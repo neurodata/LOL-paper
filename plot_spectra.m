@@ -19,8 +19,8 @@ for i=1:T.Nalgs;
         maxd=length(d);
         legendcell=[legendcell; {'dhat'}];
     elseif strcmp(T.algs{i},'SQDA')
-        d0=Proj{T.algs(i)}.d0;
-        d1=Proj{T.algs(i)}.d1;
+        d0=Proj{i}.d0;
+        d1=Proj{i}.d1;
         plot(d0,'--k','linewidth',2)
         plot(d1,'--m','linewidth',2)
         maxy=max(maxy,max(d0(1),d1(1)));
@@ -34,7 +34,7 @@ if T.simulation
     maxy=max(maxy,P.d1(1));
     maxy=max(maxy,P.d0(1));
     maxd=max(max(max(P.d1),max(P.d0)),maxd);
-    legendcell=[legendcell, {'d1'},{'d0'}];
+    legendcell=[legendcell; {'d1'}; {'d0'}];
 end
 set(gca,'Yscale','linear','XLim',[1 maxd],'YLim',[0 1.1*maxy],'XScale','log')
 grid on

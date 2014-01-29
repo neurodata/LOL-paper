@@ -1,7 +1,7 @@
 function [tasks, P, Phat, Proj, Stats] = run_task_list(task_list_name)
 % iterate over the list of tasks, and for each, run the task
 
-task_list = get_task_list(task_list_name);
+task_list = set_task_list(task_list_name);
 if ischar(task_list)
     [tasks{1},P{1},Phat{1},Proj{1},Stats{1}] = run_task(task_list);
 else

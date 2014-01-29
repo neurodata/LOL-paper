@@ -27,8 +27,8 @@ Stats.means.Lhats=squeeze(nanmean(Lhats,3));
 Stats.means.sensitivity=squeeze(nanmean(sensitivity,3));
 Stats.means.specificity=squeeze(nanmean(specificity,3));
 
-Stats.medians.Lhats=squeeze(median(Lhats,3));
-Stats.medians.sensitivity=squeeze(median(sensitivity,3));
+Stats.medians.Lhats=squeeze(nanmedian(Lhats,3));
+Stats.medians.sensitivity=squeeze(nanmedian(sensitivity,3));
 Stats.medians.specificity=squeeze(median(specificity,3));
 
 Stats.stds.Lhats=squeeze(nanstd(Lhats,[],3));
@@ -37,10 +37,15 @@ Stats.stds.specificity=squeeze(nanstd(specificity,[],3));
 
 % get mins of medians
 for i=1:task.Nalgs;
-    [~,Stats.mins.k(i)]=min(Stats.medians.Lhats(i,:));
-    Stats.mins.Lhats(i)=Stats.medians.Lhats(i,Stats.mins.k(i));
-    Stats.mins.sensitivity(i)=Stats.medians.sensitivity(i,Stats.mins.k(i));
-    Stats.mins.specificity(i)=Stats.medians.specificity(i,Stats.mins.k(i));
+    [~,Stats.mins.med.k(i)]=min(Stats.medians.Lhats(i,:));
+    Stats.mins.med.Lhats(i)=Stats.medians.Lhats(i,Stats.mins.med.k(i));
+    Stats.mins.med.sensitivity(i)=Stats.medians.sensitivity(i,Stats.mins.med.k(i));
+    Stats.mins.med.specificity(i)=Stats.medians.specificity(i,Stats.mins.med.k(i));
+
+    [~,Stats.mins.mean.k(i)]=min(Stats.means.Lhats(i,:));
+    Stats.mins.mean.Lhats(i)=Stats.means.Lhats(i,Stats.mins.mean.k(i));
+    Stats.mins.mean.sensitivity(i)=Stats.means.sensitivity(i,Stats.mins.mean.k(i));
+    Stats.mins.mean.specificity(i)=Stats.means.specificity(i,Stats.mins.mean.k(i));
 end
 
 % also get chance & bayes stats

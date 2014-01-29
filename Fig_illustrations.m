@@ -1,21 +1,13 @@
-clear, 
+clear,
 clc,
 
-task_name='w2';
-task.ks=1:5;                         % maximum # of different dimensions to embed into
 task.algs={'PCA','SDA','DRDA','LDA'};      % which algorithms to you
 task.savestuff=1;                    % flag whether to save data & figures
-task.name={task_name};
-task.simulation=1;
-
-% generate data and embed it
-[task, X, Y, P] = get_task(task_name);
-Z = parse_data(X,Y,task.ntrain,task.ntest);
-[Z,Proj,Phat,task] = embed_data(Z,task);
-
+task_list_name='MaiYuan12';
+task_list = set_task_list(task_list_name);
 
 %% figure setups
-Nsims=1; %length(task.name);
+Nsims=length(task_list);
 Nalgs=length(task.algs);
 
 h(1)=figure(1); clf
@@ -30,26 +22,33 @@ h(3)=figure(3); clf
 ncols2=Nalgs;
 nrows2=Nsims;
 
+d1=1;
+d2=2;
+d3=3;
+
+
+
 
 for j=1:Nsims
+    
+    
+    % generate data and embed it
+    [task, X, Y, P] = get_task(task_list{j});
+    Z = parse_data(X,Y,task.ntrain,task.ntest);
+    [Z,Proj,Phat,task] = embed_data(Z,task);
+    
     % plot 1D
-    
     figure(1)
-    
-    d1=1; %find(P.pi==1);
-    d2=2; %find(P.pi==2);
-    d3=3 ;%find(P.pi==3);
-    
     subplot(nrows1,ncols1,1+ncols1*(j-1)), hold on
-    plot(Z.Xtrain(Z.Y0train,d1),Z.Xtrain(Z.Y0train,d2),'r.')
-    plot(Z.Xtrain(Z.Y1train,d1),Z.Xtrain(Z.Y1train,d2),'k.')
+    plot(Z.Xtrain(d1,Z.Ytrain==0),Z.Xtrain(d2,Z.Ytrain==0),'r.')
+    plot(Z.Xtrain(d1,Z.Ytrain==1),Z.Xtrain(d2,Z.Ytrain==1),'k.')
     axis('equal')
     ylabel(task.name)
     set(gca,'XTick',[],'YTick',[])
     
     for i=1:Nalgs
-        Z.Xp0=Z.Xtest_proj{i}(Z.Y0test,1);
-        Z.Xp1=Z.Xtest_proj{i}(Z.Y1test,1);
+        Z.Xp0=Z.Xtest_proj{i}(1,Z.Ytest==0);
+        Z.Xp1=Z.Xtest_proj{i}(1,Z.Ytest==1);
         
         if mean(Z.Xp0)>mean(Z.Xp1);
             colors={'k','r'};
@@ -72,20 +71,18 @@ for j=1:Nsims
     % plot 2D
     figure(2)
     subplot(nrows2,ncols2,1+(ncols2)*(j-1)), hold on
-    plot(Z.Xtrain(Z.Y0train,d1),Z.Xtrain(Z.Y0train,d2),'r.')
-    plot(Z.Xtrain(Z.Y1train,d1),Z.Xtrain(Z.Y1train,d2),'k.')
-    axis('equal')
+    plot(Z.Xtrain(d1,Z.Ytrain==0),Z.Xtrain(d2,Z.Ytrain==0),'r.')
+    plot(Z.Xtrain(d1,Z.Ytrain==1),Z.Xtrain(d2,Z.Ytrain==1),'k.')
+    axis('tight')
     ylabel(task.name)
     set(gca,'XTick',[],'YTick',[])
     
     
-    k=0;
     for i=1:Nalgs-1
         if ~strcmp(task.algs{i},'delta')
-            k=k+1;
             subplot(nrows2,ncols2,i+1+ncols2*(j-1)), hold on
-            plot(Z.Xtest_proj{i}(Z.Y0test,1),Z.Xtest_proj{i}(Z.Y0test,2),'r.')
-            plot(Z.Xtest_proj{i}(Z.Y1test,1),Z.Xtest_proj{i}(Z.Y1test,2),'k.')
+            plot(Z.Xtest_proj{i}(1,Z.Ytest==0),Z.Xtest_proj{i}(2,Z.Ytest==0),'r.')
+            plot(Z.Xtest_proj{i}(1,Z.Ytest==1),Z.Xtest_proj{i}(2,Z.Ytest==1),'k.')
             if j==1, title(task.algs{i}), end
             axis('tight')
             set(gca,'XTick',[],'YTick',[])
@@ -93,39 +90,38 @@ for j=1:Nsims
         
     end
     
-        %% plot 3D
+    %% plot 3D
     
-        figure(3)
-        subplot(nrows2,ncols2,1+ncols2*(j-1)), hold on
-        plot3(Z.Xtrain(Z.Y0train,d1),Z.Xtrain(Z.Y0train,d2),Z.Xtrain(Z.Y0train,d3),'r.')
-        plot3(Z.Xtrain(Z.Y1train,d1),Z.Xtrain(Z.Y1train,d2),Z.Xtrain(Z.Y1train,d3),'k+')
-        axis('equal')
-        ylabel(task.name)
-        set(gca,'XTick',[],'YTick',[])
-    
-        k=0;
-        for i=1:task.Nalgs - 1 
-            if ~strcmp(task.algs{i},'delta')
-                k=k+1;
-                subplot(nrows2,ncols2,i+1+ncols2*(j-1)), hold on
-                plot3(Z.Xtest_proj{i}(Z.Y0test,1),Z.Xtest_proj{i}(Z.Y0test,2),Z.Xtest_proj{i}(Z.Y0test,3),'r.')
-                plot3(Z.Xtest_proj{i}(Z.Y1test,1),Z.Xtest_proj{i}(Z.Y1test,2),Z.Xtest_proj{i}(Z.Y1test,3),'k+')
-                if j==1, title(task.algs{i}), end
-                axis('tight')
-                set(gca,'XTick',[],'YTick',[])
-            end
-    
-        end
+%     figure(3)
+%     subplot(nrows2,ncols2,1+ncols2*(j-1)), hold on
+%     plot3(Z.Xtrain(d1,Z.Ytrain==0),Z.Xtrain(d2,Z.Ytrain==0),Z.Xtrain(d3,Z.Ytrain==0),'r.')
+%     plot3(Z.Xtrain(d1,Z.Ytrain==1),Z.Xtrain(d2,Z.Ytrain==1),Z.Xtrain(d3,Z.Ytrain==1),'k+')
+%     axis('equal')
+%     ylabel(task.name)
+%     set(gca,'XTick',[],'YTick',[])
+%     
+%     for i=1:task.Nalgs - 1
+%         if ~strcmp(task.algs{i},'delta')
+%             subplot(nrows2,ncols2,i+1+ncols2*(j-1)), hold on
+%             plot3(Z.Xtest_proj{i}(1,Z.Ytest==0),Z.Xtest_proj{i}(2,Z.Ytest==0),Z.Xtest_proj{i}(3,Z.Ytest==0),'r.')
+%             plot3(Z.Xtest_proj{i}(1,Z.Ytest==1),Z.Xtest_proj{i}(2,Z.Ytest==1),Z.Xtest_proj{i}(3,Z.Ytest==1),'k+')
+%             if j==1, title(task.algs{i}), end
+%             axis('tight')
+%             set(gca,'XTick',[],'YTick',[])
+%         end
+%         
+%     end
     
 end
 
+
 %% save figs
-fn='illustrations_';
+fn='../figs/illustrations_';
 if task.savestuff
-    wh=[6 4]*1.2;
+    wh=[6 nrows1]*1.2;
     fname{1}=[fn, '1D'];
     fname{2}=[fn, '2D'];
-    fname{3}=[fn, '3D'];
+%     fname{3}=[fn, '3D'];
     
     for i=1:3
         print_fig(h(i),wh,fname{i})

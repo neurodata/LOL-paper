@@ -2,26 +2,26 @@ function Z = generate_and_embed(task)
 
 ks=task.ks;
 
-if strcmp(task.job_list_list,'DRL')
-    if j==1 || j==4
-        a='0';
-        ntrain=50;
-    elseif j==2 || j==5
-        a='00';
-        ntrain=25;
-    elseif j==3 || j==6
-        a='01';
-        ntrain=25;
-    end
-    [X,Y] = generate_DRL(a);
-    [n, D]=size(X);
-    
-    if strcmp(task.name(4),'2')
-        ntrain=ntrain*4;
-    end
-    ntest=n-ntrain;
-    
-elseif task.simulation
+% if strcmp(task.job_list_list,'DRL')
+%     if j==1 || j==4
+%         a='0';
+%         ntrain=50;
+%     elseif j==2 || j==5
+%         a='00';
+%         ntrain=25;
+%     elseif j==3 || j==6
+%         a='01';
+%         ntrain=25;
+%     end
+%     [X,Y] = generate_DRL(a);
+%     [n, D]=size(X);
+%     
+%     if strcmp(task.name(4),'2')
+%         ntrain=ntrain*4;
+%     end
+%     ntest=n-ntrain;
+%     
+if task.simulation
     % simulate
     sim.name=task.name;
     sim.permute=0;

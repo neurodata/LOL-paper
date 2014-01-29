@@ -1,16 +1,19 @@
-function [X, Y] = sample_QDA(n,mu1,mu2,Sig1,Sig2)
+function [X, Y] = sample_QDA(n,mu0,mu1,Sig0,Sig1)
 
-D=length(mu1);
+D=length(mu0);
 
 if length(n)==1
-    n1=n/2; n2=n/2;
+    n0=n/2; n1=n/2; 
 else
-    n1=n(1); n2=n(2);
+    n0=n(2); n1=n(1); 
 end
 
 
-% generate data
-X1 = bsxfun(@plus,mu1,Sig1*randn(D,n1));
-X2 = bsxfun(@plus,mu2,Sig2*randn(D,n2));
-X = [X1,X2]';
-Y = [zeros(n1,1);ones(n2,1)];
+L0=cholcov(Sig0);
+L1=cholcov(Sig1);
+
+X0 = bsxfun(@plus,randn(n0,D)*L0,mu0')';
+X1 = bsxfun(@plus,randn(n1,D)*L1,mu1')';
+
+X = [X0,X1];
+Y = [zeros(n0,1);ones(n1,1)];

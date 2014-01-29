@@ -8,9 +8,9 @@ function [task, X, Y, P] = get_task(task_name)
 %   Y:      a vector of predictees
 %   P:      a structure of parameters
 
-task = get_setting(task_name);
+task = set_task(task_name);
 if task.simulation
-    P = get_parameters(task);
+    P = set_parameters(task);
     [X,Y,task] = get_data(task,P);
 else
     P = [];

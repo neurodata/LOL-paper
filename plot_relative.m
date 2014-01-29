@@ -26,7 +26,13 @@ for i=1:T.Nalgs;
     
     if did_lda % if we ran LDA, this is the baseline
         if ~strcmp(T.algs{i},'LDA')
-            temp=S.means.Lhats(i,:)-S.means.Lhats(lda_id,1);
+            if S.means.Lhats(lda_id,1) < mean(S.Lchance);
+                temp=S.means.Lhats(i,:)-S.means.Lhats(lda_id,1);
+                tit='LDA';
+            else
+                temp=S.means.Lhats(i,:)-mean(S.Lchance);
+                tit='chance';
+            end
             plot(T.ks,temp,'color',F.colors{i},'linewidth',2,'linestyle','-')
             maxt=max(maxt,max(temp));
             mint=min(mint,min(temp));
@@ -45,10 +51,15 @@ end
 
 mint=mint*1.1;
 maxt=maxt*1.1;
-set(gca,'XScale','log','Ylim',[mint maxt],'Xlim',[1 T.ntrain])
+if abs(mint-0)<10^-2, 
+    ylim=[-0.1 0.1];
+else
+    ylim=[mint 0];
+end
+set(gca,'XScale','log','Ylim',ylim,'Xlim',[1 T.Kmax])
 grid on
 if did_lda
-    title('Rel. Acc. vs. LDA')
+    title(['Rel. Acc. vs. ', tit])
 else
     title('Rel. Acc. vs. chance')
 end

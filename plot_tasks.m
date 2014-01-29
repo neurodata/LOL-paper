@@ -18,16 +18,29 @@ function plot_tasks(tasks,Stats,P,Proj,task_list_name)
 figure(1); clf
 % figure('visible','off');
 
+% LDA: gray
+% chance: black
+% risk: dashed red
+% bayes: solid red
+% PCA: pink
+% LOL/SDA: green
+% DRDA: blue
+% SDQA: cyan
+
 F.gray=0.5*[1 1 1];
 F.colors{1}='m';
 F.colors{2}='g';
 F.colors{3}='b';
-F.colors{4}=F.gray;
+F.colors{4}='c';
+F.colors{5}='y';
+F.colors{6}='r';
 
 F.markers{1}='o';
 F.markers{2}='+';
 F.markers{3}='x';
 F.markers{4}='*';
+F.markers{5}='v';
+F.markers{6}='s';
 
 F.Ncols=5;
 F.Nrows=length(tasks);

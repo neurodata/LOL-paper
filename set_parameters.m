@@ -1,5 +1,5 @@
-function P = get_parameters(sim)
-% get the parameters for the simulation named in 'sim' (a string)
+function P = set_parameters(task)
+% set the parameters for the simulation named in 'task' (a string)
 % there are a whole bunch of simulation settings provided in here, all of
 % them correspond to QDA models, that is, two classes, each with a mean and
 % covariance.
@@ -8,14 +8,13 @@ function P = get_parameters(sim)
 % OUTPUT:  P structure containing parameters
 
 
-if ~isfield(sim,'sd'), sd=1; else sd=sim.sd; end
-if ~isfield(sim,'permute'), sim.permute=0; end
-if ~isfield(sim,'D'), D=100; else D=sim.D; end
-if ~isfield(sim,'n'), n=550; else n=sim.n; end
+if ~isfield(task,'permute'), task.permute=0; end % whether or not to permute the coordinates, this is really for debugging purposes
+if ~isfield(task,'D'), D=100; else D=task.D; end % ambient # of dimensions
+if ~isfield(task,'n'), n=550; else n=task.n; end % total # of samples
 
-if ~isfield(sim,'P')
+if ~isfield(task,'P')
     
-    switch sim.name
+    switch task.name
         
         case 'a' % for debuggin purposes
             
@@ -29,35 +28,70 @@ if ~isfield(sim,'P')
             
         case 'w' % wide
             
-            mudelt = 6/sqrt(D);                                 % distance betwen dim 1 of means
+            mudelt = 8/sqrt(D);                                 % distance betwen dim 1 of means
             mu1 = [-mudelt/2; zeros(D-1,1)];                   % class 1 mean
             mu0 = [mudelt/2; zeros(D-1,1)];                     % class 2 mean
             
+            sd = 1;
             sv = sd/sqrt(D)*ones(D,1);
             sv(2)=1;
+            A  = eye(D,D);
+            Sig1=A*diag(sv);                            % class 1 cov
+            Sig0=A*diag(sv);                            % class 2 cov
+
+        case 'w1' % wide
+            
+            D = 1;
+            mudelt = 6/sqrt(100);                                 % distance betwen dim 1 of means
+            mu1 = [-mudelt/2; zeros(D-1,1)];                   % class 1 mean
+            mu0 = [mudelt/2; zeros(D-1,1)];                     % class 2 mean
+            
+            sd = 1;
+            sv = sd/sqrt(100)*ones(D,1);
+            if D>1, sv(2)=1; end
             A  = eye(D,D);
             Sig1=A*diag(sv);                            % class 1 cov
             Sig0=A*diag(sv);                            % class 2 cov
             
         case 'w2' % wide
             
+            mudelt = 8/sqrt(D);                                 % distance betwen dim 1 of means
+            mu1 = [-mudelt/2; zeros(D-1,1)];                   % class 1 mean
+            mu0 = [mudelt/2; zeros(D-1,1)];                     % class 2 mean
+            
+            sd = 1;
+            sv = sd/sqrt(D)*ones(D,1);
+            sv(2)=1;
+            A  = eye(D,D);
+
+            Sig0=A*diag(sv);                            % class 2 cov
+            Sig0(1,1) = 0.5;
+            Sig0(1,2)=0.25;
+            Sig0(2,1)=0.25;
+
+            Sig1=Sig0;
+
+        case 'w3' % wide
+            
             D = 3;
             mudelt = 6/sqrt(100);                                 % distance betwen dim 1 of means
             mu1 = [-mudelt/2; zeros(D-1,1)];                   % class 1 mean
             mu0 = [mudelt/2; zeros(D-1,1)];                     % class 2 mean
             
+            sd = 1;
             sv = sd/sqrt(100)*ones(D,1);
             sv(2)=1;
             A  = eye(D,D);
             Sig1=A*diag(sv);                            % class 1 cov
             Sig0=A*diag(sv);                            % class 2 cov
-
+            
         case 's' % simple
             
-            mudelt = 3/sqrt(D);                                 % distance betwen dim 1 of means
+            mudelt = 6/sqrt(D);                                 % distance betwen dim 1 of means
             mu1 = [-mudelt/2; zeros(D-1,1)];                   % class 1 mean
             mu0 = [mudelt/2; zeros(D-1,1)];                     % class 2 mean
             
+            sd = 1;
             sv = sd/sqrt(D)*ones(D,1);
             sv(2)=1;
             A  = eye(D,D);
@@ -72,6 +106,7 @@ if ~isfield(sim,'P')
             mu1(2)=mu1(2)/3;
             mu0(2)=mu0(2)/3;
             
+            sd = 1;
             sv = sd/sqrt(D)*ones(D,1);
             sv(2)=4;
             A  = eye(D,D); %A(1:2,1:2)=[1,2;0,1];       % singular vectors
@@ -85,8 +120,90 @@ if ~isfield(sim,'P')
             
             Sig1=Sig1+eye(D);
             Sig0=Sig0+eye(D);
+
             
-        case 'sa2' % simple angle
+        case 'increaseD10' % simple angle
+            
+            D=10;
+            mudelt = 2.5;                                 % distance betwen dim 1 of means
+            mu1 = [-mudelt/2*ones(2,1); zeros(D-2,1)];                   % class 1 mean
+            mu0 = [mudelt/2*ones(2,1); zeros(D-2,1)];                   % class 1 mean
+            mu1(2)=mu1(2)/3;
+            mu0(2)=mu0(2)/3;
+            
+            rho=0.5;
+            A=nan(D);
+            for a=1:D
+                for b=1:D
+                    A(a,b)=rho^abs(a-b);
+                end
+            end
+
+            Sig0=A;
+            Sig1=A;
+
+        case 'increaseD20' % simple angle
+            
+            D=20;
+            mudelt = 2.5;                                 % distance betwen dim 1 of means
+            mu1 = [-mudelt/2*ones(2,1); zeros(D-2,1)];                   % class 1 mean
+            mu0 = [mudelt/2*ones(2,1); zeros(D-2,1)];                   % class 1 mean
+            mu1(2)=mu1(2)/3;
+            mu0(2)=mu0(2)/3;
+            
+            rho=0.5;
+            A=nan(D);
+            for a=1:D
+                for b=1:D
+                    A(a,b)=rho^abs(a-b);
+                end
+            end
+
+            Sig0=A;
+            Sig1=A;
+
+
+         case 'increaseD50' % simple angle
+            
+            D=50;
+            mudelt = 2.5;                                 % distance betwen dim 1 of means
+            mu1 = [-mudelt/2*ones(2,1); zeros(D-2,1)];                   % class 1 mean
+            mu0 = [mudelt/2*ones(2,1); zeros(D-2,1)];                   % class 1 mean
+            mu1(2)=mu1(2)/3;
+            mu0(2)=mu0(2)/3;
+            
+            rho=0.5;
+            A=nan(D);
+            for a=1:D
+                for b=1:D
+                    A(a,b)=rho^abs(a-b);
+                end
+            end
+
+            Sig0=A;
+            Sig1=A;
+
+        case 'increaseD100' % simple angle
+            
+            D=100;
+            mudelt = 2.5;                                 % distance betwen dim 1 of means
+            mu1 = [-mudelt/2*ones(2,1); zeros(D-2,1)];                   % class 1 mean
+            mu0 = [mudelt/2*ones(2,1); zeros(D-2,1)];                   % class 1 mean
+            mu1(2)=mu1(2)/3;
+            mu0(2)=mu0(2)/3;
+            
+            rho=0.5;
+            A=nan(D);
+            for a=1:D
+                for b=1:D
+                    A(a,b)=rho^abs(a-b);
+                end
+            end
+
+            Sig0=A;
+            Sig1=A;
+
+       case 'sa2' % simple angle
             
             mudelt = 3.5;                                 % distance betwen dim 1 of means
             mu1 = [-mudelt/2*ones(2,1); zeros(D-2,1)];                   % class 1 mean
@@ -94,6 +211,7 @@ if ~isfield(sim,'P')
             mu1(2)=mu1(2)/3;
             mu0(2)=mu0(2)/3;
             
+            sd = 1;
             sv = sd/sqrt(D)*ones(D,1);
             sv(2)=4;
             A  = eye(D,D); %A(1:2,1:2)=[1,2;0,1];       % singular vectors
@@ -108,6 +226,7 @@ if ~isfield(sim,'P')
             Sig1=Sig1+eye(D);
             Sig0=Sig0+eye(D);        case 'wa' % wide angle
             
+            sd = 1;
             k = 1;                                      % # of latent dimensions with relatively high variance
             mudelt = 3;                                 % distance betwen dim 1 of means
             sv = sd/sqrt(D)*ones(D,1);
@@ -129,6 +248,7 @@ if ~isfield(sim,'P')
             
         case 'r' % rotated
             
+            sd = 1;
             k = 1;                                      % # of latent dimensions with relatively high variance
             mudelt = 1;                                 % distance betwen dim 1 of means
             sv = sd/sqrt(D)*ones(D,1);
@@ -148,13 +268,14 @@ if ~isfield(sim,'P')
             
         case 'wra' % wide angle
             
-            k = 1;                                      % # of latent dimensions with relatively high variance
+            sd = 1;
+            k = 5;                                      % # of latent dimensions with relatively high variance
             mudelt = 8/sqrt(D);                                 % distance betwen dim 1 of means
-            sv = 3*sd/sqrt(D)*ones(D,1);
+            sv = 1*sd/sqrt(D)*ones(D,1);
             sv(2)=2;
             A  = eye(D,D); %A(1:2,1:2)=[1,2;0,1];       % singular vectors
-            mu1 = [-mudelt/2*ones(2,1); zeros(D-2,1)];                   % class 1 mean
-            mu0 = [mudelt/2*ones(2,1); zeros(D-2,1)];                   % class 1 mean
+            mu1 = [-mudelt/2*ones(k,1); zeros(D-k,1)];                   % class 1 mean
+            mu0 = [mudelt/2*ones(k,1); zeros(D-k,1)];                   % class 1 mean
             
             mu1(1)=mu1(1)*2;
             mu0(1)=mu0(1)*2;
@@ -175,13 +296,14 @@ if ~isfield(sim,'P')
             Sig0=Sig0+eye(D);
         case 'wra2' % wide angle
             
-            k = 1;                                      % # of latent dimensions with relatively high variance
+            sd = 1;
+            k = 2;                                      % # of latent dimensions with relatively high variance
             mudelt = 16/sqrt(D);                                 % distance betwen dim 1 of means
             sv = 3*sd/sqrt(D)*ones(D,1);
             sv(2)=2;
             A  = eye(D,D); %A(1:2,1:2)=[1,2;0,1];       % singular vectors
-            mu1 = [-mudelt/2*ones(2,1); zeros(D-2,1)];                   % class 1 mean
-            mu0 = [mudelt/2*ones(2,1); zeros(D-2,1)];                   % class 1 mean
+            mu1 = [-mudelt/2*ones(k,1); zeros(D-k,1)];                   % class 1 mean
+            mu0 = [mudelt/2*ones(k,1); zeros(D-k,1)];                   % class 1 mean
             
             mu1(1)=mu1(1)*2;
             mu0(1)=mu0(1)*2;
@@ -202,6 +324,7 @@ if ~isfield(sim,'P')
             Sig0=Sig0+eye(D);
         case 'pca'
             
+            sd = 1;
             k = 2;
             sv = [ones(k,1);sd/sqrt(D)*ones(D-k,1)];
             A  = eye(D,D);
@@ -214,6 +337,7 @@ if ~isfield(sim,'P')
             
         case 'lda'
             
+            sd = 1;
             k = 2;
             sv = [ones(k,1);2*sd/sqrt(D)*ones(D-k,1)];
             A  = eye(D,D); A(1:2,1:2)=[1,2;2,1];
@@ -228,6 +352,7 @@ if ~isfield(sim,'P')
             
         case 'lda2'
             
+            sd = 1;
             k = 2;
             sv = [ones(k,1);sd/sqrt(D)*ones(D-k,1)];
             A  = eye(D,D); %A(1:2,1:2)=[1,2;0,1];
@@ -243,6 +368,7 @@ if ~isfield(sim,'P')
         case 'weird'
             
             %         k = 2;
+            sd = 1;
             sv = [0.05*sd/sqrt(D)*ones(D,1)];
             A  = eye(D,D); %A(1:2,1:2)=[1,2;0,1];
             mu1 = zeros(D,1);
@@ -254,7 +380,7 @@ if ~isfield(sim,'P')
             
         case 'trunk'
             
-            mu1=2./sqrt(1:D)';
+            mu1=1./sqrt(1:D)';
             mu0=-mu1;
             A = sqrt(D)*0.5*eye(D);
             Sig1 = A;
@@ -262,7 +388,7 @@ if ~isfield(sim,'P')
             
         case 'trunk2'
             
-            mu1=12./sqrt(D:-1:1)';
+            mu1=2./sqrt(D:-1:1)';
             mu0=-mu1;
             
             A=eye(D);
@@ -270,6 +396,17 @@ if ~isfield(sim,'P')
             Sig1=A;
             Sig0=A;
             
+        case 'trunk3'
+            
+            D=1000;
+            mu1=2./sqrt(D:-1:1)';
+            mu0=-mu1;
+            
+            A=eye(D);
+            A(1:D+1:end)=100./sqrt(1:D);
+            Sig1=A;
+            Sig0=A;
+
         case 'toeplitz'
             rho=0.5;
             A=nan(D);
@@ -284,7 +421,9 @@ if ~isfield(sim,'P')
             Sig1=A;
             Sig0=A;
             
-        case 'toeplitz-c'
+        case 'toeplitz2'
+
+            D=1000;
             rho=0.5;
             A=nan(D);
             for a=1:D
@@ -303,25 +442,76 @@ if ~isfield(sim,'P')
             A=eye(D);
             A(1:D+1:end)=100./sqrt(1:D);
             
-            mu1=2*ones(D,1);
+            mu1=1*ones(D,1);
             mu0=-mu1;
             Sig1=A;
             Sig0=A;
             
             
-        case 'model1'
+        case 'model1, p100'
+            
+            D=100;
+            s0=10;
+            mu0=zeros(D,1);
+            mu1=[ones(s0,1); zeros(D-s0,1)];
             
             rho=0.5;
             A=rho*ones(D);
             A(1:D+1:end)=1;
             
-            s0=10;
-            mu1=[ones(s0,1); zeros(D-s0,1)];
-            mu0=zeros(D,1);
-            Sig1=A;
             Sig0=A;
+            Sig1=A;
             
-        case 'model3'
+        case 'model1, p200'
+            
+            D=200;
+            s0=10;
+            mu0=zeros(D,1);
+            mu1=[ones(s0,1); zeros(D-s0,1)];
+            
+            rho=0.5;
+            A=rho*ones(D);
+            A(1:D+1:end)=1;
+            
+            Sig0=A;
+            Sig1=A;
+            
+        case 'model1, p400'
+            
+            D=400;
+            s0=10;
+            mu0=zeros(D,1);
+            mu1=[ones(s0,1); zeros(D-s0,1)];
+            
+            rho=0.5;
+            A=rho*ones(D);
+            A(1:D+1:end)=1;
+            
+            Sig0=A;
+            Sig1=A;
+            
+        case 'model1, p800'
+            
+            D=200;
+            s0=10;
+            mu0=zeros(D,1);
+            mu1=[ones(s0,1); zeros(D-s0,1)];
+            
+            rho=0.5;
+            A=rho*ones(D);
+            A(1:D+1:end)=1;
+            
+            Sig0=A;
+            Sig1=A;
+            
+        case 'model3, p100'
+            
+            D=100;
+            s0=10;
+            mu0=zeros(D,1);
+            mu1=[ones(s0,1); zeros(D-s0,1)];
+            
+            
             rho=0.8;
             A=nan(D);
             for a=1:D
@@ -330,11 +520,65 @@ if ~isfield(sim,'P')
                 end
             end
             
-            s0=10;
-            mu1=[ones(s0,1); zeros(D-s0,1)];
-            mu0=zeros(D,1);
-            Sig1=A;
             Sig0=A;
+            Sig1=A;
+            
+        case 'model3, p200'
+            
+            D=200;
+            s0=10;
+            mu0=zeros(D,1);
+            mu1=[ones(s0,1); zeros(D-s0,1)];
+            
+            
+            rho=0.8;
+            A=nan(D);
+            for a=1:D
+                for b=1:D
+                    A(a,b)=rho^abs(a-b);
+                end
+            end
+            
+            Sig0=A;
+            Sig1=A;
+            
+        case 'model3, p400'
+            
+            D=400;
+            s0=10;
+            mu0=zeros(D,1);
+            mu1=[ones(s0,1); zeros(D-s0,1)];
+            
+            
+            rho=0.8;
+            A=nan(D);
+            for a=1:D
+                for b=1:D
+                    A(a,b)=rho^abs(a-b);
+                end
+            end
+            
+            Sig0=A;
+            Sig1=A;
+            
+        case 'model3, p800'
+            
+            D=800;
+            s0=10;
+            mu0=zeros(D,1);
+            mu1=[ones(s0,1); zeros(D-s0,1)];
+            
+            
+            rho=0.8;
+            A=nan(D);
+            for a=1:D
+                for b=1:D
+                    A(a,b)=rho^abs(a-b);
+                end
+            end
+            
+            Sig0=A;
+            Sig1=A;
             
             
         case '1'
@@ -416,6 +660,7 @@ if ~isfield(sim,'P')
             mu1(2)=mu1(2)/3;
             mu0(2)=mu0(2)/3;
             
+            sd = 1;
             sv = sd/sqrt(D)*ones(D,1);
             sv(2)=4;
             A  = eye(D,D); %A(1:2,1:2)=[1,2;0,1];       % singular vectors
@@ -426,9 +671,42 @@ if ~isfield(sim,'P')
             Sig1=Sig;
             Sig0=Sig;
             
+        case 'debug'
+            
+            D=5;
+            rng('default')
+            mu0=0.5*rand(D,1);
+            mu1=-0.5*rand(D,1);
+            
+            Sig=eye(D);
+            Sig=Sig+0.5*ones(D);
+            Sig(1:D+1:end)=ones(D,1);
+            
+            Sig0=Sig;
+            Sig1=Sig;
+            
+        case 'simple'
+            
+            D=5;
+            mu0=0.5*ones(D,1);
+            mu1=-mu0;
+            
+            %             Sig=10*eye(D);
+            
+            %             Sig=0.5*ones(D);
+            %             Sig(1:D+1:end)=ones(D,1);
+            %
+            
+            rho=0.5;
+            Sig=rho*ones(D);
+            Sig(1:D+1:end)=1;
+            
+            Sig0=Sig;
+            Sig1=Sig;
+            
     end
     
-    if sim.permute
+    if task.permute
         pi=randperm(D);
     else
         pi=1:D;
@@ -450,19 +728,15 @@ if ~isfield(sim,'P')
     idx0=find(diff(P.d0)==0,1);
     P.v0=v0(:,1:idx0);
     P.Q=Q;
-    P.name=sim.name;
+    P.name=task.name;
 else
-    P=sim.P;
+    P=task.P;
 end
 
 mubar=(P.mu1+P.mu0)/2;
 P.mu1=P.mu1-mubar;
 P.mu0=P.mu0-mubar;
 
-P.delta=mu1-mu0;
-if norm(Sig1-Sig0)<10^-4
-    P.Risk=1-normcdf(0.5*sqrt(P.delta'*(P.Sig1\P.delta)));
-end
 
 if max(abs(P.mu1+P.mu0))>10^-4
     error('means are not centered')
@@ -480,4 +754,8 @@ if p1>0 || p2>0
 end
 
 
+P.delta=mu1-mu0;
+if norm(Sig1-Sig0)<10^-4
+    P.Risk=1-normcdf(0.5*sqrt(P.delta'*(P.Sig1\P.delta)));
+end
 
