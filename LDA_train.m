@@ -1,4 +1,4 @@
-function W = LDA(Input,Target,Priors)
+function W = LDA_train(Input,Target,Priors)
 % LDA - MATLAB subroutine to perform linear discriminant analysis
 % by Will Dwinnell and Deniz Sevis
 % modified by Mauro Maggioni & Joshua Vogelstein
@@ -84,6 +84,8 @@ for i = 1:k,
     % Linear
     W(i,2:end) = Temp;
 end
+
+
 
 % Housekeeping
 clear Temp

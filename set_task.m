@@ -49,7 +49,7 @@ elseif strfind(name,'trunk3')
     task.Ntrials=100;
     task.algs={'PCA','LOL','DRDA','RDA'};   % which algorithms to use
 elseif strfind(name,'increaseD')
-    task.Ntrials=100;
+    task.Ntrials=20;
     task.algs={'PCA','LOL','DRDA','RDA','LDA'};   % which algorithms to use
 end
 

@@ -8,8 +8,8 @@ function plot_sens_spec(T,S,F,row,col)
 %   col: which column
 
 for i=1:T.Nalgs
-    if strcmp(T.algs{i},'SDA')
-        SDA_ind=i;
+    if strcmp(T.algs{i},'LOL')
+        LOL_ind=i;
     end
 end
 
@@ -23,7 +23,7 @@ axis([0, 1, 0, 1])
 ticks=0:.25:1;
 set(gca,'XTick',ticks,'YTick',ticks,'XTickLabel',[],'YTickLabel',[])
 grid on
-title(['Se=',num2str(round(S.mins.mean.sensitivity(SDA_ind)*100)/100), ' Sp=', num2str(round(S.mins.mean.specificity(SDA_ind)*100)/100)])
+title(['Se=',num2str(round(S.mins.mean.sensitivity(LOL_ind)*100)/100), ' Sp=', num2str(round(S.mins.mean.specificity(LOL_ind)*100)/100)])
 if row==F.Nrows
     ylabel('sensitivity')
     xlabel('specificity')
@@ -37,7 +37,7 @@ for i=1:T.Nalgs;
 end
 grid on
 axis('tight')
-title(['Lhat=',num2str(round(S.mins.mean.Lhats(SDA_ind)*10000)/100), ' khat=', num2str(S.mins.mean.k(SDA_ind))])
+title(['Lhat=',num2str(round(S.mins.mean.Lhats(LOL_ind)*10000)/100), ' khat=', num2str(S.mins.mean.k(LOL_ind))])
 if row==F.Nrows
     ylabel('Lhat')
     xlabel('# of dimensions')

@@ -1,4 +1,4 @@
-function Stats = get_stats(task,loop)
+function Stats = get_loop_stats(task,loop)
 % this function computes a bunch of statistics based on the output run
 % task_loop
 

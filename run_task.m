@@ -25,7 +25,7 @@ Z = parse_data(X,Y,task.ntrain,task.ntest);
 loop = task_loop(task);
 
 % store stats
-Stats = get_stats(task,loop);
+Stats = get_loop_stats(task,loop);
 if isfield(P,'Risk')
     Stats.Risk=P.Risk;
 else

@@ -2,7 +2,7 @@ clearvars,
 %clc,
 
 % task_list_names={'thin','sparse','fat','colon_prostate','pancreas'};
-task_list_names={'increaseD2'};
+task_list_names={'increaseD'};
 % task_list_names={'Mai13','QDA','CaiLiu11','increaseD2','pancreas'};
 % task_list_names={'thin','fat','MaiYuan12','Mai13','QDA','CaiLiu11','increaseD2','pancreas'};
 

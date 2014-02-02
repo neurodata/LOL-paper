@@ -14,12 +14,14 @@ parfor k=1:task.Ntrials
     for i=1:task1.Nalgs
         if ~strcmp(task1.algs{i},'LDA')
             for l=1:task1.Nks
-                W = LDA(Z.Xtrain_proj{i}(1:task1.ks(l),:)',Z.Ytrain);              % estimate LDA discriminating boundary from training data
-                loop{k}.out(i,l) = LDA_accuracy(Z.Xtest_proj{i}(1:task1.ks(l),:)',Z.Ytest,W); % make predictions
+                W = LDA_train(Z.Xtrain_proj{i}(1:task1.ks(l),:)',Z.Ytrain);       % estimate LDA discriminating boundary from training data
+                Yhat = LDA_predict(Z.Xtest_proj{i}(1:task1.ks(l),:)',W);    % predict
+                loop{k}.out(i,l) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
             end
         else % if LDA, no need to project, just operate on data in ambient dimension
-            W = LDA(Z.Xtrain_proj{i}',Z.Ytrain);              % estimate LDA discriminating boundary from training data
-            loop{k}.out(i,1) = LDA_accuracy(Z.Xtest_proj{i}',Z.Ytest,W); % make predictions
+            W = LDA_train(Z.Xtrain_proj{i}',Z.Ytrain);              % estimate LDA discriminating boundary from training data
+            Yhat = LDA_predict(Z.Xtest_proj{i}',W);    % predict
+            loop{k}.out(i,1) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
         end
     end
     
