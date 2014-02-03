@@ -1,26 +1,26 @@
-function [X,Y,task] = get_data(task,P)
-% get data based on description in task (and P if simulation)
+function [X,Y,dataset] = get_data(dataset,P)
+% get data based on description in dataset (and P if simulation)
 
-if task.simulation
-    if strcmp(task.name,'DRL')
+if dataset.simulation
+    if strcmp(dataset.name,'DRL')
         [X,Y] = sample_DRL(a);
-    elseif strcmp(task.name,'xor')
-        [X,Y] = sample_xor(task);
+    elseif strcmp(dataset.name,'xor')
+        [X,Y] = sample_xor(dataset);
     else
-        [X,Y] = sample_QDA(task.n,P.mu0,P.mu1,P.Sig0,P.Sig1);
+        [X,Y] = sample_QDA(dataset.n,P.mu0,P.mu1,P.Sig0,P.Sig1);
     end
 else
-    [X,Y,task] = load_cancer(task);
+    [X,Y,dataset] = load_cancer(dataset);
 end
 
 [D, n]=size(X);
 
 if D==length(Y)
     X=X';
-    task.D = n;
-    task.n = D;
+    dataset.D = n;
+    dataset.n = D;
 else
-    task.D = D;
-    task.n = n;
+    dataset.D = D;
+    dataset.n = n;
 end
 

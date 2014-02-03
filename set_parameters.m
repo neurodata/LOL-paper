@@ -1,5 +1,5 @@
-function P = set_parameters(task)
-% set the parameters for the simulation named in 'task' (a string)
+function P = set_parameters(dataset)
+% set the parameters for the simulation named in 'dataset' (a string)
 % there are a whole bunch of simulation settings provided in here, all of
 % them correspond to QDA models, that is, two classes, each with a mean and
 % covariance.
@@ -8,13 +8,13 @@ function P = set_parameters(task)
 % OUTPUT:  P structure containing parameters
 
 
-if ~isfield(task,'permute'), task.permute=0; end % whether or not to permute the coordinates, this is really for debugging purposes
-if ~isfield(task,'D'), D=100; else D=task.D; end % ambient # of dimensions
-if ~isfield(task,'n'), n=550; else n=task.n; end % total # of samples
+if ~isfield(dataset,'permute'), dataset.permute=0; end % whether or not to permute the coordinates, this is really for debugging purposes
+if ~isfield(dataset,'D'), D=100; else D=dataset.D; end % ambient # of dimensions
+if ~isfield(dataset,'n'), n=550; else n=dataset.n; end % total # of samples
 
-if ~isfield(task,'P')
+if ~isfield(dataset,'P')
     
-    switch task.name
+    switch dataset.name
         
         case 'a' % for debuggin purposes
             
@@ -691,12 +691,6 @@ if ~isfield(task,'P')
             mu0=0.5*ones(D,1);
             mu1=-mu0;
             
-            %             Sig=10*eye(D);
-            
-            %             Sig=0.5*ones(D);
-            %             Sig(1:D+1:end)=ones(D,1);
-            %
-            
             rho=0.5;
             Sig=rho*ones(D);
             Sig(1:D+1:end)=1;
@@ -707,7 +701,7 @@ if ~isfield(task,'P')
             
     end
     
-    if task.permute
+    if dataset.permute
         pi=randperm(D);
     else
         pi=1:D;
@@ -729,9 +723,9 @@ if ~isfield(task,'P')
     idx0=find(diff(P.d0)==0,1);
     P.v0=v0(:,1:idx0);
     P.Q=Q;
-    P.name=task.name;
+    P.name=dataset.name;
 else
-    P=task.P;
+    P=dataset.P;
 end
 
 mubar=(P.mu1+P.mu0)/2;

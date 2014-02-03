@@ -10,13 +10,13 @@ switch which
         ntrain=n-ntest;
     case 'prostate'
         load('../data/base/prostate_data');
-        tasks.settings={'raw'};
+        datasets.settings={'raw'};
         [n, D] =size(X);
         ntest=round(n/3);
         ntrain=n-ntest;
     case 'pancreas'
         load('../data/base/pancreas_data');
-        tasks.settings={'IPMN-HvL';'IPMN-HvML'; 'IPMN-HMvL';'IPMNvsAll';'MCNvsAll';'SCAvsAll'};
+        datasets.settings={'IPMN-HvL';'IPMN-HvML'; 'IPMN-HMvL';'IPMNvsAll';'MCNvsAll';'SCAvsAll'};
 
         [n, D] = size(X);
         ntest=2;

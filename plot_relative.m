@@ -1,7 +1,7 @@
 function plot_relative(T,S,F,row,col)
-%  plot Lhats for each alg, one row per task
+%  plot Lhats for each alg, one row per dataset
 % INPUT:
-%   T: task info
+%   T: dataset info
 %   S: statistics of algorithms
 %   F: figure properties
 %   row: which row

@@ -1,9 +1,9 @@
 function plot_spectra(T,P,Proj,F,row,col)
-%  plot spectra, one row per task
+%  plot spectra, one row per dataset
 % INPUT:
-%   T: task info
-%   P: task parameters
-%   Proj: task projections
+%   T: dataset info
+%   P: dataset parameters
+%   Proj: dataset projections
 %   row: which row
 %   col: which column
 

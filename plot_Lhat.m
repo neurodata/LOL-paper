@@ -1,7 +1,7 @@
 function plot_Lhat(T,S,F,row,col)
-%  plot Lhats for each alg, one row per task
+%  plot Lhats for each alg, one row per dataset
 % INPUT:
-%   T: task info
+%   T: dataset info
 %   S: statistics of algorithms
 %   F: figure properties
 %   row: which row
@@ -35,11 +35,11 @@ for i=1:Nalgs;
     end
     minloc=min(location);
     
-    if ~strcmp(T.algs{i},'LDA')
+    if strcmp(T.algs{i},'LDA') || strcmp(T.algs{i},'treebagger')
+        plot(T.ks,location(1)*ones(size(T.ks)),'-','linewidth',2,'color',F.gray)
+    else
         plot(T.ks,location,'color',F.colors{i},'linewidth',2)
         minAlg=min(minAlg,minloc);
-    else
-        plot(T.ks,location(1)*ones(size(T.ks)),'-','linewidth',2,'color',F.gray)
     end
 end
 
@@ -62,7 +62,8 @@ if T.ntest>9
 else
     YL=nanmin(S.means.Lhats(:));
 end
-set(gca,'XScale','log','Ylim',[YL min(S.means.Lhats(:,1))*1.1],'Xlim',[1 T.Kmax])
+YU = min(S.means.Lhats(:,1))*1.1;
+set(gca,'XScale','log','Ylim',[YL YU],'Xlim',[1 T.Kmax])
 ylabel(T.name)
 grid on
 if row==1, title(['Lhat', loc]), end

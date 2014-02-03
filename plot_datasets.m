@@ -1,6 +1,6 @@
-function plot_tasks(tasks,Stats,P,Proj,task_list_name)
-% plot results for a set of tasks
-% generate a row of panels for each task
+function plot_datasets(datasets,Stats,P,Proj,dataset_list_name)
+% plot results for a set of datasets
+% generate a row of panels for each dataset
 % each row has the following columns:
 %   1) Lhat vs. k for each algorithm, including chance, Bayes, and Risk
 %   2) Relative Lhat
@@ -8,8 +8,8 @@ function plot_tasks(tasks,Stats,P,Proj,task_list_name)
 %   4) sensitivity and specificity
 % 
 % INPUT:
-%   tasks: a structure for each task, containing all necessary meta.data
-%   Stats: a structure for each task, containing all statistics
+%   datasets: a structure for each dataset, containing all necessary meta.data
+%   Stats: a structure for each dataset, containing all statistics
 % 
 % OUTPUT: none
 
@@ -43,13 +43,13 @@ F.markers{5}='v';
 F.markers{6}='s';
 
 F.Ncols=5;
-F.Nrows=length(tasks);
+F.Nrows=length(datasets);
 
 %% make various plots
 for j=1:F.Nrows
 
-    % rename variables for task j for legibility
-    T=tasks{j};
+    % rename variables for dataset j for legibility
+    T=datasets{j};
     S=Stats{j};
     
     plot_Lhat(T,S,F,j,1)                % column 1: plot Lhats
@@ -62,6 +62,6 @@ end
 %% save plots
 if T.savestuff
     wh=[8 F.Nrows]*1.2;
-    fname=char(strcat('performance_', task_list_name));
+    fname=char(strcat('performance_', dataset_list_name));
     print_fig(gcf,wh,fname)
 end
