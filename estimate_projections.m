@@ -91,6 +91,9 @@ for i=1:length(algs)
         case 'LDA'
             Proj{i}.Vhat=eye(D);
             Proj{i}.time = toc;
+        case 'treebagger'
+            Proj{i}.Vhat=eye(D);
+            Proj{i}.time = toc;
     end
     Proj{i}.alg = alg;
 end

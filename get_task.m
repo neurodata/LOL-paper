@@ -9,11 +9,10 @@ function [task, X, Y, P] = get_task(task_name)
 %   P:      a structure of parameters
 
 task = set_task(task_name);
+P = [];
 if task.simulation
-    P = set_parameters(task);
-    [X,Y,task] = get_data(task,P);
-else
-    P = [];
-    [X,Y,task] = get_data(task);
+    if task.QDA_model
+        P = set_parameters(task);
+    end
 end
-
+[X,Y,task] = get_data(task,P);

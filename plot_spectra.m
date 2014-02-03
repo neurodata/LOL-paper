@@ -28,7 +28,7 @@ for i=1:T.Nalgs;
         legendcell=[legendcell; {'dhat1'}; {'dhat2'}];
     end
 end
-if T.simulation
+if T.QDA_model
     plot(P.d1,'k','linewidth',2)
     plot(P.d0,'color',F.gray,'linewidth',2)
     maxy=max(maxy,P.d1(1));

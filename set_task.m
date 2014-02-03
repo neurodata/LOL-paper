@@ -51,6 +51,9 @@ elseif strfind(name,'trunk3')
 elseif strfind(name,'increaseD')
     task.Ntrials=20;
     task.algs={'PCA','LOL','DRDA','RDA','LDA'};   % which algorithms to use
+elseif strfind(name,'xor')
+    task.QDA_model=0;
+    task.algs={'PCA','LOL','DRDA','RDA','LDA','treebagger'};   % which algorithms to use
 end
 
 if task.simulation==0

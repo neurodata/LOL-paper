@@ -38,7 +38,7 @@ if ~isfield(task,'P')
             A  = eye(D,D);
             Sig1=A*diag(sv);                            % class 1 cov
             Sig0=A*diag(sv);                            % class 2 cov
-
+            
         case 'w1' % wide
             
             D = 1;
@@ -63,14 +63,14 @@ if ~isfield(task,'P')
             sv = sd/sqrt(D)*ones(D,1);
             sv(2)=1;
             A  = eye(D,D);
-
+            
             Sig0=A*diag(sv);                            % class 2 cov
             Sig0(1,1) = 0.5;
             Sig0(1,2)=0.25;
             Sig0(2,1)=0.25;
-
+            
             Sig1=Sig0;
-
+            
         case 'w3' % wide
             
             D = 3;
@@ -120,7 +120,7 @@ if ~isfield(task,'P')
             
             Sig1=Sig1+eye(D);
             Sig0=Sig0+eye(D);
-
+            
             
         case 'increaseD10' % simple angle
             
@@ -138,10 +138,10 @@ if ~isfield(task,'P')
                     A(a,b)=rho^abs(a-b);
                 end
             end
-
+            
             Sig0=A;
             Sig1=A;
-
+            
         case 'increaseD20' % simple angle
             
             D=20;
@@ -158,12 +158,12 @@ if ~isfield(task,'P')
                     A(a,b)=rho^abs(a-b);
                 end
             end
-
+            
             Sig0=A;
             Sig1=A;
-
-
-         case 'increaseD50' % simple angle
+            
+            
+        case 'increaseD50' % simple angle
             
             D=50;
             mudelt = 2.5;                                 % distance betwen dim 1 of means
@@ -179,10 +179,10 @@ if ~isfield(task,'P')
                     A(a,b)=rho^abs(a-b);
                 end
             end
-
+            
             Sig0=A;
             Sig1=A;
-
+            
         case 'increaseD100' % simple angle
             
             D=100;
@@ -199,11 +199,11 @@ if ~isfield(task,'P')
                     A(a,b)=rho^abs(a-b);
                 end
             end
-
+            
             Sig0=A;
             Sig1=A;
-
-       case 'sa2' % simple angle
+            
+        case 'sa2' % simple angle
             
             mudelt = 3.5;                                 % distance betwen dim 1 of means
             mu1 = [-mudelt/2*ones(2,1); zeros(D-2,1)];                   % class 1 mean
@@ -406,7 +406,7 @@ if ~isfield(task,'P')
             A(1:D+1:end)=100./sqrt(1:D);
             Sig1=A;
             Sig0=A;
-
+            
         case 'toeplitz'
             rho=0.5;
             A=nan(D);
@@ -422,7 +422,7 @@ if ~isfield(task,'P')
             Sig0=A;
             
         case 'toeplitz2'
-
+            
             D=1000;
             rho=0.5;
             A=nan(D);
@@ -703,6 +703,7 @@ if ~isfield(task,'P')
             
             Sig0=Sig;
             Sig1=Sig;
+            
             
     end
     

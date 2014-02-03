@@ -25,53 +25,38 @@ minLDA=0.5;
 subplot(F.Nrows,F.Ncols,F.Ncols*row-(F.Ncols-col)), hold all
 minAlg=0.5;
 for i=1:Nalgs;
-    if ~strcmp(T.algs{i},'LDA')
-        %         errorbar(T.ks,S.means.Lhats(i,:),S.stds.Lhats(i,:)/10,'color',F.colors{i},'linewidth',2)
-        if T.ntest>9
-            plot(T.ks,S.medians.Lhats(i,:),'color',F.colors{i},'linewidth',2)
-            loc=' median';
-            temp=min(S.medians.Lhats(:));
-        else
-            plot(T.ks,S.means.Lhats(i,:),'color',F.colors{i},'linewidth',2)
-            loc=' mean';
-            temp=min(S.means.Lhats(:));
-        end
-        minAlg=min(minAlg,temp);
+    
+    if T.ntest>9
+        location=S.medians.Lhats(i,:);
+        loc=' median';
     else
-        %         errorbar(T.ks,S.means.Lhats(i,1)*ones(size(T.ks)),S.stds.Lhats(i,1)*ones(size(T.ks)),'-','linewidth',2,'color',F.gray)
-        if T.ntest>9
-            plot(T.ks,S.medians.Lhats(i,1)*ones(size(T.ks)),'-','linewidth',2,'color',F.gray)
-            minLDA=S.medians.Lhats(i,1);
-        else
-            plot(T.ks,S.means.Lhats(i,1)*ones(size(T.ks)),'-','linewidth',2,'color',F.gray)
-            minLDA=S.means.Lhats(i,1);
-        end
-        
+        location=S.means.Lhats(i,:);
+        loc=' mean';
+    end
+    minloc=min(location);
+    
+    if ~strcmp(T.algs{i},'LDA')
+        plot(T.ks,location,'color',F.colors{i},'linewidth',2)
+        minAlg=min(minAlg,minloc);
+    else
+        plot(T.ks,location(1)*ones(size(T.ks)),'-','linewidth',2,'color',F.gray)
     end
 end
-
 
 
 % plot chance
-% errorbar(1:T.Kmax,mean(S.Lchance)*ones(T.Kmax,1),std(S.Lchance)*ones(T.Kmax,1),'-k','linewidth',2)
 plot(1:T.Kmax,mean(S.Lchance)*ones(T.Kmax,1),'-k','linewidth',2)
 
-% plot emperically computed Lhat for the Bayes classifier
-if T.QDA_model
-    %     errorbar(1:T.Kmax,mean(S.Lbayes)*ones(T.Kmax,1),std(S.Lbayes)*ones(T.Kmax,1),'-.r','Linewidth',2)
+% plot optimal (when available)
+if T.QDA_model % plot emperically computed Lhat for the Bayes classifier
     plot(1:T.Kmax,median(S.Lbayes)*ones(T.Kmax,1),'-.r','Linewidth',2)
     
-    % plot risk if we can compute it analytically
-    if isfield(S,'Risk')
+    if isfield(S,'Risk')     % plot risk if we can compute it analytically
         plot(1:T.Kmax,S.Risk*ones(T.Kmax,1),'-r','linewidth',2)
     end
 end
-% minT=min(0.5,minLDA);
-% minT=min(minT,maxAlg);
 
-
-% YU=min(YU,min(nanmax(S.means.Lhats(:,1:end-5))));
-
+% formatting
 if T.ntest>9
     YL=nanmin(S.medians.Lhats(:));
 else
