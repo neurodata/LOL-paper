@@ -24,7 +24,7 @@ function v = logdet(A, op)
 %
 %   v = logdet(A, 'chol');
 %       If A is positive definite, you can tell the function 
-%       to use Cholesky factorization to accomplish the dataset 
+%       to use Cholesky factorization to accomplish the task 
 %       using this syntax, which is substantially more efficient
 %       for positive definite matrix. 
 %

@@ -5,9 +5,9 @@ n0=1000;
 n1=n0;
 n=n0+n1;
 
-dataset.name='model3_100';
+task.name='model3_100';
 
-P = get_parameters(dataset);
+P = get_parameters(task);
 Risk = get_risk(P.mu0-P.mu1,P.Sig0);
 
 

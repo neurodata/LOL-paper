@@ -10,3 +10,5 @@ Z.Ytrain=Y(idx(1:ntrain));
 
 Z.Xtest=X(:,idx(ntrain+1:end));
 Z.Ytest=Y(idx(ntrain+1:end));
+
+Z.idx = idx;

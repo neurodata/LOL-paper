@@ -1,9 +1,9 @@
 function plot_sens_spec(T,S,F,row,col)
-%  plot spectra, one row per dataset
+%  plot spectra, one row per task
 % INPUT:
-%   T: dataset info
-%   P: dataset parameters
-%   Proj: dataset projections
+%   T: task info
+%   P: task parameters
+%   Proj: task projections
 %   row: which row
 %   col: which column
 

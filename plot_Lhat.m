@@ -1,7 +1,7 @@
 function plot_Lhat(T,S,F,row,col)
-%  plot Lhats for each alg, one row per dataset
+%  plot Lhats for each alg, one row per task
 % INPUT:
-%   T: dataset info
+%   T: task info
 %   S: statistics of algorithms
 %   F: figure properties
 %   row: which row

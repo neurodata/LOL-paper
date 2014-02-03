@@ -1,4 +1,4 @@
-function out = get_dataset_stats(Yhat,Y)
+function out = get_task_stats(Yhat,Y)
 % projects onto LDA projection line and computes scores, Yhats, and Lhat
 % 
 % 

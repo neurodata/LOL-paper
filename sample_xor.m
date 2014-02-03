@@ -1,6 +1,6 @@
-function [X,Y] = sample_xor(dataset)
+function [X,Y] = sample_xor(task)
 
-n=dataset.n;
+n=task.n;
 D=25;
 
 X=randn(n,D);
