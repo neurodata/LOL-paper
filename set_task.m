@@ -38,7 +38,7 @@ elseif strcmp(name,'sa')
     task.algs={'PCA','LOL','DRDA','QOL','RDA','LDA'};   % which algorithms to use
     task.ks=1:40;                          % list of dimensions to embed into
 elseif strcmp(name,'r') || strcmp(name,'wra') || strcmp(name,'wra2')
-    task.algs={'PCA','LOL','DRDA','QOL','RDA','LDA'};   % which algorithms to use
+    task.algs={'PCA','LOL','DRDA','QOL','QOQ','RDA','LDA'};   % which algorithms to use
 elseif strfind(name,'model')
     task.Ntrials=100;
     task.ntrain=200;   % which algorithms to use
@@ -52,16 +52,15 @@ elseif strfind(name,'increaseD')
     task.Ntrials=20;
     task.algs={'PCA','LOL','DRDA','RDA','LDA'};   % which algorithms to use
 elseif strfind(name,'xor')
-    task.Ntrials=10;
+    task.Ntrials=50;
     task.QDA_model=0;
-    task.algs={'PCA','LOL','DRDA','RDA','LDA','treebagger'};   % which algorithms to use
+    task.algs={'PCA','LOL','LDA','treebagger','QOL','QOQ'};   % which algorithms to use
 end
 
 if task.simulation==0
     task.QDA_model=0;
 end
 
-task.algs={'LDA','RDA','LOL'};   % which algorithms to use
 
 task.Nalgs=length(task.algs);           % # of algorithms to use
 task.n=task.ntrain+task.ntest;          % # of total samples

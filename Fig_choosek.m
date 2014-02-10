@@ -12,10 +12,10 @@ just_plot=false;
 for i=1:length(task_list_names)
     display(task_list_names{i})
     if ~just_plot
-        [tasks, P, Phat, Proj, Stats] = run_task_list(task_list_names{i});
+        [tasks, P, Stats] = run_task_list(task_list_names{i});
     else
         load(['../data/results/', task_list_names{i}]);
     end
-    plot_tasks(tasks,Stats,P,Proj,task_list_names{i})
+    plot_tasks(tasks,Stats,task_list_names{i})
 end
 

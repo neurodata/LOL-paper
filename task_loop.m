@@ -6,65 +6,113 @@ for k=1:task.Ntrials
     
     if mod(k,10)==0, display(['trial # ', num2str(k)]); end
     
+    % prepare data
     [task1, X, Y, P] = get_task(task.name);
-    
     Z = parse_data(X,Y,task1.ntrain,task1.ntest);
     task1 = update_k(task1);
     
-    %     [Proj, Phat] = estimate_projections(Z.Xtrain,Z.Ytrain,task.Kmax,task.algs);
-    %    [Z,Proj,Phat] = embed_data(Z,task1);
-    
-    % tic
-    
+    tic % get delta and eigenvectors
     Phat = estimate_parameters(Z.Xtrain,Z.Ytrain,task1.Kmax);
+    loop{k}.svdtime = toc;
     
+    % center data
     Xtrain_centered = bsxfun(@minus,Z.Xtrain,Phat.mu);
     Xtest_centered = bsxfun(@minus,Z.Xtest,Phat.mu);
     
     % classify
     for i=1:task1.Nalgs
-        if strcmp(task1.algs{i},'LDA')  % if LDA, no need to project, just operate on data in ambient dimension
+        if strcmp(task1.algs{i},'LDA')
+            tic
             W = LDA_train(Xtrain_centered',Z.Ytrain);              % estimate LDA discriminating boundary from training data
             Yhat = LDA_predict(Xtest_centered',W);    % predict
             loop{k}.out(i,1) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
+            loop{k}.time(i,1)=toc;
+            
+        elseif strcmp(task1.algs{i},'PCA')
+            for l=1:task1.Nks
+                tic
+                [Proj, W] = LDAoPCA_train(Xtrain_centered, Z.Ytrain, Phat.V(1:task1.ks(l),:));
+                Yhat = LOL_predict(Xtest_centered,Proj,W);
+                loop{k}.out(i,l) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
+                loop{k}.time(i,l)=toc+loop{k}.svdtime;
+            end
             
         elseif strcmp(task1.algs{i},'treebagger')
+            tic
             B = TreeBagger(100,Z.Xtrain',Z.Ytrain');
             [~, scores] = predict(B,Z.Xtest');
             Yhat=scores(:,1)<scores(:,2);
             loop{k}.out(i,1) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
+            loop{k}.time(i,1)=toc;
             
-        elseif strcmp(task1.algs{i},'LOL')  % if LDA, no need to project, just operate on data in ambient dimension
-            
+        elseif strcmp(task1.algs{i},'LOL')
             for l=1:task1.Nks
+                tic
                 [Proj, W] = LOL_train(Xtrain_centered, Z.Ytrain,Phat.delta,Phat.V(1:task1.ks(l),:));
                 Yhat = LOL_predict(Xtest_centered,Proj,W);
                 loop{k}.out(i,l) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
+                loop{k}.time(i,l)=toc+loop{k}.svdtime;
             end
-                        
-
-        elseif strcmp(task1.algs{i},'RDA')  % if LDA, no need to project, just operate on data in ambient dimension
             
-            [V_RDA, ~] = qr(randn(task1.D,task1.Kmax),0);
-            Proj=V_RDA';
-
-            training_features = Proj*Xtrain_centered;
-            test_features = Proj*Xtest_centered;
-            
+        elseif strcmp(task1.algs{i},'QOL')
             for l=1:task1.Nks
-                W = LDA_train(training_features(1:task1.ks(l),:)',Z.Ytrain);       % estimate LDA discriminating boundary from training data
-                Yhat = LDA_predict(test_features(1:task1.ks(l),:)',W);    % predict
+                tic
+                [Proj, W] = QOL_train(Xtrain_centered, Z.Ytrain,Phat.delta,task1.ks(l));
+                Yhat = LOL_predict(Xtest_centered,Proj,W);
+                loop{k}.out(i,l) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
+                loop{k}.time(i,l)=toc+loop{k}.svdtime;
+            end
+            
+        elseif strcmp(task1.algs{i},'QOQ')
+            for l=1:task1.Nks
+                QDAhat = QOQ_train(Xtrain_centered, Z.Ytrain,Phat.delta,task1.ks(l));
+                Yhat = QOQ_predict(Xtest_centered,QDAhat);
                 loop{k}.out(i,l) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
             end
             
-            
-            
-        else % if LDA, no need to project, just operate on data in ambient dimension
+        elseif strcmp(task1.algs{i},'RDA')
             for l=1:task1.Nks
-                W = LDA_train(Z.Xtrain_proj{i}(1:task1.ks(l),:)',Z.Ytrain);       % estimate LDA discriminating boundary from training data
-                Yhat = LDA_predict(Z.Xtest_proj{i}(1:task1.ks(l),:)',W);    % predict
+                tic
+                [Proj, W] = RDA_train(Xtrain_centered, Z.Ytrain, task1.ks(l));
+                Yhat = LOL_predict(Xtest_centered,Proj,W);
                 loop{k}.out(i,l) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
+                loop{k}.time(i,l)=toc+loop{k}.svdtime;
             end
+            
+        elseif strcmp(task1.algs{i},'DRDA')
+            for l=1:task1.Nks
+                tic
+                [Proj, W] = DRDA_train(Xtrain_centered, Z.Ytrain, Phat.delta,task1.ks(l));
+                Yhat = LOL_predict(Xtest_centered,Proj,W);
+                loop{k}.out(i,l) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
+                loop{k}.time(i,l)=toc+loop{k}.svdtime;
+            end
+            
+%         elseif strcmp(task1.algs{i},'knn')
+%             
+%             d=bsxfun(@minus,Z.Xtrain,Z.Xtest).^2;
+%             [~,IX]=sort(d);
+%             
+%             for l=1:tasks1.Nks
+%                 Yhat(i)=sum(Z.Ytrain(IX(1:l,:)))>k/2;
+%                 loop{k}.out(i,l) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
+%             end
+            
+
+        elseif strcmp(task1.algs{i},'svm')
+
+            tic
+            SVMStruct = svmtrain(Z.Xtrain',Z.Ytrain);    
+            Yhat = svmclassify(SVMStruct,Z.Xtest');            
+            loop{k}.out(i,1) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
+            loop{k}.time(i,1)=toc;
+            
+            %         else
+            %             for l=1:task1.Nks
+            %                 W = LDA_train(Z.Xtrain_proj{i}(1:task1.ks(l),:)',Z.Ytrain);       % estimate LDA discriminating boundary from training data
+            %                 Yhat = LDA_predict(Z.Xtest_proj{i}(1:task1.ks(l),:)',W);    % predict
+            %                 loop{k}.out(i,l) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
+            %             end
         end
     end
     

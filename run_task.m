@@ -1,4 +1,4 @@
-function [task,P,Phat,Proj,Stats] = run_task(task_name)
+function [task,P,Stats] = run_task(task_name)
 % this function does the following for the input task
 % 1) runs a variety of classifiers on such task for a variety of embedding
 % dimensions
@@ -32,10 +32,8 @@ else
     Stats.Risk=nan;
 end
 
-% get Proj & Phat
-[~,Proj,Phat] = embed_data(Z,task);
 
 % save results
 if task.savestuff
-    save(['../data/results/', task.name],'task','P','Phat','Proj','Stats')
+    save(['../data/results/', task.name],'task','P','Stats')
 end

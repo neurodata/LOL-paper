@@ -8,7 +8,7 @@ specificity=nan(task.Nalgs,task.Nks,task.Ntrials);
 
 for k=1:task.Ntrials
     for i=1:task.Nalgs;
-        if strcmp(task.algs{i},'LDA') || strcmp(task.algs{i},'treebagger')
+        if isempty(loop{k}.out(i,2).Lhat) %strcmp(task.algs{i},'LDA') || strcmp(task.algs{i},'treebagger') || 
             l=1;
             Lhats(i,l,k)=loop{k}.out(i,l).Lhat;
             sensitivity(i,l,k)=loop{k}.out(i,l).sensitivity;

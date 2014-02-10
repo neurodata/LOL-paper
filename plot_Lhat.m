@@ -35,7 +35,7 @@ for i=1:Nalgs;
     end
     minloc=min(location);
     
-    if strcmp(T.algs{i},'LDA') || strcmp(T.algs{i},'treebagger')
+    if isnan(location(2)) % if no dimension tuning in algorithm
         plot(T.ks,location(1)*ones(size(T.ks)),'-','linewidth',2,'color',F.gray)
     else
         plot(T.ks,location,'color',F.colors{i},'linewidth',2)
@@ -63,7 +63,7 @@ else
     YL=nanmin(S.means.Lhats(:));
 end
 YU = min(S.means.Lhats(:,1))*1.1;
-set(gca,'XScale','log','Ylim',[YL YU],'Xlim',[1 T.Kmax])
+set(gca,'XScale','log','Ylim',[YL*0.9 YU],'Xlim',[1 T.Kmax])
 ylabel(T.name)
 grid on
 if row==1, title(['Lhat', loc]), end

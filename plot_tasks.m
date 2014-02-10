@@ -1,4 +1,4 @@
-function plot_tasks(tasks,Stats,P,Proj,task_list_name)
+function plot_tasks(tasks,Stats,task_list_name)
 % plot results for a set of tasks
 % generate a row of panels for each task
 % each row has the following columns:
@@ -42,7 +42,7 @@ F.markers{4}='*';
 F.markers{5}='v';
 F.markers{6}='s';
 
-F.Ncols=5;
+F.Ncols=4;
 F.Nrows=length(tasks);
 
 %% make various plots
@@ -53,9 +53,8 @@ for j=1:F.Nrows
     S=Stats{j};
     
     plot_Lhat(T,S,F,j,1)                % column 1: plot Lhats
-    plot_relative(T,S,F,j,3)            % column 2: plot performance vs LDA
-%     plot_spectra(T,P{j},Proj{j},F,j,2)  % column 3: plot spectra
-    plot_sens_spec(T,S,F,j,1)           % column 4 & 5: sensitivity and specificity
+    plot_relative(T,S,F,j,2)            % column 2: plot performance vs LDA
+    plot_sens_spec(T,S,F,j,1)           % column 3 & 4: sensitivity and specificity
 
 end
 

@@ -33,6 +33,7 @@ for i=1:T.Nalgs;
                 temp=S.means.Lhats(i,:)-mean(S.Lchance);
                 tit='chance';
             end
+            if isnan(temp(2)), temp=temp(1)*ones(size(temp)); end
             plot(T.ks,temp,'color',F.colors{i},'linewidth',2,'linestyle','-')
             maxt=max(maxt,max(temp));
             mint=min(mint,min(temp));
