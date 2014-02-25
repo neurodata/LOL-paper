@@ -1,9 +1,8 @@
 clearvars, clc, updatepath
 
-just_plot=true;
-task_list_name='fat';
+just_plot=false;
+task_list_name='trunk3';
 task_list = set_task_list(task_list_name);
-
 
 if just_plot==false;
     for j=1:length(task_list)

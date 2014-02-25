@@ -7,6 +7,8 @@ if strcmp(task_list_name,'thin')
     task_list={'sa';'s';'w'};
 elseif strcmp(task_list_name,'fat')
     task_list={'trunk';'toeplitz';'decaying';'trunk2'}; 
+elseif strcmp(task_list_name,'trunks')
+    task_list={'trunk';'trunk2';'trunk3'}; 
 elseif strcmp(task_list_name,'demo1')
     task_list={'cigars';'angled cigars';'trunk';'colon';'prostate'}; 
 elseif strcmp(task_list_name,'MaiYuan12')
