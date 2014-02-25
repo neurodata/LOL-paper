@@ -20,7 +20,7 @@ for k=1:task.Ntrials
             sensitivity(i,l,k)=loop{k}.out(i,l).sensitivity;
             specificity(i,l,k)=loop{k}.out(i,l).specificity;
             times(i,l,k)=loop{k}.time(i,l);
-            if size(loop{k}.out,2)==1 % if we did not do cv across dimensions for this algorithm
+            if size(loop{k}.out,2)==1 || isempty(loop{k}.out(i,2).Lhat) % if we did not do cv across dimensions for this algorithm
                 break
             end
             %             end
