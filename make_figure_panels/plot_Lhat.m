@@ -58,7 +58,7 @@ end
 YU=1.01*min(maxloc); %YU = min(S.means.Lhats(:,1))*1.1;
 YL=0.99*minAlg;
 
-set(gca,'XScale','linear','Ylim',[YL, YU],'Xlim',[1 T.Kmax],'XTick',[10:20:100])
+set(gca,'XScale','linear','Ylim',[YL, YU],'Xlim',[1 T.Kmax+1],'XTick',[10:20:100])
 title(T.name)
 grid on
 if col==1, ylabel('$\langle \hat{L}_n \rangle$','interp','latex'), end
