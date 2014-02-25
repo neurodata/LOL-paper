@@ -25,9 +25,10 @@ minLDA=0.5;
 subplot(F.Nrows,F.Ncols,col), hold all
 minAlg=0.5;
 for i=1:Nalgs;
-        location=S.means.Lhats(i,:);
-        loc=' mean';
-        minloc=min(location);
+    location=S.means.Lhats(i,:);
+    loc=' mean';
+    minloc=min(location);
+    maxloc(i)=max(location);
     
     if isnan(location(2)) % if no dimension tuning in algorithm
         plot(T.ks,location(1)*ones(size(T.ks)),'-','linewidth',2,'color',F.colors{i})
@@ -54,10 +55,10 @@ if T.QDA_model % plot emperically computed Lhat for the Bayes classifier
 end
 
 % formatting
-YU=0.5; %YU = min(S.means.Lhats(:,1))*1.1;
-YL=0.9*nanmin(S.means.Lhats(:));
+YU=1.01*min(maxloc); %YU = min(S.means.Lhats(:,1))*1.1;
+YL=0.99*minAlg;
 
-set(gca,'XScale','linear','Ylim',[YL, 0.5],'Xlim',[1 T.Kmax])
+set(gca,'XScale','linear','Ylim',[YL, YU],'Xlim',[1 T.Kmax],'XTick',[10:20:100])
 title(T.name)
 grid on
 if col==1, ylabel('$\langle \hat{L}_n \rangle$','interp','latex'), end

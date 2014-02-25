@@ -30,6 +30,8 @@ if row==F.Nrows
     xlabel('# of dimensions')
 end
 if col==1, ylabel('$\langle \hat{L}_n \rangle$','interp','latex'), end
+set(gca,'XTick',[10:20:100],'XLim',[1 50])
+
 % if row==2
 %    legend(legendcell,'Location','NorthEast')
 % end
