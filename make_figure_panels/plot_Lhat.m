@@ -25,15 +25,9 @@ minLDA=0.5;
 subplot(F.Nrows,F.Ncols,col), hold all
 minAlg=0.5;
 for i=1:Nalgs;
-%     
-%     if T.ntest>9
-%         location=S.medians.Lhats(i,:);
-%         loc=' median';
-%     else
         location=S.means.Lhats(i,:);
         loc=' mean';
-%     end
-    minloc=min(location);
+        minloc=min(location);
     
     if isnan(location(2)) % if no dimension tuning in algorithm
         plot(T.ks,location(1)*ones(size(T.ks)),'-','linewidth',2,'color',F.colors{i})
@@ -61,14 +55,7 @@ end
 
 % formatting
 YU=0.5; %YU = min(S.means.Lhats(:,1))*1.1;
-if T.ntest>9
-    YL=0.9*nanmin(S.medians.Lhats(:));
-    YL=YL-(YU-YL)*0.1;
-else
-    YL=0.9*nanmin(S.means.Lhats(:));
-    YL=YL-(YU-YL)*0.1;
-end
-
+YL=0.9*nanmin(S.means.Lhats(:));
 
 set(gca,'XScale','linear','Ylim',[YL, 0.5],'Xlim',[1 T.Kmax])
 title(T.name)
