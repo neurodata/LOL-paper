@@ -24,3 +24,4 @@ switch task.name
         task.ntrain = task.n-2;
         task.ntest = 2;
 end
+Y=double(Y);
