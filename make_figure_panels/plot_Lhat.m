@@ -25,14 +25,14 @@ minLDA=0.5;
 subplot(F.Nrows,F.Ncols,col), hold all
 minAlg=0.5;
 for i=1:Nalgs;
-    
-    if T.ntest>9
-        location=S.medians.Lhats(i,:);
-        loc=' median';
-    else
+%     
+%     if T.ntest>9
+%         location=S.medians.Lhats(i,:);
+%         loc=' median';
+%     else
         location=S.means.Lhats(i,:);
         loc=' mean';
-    end
+%     end
     minloc=min(location);
     
     if isnan(location(2)) % if no dimension tuning in algorithm

@@ -20,11 +20,11 @@ figure(1); clf
 
 
 F.gray=0.5*[1 1 1];
-F.Ncols=2;
-F.Nrows=length(tasks);
+F.Nrows=2;
+F.Ncols=length(tasks);
 
 %% make various plots
-for j=1:F.Nrows
+for j=1:F.Ncols
     
     % rename variables for task j for legibility
     T=tasks{j};
@@ -63,7 +63,7 @@ end
 
 %% save plots
 if T.savestuff
-    wh=[3 F.Nrows]*1.2;
+    wh=[F.Ncols 2]*1.2;
     fname=['../../figs/', char(strcat('performance_', task_list_name))];
     print_fig(gcf,wh,fname)
 end
