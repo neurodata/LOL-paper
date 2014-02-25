@@ -438,8 +438,7 @@ if ~isfield(task,'P')
             
         case 'trunk3'
             
-            D=1000;
-            mu1=2./sqrt(D:-1:1)';
+            mu1=3./sqrt(D:-1:1)';
             mu0=-mu1;
             
             A=eye(D);
