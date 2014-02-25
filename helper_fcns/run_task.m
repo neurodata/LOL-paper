@@ -18,7 +18,7 @@ function [task,P,Stats] = run_task(task)
 
 [task, X, Y, P] = get_task(task);
 
-Z = parse_data(X,Y,task.ntrain,task.ntest);
+Z = parse_data(X,Y,task.ntrain,task.ntest,task.percent_unlabeled);
 task = update_k(task);
 
 % loop over Ntrials for this task running the specified algorithms

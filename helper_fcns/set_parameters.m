@@ -109,6 +109,19 @@ if ~isfield(task,'P')
             Sig1=A;                            % class 1 cov
             Sig0=A;                            % class 2 cov
             
+        case 'semisup cigars' % simple
+            
+            mudelt = 6/sqrt(D);                                 % distance betwen dim 1 of means
+            mu1 = [-mudelt/2; zeros(D-1,1)];                   % class 1 mean
+            mu0 = [mudelt/2; zeros(D-1,1)];                     % class 2 mean
+            
+            sv = ones(D,1)/sqrt(D);
+            sv(2)=0.5;
+            
+            A  = eye(D,D)*diag(sv);
+            Sig1=A;                            % class 1 cov
+            Sig0=A;                            % class 2 cov
+
         case 'rotated cigars' % simple angle
             
             mudelt = 18/sqrt(D);                                 % distance betwen dim 1 of means
@@ -725,21 +738,27 @@ if ~isfield(task,'P')
             Sig0=Sig;
             Sig1=Sig;
             
-            
+        otherwise
+            error('no known parameter setting provided')
     end
     
     if task.permute
-        pi=randperm(D);
+        perm=randperm(D);
     else
-        pi=1:D;
+        perm=1:D;
     end
+    
+    if ~exist('pi0','var'), P.pi0=0.5; end
+    if ~exist('pi1','var'), P.pi1=0.5; end
+    if ~exist('piu','var'), P.piu=0.5; end
+    
     Q=eye(D);
-    Q=Q(pi,:);
+    Q=Q(perm,:);
     P.mu1=Q*mu1;
     P.mu0=Q*mu0;
     P.Sig1=Q*Sig1*Q';
     P.Sig0=Q*Sig0*Q';
-    P.pi=pi;
+    P.perm=perm;
     [~,d1, v1]=svd(Sig1);
     P.d1=diag(d1);
     idx1=find(diff(P.d1)==0,1);
@@ -760,23 +779,20 @@ P.mu1=P.mu1-mubar;
 P.mu0=P.mu0-mubar;
 
 
+% check for centered means
 if max(abs(P.mu1+P.mu0))>10^-4
     error('means are not centered')
 end
-% if max(max(abs(P.Sig1-P.Sig1')))>10^-4
-%     error('Sig1 is not symmetric')
-% end
-% if max(max(abs(P.Sig0-P.Sig0')))>10^-4
-%     error('Sig0 is not symmetric')
-% end
+
+% check for positive definiteness
 [~,p1]=chol(P.Sig1);
 [~,p2]=chol(P.Sig0);
 if p1>0 || p2>0
     error('Sig1 or Sig0 is not positive definite')
 end
 
-
 P.delta=mu1-mu0;
+% compute risk when Sig1=Sig0
 if norm(Sig1-Sig0)<10^-4
     P.Risk=1-normcdf(0.5*sqrt(P.delta'*(P.Sig1\P.delta)));
 end

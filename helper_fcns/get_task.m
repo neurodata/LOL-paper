@@ -1,4 +1,4 @@
-function [task, X, Y, P] = get_task(task_name)
+function [task, X, Y, P] = get_task(task)
 % this function generates everything necessarty to analyze a specific task
 %
 % INPUT: task_name: a string, naming the task
@@ -8,7 +8,7 @@ function [task, X, Y, P] = get_task(task_name)
 %   Y:      a vector of predictees
 %   P:      a structure of parameters
 
-task = set_task(task_name);
+task = set_task(task);
 P = [];
 if task.simulation
     if task.QDA_model

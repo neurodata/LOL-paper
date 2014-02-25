@@ -1,7 +1,7 @@
 clearvars, clc, updatepath
 
 just_plot=false;
-task_list_name='all';
+task_list_name='both_cigars';
 task_list = set_task_list(task_list_name);
 
 

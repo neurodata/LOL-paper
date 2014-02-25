@@ -9,18 +9,21 @@ times=nan(task.Nalgs,task.Nks,task.Ntrials);
 
 for k=1:task.Ntrials
     for i=1:task.Nalgs;
-        if isempty(loop{k}.out(i,2).Lhat) %strcmp(task.algs{i},'LDA') || strcmp(task.algs{i},'treebagger') || 
-            l=1;
+        %         if isempty(loop{k}.out(i,2).Lhat) %strcmp(task.algs{i},'LDA') || strcmp(task.algs{i},'treebagger') ||
+        %             l=1;
+        %             Lhats(i,l,k)=loop{k}.out(i,l).Lhat;
+        %             sensitivity(i,l,k)=loop{k}.out(i,l).sensitivity;
+        %             specificity(i,l,k)=loop{k}.out(i,l).specificity;
+        %         else
+        for l=1:task.Nks
             Lhats(i,l,k)=loop{k}.out(i,l).Lhat;
             sensitivity(i,l,k)=loop{k}.out(i,l).sensitivity;
             specificity(i,l,k)=loop{k}.out(i,l).specificity;
-        else
-            for l=1:task.Nks
-                Lhats(i,l,k)=loop{k}.out(i,l).Lhat;
-                sensitivity(i,l,k)=loop{k}.out(i,l).sensitivity;
-                specificity(i,l,k)=loop{k}.out(i,l).specificity;
-                times(i,l,k)=loop{k}.time(i,l);
+            times(i,l,k)=loop{k}.time(i,l);
+            if size(loop{k}.out,2)==1 % if we did not do cv across dimensions for this algorithm
+                break
             end
+            %             end
         end
     end
 end

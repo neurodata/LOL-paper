@@ -7,7 +7,7 @@ if task.simulation
     elseif strcmp(task.name,'xor')
         [X,Y] = sample_xor(task);
     else
-        [X,Y] = sample_QDA(task.n,P.mu0,P.mu1,P.Sig0,P.Sig1);
+        [X,Y] = sample_QDA(task.n,P);
     end
 else
     [X,Y,task] = load_cancer(task);

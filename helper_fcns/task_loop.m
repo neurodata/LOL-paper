@@ -4,11 +4,12 @@ function loop = task_loop(task)
 
 for k=1:task.Ntrials
     
+    
     if mod(k,10)==0, display(['trial # ', num2str(k)]); end
     
     % prepare data
     [task1, X, Y, P] = get_task(task);
-    Z = parse_data(X,Y,task1.ntrain,task1.ntest);
+    Z = parse_data(X,Y,task1.ntrain,task1.ntest,task1.percent_unlabeled);
     task1 = update_k(task1);
     
     tic % get delta and eigenvectors

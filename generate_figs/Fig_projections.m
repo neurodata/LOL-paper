@@ -15,7 +15,7 @@ for j=1:Nsims
     task.ntest=1000;
     task.algs={'LDA','PDA','LOL','Bayes'};
     [task1, X, Y, P] = get_task(task);
-    Z = parse_data(X,Y,task1.ntrain,task1.ntest);
+    Z = parse_data(X,Y,task1.ntrain,task1.ntest,0);
     task1 = update_k(task1);
     
     Phat = estimate_parameters(Z.Xtrain,Z.Ytrain,task1.Kmax);
@@ -63,9 +63,8 @@ for j=1:Nsims
         elseif strcmp(task1.algs{i},'ROAD')
             fit = road(Xtrain_centered, Z.Ytrain);
         elseif strcmp(task1.algs{i},'Bayes')
-            parms.lnpi0=log(0.5);
-            parms.lnpi1=log(0.5);
-            parms.del=P.mu0-P.mu1;
+            parms.thresh=(log(P.pi0)-log(P.pi1))/2;
+            parms.del=P.delta;
             parms.InvSig=pinv(P.Sig0);
             parms.mu=P.mu0+P.mu1;
             [Yhat, eta] = LDA_predict(Xtest_centered,parms);
