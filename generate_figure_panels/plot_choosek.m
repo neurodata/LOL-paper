@@ -15,7 +15,7 @@ function plot_choosek(tasks,Stats,task_list_name)
 
 
 %% set some figure parameters
-figure(1); clf
+h(1)=figure(1); clf
 % figure('visible','off');
 
 
@@ -32,7 +32,7 @@ for j=1:F.Ncols
     
     for i=1:T.Nalgs
         
-        if strcmp(T.algs{i},'LDA')
+        if strcmp(T.algs{i},'LDA') 
             F.colors{i}='g';
             F.markers{i}='.';
             F.markersize{i}=24;
@@ -65,5 +65,5 @@ end
 if T.savestuff
     wh=[F.Ncols*1.2 2]*1.2;
     fname=['../../figs/', char(strcat('performance_', task_list_name))];
-    print_fig(gcf,wh,fname)
+    print_fig(h(1),wh,fname)
 end

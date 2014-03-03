@@ -10,7 +10,7 @@ if just_plot==false;
         
         task.name=task_list{j};
         task.ks=1:100;
-        task.Ntrials=100;
+        task.Ntrials=10;
         task.algs={'LDA','PDA','LOL','DRDA'};
         task.savestuff=1;
         
