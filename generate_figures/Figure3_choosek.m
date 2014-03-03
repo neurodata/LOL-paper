@@ -10,9 +10,9 @@ if just_plot==false;
         
         task.name=task_list{j};
         task.ks=1:100;
-        task.Ntrials=10;
+        task.Ntrials=20;
         task.algs={'LDA','PDA','LOL','DRDA'};
-        task.savestuff=0;
+        task.savestuff=1;
         
         [tasks{j},P{j},Stats{j}] = run_task(task);
     end
