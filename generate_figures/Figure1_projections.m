@@ -107,5 +107,5 @@ end
 fn=['../../figs/projections_', task_list_name];
 if savestuff
     wh=[6 nrows]*1.2;
-    print_fig(h(1),wh,fn)
+    print_fig(wh,fn)
 end
