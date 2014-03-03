@@ -1,7 +1,7 @@
 clearvars, clc, updatepath
 
-just_plot=true;
-task_list_name='increaseD';
+just_plot=false;
+task_list_name='thin';
 task_list = set_task_list(task_list_name);
 
 if just_plot==false;
@@ -10,14 +10,15 @@ if just_plot==false;
         
         task.name=task_list{j};
         task.ks=1:100;
-        task.Ntrials=100;
+        task.Ntrials=10;
         task.algs={'LDA','PDA','LOL','DRDA'};
-
+        task.savestuff=0;
+        
         [tasks{j},P{j},Stats{j}] = run_task(task);
     end
     save(['../../data/results/', task_list_name])
-    plot_tasks(tasks,Stats,task_list_name)
+    plot_choosek(tasks,Stats,task_list_name)
 else
     load(['../../data/results/', task_list_name])
-    plot_tasks(tasks,Stats,task_list_name)
+    plot_choosek(tasks,Stats,task_list_name)
 end

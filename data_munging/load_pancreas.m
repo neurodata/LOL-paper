@@ -1,6 +1,6 @@
 function [X,Y] = load_pancreas(which)
 
-data=load('../data/base/pancreas_data');
+data=load('../../data/base/pancreas_data');
 X=data.X;
 [n, ~] = size(X);
 labels=data.labels;

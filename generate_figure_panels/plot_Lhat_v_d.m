@@ -34,16 +34,19 @@ end
 if col==1, ylabel('$\langle \hat{L}_n \rangle$','interp','latex'), end
 if maxx<11
     xtick=[0:2:10];
-    xticklabel={'0';'';'4';'';'8'};
+    xticklabel={'0';'';'4';'';'8';'';'12'};
+    xmax=10;
 elseif maxx<21
     xtick=[0:4:20];
-    xticklabel={'0';'';'8';'';'16'};
+    xticklabel={'0';'';'8';'';'16';'';'24'};
+    xmax=20;
 else
     xtick=10:10:100;
-    xticklabel={'10';'';'30';'';'50'};
+    xticklabel={'10';'';'30';'';'50';'';'70'};
+    xmax=maxx;
 end
     
-set(gca,'XTick',xtick,'XTickLabel',xticklabel,'XLim',[0, maxx])
+set(gca,'XTick',xtick,'XTickLabel',xticklabel,'XLim',[0, xmax])
 
 % if row==2
 %    legend(legendcell,'Location','NorthEast')

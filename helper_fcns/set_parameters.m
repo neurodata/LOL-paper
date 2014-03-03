@@ -109,6 +109,23 @@ if ~isfield(task,'P')
             Sig1=A;                            % class 1 cov
             Sig0=A;                            % class 2 cov
             
+        case 'angled cigars' % simple
+            
+            mudelt = 6/sqrt(D);                                 % distance betwen dim 1 of means
+            mu1 = [-mudelt/2; zeros(D-1,1)];                   % class 1 mean
+            mu0 = [mudelt/2; zeros(D-1,1)];                     % class 2 mean
+            
+            sv = ones(D,1)/sqrt(D);
+            sv(2)=0.5;
+            
+            A  = eye(D,D)*diag(sv);
+            shear = eye(D);
+            shear(1,2)=1;
+            shear(2,1)=1;
+            A=shear*A;
+            Sig1=A;                            % class 1 cov
+            Sig0=A;                            % class 2 cov
+
         case 'semisup cigars' % simple
             
             mudelt = 6/sqrt(D);                                 % distance betwen dim 1 of means
@@ -162,7 +179,7 @@ if ~isfield(task,'P')
             Sig0=Sig0+eye(D);
             
             
-        case 'increaseD10' % simple angle
+        case 'toeplitz, D=10' % simple angle
             
             D=10;
             mudelt = 2.5;                                 % distance betwen dim 1 of means
@@ -182,7 +199,7 @@ if ~isfield(task,'P')
             Sig0=A;
             Sig1=A;
             
-        case 'increaseD20' % simple angle
+        case 'toeplitz, D=20' % simple angle
             
             D=20;
             mudelt = 2.5;                                 % distance betwen dim 1 of means
@@ -203,7 +220,7 @@ if ~isfield(task,'P')
             Sig1=A;
             
             
-        case 'increaseD50' % simple angle
+        case 'toeplitz, D=50' % simple angle
             
             D=50;
             mudelt = 2.5;                                 % distance betwen dim 1 of means
@@ -223,7 +240,7 @@ if ~isfield(task,'P')
             Sig0=A;
             Sig1=A;
             
-        case 'increaseD100' % simple angle
+        case 'toeplitz, D=100' % simple angle
             
             D=100;
             mudelt = 2.5;                                 % distance betwen dim 1 of means
@@ -788,6 +805,9 @@ end
 [~,p2]=chol(P.Sig0);
 if p1>0 || p2>0
     error('Sig1 or Sig0 is not positive definite')
+end
+if norm(P.Sig0-P.Sig0')>10^-4 || norm(P.Sig1-P.Sig1')>10^-4 
+    error('Sig0 or Sig1 is not symmetric')
 end
 
 P.delta=mu1-mu0;

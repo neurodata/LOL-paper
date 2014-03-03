@@ -34,8 +34,8 @@ for i=1:Nalgs;
         plot(T.ks,location(1)*ones(size(T.ks)),'-','linewidth',2,'color',F.colors{i})
     else
         plot(T.ks,location,'color',F.colors{i},'linewidth',2)
-        minAlg=min(minAlg,minloc);
     end
+    minAlg=min(minAlg,minloc);
 end
 
 % plot upper and lower bounds
@@ -57,6 +57,7 @@ end
 % formatting
 YU=1.01*min(maxloc); %YU = min(S.means.Lhats(:,1))*1.1;
 YL=0.99*minAlg;
+if YU<YL, YU=mean([YU,YL])*1.1; YL=mean([YU,YL])*0.9; end
 
 set(gca,'XScale','linear','Ylim',[YL, YU],'Xlim',[1 T.Kmax+1],'XTick',[10:20:100])
 title(T.name)

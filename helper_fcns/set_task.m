@@ -37,7 +37,7 @@ elseif strfind(name,'debug')
 elseif strfind(name,'trunk3')
 %     task.Ntrials=100;
 %     task.algs={'PDA','LOL','DRDA','RDA'};   % which algorithms to use
-elseif strfind(name,'increaseD')
+elseif strfind(name,'toeplitz, D=')
 %     task.Ntrials=20;
 %     task.algs={'PDA','LOL','DRDA','RDA','LDA'};   % which algorithms to use
 elseif strfind(name,'xor')
