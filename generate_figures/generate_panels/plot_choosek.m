@@ -57,7 +57,6 @@ for j=1:F.Ncols
     
     plot_Lhat(T,S,F,j)                % column 1: plot Lhats
     plot_Lhat_v_d(T,S,F,2,j)           % column 3 & 4: sensitivity and specificity
-    %     plot_sens_spec(T,S,F,j,1)           % column 3 & 4: sensitivity and specificity
     
 end
 

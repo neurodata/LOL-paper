@@ -48,6 +48,3 @@ end
     
 set(gca,'XTick',xtick,'XTickLabel',xticklabel,'XLim',[0, xmax])
 
-% if row==2
-%    legend(legendcell,'Location','NorthEast')
-% end

@@ -5,6 +5,7 @@ function print_fig(h,wh,fname)
 
 set(h,'PaperSize',wh,'PaperPosition',[0 0 wh],'color','w');
 set(h, 'InvertHardCopy', 'off');
+set(h,'renderer','zbuffer')
 saveas(h,fname,'fig')
 print(h,fname,'-dpdf')
 print(h,fname,'-dpng','-r300')

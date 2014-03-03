@@ -1,7 +1,7 @@
 clearvars, clc, updatepath
 
 just_plot=false;
-task_list_name='thin';
+task_list_name='sa';
 task_list = set_task_list(task_list_name);
 
 if just_plot==false;
@@ -9,8 +9,8 @@ if just_plot==false;
         display(task_list{j})
         
         task.name=task_list{j};
-        task.ks=1:100;
-        task.Ntrials=10;
+        task.ks=1:50;
+        task.Ntrials=20;
         task.algs={'LDA','PDA','LOL','DRDA'};
         task.savestuff=1;
         
