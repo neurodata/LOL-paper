@@ -12,16 +12,7 @@ function [Yhat, eta, Proj] = LOL_train_and_predict(Xtrain, Ytrain, Xtest, vararg
 %           delta in R^D: difference of means
 %           V in R^{d x D}: projection matrix
 
-if nargin==4
-    Phat = estimate_parameters(Xtrain,Ytrain,varargin{1});
-    delta = Phat.delta;
-    V = Phat.V;
-else
-    delta = varargin{1};
-    V = varargin{2};
-end
-
-Proj = LOL_train(Xtrain,Ytrain,delta,V);
+Proj = LOL_train(Xtrain,Ytrain,varargin{1},varargin{2});
 Xtilde=Proj*Xtrain;
 parms = LDA_train(Xtilde,Ytrain);
 [Yhat, eta] = LDA_predict(Proj*Xtest,parms);

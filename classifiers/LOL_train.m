@@ -12,7 +12,7 @@ function Proj = LOL_train(X,Y,varargin)
 %       V in R^{d x D}: projection matrix
 %   end
 % 
-% OUTPUT: Proj \in R^{d x D}: projection matrix
+% OUTPUT: Proj in R^{d x D}: projection matrix
 
 if nargin==3
     Phat = estimate_parameters(X,Y,varargin{1});

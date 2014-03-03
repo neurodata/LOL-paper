@@ -45,6 +45,14 @@ parfor k=1:task.Ntrials
             loop{k}.out(i,1) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
             loop{k}.time(i,1)=toc;
             
+        elseif strcmp(task1.algs{i},'LRL')
+            for l=1:task1.Nks
+                tic
+                Yhat = LRL_train_and_predict(Xtrain_centered,Z.Ytrain,Xtest_centered,Phat.V(1:task1.ks(l),:));
+                loop{k}.out(i,l) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
+                loop{k}.time(i,l)=toc+loop{k}.svdtime;
+            end
+            
         elseif strcmp(task1.algs{i},'LOL')
             for l=1:task1.Nks
                 tic

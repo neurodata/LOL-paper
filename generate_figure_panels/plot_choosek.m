@@ -32,7 +32,7 @@ for j=1:F.Ncols
     
     for i=1:T.Nalgs
         
-        if strcmp(T.algs{i},'LDA')
+        if strcmp(T.algs{i},'LDA') || strcmp(T.algs{i},'LRL')
             F.colors{i}='g';
             F.markers{i}='.';
             F.markersize{i}=24;
