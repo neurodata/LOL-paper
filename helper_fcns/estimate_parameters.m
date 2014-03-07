@@ -13,9 +13,13 @@ function Phat = estimate_parameters(X,Y,k)
 %   delta in R^D: estimated difference between class means
 %   V in R^{d x D}: truncated eigenvectors
 
-X0 = X(:,Y==0);
-X1 = X(:,Y==1);
+X0 = X(:,Y==0); 
+X1 = X(:,Y==1); 
 Xu = X(:,isnan(Y));
+
+[D,n0]=size(X0);
+n1=size(X1,2);
+nl=n0+n1;
 
 Phat.mu = mean(X,2);
 Phat.mu0=mean(X0,2);
@@ -23,9 +27,15 @@ Phat.mu1=mean(X1,2);
 Phat.muu=mean(Xu,2);
 Phat.delta=Phat.mu0-Phat.mu1;
 
+t=quantile(abs(Phat.delta),sqrt(nl/D));
+Phat.sdelta=Phat.delta;
+% Phat.sdelta(abs(Phat.sdelta)<t)=0;
+Phat.sdelta(abs(Phat.sdelta)<0.9*max(abs(Phat.sdelta)))=0;
+
+
 X0=bsxfun(@minus,X0,Phat.mu0);
 X1=bsxfun(@minus,X1,Phat.mu1);
-Xu=bsxfun(@minus,Xu,Phat.mu);
+Xu=bsxfun(@minus,Xu,Phat.muu);
 
 X_centered = [X0,X1,Xu]; %bsxfun(@minus,X,Phat.mu);
 [~,Phat.d,V] = svd(X_centered',0);

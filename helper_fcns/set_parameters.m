@@ -40,7 +40,6 @@ if ~isfield(task,'P')
             
         case 'w1' % wide
             
-            D = 1;
             mudelt = 6/sqrt(100);                                 % distance betwen dim 1 of means
             mu1 = [-mudelt/2; zeros(D-1,1)];                   % class 1 mean
             mu0 = [mudelt/2; zeros(D-1,1)];                     % class 2 mean

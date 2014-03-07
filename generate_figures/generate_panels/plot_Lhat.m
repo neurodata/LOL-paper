@@ -30,8 +30,12 @@ for i=1:Nalgs;
     minloc=min(location);
     maxloc(i)=max(location);
     
-    if isnan(location(2)) % if no dimension tuning in algorithm
-        plot(T.ks,location(1)*ones(size(T.ks)),'-','linewidth',2,'color',F.colors{i})
+    if length(location)>1
+        if isnan(location(2)) % if no dimension tuning in algorithm
+            plot(T.ks,location(1)*ones(size(T.ks)),'-','linewidth',2,'color',F.colors{i})
+        else
+            plot(T.ks,location,'color',F.colors{i},'linewidth',2)
+        end
     else
         plot(T.ks,location,'color',F.colors{i},'linewidth',2)
     end

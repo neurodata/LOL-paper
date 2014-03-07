@@ -25,6 +25,7 @@ for i=1:T.Nalgs;
     maxy=max(maxy,S.mins.mean.Lhats(i));
     legendcell=[legendcell; T.algs(i)];
     maxx=max(maxx,max(S.mins.mean.k));
+    display([T.name,' ', T.algs{i},', dhat=',num2str(S.mins.mean.Lhats(i)),', Lhat=',num2str(S.mins.mean.k(i))])
 end
 grid on
 axis('tight')

@@ -53,6 +53,14 @@ parfor k=1:task.Ntrials
                 loop{k}.time(i,l)=toc+loop{k}.svdtime;
             end
             
+        elseif strcmp(task1.algs{i},'SLOL')
+            for l=1:task1.Nks
+                tic
+                Yhat = LOL_train_and_predict(Xtrain_centered,Z.Ytrain,Xtest_centered,Phat.sdelta,Phat.V(1:task1.ks(l),:));
+                loop{k}.out(i,l) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
+                loop{k}.time(i,l)=toc+loop{k}.svdtime;
+            end
+            
         elseif strcmp(task1.algs{i},'QOL')
             for l=1:task1.Nks
                 tic

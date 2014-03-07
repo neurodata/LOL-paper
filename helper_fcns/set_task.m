@@ -15,11 +15,23 @@ elseif strcmp(name,'IPMN-HvL') || strcmp(name,'IPMN-HvML') || strcmp(name,'IPMN-
 elseif strcmp(name,'colon')
     task.simulation=0;
     if ~isfield(task,'Ntrials'), task.Ntrials=10; end                       % # of trials
-    task.algs={'PDA','LOL','DRDA'};   % which algorithms to use
+    if isfield(task.algs)
+        for i=1:length(task.algs)
+            if task.algs(i) == 'LDA';
+                task.algs(i)=[];
+            end
+        end
+    end
 elseif strcmp(name,'prostate')
     task.simulation=0;
-    if ~isfield(task,'Ntrials'), task.Ntrials=10; end                       % # of trials
-    task.algs={'PDA','LOL','DRDA'};   % which algorithms to use
+    if ~isfield(task,'Ntrials'), task.Ntrials=10; end     % # of trials
+    if isfield(task.algs)
+        for i=1:length(task.algs)
+            if task.algs(i) == 'LDA';
+                task.algs(i)=[];
+            end
+        end
+    end
 elseif strcmp(name,'a')
 %     task.Ntrials=20;
 %     task.ntrain=500;
@@ -52,12 +64,13 @@ elseif strcmp(name,'angled cigars')
     if ~isfield(task,'ks'), task.ks=5; end                              % list of dimensions to embed into
     if ~isfield(task,'algs'), task.algs={'LDA','PDA','LOL','Bayes'}; end               % which algorithms to use
 elseif strcmp(name,'semisup cigars')
-    task.ntrain = 100;
-    task.percent_unlabeled=0.5;
+    task.ntrain = 500;
+    task.percent_unlabeled=0.9;
 end
 
 
 % default settings
+if ~isfield(task,'algs'),       task.algs={'LDA','PDA','LOL','Bayes'}; end               % which algorithms to use
 if ~isfield(task,'name'),       task.name=name;     end                         % name of task
 if ~isfield(task,'simulation'), task.simulation=1;  end                    % is this a simulation
 if ~isfield(task,'QDA_model'),  task.QDA_model=1;   end                   % does this simulation satisfy the QDA model

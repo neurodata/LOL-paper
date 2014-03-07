@@ -1,4 +1,4 @@
-function plot_choosek(tasks,Stats,task_list_name)
+function plot_choosek(tasks,Stats,task_list_name,renderer)
 % plot results for a set of tasks
 % generate a row of panels for each task
 % each row has the following columns:
@@ -33,22 +33,27 @@ for j=1:F.Ncols
     for i=1:T.Nalgs
         
         if strcmp(T.algs{i},'LDA') 
-            F.colors{i}='g';
+            F.colors{i}='g';            % green
             F.markers{i}='.';
             F.markersize{i}=24;
             F.linewidth{i}=4;
         elseif strcmp(T.algs{i},'PDA')
-            F.colors{i}='m';
+            F.colors{i}='m';            % magenta
             F.markers{i}='s';
             F.markersize{i}=3;
             F.linewidth{i}=4;
         elseif strcmp(T.algs{i},'LOL')
-            F.colors{i}='c';
+            F.colors{i}='c';            % cyan
             F.markers{i}='v';
             F.markersize{i}=2;
             F.linewidth{i}=4;
+        elseif strcmp(T.algs{i},'SLOL')
+            F.colors{i}=[0.5 0 0.9];    % purple
+            F.markers{i}='+';
+            F.markersize{i}=2;
+            F.linewidth{i}=4;
         elseif strcmp(T.algs{i},'DRDA')
-            F.colors{i}= [1 0.5 0.2];
+            F.colors{i}= [1 0.5 0.2];   % orange
             F.markers{i}='x';
             F.markersize{i}=8;
             F.linewidth{i}=2;
@@ -64,5 +69,5 @@ end
 if T.savestuff
     wh=[F.Ncols*1.2 2]*1.2;
     fname=['../../figs/', char(strcat('performance_', task_list_name))];
-    print_fig(h(1),wh,fname)
+    print_fig(h(1),wh,fname,renderer)
 end
