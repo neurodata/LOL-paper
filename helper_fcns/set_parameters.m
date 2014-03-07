@@ -108,23 +108,6 @@ if ~isfield(task,'P')
             Sig1=A;                            % class 1 cov
             Sig0=A;                            % class 2 cov
             
-        case 'angled cigars' % simple
-            
-            mudelt = 6/sqrt(D);                                 % distance betwen dim 1 of means
-            mu1 = [-mudelt/2; zeros(D-1,1)];                   % class 1 mean
-            mu0 = [mudelt/2; zeros(D-1,1)];                     % class 2 mean
-            
-            sv = ones(D,1)/sqrt(D);
-            sv(2)=0.5;
-            
-            A  = eye(D,D)*diag(sv);
-            shear = eye(D);
-            shear(1,2)=1;
-            shear(2,1)=1;
-            A=shear*A;
-            Sig1=A;                            % class 1 cov
-            Sig0=A;                            % class 2 cov
-
         case 'semisup cigars' % simple
             
             mudelt = 6/sqrt(D);                                 % distance betwen dim 1 of means
@@ -140,21 +123,52 @@ if ~isfield(task,'P')
 
         case 'rotated cigars' % simple angle
             
-            mudelt = 18/sqrt(D);                                 % distance betwen dim 1 of means
+            R = eye(D);
+            theta=pi/4;
+            R(1,1)=cos(theta);
+            R(2,2)=cos(theta);
+            R(1,2)=sin(theta);
+            R(2,1)=-R(1,2);
+
+            mudelt = 6/sqrt(D);                                 % distance betwen dim 1 of means
             mu1 = [-mudelt/2; zeros(D-1,1)];                   % class 1 mean
             mu0 = [mudelt/2; zeros(D-1,1)];                     % class 2 mean
             
+            mu1 = R*mu1;
+            mu0 = R*mu0;
+            
             sv = ones(D,1)/sqrt(D);
-            sv(2)=1;
+            sv(2)=0.5;
             
             A  = eye(D,D)*diag(sv);
-            A(1,2) = 1;
-            A(2,1) = 1;
-            A = A+0.8*eye(D);
-            
+            A = R*A*R';
             Sig1=A;                            % class 1 cov
             Sig0=A;                            % class 2 cov
             
+        case 'semisup rotated cigars' % simple angle
+            
+            R = eye(D);
+            theta=pi/4;
+            R(1,1)=cos(theta);
+            R(2,2)=cos(theta);
+            R(1,2)=sin(theta);
+            R(2,1)=-R(1,2);
+
+            mudelt = 6/sqrt(D);                                 % distance betwen dim 1 of means
+            mu1 = [-mudelt/2; zeros(D-1,1)];                   % class 1 mean
+            mu0 = [mudelt/2; zeros(D-1,1)];                     % class 2 mean
+            
+            mu1=R*mu1;
+            mu0=R*mu0;
+            
+            sv = ones(D,1)/sqrt(D);
+            sv(2)=0.5;
+            
+            A  = eye(D,D)*diag(sv);
+            A = R*A*R';
+            Sig1=A;                            % class 1 cov
+            Sig0=A;                            % class 2 cov
+
         case 'sa' % simple angle
             
             mudelt = 2.5;                                 % distance betwen dim 1 of means

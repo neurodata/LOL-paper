@@ -1,9 +1,9 @@
 clearvars, clc, updatepath
 
 just_plot=false;
-task_list_name='all';
+task_list_name='all cigars';
 task_list = set_task_list(task_list_name);
-renderer='zbuffer'; % other options: 'zbuffer', 'OpenGL'
+renderer='zbuffer'; % options: 'painters', 'zbuffer', 'OpenGL'
 
 if just_plot==false;
     for j=1:length(task_list)

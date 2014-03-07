@@ -25,10 +25,14 @@ parfor k=1:task.Ntrials
     for i=1:task1.Nalgs
         if strcmp(task1.algs{i},'LDA')
             tic
-            Yhat = LDA_train_and_predict(Xtrain_centered,Z.Ytrain,Xtest_centered);
+            D = size(Xtrain_centered,1);
+            if D<1000 % skip LDA if the # of dimensions is too large such that pinv takes forever!
+                Yhat = LDA_train_and_predict(Xtrain_centered,Z.Ytrain,Xtest_centered);
+            else
+                Yhat = nan(size(Z.Ytest));
+            end
             loop{k}.out(i,1) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
             loop{k}.time(i,1)=toc;
-            
         elseif strcmp(task1.algs{i},'PDA')
             for l=1:task1.Nks
                 tic
@@ -94,22 +98,22 @@ parfor k=1:task.Ntrials
                 loop{k}.time(i,l)=toc+loop{k}.svdtime;
             end
             
-%         elseif strcmp(task1.algs{i},'knn')
-%             
-%             d=bsxfun(@minus,Z.Xtrain,Z.Xtest).^2;
-%             [~,IX]=sort(d);
-%             
-%             for l=1:tasks1.Nks
-%                 Yhat(i)=sum(Z.Ytrain(IX(1:l,:)))>k/2;
-%                 loop{k}.out(i,l) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
-%             end
+            %         elseif strcmp(task1.algs{i},'knn')
+            %
+            %             d=bsxfun(@minus,Z.Xtrain,Z.Xtest).^2;
+            %             [~,IX]=sort(d);
+            %
+            %             for l=1:tasks1.Nks
+            %                 Yhat(i)=sum(Z.Ytrain(IX(1:l,:)))>k/2;
+            %                 loop{k}.out(i,l) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
+            %             end
             
-
+            
         elseif strcmp(task1.algs{i},'svm')
-
+            
             tic
-            SVMStruct = svmtrain(Z.Xtrain',Z.Ytrain);    
-            Yhat = svmclassify(SVMStruct,Z.Xtest');            
+            SVMStruct = svmtrain(Z.Xtrain',Z.Ytrain);
+            Yhat = svmclassify(SVMStruct,Z.Xtest');
             loop{k}.out(i,1) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
             loop{k}.time(i,1)=toc;
             

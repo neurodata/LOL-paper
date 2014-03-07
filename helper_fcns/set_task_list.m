@@ -58,10 +58,12 @@ elseif strcmp(task_list_name,'bunch')
         'semisup cigars';'parallel cigars';'rotated cigars';...
         'model1, p100';'model1, p200';'model1, p400';'model1, p800';'model3, p100';'model3, p200';'model3, p400';'model3, p800';...
         'toeplitz, D=10';'toeplitz, D=20';'toeplitz, D=50';'toeplitz, D=100'};
-elseif strcmp(task_list_name,'both_cigars')
+elseif strcmp(task_list_name,'both cigars')
     task_list={'parallel cigars';'rotated cigars'}; 
 elseif strcmp(task_list_name,'semi comp')
     task_list={'semisup cigars';'parallel cigars'}; 
+elseif strcmp(task_list_name,'all cigars')
+    task_list={'semisup cigars';'parallel cigars'; 'semisup rotated cigars'; 'rotated cigars'}; 
 else 
     task_list = {task_list_name};
 end

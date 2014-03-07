@@ -1,7 +1,7 @@
 clearvars, clc, updatepath
 
 savestuff=1;
-task_list_name='both_cigars';
+task_list_name='both cigars';
 task_list = set_task_list(task_list_name);
 Nsims=length(task_list);
 nrows=Nsims;
@@ -9,6 +9,7 @@ nrows=Nsims;
 h(1)=figure(1); clf
 for j=1:Nsims
     
+    figure(1)
     % generate data and embed it
     task.name=task_list{j};
     task.ks=5;
@@ -35,8 +36,8 @@ for j=1:Nsims
    S1=surfl(x1, y1, z1);
    
    if j==2
-       rotate(S0,[0 0 1],135);
-       rotate(S1,[0 0 1],135);
+       rotate(S0,[1 0 0],135);
+       rotate(S1,[1 0 0],135);
    end
    
    colormap copper
@@ -100,6 +101,7 @@ for j=1:Nsims
         set(gca,'XTickLabel',[],'YTickLabel',[])
     end
     
+figure(j+1), clf, plot(X(1,Y==0),X(2,Y==0),'.r'), hold all, plot(X(1,Y==1),X(2,Y==1),'.b')
 end
 
 
@@ -107,5 +109,5 @@ end
 fname=['../../figs/projections_', task_list_name];
 if savestuff
     wh=[6 nrows]*1.2;
-    print_fig(h(1),wh,fname)
+    print_fig(h(1),wh,fname,'painters')
 end
