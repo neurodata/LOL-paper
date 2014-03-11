@@ -1,6 +1,6 @@
 clearvars, clc, updatepath
 
-task_list_name='amen SPECT';
+task_list_name='pancreas';
 task_list = set_task_list(task_list_name);
 renderer='painters'; % options: 'painters', 'zbuffer', 'OpenGL'
 

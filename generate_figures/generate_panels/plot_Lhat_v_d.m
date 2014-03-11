@@ -47,6 +47,6 @@ else
     xmax=maxx;
 end
     
-ytick=round(linspace(miny,maxy,5)*1000)/1000;
+ytick=round(linspace(miny*0.9,maxy*1.1,5)*1000)/1000;
 set(gca,'XTick',xtick,'XTickLabel',xticklabel,'XLim',[0, xmax],'YLim',[miny, maxy],'YTick',ytick)
 

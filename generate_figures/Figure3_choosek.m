@@ -11,7 +11,7 @@ for j=1:length(task_list)
     task.name=task_list{j};
     task.ks=unique(round(logspace(0,2,50)));
     task.Ntrials=1000;
-    task.algs={'LDA','PDA','SLOL','LOL'}; %,'treebagger'}; %;,'svm'};
+    task.algs={'LDA','PDA','SLOL','LOL','treebagger','svm'};
     task.savestuff=1;
     
     [T{j},P{j},S{j}] = run_task(task);

@@ -34,7 +34,7 @@ Phat.sdelta=Phat.delta;
 %     t=quantile(abs(Phat.delta),.9);    
 % end
 % Phat.sdelta(abs(Phat.sdelta)<t)=0;
-Phat.sdelta(abs(Phat.sdelta)<0.9*max(abs(Phat.sdelta)))=0;
+Phat.sdelta(abs(Phat.sdelta)<0.95*max(abs(Phat.sdelta)))=0;
 
 
 X0=bsxfun(@minus,X0,Phat.mu0);
