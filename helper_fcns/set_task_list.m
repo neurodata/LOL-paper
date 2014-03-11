@@ -64,6 +64,25 @@ elseif strcmp(task_list_name,'semi comp')
     task_list={'semisup cigars';'parallel cigars'}; 
 elseif strcmp(task_list_name,'all cigars')
     task_list={'semisup cigars';'parallel cigars'; 'semisup rotated cigars'; 'rotated cigars'}; 
+elseif strcmp(task_list_name,'amen READINGS')
+    task_list={'amen READINGS depression';'amen READINGS adhd';'amen READINGS gender'}; %'amen mood';'amen dementia';'amen bipolar';'amen adjustment';'amen anxiety'}; 
+
+elseif strcmp(task_list_name,'amen COGNITIVE')
+    task_list={'amen COGNITIVE depression';'amen COGNITIVE adhd';'amen COGNITIVE gender'}; %'amen mood';'amen dementia';'amen bipolar';'amen adjustment';'amen anxiety'}; 
+
+elseif strcmp(task_list_name,'amen SPECT')
+    task_list={'amen SPECT depression';'amen SPECT adhd';'amen SPECT gender'}; %'amen mood';'amen dementia';'amen bipolar';'amen adjustment';'amen anxiety'}; 
+
+elseif strcmp(task_list_name,'amen X')
+    task_list={'amen X depression';'amen X adhd';'amen X gender'}; %'amen mood';'amen dementia';'amen bipolar';'amen adjustment';'amen anxiety'};
+
+elseif strcmp(task_list_name,'amen ACTIVATION')
+    task_list={'amen ACTIVATION depression';'amen ACTIVATION adhd';'amen ACTIVATION gender'}; %'amen mood';'amen dementia';'amen bipolar';'amen adjustment';'amen anxiety'};
+
+elseif strcmp(task_list_name,'amen first')
+    task_list={'amen depression';'amen adhd';'amen gender';'amen mood'}; 
+elseif strcmp(task_list_name,'amen else')
+    task_list={'amen dementia';'amen bipolar';'amen adjustment';'amen anxiety'};
 else 
     task_list = {task_list_name};
 end

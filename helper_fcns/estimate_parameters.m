@@ -27,8 +27,12 @@ Phat.mu1=mean(X1,2);
 Phat.muu=mean(Xu,2);
 Phat.delta=Phat.mu0-Phat.mu1;
 
-t=quantile(abs(Phat.delta),sqrt(nl/D));
 Phat.sdelta=Phat.delta;
+% if D>nl
+%     t=quantile(abs(Phat.delta),sqrt(nl/D));
+% else
+%     t=quantile(abs(Phat.delta),.9);    
+% end
 % Phat.sdelta(abs(Phat.sdelta)<t)=0;
 Phat.sdelta(abs(Phat.sdelta)<0.9*max(abs(Phat.sdelta)))=0;
 

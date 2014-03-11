@@ -47,6 +47,15 @@ elseif strcmp(name,'semisup cigars')
 elseif strcmp(name,'semisup rotated cigars')
     task.ntrain = 500;
     task.percent_unlabeled=0.9;
+elseif strfind(name,'amen')==1
+    task.simulation = 0;
+    task.ntrain=5112;
+    task.ntest=569;
+elseif strfind(name,'amen adhd')==1
+    task.simulation = 0;
+    task.ntrain=5112;
+    task.ntest=569;    
+    task.ks=unique(round(logspace(0,2.9,30)));
 end
 
 

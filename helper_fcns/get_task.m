@@ -1,4 +1,4 @@
-function [task, X, Y, P] = get_task(task)
+function [task,X,Y,P] = get_task(task_in)
 % this function generates everything necessarty to analyze a specific task
 %
 % INPUT: task_name: a string, naming the task
@@ -8,11 +8,29 @@ function [task, X, Y, P] = get_task(task)
 %   Y:      a vector of predictees
 %   P:      a structure of parameters
 
-task = set_task(task);
+task = set_task(task_in);
 P = [];
 if task.simulation
-    if task.QDA_model
+    if strcmp(task.name,'DRL')
+        [X,Y] = sample_DRL(a);
+    elseif strcmp(task.name,'xor')
+        [X,Y] = sample_xor(task);
+    else
         P = set_parameters(task);
+        [X,Y] = sample_QDA(task.n,P);
     end
+else
+    [X,Y,task] = load_data(task);
 end
-[X,Y,task] = get_data(task,P);
+
+[D, n]=size(X);
+
+if D==length(Y)
+    X=X';
+    task.D = n;
+    task.n = D;
+else
+    task.D = D;
+    task.n = n;
+end
+

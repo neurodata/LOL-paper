@@ -12,7 +12,7 @@ for i=1:Nalgs
     legendcell=[legendcell; T.algs(i)];
 end
 
-plot_chance = false;
+plot_chance = true;
 plot_bayes = false;
 plot_risk = false;
 
@@ -42,8 +42,6 @@ for i=1:Nalgs;
     minAlg=min(minAlg,minloc);
 end
 
-% plot upper and lower bounds
-if plot_chance, plot(1:T.Kmax,mean(S.Lchance)*ones(T.Kmax,1),'-k','linewidth',2), end
 if T.QDA_model % plot emperically computed Lhat for the Bayes classifier
     if plot_bayes
         plot(1:T.Kmax,median(S.Lbayes)*ones(T.Kmax,1),'-.r','Linewidth',2)
@@ -63,7 +61,21 @@ YU=1.01*min(maxloc); %YU = min(S.means.Lhats(:,1))*1.1;
 YL=0.99*minAlg;
 if YU<YL, YU=mean([YU,YL])*1.1; YL=mean([YU,YL])*0.9; end
 
-set(gca,'XScale','linear','Ylim',[YL, YU],'Xlim',[1 T.Kmax+1],'XTick',[10:20:100])
+% plot upper and lower bounds
+if plot_chance,
+    Lchance=mean(S.Lchance);
+    plot(1:T.Kmax,Lchance*ones(T.Kmax,1),'-k','linewidth',2),
+    if Lchance>YU
+        YU=Lchance*1.05;
+    end
+    if Lchance<YL
+        YL=Lchance*0.95;
+    end
+end
+
+xtick=round(linspace(min(T.ks),max(T.ks),4));
+ytick=round(linspace(YL,YU,5)*100)/100;
+set(gca,'XScale','linear','Ylim',[YL, YU],'Xlim',[1 T.Kmax+1],'XTick',xtick,'YTick',ytick)
 title(T.name)
 grid on
 if col==1, ylabel('$\langle \hat{L}_n \rangle$','interp','latex'), end

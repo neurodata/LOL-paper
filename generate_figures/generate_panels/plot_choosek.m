@@ -57,6 +57,11 @@ for j=1:F.Ncols
             F.markers{i}='x';
             F.markersize{i}=8;
             F.linewidth{i}=2;
+        elseif strcmp(T.algs{i},'treebagger')
+            F.colors{i}= [0 0.3 0.8];   % avocado
+            F.markers{i}='o';
+            F.markersize{i}=8;
+            F.linewidth{i}=2;
         end
     end
     
@@ -67,7 +72,7 @@ end
 
 %% save plots
 if T.savestuff
-    wh=[F.Ncols*1.2 2]*1.2;
+    wh=[F.Ncols*2 2]*1.2;
     fname=['../../figs/', char(strcat('performance_', task_list_name))];
     print_fig(h(1),wh,fname,renderer)
 end
