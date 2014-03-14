@@ -33,6 +33,15 @@ elseif strfind(name,'amen adhd')==1
     task.ntrain=5112;
     task.ntest=569;    
     task.ks=unique(round(logspace(0,2.9,30)));
+elseif strfind(name,'toeplitz, D')==1 
+    Dind=strfind(task.name,'D');
+    task.D=str2double(task.name(Dind+2:end));
+elseif strfind(name,'toeplitz2, D')==1 
+    Dind=strfind(task.name,'D');
+    task.D=str2double(task.name(Dind+2:end));
+elseif strfind(name,'toeplitz2R, D')==1
+    Dind=strfind(task.name,'D');
+    task.D=str2double(task.name(Dind+2:end));
 end
 
 

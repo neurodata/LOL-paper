@@ -107,8 +107,8 @@ if ~isfield(task,'P')
             A  = eye(D,D)*diag(sv);
             Sig1=A;                            % class 1 cov
             Sig0=A;                            % class 2 cov
-
-
+            
+            
         case 'semisup cigars' % simple
             
             mudelt = 6/sqrt(D);                                 % distance betwen dim 1 of means
@@ -121,7 +121,7 @@ if ~isfield(task,'P')
             A  = eye(D,D)*diag(sv);
             Sig1=A;                            % class 1 cov
             Sig0=A;                            % class 2 cov
-
+            
         case 'rotated cigars' % simple angle
             
             R = eye(D);
@@ -130,7 +130,7 @@ if ~isfield(task,'P')
             R(2,2)=cos(theta);
             R(1,2)=sin(theta);
             R(2,1)=-R(1,2);
-
+            
             mudelt = 6/sqrt(D);                                 % distance betwen dim 1 of means
             mu1 = [-mudelt/2; zeros(D-1,1)];                   % class 1 mean
             mu0 = [mudelt/2; zeros(D-1,1)];                     % class 2 mean
@@ -154,7 +154,7 @@ if ~isfield(task,'P')
             R(2,2)=cos(theta);
             R(1,2)=sin(theta);
             R(2,1)=-R(1,2);
-
+            
             mudelt = 6/sqrt(D);                                 % distance betwen dim 1 of means
             mu1 = [-mudelt/2; zeros(D-1,1)];                   % class 1 mean
             mu0 = [mudelt/2; zeros(D-1,1)];                     % class 2 mean
@@ -169,7 +169,7 @@ if ~isfield(task,'P')
             A = R*A*R';
             Sig1=A;                            % class 1 cov
             Sig0=A;                            % class 2 cov
-
+            
         case 'sa' % simple angle
             
             mudelt = 2.5;                                 % distance betwen dim 1 of means
@@ -193,9 +193,8 @@ if ~isfield(task,'P')
             Sig0=Sig0+eye(D);
             
             
-        case 'toeplitz, D=10' % simple angle
+        case ['toeplitz, D=', num2str(D)] % simple angle
             
-            D=10;
             mudelt = 2.5;                                 % distance betwen dim 1 of means
             mu1 = [-mudelt/2*ones(2,1); zeros(D-2,1)];                   % class 1 mean
             mu0 = [mudelt/2*ones(2,1); zeros(D-2,1)];                   % class 1 mean
@@ -212,36 +211,14 @@ if ~isfield(task,'P')
             
             Sig0=A;
             Sig1=A;
+                        
+        case ['toeplitz2, D=', num2str(D)] % simple angle
             
-        case 'toeplitz, D=20' % simple angle
-            
-            D=20;
-            mudelt = 2.5;                                 % distance betwen dim 1 of means
-            mu1 = [-mudelt/2*ones(2,1); zeros(D-2,1)];                   % class 1 mean
-            mu0 = [mudelt/2*ones(2,1); zeros(D-2,1)];                   % class 1 mean
-            mu1(2)=mu1(2)/3;
-            mu0(2)=mu0(2)/3;
-            
-            rho=0.5;
-            A=nan(D);
-            for a=1:D
-                for b=1:D
-                    A(a,b)=rho^abs(a-b);
-                end
-            end
-            
-            Sig0=A;
-            Sig1=A;
-            
-            
-        case 'toeplitz, D=50' % simple angle
-            
-            D=50;
-            mudelt = 2.5;                                 % distance betwen dim 1 of means
-            mu1 = [-mudelt/2*ones(2,1); zeros(D-2,1)];                   % class 1 mean
-            mu0 = [mudelt/2*ones(2,1); zeros(D-2,1)];                   % class 1 mean
-            mu1(2)=mu1(2)/3;
-            mu0(2)=mu0(2)/3;
+            mudelt=0.1;
+            mu0 = ones(D,1);
+            mu0(2:2:end)=-1;
+            mu0=mudelt*mu0;
+            mu1=-mu0;
             
             rho=0.5;
             A=nan(D);
@@ -254,15 +231,26 @@ if ~isfield(task,'P')
             Sig0=A;
             Sig1=A;
             
-        case 'toeplitz, D=100' % simple angle
+        case ['toeplitz2R, D=', num2str(D)] % simple angle
             
-            D=100;
-            mudelt = 2.5;                                 % distance betwen dim 1 of means
-            mu1 = [-mudelt/2*ones(2,1); zeros(D-2,1)];                   % class 1 mean
-            mu0 = [mudelt/2*ones(2,1); zeros(D-2,1)];                   % class 1 mean
-            mu1(2)=mu1(2)/3;
-            mu0(2)=mu0(2)/3;
             
+            R = eye(D);
+            theta=pi/4;
+            R(1,1)=cos(theta);
+            R(2,2)=cos(theta);
+            R(1,2)=sin(theta);
+            R(2,1)=-R(1,2);
+            
+            
+            mudelt=0.1;
+            mu0 = ones(D,1);
+            mu0(2:2:end)=-1;
+            mu0=mudelt*mu0;
+            mu1=-mu0;
+
+            mu0=R*mu0;
+            mu1=R*mu1;
+
             rho=0.5;
             A=nan(D);
             for a=1:D
@@ -270,6 +258,7 @@ if ~isfield(task,'P')
                     A(a,b)=rho^abs(a-b);
                 end
             end
+            A=R*A*R';            
             
             Sig0=A;
             Sig1=A;
@@ -820,7 +809,7 @@ end
 if p1>0 || p2>0
     error('Sig1 or Sig0 is not positive definite')
 end
-if norm(P.Sig0-P.Sig0')>10^-4 || norm(P.Sig1-P.Sig1')>10^-4 
+if norm(P.Sig0-P.Sig0')>10^-4 || norm(P.Sig1-P.Sig1')>10^-4
     error('Sig0 or Sig1 is not symmetric')
 end
 

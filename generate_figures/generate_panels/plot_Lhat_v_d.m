@@ -51,5 +51,8 @@ end
     
 if Lchance<miny, miny=Lchance*0.9; end
 ytick=round(linspace(miny*0.9,maxy*1.1,5)*1000)/1000;
+if xmax<=0, xmax=0.1; end
+if miny>=maxy miny=maxy-eps; end
+if any(diff(ytick)<0.001), ytick=[miny*0.9,maxy*1.1]; end    
 set(gca,'XTick',xtick,'XTickLabel',xticklabel,'XLim',[0, xmax],'YLim',[miny, maxy],'YTick',ytick)
 

@@ -43,12 +43,15 @@ parfor k=1:task.Ntrials
             
         elseif strcmp(task1.algs{i},'treebagger')
             tic
-            B = TreeBagger(100,Z.Xtrain',Z.Ytrain');
+            B = TreeBagger(500,Z.Xtrain',Z.Ytrain');
             [~, scores] = predict(B,Z.Xtest');
             Yhat=scores(:,1)<scores(:,2);
             loop{k}.time(i,1)=toc;
-            loop{k}.out(i,1) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
-            
+            loop{k}.out(i,1) = get_task_stats(Yhat,Z.Ytest);  
+            % get accuracy
+            for ii=1:B.NTrees
+                loop{k}.NumParents=length(unique(B.Trees{ii}.Parent));
+            end
         elseif strcmp(task1.algs{i},'LOL')
             for l=1:task1.Nks
                 tic

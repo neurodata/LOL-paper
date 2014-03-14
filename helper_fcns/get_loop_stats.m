@@ -10,11 +10,7 @@ times=nan(task.Nalgs,task.Nks,task.Ntrials);
 for k=1:task.Ntrials
     for i=1:task.Nalgs;
         for l=1:task.Nks
-            try
-                Lhats(i,l,k)=loop{k}.out(i,l).Lhat;
-            catch
-                keyboard
-            end
+            Lhats(i,l,k)=loop{k}.out(i,l).Lhat;
             sensitivity(i,l,k)=loop{k}.out(i,l).sensitivity;
             specificity(i,l,k)=loop{k}.out(i,l).specificity;
             times(i,l,k)=loop{k}.time(i,l);
@@ -23,6 +19,14 @@ for k=1:task.Ntrials
             end
         end
     end
+end
+
+for i=1:task.Nalgs
+   if strcmp(task.algs{i},'treebagger')
+      for k=1:task.Ntrials
+         Stats.NumParents(k)=loop{k}.NumParents; 
+      end
+   end
 end
 
 Stats.means.Lhats=squeeze(nanmean(Lhats,3));
