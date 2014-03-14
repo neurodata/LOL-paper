@@ -50,6 +50,7 @@ else
 end
     
 if Lchance<miny, miny=Lchance*0.9; end
+if maxy>Lchance, maxy=Lchance*1.1; end
 ytick=round(linspace(miny*0.9,maxy*1.1,5)*1000)/1000;
 if xmax<=0, xmax=0.1; end
 if miny>=maxy miny=maxy-eps; end

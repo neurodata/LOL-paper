@@ -23,6 +23,9 @@ for i=1:T.Nalgs;
 end
 Lchance=mean(S.Lchance);
 plot(minx, Lchance,'.k','markersize',16)
+
+if maxy>Lchance, maxy=Lchance*1.1; end
+
 % title(T.name)
 grid on
 xlabel('time (sec)')
