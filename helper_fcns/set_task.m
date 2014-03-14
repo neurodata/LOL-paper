@@ -33,8 +33,28 @@ elseif strcmp(name,'IPMN-HvL') || strcmp(name,'IPMN-HvML') || strcmp(name,'IPMN-
     task.Ntrials=1000;                        % # of trials
 elseif strcmp(name,'colon')
     task.simulation=0;
+    LDA_ind=inf;
+    for i=1:length(task.algs)
+        if strcmp(task.algs{i},'LDA')
+            LDA_ind=i;
+        end
+    end
+    for j=LDA_ind:length(task.algs)-1
+        task.algs{j}=task.algs{j+1};
+    end    
+    task.algs=task.algs(1:end-1);
 elseif strcmp(name,'prostate')
     task.simulation=0;
+    LDA_ind=inf;
+    for i=1:length(task.algs)
+        if strcmp(task.algs{i},'LDA')
+            LDA_ind=i;
+        end
+    end
+    for j=LDA_ind:length(task.algs)-1
+        task.algs{j}=task.algs{j+1};
+    end    
+    task.algs=task.algs(1:end-1);
 elseif strfind(name,'xor')
     task.QDA_model=0;
 elseif strcmp(name,'parallel cigars')

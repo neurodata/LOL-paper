@@ -32,7 +32,7 @@ for j=1:F.Ncols
     
     for i=1:T.Nalgs
         
-        if strcmp(T.algs{i},'LDA') 
+        if strcmp(T.algs{i},'LDA')
             F.colors{i}='g';            % green
             F.markers{i}='.';
             F.markersize{i}=24;
@@ -80,8 +80,8 @@ for j=1:F.Ncols
 end
 
 for j=1:F.Ncols
-    figure(4+j), clf, hold all
-    plot_Lhat_vs_time(tasks{j},Stats{j},F)                % new fig: Lhat vs. time     
+    h(1+j)=figure(4+j); clf, hold all
+    plot_Lhat_vs_time(tasks{j},Stats{j},F)                % new fig: Lhat vs. time
 end
 
 %% save plots
@@ -89,4 +89,8 @@ if T.savestuff
     wh=[F.Ncols*2 2]*1.2;
     fname=['../../figs/', char(strcat('performance_', task_list_name))];
     print_fig(h(1),wh,fname,renderer)
+    for j=1:F.Ncols
+        fname=['../../figs/', char(strcat('L_v_time_', tasks{j}.name))];
+        print_fig(h(1+j),wh,fname,renderer)
+    end
 end
