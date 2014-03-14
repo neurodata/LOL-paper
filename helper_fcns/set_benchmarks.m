@@ -24,9 +24,9 @@ switch task_list_name
         task.algs={'naivebayes','LDA','PDA','SLOL','LOL','DRDA','RDA','treebagger','svm'};
         task.savestuff=1;
     case 'toeplitzs2'
-        task.ks=unique(round(logspace(0,2,50)));
+        task.ks=unique(round(logspace(0,2.5,50)));
         task.Ntrials=100;
-        task.algs={'naivebayes','LDA','LOL','treebagger'};
+        task.algs={'naivebayes','LDA','PDA','SLOL','LOL','DRDA','RDA','treebagger','svm'};
         task.savestuff=1;
 end
 
