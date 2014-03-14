@@ -68,12 +68,12 @@ for j=1:F.Ncols
             F.markersize{i}=8;
             F.linewidth{i}=2;
         elseif strcmp(T.algs{i},'svm')
-            F.colors{i}= 'r';           % red
+            F.colors{i}= [0 0.5 0];     % dark green
             F.markers{i}='d';
             F.markersize{i}=8;
             F.linewidth{i}=2;
         elseif strcmp(T.algs{i},'naivebayes')
-            F.colors{i}= [0.8 0.5 0];    % brown
+            F.colors{i}= [0.9 0.75 0];    % brown
             F.markers{i}='h';
             F.markersize{i}=8;
             F.linewidth{i}=2;
