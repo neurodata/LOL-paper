@@ -20,7 +20,7 @@ h(1)=figure(1); clf
 
 
 F.gray=0.5*[1 1 1];
-F.Nrows=2;
+F.Nrows=3;
 F.Ncols=length(tasks);
 
 %% make various plots
@@ -82,21 +82,12 @@ for j=1:F.Ncols
     
     plot_Lhat(T,S,F,j)                % column 1: plot Lhats
     plot_Lhat_v_d(T,S,F,2,j)          % column 2: Lhat vs dimension embedded
-end
-
-for j=1:F.Ncols
-    h(1+j)=figure(4+j); clf, hold all
-    plot_Lhat_vs_time(tasks{j},Stats{j},F)                % new fig: Lhat vs. time
+    plot_Lhat_vs_time(T,S,F,3,j)      % column 3: Lhat vs. time
 end
 
 %% save plots
 if T.savestuff
-    wh=[F.Ncols*2 2]*1.2;
+    wh=[F.Ncols*3 F.Nrows]*1.2;
     fname=['../../figs/', char(strcat('performance_', task_list_name))];
     print_fig(h(1),wh,fname,renderer)
-    for j=1:F.Ncols
-        wh=[4 2];
-        fname=['../../figs/', char(strcat('L_v_time_', tasks{j}.name))];
-        print_fig(h(1+j),wh,fname,renderer)
-    end
 end

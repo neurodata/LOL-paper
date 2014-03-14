@@ -32,7 +32,7 @@ elseif strcmp(task_list_name,'CaiLiu11')
 elseif strcmp(task_list_name,'toeplitzs')
     task_list={'toeplitz, D=10';'toeplitz, D=20';'toeplitz, D=50';'toeplitz, D=100'};
 elseif strcmp(task_list_name,'toeplitzs2')
-    task_list={'toeplitz2, D=10';'toeplitz2R, D=10';'toeplitz2, D=20';'toeplitz2R, D=20';'toeplitz2, D=50';'toeplitz2R, D=50';'toeplitz2, D=100';'toeplitz2R, D=100'};
+    task_list={'toeplitz2, D=10';'toeplitz2R, D=10';'toeplitz2, D=20';'toeplitz2R, D=20';'toeplitz2, D=50';'toeplitz2R, D=50';'toeplitz2, D=100';'toeplitz2R, D=100';'toeplitz2, D=500';'toeplitz2R, D=500';'toeplitz2, D=1000';'toeplitz2R, D=1000'};
 elseif strcmp(task_list_name,'all')
     task_list={'sa';'s';'w';'trunk';'toeplitz';'decaying';'trunk2';...
         'IPMN-HvL';'IPMN-HvML'; 'IPMN-HMvL';'IPMNvsAll';'MCNvsAll';'SCAvsAll';...

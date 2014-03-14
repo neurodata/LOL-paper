@@ -31,7 +31,7 @@ Lchance=mean(S.Lchance);
 plot([1 10^4], Lchance*[1 1],'-k','linewidth',2)
 grid on
 axis('tight')
-if row==F.Nrows
+if col==1
     xlabel('# of dimensions')
 end
 if col==1, ylabel('$\langle \hat{L}_n \rangle$','interp','latex'), end

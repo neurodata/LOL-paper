@@ -35,7 +35,7 @@ for i=1:Nalgs;
             plot(T.ks,location(1)*ones(size(T.ks)),'-','linewidth',2,'color',F.colors{i})
         else
             plot(T.ks,location,'color',F.colors{i},'linewidth',2)
-            maxloc(i)=max(location(5:end));
+            maxloc(i)=max(location(2:end));
         end
     else
         plot(T.ks,location,'color',F.colors{i},'linewidth',2)
@@ -73,9 +73,12 @@ if plot_chance,
         YL=Lchance*0.95;
     end
 end
+if col==1
+    xlabel('# of dimensions')
+end
 
-xtick=round(linspace(min(T.ks),max(T.ks),4));
-ytick=round(linspace(YL,YU,5)*1000)/1000;
+xtick=round(linspace(min(T.ks),max(T.ks),4));   xtick=unique(xtick);
+ytick=round(linspace(YL,YU,5)*100)/100;         ytick=unique(ytick);
 set(gca,'XScale','linear','Ylim',[YL, YU],'Xlim',[1 T.Kmax+1],'XTick',xtick,'YTick',ytick)
 title(T.name)
 grid on

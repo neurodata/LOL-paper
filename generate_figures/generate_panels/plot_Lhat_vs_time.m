@@ -1,10 +1,11 @@
-function plot_Lhat_vs_time(T,S,F)
+function plot_Lhat_vs_time(T,S,F,row,col)
 %  plot Lhat vs time for all algorithms
 % INPUT:
 %   T: task info
 %   S: Stats
 %   F: plotting details
 
+subplot(F.Nrows,F.Ncols,F.Ncols*(row-1)+col), hold all
 
 miny=0.5;
 maxy=0;
@@ -22,9 +23,12 @@ for i=1:T.Nalgs;
 end
 Lchance=mean(S.Lchance);
 plot(minx, Lchance,'.k','markersize',16)
-title(T.name)
+% title(T.name)
 grid on
 xlabel('time (sec)')
 ylabel('$\langle \hat{L}_n \rangle$','interp','latex')
 if Lchance<miny, miny=Lchance*0.9; end
-set(gca,'YLim',[miny maxy],'XLim',[minx*.95 maxx*1.05],'Xscale','log','YScale','linear')
+minx=10^floor(log10(minx));
+maxx=10^ceil(log10(maxx));
+xtick=10.^[-10:10];
+set(gca,'YLim',[miny maxy],'XLim',[minx maxx],'YScale','linear','XTick',xtick,'XScale','log')
