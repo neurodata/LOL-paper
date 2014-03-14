@@ -26,6 +26,5 @@ title(T.name)
 grid on
 xlabel('time (sec)')
 ylabel('$\langle \hat{L}_n \rangle$','interp','latex')
-    
 if Lchance<miny, miny=Lchance*0.9; end
-set(gca,'YLim',[miny maxy],'XLim',[minx*.95 maxx*1.05],'Xscale','log')
+set(gca,'YLim',[miny maxy],'XLim',[minx*.95 maxx*1.05],'Xscale','log','YScale','linear')

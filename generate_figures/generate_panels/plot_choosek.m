@@ -72,6 +72,11 @@ for j=1:F.Ncols
             F.markers{i}='d';
             F.markersize{i}=8;
             F.linewidth{i}=2;
+        elseif strcmp(T.algs{i},'naivebayes')
+            F.colors{i}= [0.8 0.5 0];    % brown
+            F.markers{i}='h';
+            F.markersize{i}=8;
+            F.linewidth{i}=2;
         end
     end
     
@@ -90,6 +95,7 @@ if T.savestuff
     fname=['../../figs/', char(strcat('performance_', task_list_name))];
     print_fig(h(1),wh,fname,renderer)
     for j=1:F.Ncols
+        wh=[4 2];
         fname=['../../figs/', char(strcat('L_v_time_', tasks{j}.name))];
         print_fig(h(1+j),wh,fname,renderer)
     end

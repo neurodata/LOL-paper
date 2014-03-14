@@ -3,29 +3,6 @@ function task = set_task(task)
 
 name=task.name;
 % change settings for certain cases
-% if strcmp(name,'trunk') || strcmp(name,'toeplitz') || strcmp(name,'decaying') || strcmp(name,'trunk2') ||strcmp(name,'model1') ||strcmp(name,'model3')
-%     if ~isfield(task,'algs'), task.algs={'PDA','LOL','DRDA'}; end                              % list of dimensions to embed into
-% elseif strcmp(name,'1') || strcmp(name,'2') || strcmp(name,'3') || strcmp(name,'4') ||strcmp(name,'5') ||strcmp(name,'6')
-%     if ~isfield(task,'Ntrials'), task.Ntrials=10;   end                     % # of trials
-% elseif strcmp(name,'a')
-%     task.Ntrials=20;
-%     task.ntrain=500;
-% elseif strcmp(name,'sa')
-%     task.algs={'PDA','LOL','DRDA','QOL','RDA','LDA'};   % which algorithms to use
-%     task.ks=1:40;                          % list of dimensions to embed into
-% elseif strcmp(name,'r') || strcmp(name,'wra') || strcmp(name,'wra2')
-%     task.algs={'PDA','LOL','DRDA','QOL','QOQ','RDA','LDA'};   % which algorithms to use
-% elseif strfind(name,'model')
-%     task.Ntrials=100;
-%     task.ntrain=200;   % which algorithms to use
-%     task.algs={'PDA','LOL','DRDA'};   % which algorithms to use
-% elseif strfind(name,'debug')
-%     task.Ntrials=100;
-% elseif strfind(name,'trunk3')
-%     task.Ntrials=100;
-%     task.algs={'PDA','LOL','DRDA','RDA'};   % which algorithms to use
-% elseif strfind(name,'toeplitz, D=')
-%     task.algs={'PDA','LOL','DRDA','RDA','LDA'};   % which algorithms to use
 if strfind(name,'DRL')
     task.QDA_model=0;
 elseif strcmp(name,'IPMN-HvL') || strcmp(name,'IPMN-HvML') || strcmp(name,'IPMN-HMvL') || strcmp(name,'IPMNvsAll') || strcmp(name,'MCNvsAll') || strcmp(name,'SCAvsAll')

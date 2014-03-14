@@ -3,7 +3,7 @@ function loop = task_loop(task)
 % results
 
 loop = cell(1,task.Ntrials);
-for k=1:task.Ntrials
+parfor k=1:task.Ntrials
     
     
     if mod(k,10)==0, display(['trial # ', num2str(k)]); end
@@ -117,15 +117,19 @@ for k=1:task.Ntrials
             %                 loop{k}.out(i,l) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
             %             end
             
+        elseif strcmp(task1.algs{i},'naivebayes')
+            tic
+            nb = NaiveBayes.fit(Z.Xtrain',Z.Ytrain);
+            Yhat = predict(nb,Z.Xtest');
+            loop{k}.time(i,1)=toc;
+            loop{k}.out(i,1) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
             
         elseif strcmp(task1.algs{i},'svm')
-            
             tic
             SVMStruct = svmtrain(Z.Xtrain',Z.Ytrain);
             Yhat = svmclassify(SVMStruct,Z.Xtest');
-            loop{k}.out(i,1) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
             loop{k}.time(i,1)=toc;
-            
+            loop{k}.out(i,1) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
         end
     end
     
