@@ -1,6 +1,6 @@
-clearvars, clc, updatepath
+function Figure_benchmarks(task_list_name)
+run([pwd,'/../helper_fcns/updatepath.m'])
 
-task_list_name='pancreas';
 task_list = set_task_list(task_list_name);
 renderer='painters'; % options: 'painters', 'zbuffer', 'OpenGL'
 

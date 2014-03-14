@@ -26,6 +26,7 @@ Phat.mu0=mean(X0,2);
 Phat.mu1=mean(X1,2);
 Phat.muu=mean(Xu,2);
 Phat.delta=Phat.mu0-Phat.mu1;
+Phat.rdelta=trimmean([X0,-X1],10);
 
 Phat.sdelta=Phat.delta;
 % if D>nl

@@ -15,6 +15,8 @@ if task.simulation
         [X,Y] = sample_DRL(a);
     elseif strcmp(task.name,'xor')
         [X,Y] = sample_xor(task);
+    elseif strcmp(task.name,'multiclass')
+        [X,Y] = sample_multiclass(task.n);
     else
         P = set_parameters(task);
         [X,Y] = sample_QDA(task.n,P);

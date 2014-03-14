@@ -31,14 +31,14 @@ parfor k=1:task.Ntrials
             else
                 Yhat = nan(size(Z.Ytest));
             end
-            loop{k}.out(i,1) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
             loop{k}.time(i,1)=toc;
+            loop{k}.out(i,1) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
         elseif strcmp(task1.algs{i},'PDA')
             for l=1:task1.Nks
                 tic
                 Yhat = PDA_train_and_predict(Xtrain_centered,Z.Ytrain,Xtest_centered,Phat.V(1:task1.ks(l),:));
-                loop{k}.out(i,l) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
                 loop{k}.time(i,l)=toc+loop{k}.svdtime;
+                loop{k}.out(i,l) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
             end
             
         elseif strcmp(task1.algs{i},'treebagger')
@@ -46,23 +46,31 @@ parfor k=1:task.Ntrials
             B = TreeBagger(100,Z.Xtrain',Z.Ytrain');
             [~, scores] = predict(B,Z.Xtest');
             Yhat=scores(:,1)<scores(:,2);
-            loop{k}.out(i,1) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
             loop{k}.time(i,1)=toc;
+            loop{k}.out(i,1) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
             
         elseif strcmp(task1.algs{i},'LOL')
             for l=1:task1.Nks
                 tic
                 Yhat = LOL_train_and_predict(Xtrain_centered,Z.Ytrain,Xtest_centered,Phat.delta,Phat.V(1:task1.ks(l),:));
-                loop{k}.out(i,l) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
                 loop{k}.time(i,l)=toc+loop{k}.svdtime;
+                loop{k}.out(i,l) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
             end
             
         elseif strcmp(task1.algs{i},'SLOL')
             for l=1:task1.Nks
                 tic
                 Yhat = LOL_train_and_predict(Xtrain_centered,Z.Ytrain,Xtest_centered,Phat.sdelta,Phat.V(1:task1.ks(l),:));
-                loop{k}.out(i,l) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
                 loop{k}.time(i,l)=toc+loop{k}.svdtime;
+                loop{k}.out(i,l) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
+            end
+            
+        elseif strcmp(task1.algs{i},'RLOL')
+            for l=1:task1.Nks
+                tic
+                Yhat = LOL_train_and_predict(Xtrain_centered,Z.Ytrain,Xtest_centered,Phat.rdelta,Phat.rV(1:task1.ks(l),:));
+                loop{k}.time(i,l)=toc+loop{k}.svdtime;
+                loop{k}.out(i,l) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
             end
             
         elseif strcmp(task1.algs{i},'QOL')
@@ -70,32 +78,33 @@ parfor k=1:task.Ntrials
                 tic
                 [Proj, W] = QOL_train(Xtrain_centered, Z.Ytrain,Phat.delta,task1.ks(l));
                 Yhat = LOL_predict(Xtest_centered,Proj,W);
-                loop{k}.out(i,l) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
                 loop{k}.time(i,l)=toc+loop{k}.svdtime;
+                loop{k}.out(i,l) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
             end
             
         elseif strcmp(task1.algs{i},'QOQ')
             for l=1:task1.Nks
+                tic
                 QDAhat = QOQ_train(Xtrain_centered, Z.Ytrain,Phat.delta,task1.ks(l));
                 Yhat = QOQ_predict(Xtest_centered,QDAhat);
+                loop{k}.time(i,l)=toc+loop{k}.svdtime;
                 loop{k}.out(i,l) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
             end
             
         elseif strcmp(task1.algs{i},'RDA')
             for l=1:task1.Nks
                 tic
-                [Proj, W] = RDA_train(Xtrain_centered, Z.Ytrain, task1.ks(l));
-                Yhat = LOL_predict(Xtest_centered,Proj,W);
+                Yhat = RDA_train_and_predict(Xtrain_centered,Z.Ytrain,Xtest_centered,task1.ks(l));
+                loop{k}.time(i,l)=toc;
                 loop{k}.out(i,l) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
-                loop{k}.time(i,l)=toc+loop{k}.svdtime;
             end
             
         elseif strcmp(task1.algs{i},'DRDA')
             for l=1:task1.Nks
                 tic
                 Yhat = DRDA_train_and_predict(Xtrain_centered,Z.Ytrain,Xtest_centered,Phat.delta,task1.ks(l));
+                loop{k}.time(i,l)=toc;
                 loop{k}.out(i,l) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
-                loop{k}.time(i,l)=toc+loop{k}.svdtime;
             end
             
             %         elseif strcmp(task1.algs{i},'knn')

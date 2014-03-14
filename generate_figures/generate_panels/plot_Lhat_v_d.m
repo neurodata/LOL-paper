@@ -1,9 +1,9 @@
 function plot_Lhat_v_d(T,S,F,row,col)
-%  plot spectra, one row per task
+%  plot Lhat vs dimension for best performing algorithm
 % INPUT:
 %   T: task info
-%   P: task parameters
-%   Proj: task projections
+%   S: Statss
+%   F: plotting details
 %   row: which row
 %   col: which column
 
@@ -20,13 +20,15 @@ maxy=0;
 legendcell=[];
 maxx=0;
 for i=1:T.Nalgs;
-    plot(S.mins.mean.k(i),S.mins.mean.Lhats(i),'.','color',F.colors{i},'MarkerSize',F.markersize{i},'Marker',F.markers{i},'LineWidth',F.linewidth{i})
+    plot(S.mins.mean.k(i),S.mins.mean.Lhats(i)'.','color',F.colors{i},'MarkerSize',F.markersize{i},'Marker',F.markers{i},'LineWidth',F.linewidth{i})
     miny=min(miny,S.mins.mean.Lhats(i));
     maxy=max(maxy,S.mins.mean.Lhats(i));
     legendcell=[legendcell; T.algs(i)];
     maxx=max(maxx,max(S.mins.mean.k));
     display([T.name,' ', T.algs{i},', dhat=',num2str(S.mins.mean.Lhats(i)),', Lhat=',num2str(S.mins.mean.k(i))])
 end
+Lchance=mean(S.Lchance);
+plot([1 10^4], Lchance*[1 1],'-k','linewidth',2)
 grid on
 axis('tight')
 if row==F.Nrows
@@ -47,6 +49,7 @@ else
     xmax=maxx;
 end
     
+if Lchance<miny, miny=Lchance*0.9; end
 ytick=round(linspace(miny*0.9,maxy*1.1,5)*1000)/1000;
 set(gca,'XTick',xtick,'XTickLabel',xticklabel,'XLim',[0, xmax],'YLim',[miny, maxy],'YTick',ytick)
 

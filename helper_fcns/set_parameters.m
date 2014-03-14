@@ -107,7 +107,8 @@ if ~isfield(task,'P')
             A  = eye(D,D)*diag(sv);
             Sig1=A;                            % class 1 cov
             Sig0=A;                            % class 2 cov
-            
+
+
         case 'semisup cigars' % simple
             
             mudelt = 6/sqrt(D);                                 % distance betwen dim 1 of means

@@ -24,17 +24,18 @@ minLDA=0.5;
 % plot accuracies
 subplot(F.Nrows,F.Ncols,col), hold all
 minAlg=0.5;
+maxloc=ones(1,Nalgs);
 for i=1:Nalgs;
     location=S.means.Lhats(i,:);
     loc=' mean';
     minloc=min(location);
-    maxloc(i)=max(location);
     
     if length(location)>1
         if isnan(location(2)) % if no dimension tuning in algorithm
             plot(T.ks,location(1)*ones(size(T.ks)),'-','linewidth',2,'color',F.colors{i})
         else
             plot(T.ks,location,'color',F.colors{i},'linewidth',2)
+            maxloc(i)=max(location(5:end));
         end
     else
         plot(T.ks,location,'color',F.colors{i},'linewidth',2)
@@ -74,7 +75,7 @@ if plot_chance,
 end
 
 xtick=round(linspace(min(T.ks),max(T.ks),4));
-ytick=round(linspace(YL,YU,5)*100)/100;
+ytick=round(linspace(YL,YU,5)*1000)/1000;
 set(gca,'XScale','linear','Ylim',[YL, YU],'Xlim',[1 T.Kmax+1],'XTick',xtick,'YTick',ytick)
 title(T.name)
 grid on
