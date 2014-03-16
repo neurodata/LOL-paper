@@ -30,23 +30,26 @@ for j=1:Nsims
     ncols=Nalgs+1;
     
    subplot(nrows,ncols,1+ncols*(j-1)), hold on
-   [X0, Y0, Z0] = ellipsoid(P.mu0(1),P.mu0(2),P.mu0(3),2*P.Sig0(1,1),2*P.Sig0(2,2),2*P.Sig0(3,3),30);
-   [X1, Y1, Z1] = ellipsoid(P.mu1(1),P.mu1(2),P.mu1(3),2*P.Sig0(1,1),2*P.Sig0(2,2),2*P.Sig0(3,3),30);
-   
-   S0=surfl(X0, Y0, Z0);
-   S1=surfl(X1, Y1, Z1);
-   
-   if j==2
-       rotate(S0,[1 1 0],45);
-       rotate(S1,[1 1 0],45);
-   end
-   
-   colormap copper
-   axis tight
-   shading interp;
-   light;
-   lighting phong;
-   grid on
+   plot(X(1,Y==0),X(2,Y==0),'o','color',[1 1 1]),
+   plot(X(1,Y==1),X(2,Y==1),'x','color',0.7*[1 1 1])
+   axis('tight')
+   %    [X0, Y0, Z0] = ellipsoid(P.mu0(1),P.mu0(2),P.mu0(3),2*P.Sig0(1,1),2*P.Sig0(2,2),2*P.Sig0(3,3),30);
+%    [X1, Y1, Z1] = ellipsoid(P.mu1(1),P.mu1(2),P.mu1(3),2*P.Sig0(1,1),2*P.Sig0(2,2),2*P.Sig0(3,3),30);
+%    
+%    S0=surfl(X0, Y0, Z0);
+%    S1=surfl(X1, Y1, Z1);
+%    
+%    if j==2
+%        rotate(S0,[1 1 0],45);
+%        rotate(S1,[1 1 0],45);
+%    end
+%    
+%    colormap copper
+%    axis tight
+%    shading interp;
+%    light;
+%    lighting phong;
+%    grid on
    title(task1.name)
    set(gca,'XTickLabel',[],'YTickLabel',[])
 

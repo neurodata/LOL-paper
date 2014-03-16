@@ -20,9 +20,15 @@ switch task_list_name
         task.savestuff=1;
     case 'toeplitzs'
         task.ks=unique(round(logspace(0,2,50)));
-        task.Ntrials=20;
+        task.Ntrials=5;
         task.algs={'naivebayes','LDA','PDA','SLOL','LOL','DRDA','RDA','treebagger','svm'};
         task.savestuff=1;
+    otherwise
+        task.name=task_list_name;
+        task.Ntrials=5;
+        task.algs={'naivebayes','LDA','LOL'};
+        task.savestuff=1;
+        task.ks=unique(round(logspace(0,2,50)));
 end
 
 [T,P,S] = run_benchmarks(task_list_name,task);
