@@ -1,7 +1,7 @@
 % profile on
 clearvars, clc, updatepath
 
-task_list_name='sa';
+task_list_name='toeplitzs';
 switch task_list_name
     case 'Mai13'
         task.ks=unique(round(logspace(0,2,50)));
