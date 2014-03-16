@@ -1,4 +1,5 @@
-clearvars, clc, updatepath
+clearvars, clc, 
+run([pwd,'/../helper_fcns/updatepath.m'])
 
 savestuff=1;
 task_list_name='both cigars';
@@ -29,15 +30,15 @@ for j=1:Nsims
     ncols=Nalgs+1;
     
    subplot(nrows,ncols,1+ncols*(j-1)), hold on
-   [x0, y0, z0] = ellipsoid(P.mu0(1),P.mu0(2),P.mu0(3),P.Sig0(1,1),P.Sig0(2,2),P.Sig0(3,3),30);
-   [x1, y1, z1] = ellipsoid(P.mu1(1),P.mu1(2),P.mu1(3),P.Sig1(1,1),P.Sig1(2,2),P.Sig1(3,3),30);
+   [X0, Y0, Z0] = ellipsoid(P.mu0(1),P.mu0(2),P.mu0(3),2*P.Sig0(1,1),2*P.Sig0(2,2),2*P.Sig0(3,3),30);
+   [X1, Y1, Z1] = ellipsoid(P.mu1(1),P.mu1(2),P.mu1(3),2*P.Sig0(1,1),2*P.Sig0(2,2),2*P.Sig0(3,3),30);
    
-   S0=surfl(x0, y0, z0);
-   S1=surfl(x1, y1, z1);
+   S0=surfl(X0, Y0, Z0);
+   S1=surfl(X1, Y1, Z1);
    
    if j==2
-       rotate(S0,[1 0 0],135);
-       rotate(S1,[1 0 0],135);
+       rotate(S0,[1 1 0],45);
+       rotate(S1,[1 1 0],45);
    end
    
    colormap copper

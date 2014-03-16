@@ -193,7 +193,7 @@ if ~isfield(task,'P')
             Sig0=Sig0+eye(D);
             
             
-        case ['toeplitz, D=', num2str(D)] % simple angle
+        case ['sparse toeplitz, D=', num2str(D)] % simple angle
             
             mudelt = 2.5;                                 % distance betwen dim 1 of means
             mu1 = [-mudelt/2*ones(2,1); zeros(D-2,1)];                   % class 1 mean
@@ -212,7 +212,7 @@ if ~isfield(task,'P')
             Sig0=A;
             Sig1=A;
                         
-        case ['toeplitz2, D=', num2str(D)] % simple angle
+        case ['toeplitz, D=', num2str(D)] % simple angle
             
             mudelt=0.1;
             mu0 = ones(D,1);
@@ -227,38 +227,6 @@ if ~isfield(task,'P')
                     A(a,b)=rho^abs(a-b);
                 end
             end
-            
-            Sig0=A;
-            Sig1=A;
-            
-        case ['toeplitz2R, D=', num2str(D)] % simple angle
-            
-            
-            R = eye(D);
-            theta=pi/4;
-            R(1,1)=cos(theta);
-            R(2,2)=cos(theta);
-            R(1,2)=sin(theta);
-            R(2,1)=-R(1,2);
-            
-            
-            mudelt=0.1;
-            mu0 = ones(D,1);
-            mu0(2:2:end)=-1;
-            mu0=mudelt*mu0;
-            mu1=-mu0;
-
-            mu0=R*mu0;
-            mu1=R*mu1;
-
-            rho=0.5;
-            A=nan(D);
-            for a=1:D
-                for b=1:D
-                    A(a,b)=rho^abs(a-b);
-                end
-            end
-            A=R*A*R';            
             
             Sig0=A;
             Sig1=A;

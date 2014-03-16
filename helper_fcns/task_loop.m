@@ -3,7 +3,7 @@ function loop = task_loop(task)
 % results
 
 loop = cell(1,task.Ntrials);
-parfor k=1:task.Ntrials
+for k=1:task.Ntrials
     
     
     if mod(k,10)==0, display(['trial # ', num2str(k)]); end

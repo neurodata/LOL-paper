@@ -87,7 +87,7 @@ end
 
 %% save plots
 if T.savestuff
-    wh=[F.Ncols*3 F.Nrows]*1.2;
+    wh=[F.Ncols*2 F.Nrows]*1.2;
     fname=['../../figs/', char(strcat('performance_', task_list_name))];
     print_fig(h(1),wh,fname,renderer)
 end

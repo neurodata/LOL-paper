@@ -46,13 +46,15 @@ Stats.stds.times=squeeze(nanstd(times,[],3));
 
 % get mins of medians
 for i=1:task.Nalgs;
-    [~,Stats.mins.med.k(i)]=min(Stats.medians.Lhats(i,:));
+    [~,k]=min(Stats.medians.Lhats(i,:));
+    Stats.mins.med.k(i)=task.ks(k);
     Stats.mins.med.Lhats(i)=Stats.medians.Lhats(i,Stats.mins.med.k(i));
     Stats.mins.med.sensitivity(i)=Stats.medians.sensitivity(i,Stats.mins.med.k(i));
     Stats.mins.med.specificity(i)=Stats.medians.specificity(i,Stats.mins.med.k(i));
     Stats.mins.med.times(i)=Stats.medians.times(i,Stats.mins.med.k(i));
     
-    [~,Stats.mins.mean.k(i)]=min(Stats.means.Lhats(i,:));
+    [~,k]=min(Stats.means.Lhats(i,:));
+    Stats.mins.mean.k(i)=task.ks(k);
     Stats.mins.mean.Lhats(i)=Stats.means.Lhats(i,Stats.mins.mean.k(i));
     Stats.mins.mean.sensitivity(i)=Stats.means.sensitivity(i,Stats.mins.mean.k(i));
     Stats.mins.mean.specificity(i)=Stats.means.specificity(i,Stats.mins.mean.k(i));
