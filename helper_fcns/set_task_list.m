@@ -29,10 +29,10 @@ elseif strcmp(task_list_name,'QDA')
     task_list={'r';'wra';'wra2'};
 elseif strcmp(task_list_name,'CaiLiu11')
     task_list={'model1, p100';'model1, p200';'model1, p400';'model1, p800';'model3, p100';'model3, p200';'model3, p400';'model3, p800'};
-elseif strcmp(task_list_name,'toeplitzs')
+elseif strcmp(task_list_name,'sparse toeplitzs')
     task_list={'toeplitz, D=10';'toeplitz, D=20';'toeplitz, D=50';'toeplitz, D=100'};
-elseif strcmp(task_list_name,'toeplitzs2')
-    task_list={'toeplitz2, D=10';'toeplitz2, D=20';'toeplitz2, D=50';'toeplitz2, D=100';'toeplitz2, D=1000'};
+elseif strcmp(task_list_name,'toeplitzs')
+    task_list={'toeplitz, D=10';'toeplitz, D=20';'toeplitz, D=50';'toeplitz, D=100';'toeplitz, D=1000'};
 elseif strcmp(task_list_name,'all')
     task_list={'sa';'s';'w';'trunk';'toeplitz';'decaying';'trunk2';...
         'IPMN-HvL';'IPMN-HvML'; 'IPMN-HMvL';'IPMNvsAll';'MCNvsAll';'SCAvsAll';...

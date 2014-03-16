@@ -23,11 +23,6 @@ switch task_list_name
         task.Ntrials=20;
         task.algs={'naivebayes','LDA','PDA','SLOL','LOL','DRDA','RDA','treebagger','svm'};
         task.savestuff=1;
-    case 'toeplitz2R, D=1000'
-        task.ks=unique(round(logspace(0,2.5,50)));
-        task.Ntrials=100;
-        task.algs={'naivebayes','LDA','PDA','SLOL','LOL','DRDA','RDA','treebagger','svm'};
-        task.savestuff=1;
 end
 
 [T,P,S] = run_benchmarks(task_list_name,task);
