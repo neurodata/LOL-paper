@@ -2,7 +2,7 @@
 clearvars, clc, 
 run([pwd,'/../helper_fcns/updatepath.m'])
 
-task_list_name='little_toeplitzs';
+task_list_name='toeplitzs';
 
 [T,P,S] = run_task_list(task_list_name);
 
