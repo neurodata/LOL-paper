@@ -45,7 +45,7 @@ elseif maxx<21
     xmax=20;
 else
     xtick=10:10:100;
-    xticklabel={'10';'';'30';'';'50';'';'70'};
+    xticklabel={'10';'';'30';'';'50';'';'70';'';'90';'';'110'};
     xmax=maxx;
 end
     

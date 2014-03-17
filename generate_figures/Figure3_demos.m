@@ -1,7 +1,7 @@
 % profile on
 clearvars, clc, updatepath
 
-task_list_name='Mai13';
+task_list_name='toeplitzs';
 switch task_list_name
     case 'Mai13'
         task.ks=unique(round(logspace(0,2,50)));
@@ -20,8 +20,13 @@ switch task_list_name
         task.savestuff=1;
     case 'toeplitzs'
         task.ks=unique(round(logspace(0,2,50)));
-        task.Ntrials=5;
+        task.Ntrials=20;
         task.algs={'naivebayes','LDA','PDA','SLOL','LOL','DRDA','RDA','treebagger','svm'};
+        task.savestuff=1;
+    case 'all_cigars'
+        task.ks=unique(round(logspace(0,2,50)));
+        task.Ntrials=100;
+        task.algs={'PDA','SLOL','LOL','DRDA'};
         task.savestuff=1;
     otherwise
         task.name=task_list_name;

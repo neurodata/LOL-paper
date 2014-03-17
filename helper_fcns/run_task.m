@@ -1,11 +1,12 @@
-function [task,P,Stats] = run_task(task)
+function [task,P,Stats] = run_task(task_in)
 % this function does the following for the input task
 % 1) runs a variety of classifiers on such task for a variety of embedding
 % dimensions
 % 2) computes some summary statistics
 % 3) saves the results
 %
-% INPUT is simply 'task_name', a string identifier for the task.
+% INPUT is simply 'task_in', a structure containing a bunch of info about
+% the task
 %
 % OUTPUT: a number of structures
 %   task:   a structure containing details about the tas
@@ -16,10 +17,7 @@ function [task,P,Stats] = run_task(task)
 
 %% store and generate parameters from a single simulation fo plotting the spectrum and getting performance bounds
 
-[task, X, Y, P] = get_task(task);
-
-Z = parse_data(X,Y,task.ntrain,task.ntest,task.percent_unlabeled);
-task = update_k(task);
+[task, ~, ~, P] = get_task(task_in);
 
 % loop over Ntrials for this task running the specified algorithms
 loop = task_loop(task);

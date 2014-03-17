@@ -60,11 +60,11 @@ elseif strcmp(task_list_name,'bunch')
         'semisup cigars';'parallel cigars';'rotated cigars';...
         'model1, p100';'model1, p200';'model1, p400';'model1, p800';'model3, p100';'model3, p200';'model3, p400';'model3, p800';...
         'toeplitz, D=10';'toeplitz, D=20';'toeplitz, D=50';'toeplitz, D=100'};
-elseif strcmp(task_list_name,'both cigars')
+elseif strcmp(task_list_name,'both_cigars')
     task_list={'parallel cigars';'rotated cigars'}; 
 elseif strcmp(task_list_name,'semi comp')
     task_list={'semisup cigars';'parallel cigars'}; 
-elseif strcmp(task_list_name,'all cigars')
+elseif strcmp(task_list_name,'all_cigars')
     task_list={'semisup cigars';'parallel cigars'; 'semisup rotated cigars'; 'rotated cigars'}; 
 elseif strcmp(task_list_name,'amen READINGS')
     task_list={'amen READINGS depression';'amen READINGS adhd';'amen READINGS gender'}; %'amen mood';'amen dementia';'amen bipolar';'amen adjustment';'amen anxiety'}; 

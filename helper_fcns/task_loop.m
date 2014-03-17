@@ -11,7 +11,6 @@ parfor k=1:task.Ntrials
     % prepare data
     [task1, X, Y, P] = get_task(task);
     Z = parse_data(X,Y,task1.ntrain,task1.ntest,task1.percent_unlabeled);
-    task1 = update_k(task1);
     
     tic % get delta and eigenvectors
     Phat = estimate_parameters(Z.Xtrain,Z.Ytrain,task1.Kmax);

@@ -1,4 +1,4 @@
-function Figure_benchmarks(task_list_name)
+function plot_benchmarks(task_list_name)
 run([pwd,'/../helper_fcns/updatepath.m'])
 
 task_list = set_task_list(task_list_name);

@@ -32,12 +32,6 @@ elseif strfind(name,'amen')==1
 elseif strfind(name,'toeplitz, D')==1 
     Dind=strfind(task.name,'D');
     task.D=str2double(task.name(Dind+2:end));
-elseif strfind(name,'toeplitz2, D')==1 
-    Dind=strfind(task.name,'D');
-    task.D=str2double(task.name(Dind+2:end));
-elseif strfind(name,'toeplitz2R, D')==1
-    Dind=strfind(task.name,'D');
-    task.D=str2double(task.name(Dind+2:end));
 end
 
 

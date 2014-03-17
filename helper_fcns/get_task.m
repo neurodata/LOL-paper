@@ -36,3 +36,8 @@ else
     task.n = n;
 end
 
+k_max=min(task.ntrain,min(task.D,task.Kmax));
+task.ks=task.ks(task.ks<=k_max);
+task.Nks=length(task.ks);
+task.Kmax=max(task.ks);
+
