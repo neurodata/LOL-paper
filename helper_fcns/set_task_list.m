@@ -22,14 +22,16 @@ elseif strcmp(task_list_name,'Mai13')
     
 elseif strcmp(task_list_name,'little_toeplitzs')
     task_list={'toeplitz, D=10';'toeplitz, D=20';'toeplitz, D=50';'toeplitz, D=100'};
-    task.ks=unique(round(logspace(0,2,50)));
+    task.ntrain=50;
+    task.ks=unique(round(logspace(0,log10(task.ntrain),task.ntrain)));
     task.Ntrials=10;
     task.algs={'NaiveB','LDA','PDA','SLOL','LOL','DRDA','RDA','RF','svm'};
     task.savestuff=1;
 
 elseif strcmp(task_list_name,'toeplitzs')
     task_list={'toeplitz, D=10';'toeplitz, D=20';'toeplitz, D=50';'toeplitz, D=100';'toeplitz, D=1000'};
-    task.ks=unique(round(logspace(0,2,50)));
+    task.ntrain=50;
+    task.ks=unique(round(logspace(0,log10(task.ntrain),task.ntrain)));
     task.Ntrials=10;
     task.algs={'NaiveB','LDA','PDA','SLOL','LOL','DRDA','RDA','RF','svm'};
     task.savestuff=1;

@@ -42,7 +42,7 @@ parfor k=1:task.Ntrials
             
         elseif strcmp(task1.algs{i},'RF')
             tic
-            B = TreeBagger(500,Z.Xtrain',Z.Ytrain');
+            B = TreeBagger(100,Z.Xtrain',Z.Ytrain');
             [~, scores] = predict(B,Z.Xtest');
             Yhat=scores(:,1)<scores(:,2);
             loop{k}.time(i,1)=toc;
