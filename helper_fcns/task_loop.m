@@ -40,7 +40,7 @@ parfor k=1:task.Ntrials
                 loop{k}.out(i,l) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
             end
             
-        elseif strcmp(task1.algs{i},'treebagger')
+        elseif strcmp(task1.algs{i},'RF')
             tic
             B = TreeBagger(500,Z.Xtrain',Z.Ytrain');
             [~, scores] = predict(B,Z.Xtest');
@@ -119,7 +119,7 @@ parfor k=1:task.Ntrials
             %                 loop{k}.out(i,l) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
             %             end
             
-        elseif strcmp(task1.algs{i},'naivebayes')
+        elseif strcmp(task1.algs{i},'NaiveB')
             tic
             nb = NaiveBayes.fit(Z.Xtrain',Z.Ytrain);
             Yhat = predict(nb,Z.Xtest');

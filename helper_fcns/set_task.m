@@ -1,5 +1,14 @@
-function task = set_task(task)
+function [task,X,Y,P] = set_task(task)
 % sets up all metadata associated with the input task
+%
+% INPUT: task: a structure containing various task settings
+% 
+% OUTPUT:
+%   task:   update task structure
+%   X:      a matrix of predictors
+%   Y:      a vector of predictees
+%   P:      a structure of parameters
+
 
 name=task.name;
 % change settings for certain cases
@@ -32,8 +41,12 @@ elseif strfind(name,'amen')==1
 elseif strfind(name,'toeplitz, D')==1 
     Dind=strfind(task.name,'D');
     task.D=str2double(task.name(Dind+2:end));
+elseif strcmp(name,'sa')==1
+    task.ks=unique(round(logspace(0,2,50)));
+    task.Ntrials=10;
+    task.algs={'NaiveB','RF','LOL'};
+    task.savestuff=1;
 end
-
 
 % default settings
 if ~isfield(task,'algs'),       task.algs={'LDA','PDA','LOL','Bayes'}; end               % which algorithms to use
@@ -54,7 +67,36 @@ end
 
 task.Nalgs=length(task.algs);           % # of algorithms to use
 task.n=sum(task.ntrain)+task.ntest;     % # of total samples
-task.Nks=length(task.ks);               % # of different dimensions
-task.Kmax=max(task.ks);                 % max dimension to embed into
+
+P = [];
+if task.simulation
+    if strcmp(task.name,'DRL')
+        [X,Y] = sample_DRL(a);
+    elseif strcmp(task.name,'xor')
+        [X,Y] = sample_xor(task);
+    elseif strcmp(task.name,'multiclass')
+        [X,Y] = sample_multiclass(task.n);
+    else
+        P = set_parameters(task);
+        [X,Y] = sample_QDA(task.n,P);
+    end
+else
+    [X,Y,task] = load_data(task);
+end
+[D, n]=size(X);
+
+if D==length(Y)
+    X=X';
+    task.D = n;
+    task.n = D;
+else
+    task.D = D;
+    task.n = n;
+end
+
+task.ks=task.ks(task.ks<=min(task.ntrain,min(task.D,max(task.ks))));
+task.Nks=length(task.ks);
+task.Kmax=max(task.ks);
+
 
 task=orderfields(task);                 % sort fields

@@ -287,6 +287,7 @@ if ~isfield(task,'P')
             
             Sig1=Sig1+eye(D);
             Sig0=Sig0+eye(D);
+            
         case 'wra2' % wide angle
             
             sd = 1;
@@ -400,7 +401,7 @@ if ~isfield(task,'P')
             Sig1=A;
             Sig0=A;
             
-        case 'toeplitz, D='
+        case ['toeplitz, D=', num2str(D)]
 
             delta1=0.4; D1=10;
             
@@ -421,7 +422,7 @@ if ~isfield(task,'P')
             end
             K=sum(A(:));
             
-            mudelt=(K1*delta1^2/K)^0.5;
+            mudelt=(K1*delta1^2/K)^0.5/2;
             mu0 = ones(D,1);
             mu0(2:2:end)=-1;
             mu0=mudelt*mu0;
@@ -430,7 +431,7 @@ if ~isfield(task,'P')
             Sig1=A;
             Sig0=A;
             
-        case ['sparse toeplitz, D=', num2str(D)] % simple angle
+        case ['sparse toeplitz, D=', num2str(D)]        % toeplitz with sparse delta
             
             mudelt = 2.5;                                 % distance betwen dim 1 of means
             mu1 = [-mudelt/2*ones(2,1); zeros(D-2,1)];                   % class 1 mean
@@ -449,24 +450,6 @@ if ~isfield(task,'P')
             Sig0=A;
             Sig1=A;
                         
-        case ['toeplitz, D=', num2str(D)]   % toeplitz
-            
-            mudelt=0.1;
-            mu0 = ones(D,1);
-            mu0(2:2:end)=-1;
-            mu0=mudelt*mu0;
-            mu1=-mu0;
-            
-            rho=0.5;
-            A=nan(D);
-            for a=1:D
-                for b=1:D
-                    A(a,b)=rho^abs(a-b);
-                end
-            end
-            
-            Sig0=A;
-            Sig1=A;
             
         case 'decaying'
             
