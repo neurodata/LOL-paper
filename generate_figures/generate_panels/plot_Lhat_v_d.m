@@ -85,7 +85,7 @@ set(gca,'XTick',xtick,'XLim',xlim,'YLim',ylim,'YTick',ytick)
 if col==F.Ncols,
     Position=get(gca,'Position');
     legend(legendcell,'Location','EastOutside');
-    set(gca,'Position',Position);
+    set(gca,'Position',[Position(1), 0.47, 0.15, 0.16]);
     legend('boxoff')
 end
 grid('on')

@@ -1,5 +1,5 @@
 function [T,P,S] = run_task_list(task_list_name)
-clc, updatepath
+updatepath
 
 [task_list, task] = set_task_list(task_list_name);
 

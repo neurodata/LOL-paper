@@ -3,7 +3,7 @@ function [Lhats, times] = plot_Lhat_vs_time_compile(T,S,task_list_name)
 
 h(2)=figure(2); clf, hold all
 for i=1:T{1}.Nalgs
-    for j=1:length(S)
+    for j=2:length(S)
         times(j,i)=S{j}.mins.mean.times(i);
         Lhats(j,i)=S{j}.mins.mean.Lhats(i);
     end

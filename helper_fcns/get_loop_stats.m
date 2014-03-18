@@ -9,7 +9,11 @@ times=nan(T.Nalgs,T.Nks,T.Ntrials);
 for k=1:T.Ntrials
     for i=1:T.Nalgs;
         for l=1:T.Nks
-            Lhats(i,l,k)=loop{k}.out(i,l).Lhat;
+            try
+                Lhats(i,l,k)=loop{k}.out(i,l).Lhat;
+            catch
+                keyboard
+            end
             sensitivity(i,l,k)=loop{k}.out(i,l).sensitivity;
             specificity(i,l,k)=loop{k}.out(i,l).specificity;
             times(i,l,k)=loop{k}.time(i,l);
@@ -58,10 +62,10 @@ for i=1:T.Nalgs;
     Stats.mins.mean.sensitivity(i)=Stats.means.sensitivity(i,k);
     Stats.mins.mean.specificity(i)=Stats.means.specificity(i,k);
     Stats.mins.mean.times(i)=Stats.means.times(i,k);
-
-    if strcmp(T.algs{i},'LDA'), 
-        Stats.mins.mean.k(i) = min(T.ntrain,T.D); 
-        Stats.med.mean.k(i) = min(T.ntrain,T.D); 
+    
+    if strcmp(T.algs{i},'LDA'),
+        Stats.mins.mean.k(i) = min(T.ntrain,T.D);
+        Stats.med.mean.k(i) = min(T.ntrain,T.D);
     end
 end
 

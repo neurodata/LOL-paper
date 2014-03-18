@@ -3,6 +3,7 @@ function [task_list,task] = set_task_list(task_list_name)
 % together. the 'else' command is if one specifies only a single task, in
 % which case we just use that task.
 
+task=struct;
 if strcmp(task_list_name,'thin')
     task_list={'sa';'s';'w'};
     task.ks=unique(round(logspace(0,2,50)));
