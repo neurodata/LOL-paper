@@ -47,6 +47,11 @@ elseif strcmp(name,'sa')==1
     task.Ntrials=10;
     task.algs={'NaiveB','RF','LOL'};
     task.savestuff=1;
+elseif strcmp(name,'mnist')==1
+    task.ks=unique(round(logspace(0,2,50)));
+    task.Ntrials=10;
+    task.algs={'NaiveB','RF','PDA','LOL'};
+    task.savestuff=1;
 end
 
 % default settings

@@ -82,6 +82,7 @@ if ~isfield(F,'ylim'),
 else
     ylim=F.ylim;
 end
+
 if ~isfield(F,'ytick'),
     ytick=round(linspace(YL,YU,5)*100)/100;    ytick=unique(ytick);
 else

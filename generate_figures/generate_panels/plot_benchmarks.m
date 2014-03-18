@@ -55,8 +55,11 @@ for j=1:F.Ncols
     elseif F.xlim(2)<=100
         F.xtick=0:25:F.xlim(2);
     end
-    F.ylim=[S{j}.Risk, mean(S{j}.Lchance)];
-
+    if ~isfield(F,'ylim')
+        F.ylim=[S{j}.Risk, mean(S{j}.Lchance)];
+        if isnan(F.ylim(1)), F.ylim(1)=0; end
+    end
+    
     plot_Lhat(T{j},S{j},F,j)                % column 1: plot Lhats
     plot_Lhat_v_d(T{j},S{j},F,2,j)          % column 2: Lhat vs dimension embedded
     if F.plot_time, plot_Lhat_vs_time(T{j},S{j},F,3,j), end     % column 3: Lhat vs. time

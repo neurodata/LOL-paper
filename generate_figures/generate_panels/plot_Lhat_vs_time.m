@@ -44,7 +44,7 @@ for i=1:T.Nalgs;
     display([T.name,' ', T.algs{i},', dhat=',num2str(S.mins.mean.Lhats(i)),', Lhat=',num2str(S.mins.mean.k(i))])
 end
 Lchance=mean(S.Lchance);
-% plot(minx, Lchance,'.k','markersize',16)
+plot(minx, Lchance,'.k','markersize',16)
 
 if maxy>Lchance, maxy=Lchance*1.1; end
 
