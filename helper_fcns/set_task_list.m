@@ -98,19 +98,19 @@ elseif strcmp(task_list_name,'bunch')
         'model1, p100';'model1, p200';'model1, p400';'model1, p800';'model3, p100';'model3, p200';'model3, p400';'model3, p800';...
         'toeplitz, D=10';'toeplitz, D=20';'toeplitz, D=50';'toeplitz, D=100'};
 
-elseif strcmp(task_list_name,'amen READINGS')
+elseif strfind(task_list_name,'amen READINGS')
     task_list={'amen READINGS depression';'amen READINGS adhd';'amen READINGS gender'}; %'amen mood';'amen dementia';'amen bipolar';'amen adjustment';'amen anxiety'};
-elseif strcmp(task_list_name,'amen COGNITIVE')
+elseif strfind(task_list_name,'amen COGNITIVE')
     task_list={'amen COGNITIVE depression';'amen COGNITIVE adhd';'amen COGNITIVE gender'}; %'amen mood';'amen dementia';'amen bipolar';'amen adjustment';'amen anxiety'};
-elseif strcmp(task_list_name,'amen SPECT')
+elseif strfind(task_list_name,'amen SPECT')
     task_list={'amen SPECT depression';'amen SPECT adhd';'amen SPECT gender'}; %'amen mood';'amen dementia';'amen bipolar';'amen adjustment';'amen anxiety'};
-elseif strcmp(task_list_name,'amen X')
+elseif strfind(task_list_name,'amen X')
     task_list={'amen X depression';'amen X adhd';'amen X gender'}; %'amen mood';'amen dementia';'amen bipolar';'amen adjustment';'amen anxiety'};
-elseif strcmp(task_list_name,'amen ACTIVATION')
+elseif strfind(task_list_name,'amen ACTIVATION')
     task_list={'amen ACTIVATION depression';'amen ACTIVATION adhd';'amen ACTIVATION gender'}; %'amen mood';'amen dementia';'amen bipolar';'amen adjustment';'amen anxiety'};
-elseif strcmp(task_list_name,'amen first')
+elseif strfind(task_list_name,'amen first')
     task_list={'amen depression';'amen adhd';'amen gender';'amen mood'};
-elseif strcmp(task_list_name,'amen else')
+elseif strfind(task_list_name,'amen else')
     task_list={'amen dementia';'amen bipolar';'amen adjustment';'amen anxiety'};
 else
     task_list = {task_list_name};
@@ -120,3 +120,5 @@ else
     task.savestuff=1;
     task.ks=unique(round(logspace(0,2,50)));
 end
+
+if ~isfield(task,'savestuff'), task.savestuff=1; end
