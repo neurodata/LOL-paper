@@ -11,7 +11,6 @@ parfor k=1:task.Ntrials
     % prepare data
     [task1, X, Y, P] = get_task(task);
     Z = parse_data(X,Y,task1.ntrain,task1.ntest,task1.percent_unlabeled);
-    task1 = update_k(task1);
     
     tic % get delta and eigenvectors
     Phat = estimate_parameters(Z.Xtrain,Z.Ytrain,task1.Kmax);
@@ -41,9 +40,9 @@ parfor k=1:task.Ntrials
                 loop{k}.out(i,l) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
             end
             
-        elseif strcmp(task1.algs{i},'treebagger')
+        elseif strcmp(task1.algs{i},'RF')
             tic
-            B = TreeBagger(500,Z.Xtrain',Z.Ytrain');
+            B = TreeBagger(100,Z.Xtrain',Z.Ytrain');
             [~, scores] = predict(B,Z.Xtest');
             Yhat=scores(:,1)<scores(:,2);
             loop{k}.time(i,1)=toc;
@@ -120,7 +119,7 @@ parfor k=1:task.Ntrials
             %                 loop{k}.out(i,l) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
             %             end
             
-        elseif strcmp(task1.algs{i},'naivebayes')
+        elseif strcmp(task1.algs{i},'NaiveB')
             tic
             nb = NaiveBayes.fit(Z.Xtrain',Z.Ytrain);
             Yhat = predict(nb,Z.Xtest');

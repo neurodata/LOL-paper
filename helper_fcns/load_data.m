@@ -258,5 +258,8 @@ switch task.name
         X=data.ACTIVATION';
         Y=data.Mood_Disorder;
         [task.D, task.n] = size(X);
+    case 'mnist'
+        X=load('/ztmp/Data Sets/MNIST/Data/TrainImages.mat');
+        Y=load('/ztmp/Data Sets/MNIST/Data/TrainImageLabels.mat');
 end
 Y=double(Y);

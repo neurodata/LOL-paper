@@ -1,12 +1,13 @@
-function print_fig(h,wh,fname,renderer)
+function print_fig(h,F)
 % h: figure handle
 % fname: name of fig file & script
 % wh: set paper width and height
+if ~isfield(F,'renderer'), F.renderer='painters'; end
 
-set(h,'PaperSize',wh,'PaperPosition',[0 0 wh],'color','w');
+set(h,'PaperSize',F.PaperSize,'PaperPosition',F.PaperPosition,'color','w');
 set(h, 'InvertHardCopy', 'off');
-set(h,'renderer',renderer)
-saveas(h,fname,'fig')
-print(h,fname,'-dpdf')
-print(h,fname,'-dpng','-r300')
+set(h,'renderer',F.renderer)
+saveas(h,F.fname,'fig')
+print(h,F.fname,'-dpdf')
+print(h,F.fname,'-dpng','-r300')
 
