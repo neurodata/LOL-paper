@@ -59,5 +59,10 @@ for i=1:T.Nalgs
         F.markers{i}='^';
         F.markersize{i}=8;
         F.linewidth{i}=2;
+    elseif strcmp(T.algs{i},'lda') 
+        F.colors{i}= 'k';           % brown
+        F.markers{i}='^';
+        F.markersize{i}=8;
+        F.linewidth{i}=2;
     end
 end
