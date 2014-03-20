@@ -4,14 +4,13 @@ function loop = task_loop(task)
 
 loop = cell(1,task.Ntrials);
 parfor k=1:task.Ntrials
-    
-    
+        
     if mod(k,10)==0, display(['trial # ', num2str(k)]); end
     
     % prepare data
     [task1, X, Y, P] = get_task(task);
     Z = parse_data(X,Y,task1.ntrain,task1.ntest,task1.percent_unlabeled);
-    
+
     tic % get delta and eigenvectors
     Phat = estimate_parameters(Z.Xtrain,Z.Ytrain,task1.Kmax);
     loop{k}.svdtime = toc;
@@ -78,18 +77,16 @@ parfor k=1:task.Ntrials
         elseif strcmp(task1.algs{i},'QOL')
             for l=1:task1.Nks
                 tic
-                [Proj, W] = QOL_train(Xtrain_centered, Z.Ytrain,Phat.delta,task1.ks(l));
-                Yhat = LOL_predict(Xtest_centered,Proj,W);
-                loop{k}.time(i,l)=toc+loop{k}.svdtime;
+                Yhat = QOL_train_and_predict(Xtrain_centered,Z.Ytrain,Xtest_centered,Phat.delta,task1.ks(l));
+                loop{k}.time(i,l)=toc;
                 loop{k}.out(i,l) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
             end
             
         elseif strcmp(task1.algs{i},'QOQ')
             for l=1:task1.Nks
                 tic
-                QDAhat = QOQ_train(Xtrain_centered, Z.Ytrain,Phat.delta,task1.ks(l));
-                Yhat = QOQ_predict(Xtest_centered,QDAhat);
-                loop{k}.time(i,l)=toc+loop{k}.svdtime;
+                Yhat = QOQ_train_and_predict(Xtrain_centered,Z.Ytrain,Xtest_centered,Phat.delta,task1.ks(l));
+                loop{k}.time(i,l)=toc;
                 loop{k}.out(i,l) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
             end
             

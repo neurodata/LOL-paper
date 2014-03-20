@@ -37,16 +37,11 @@ elseif strfind(name,'amen')==1
     task.simulation = 0;
     task.ntrain=5112;
     task.ntest=569;
-    task.ks=unique(round(logspace(0,2.9,30)));
-    task.algs={'LDA','SLOL','LOL','RF'};
+    if ~isfield(task,'ks'), task.ks=unique(round(logspace(0,2.9,30))); end
+    if ~isfield(task,'algs'), task.algs={'LDA','SLOL','LOL','RF'}; end
 elseif strfind(name,'toeplitz, D')==1 
     Dind=strfind(task.name,'D');
     task.D=str2double(task.name(Dind+2:end));
-elseif strcmp(name,'sa')==1
-    task.ks=unique(round(logspace(0,2,50)));
-    task.Ntrials=10;
-    task.algs={'NaiveB','RF','LOL'};
-    task.savestuff=1;
 elseif strcmp(name,'mnist')==1
     task.ks=unique(round(logspace(0,2,50)));
     task.Ntrials=10;

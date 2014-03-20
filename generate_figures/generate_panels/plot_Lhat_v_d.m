@@ -52,7 +52,7 @@ if ~isfield(F,'ylim'), ylim=[miny,maxy]; else ylim=F.ylim; end
 if ~isfield(F,'ytick'),
     if Lchance<miny, miny=Lchance*0.9; end
     if maxy>Lchance, maxy=Lchance*1.1; end
-    ytick=round(linspace(YL,YU,5)*100)/100;
+    ytick=round(linspace(ylim(1),ylim(2),5)*100)/100;
     ytick=unique(ytick);
     if miny>=maxy miny=maxy-eps; end
     if any(diff(ytick)<0.001), ytick=[miny*0.9,maxy*1.1]; end
