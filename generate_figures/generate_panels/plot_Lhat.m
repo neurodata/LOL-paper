@@ -13,10 +13,6 @@ if ~isfield(F,'plot_bayes'), F.plot_bayes=false; end
 if ~isfield(F,'plot_risk'), F.plot_risk=false; end
 
 Nalgs=length(T.algs);
-% legendcell = cell(1,Nalgs);
-% if F.plot_chance, legendcell=[legendcell,'chance']; end
-% if F.plot_bayes,  legendcell=[legendcell,'Bayes']; end
-% if F.plot_risk,   legendcell=[legendcell,'Risk']; end
 legendcell=[];
 
 % plot accuracies
@@ -84,7 +80,7 @@ else
 end
 
 if ~isfield(F,'ytick'),
-    ytick=round(linspace(YL,YU,5)*100)/100;    ytick=unique(ytick);
+    ytick=round(linspace(ylim(1),ylim(2),5)*100)/100;    ytick=unique(ytick);
 else
     ytick=F.ytick;
 end

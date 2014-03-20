@@ -78,8 +78,7 @@ parfor k=1:task.Ntrials
         elseif strcmp(task1.algs{i},'QOL')
             for l=1:task1.Nks
                 tic
-                [Proj, W] = QOL_train(Xtrain_centered, Z.Ytrain,Phat.delta,task1.ks(l));
-                Yhat = LOL_predict(Xtest_centered,Proj,W);
+                Yhat = QOL_train_and_predict(Xtrain_centered,Z.Ytrain,Xtest_centered,Phat.delta,task1.ks(l));
                 loop{k}.time(i,l)=toc+loop{k}.svdtime;
                 loop{k}.out(i,l) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
             end

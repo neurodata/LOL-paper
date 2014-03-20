@@ -58,7 +58,7 @@ maxx=10^ceil(log10(maxx));
 xtick=10.^[-10:10];
 if ~isfield(F,'ylim'), ylim=[miny,maxy]; else ylim=F.ylim; end
 if ~isfield(F,'ytick'),
-    ytick=round(linspace(YL,YU,5)*100)/100;    ytick=unique(ytick);
+    ytick=round(linspace(ylim(1),ylim(2),5)*100)/100;    ytick=unique(ytick);
 else
     ytick=F.ytick;
 end

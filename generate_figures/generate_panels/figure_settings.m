@@ -49,5 +49,10 @@ for i=1:T.Nalgs
         F.markers{i}='h';
         F.markersize{i}=8;
         F.linewidth{i}=2;
+    elseif strcmp(T.algs{i},'QOL') 
+        F.colors{i}= 'r';    % brown
+        F.markers{i}='^';
+        F.markersize{i}=8;
+        F.linewidth{i}=2;
     end
 end
