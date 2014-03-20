@@ -3,7 +3,7 @@ function loop = task_loop(task)
 % results
 
 loop = cell(1,task.Ntrials);
-parfor k=1:task.Ntrials
+for k=1:task.Ntrials
         
     if mod(k,10)==0, display(['trial # ', num2str(k)]); end
     
@@ -29,6 +29,11 @@ parfor k=1:task.Ntrials
             else
                 Yhat = nan(size(Z.Ytest));
             end
+            loop{k}.time(i,1)=toc;
+            loop{k}.out(i,1) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
+        elseif strcmp(task1.algs{i},'lda')
+            tic
+            Yhat = classify(Xtest_centered',Xtrain_centered',Z.Ytrain);
             loop{k}.time(i,1)=toc;
             loop{k}.out(i,1) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
         elseif strcmp(task1.algs{i},'PDA')

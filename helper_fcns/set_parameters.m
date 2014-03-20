@@ -215,8 +215,8 @@ if ~isfield(task,'P')
             Sig0(2,1) = sv(2)/2;
             
             Sig1=Sig1+eye(D);
-            Sig0=Sig0+eye(D);        
-        
+            Sig0=Sig0+eye(D);
+            
         case 'wa' % wide angle
             
             sd = 1;
@@ -402,7 +402,7 @@ if ~isfield(task,'P')
             Sig0=A;
             
         case ['toeplitz, D=', num2str(D)]
-
+            
             delta1=0.4; D1=10;
             
             rho=0.5;
@@ -427,10 +427,72 @@ if ~isfield(task,'P')
             mu0(2:2:end)=-1;
             mu0=mudelt*mu0;
             mu1=-mu0;
-
+            
             Sig1=A;
             Sig0=A;
             
+            
+        case ['Rtoeplitz, D=', num2str(D)]
+            delta1=0.4; D1=10;
+            
+            rho=0.5;
+            A=nan(D1);
+            for a=1:D1
+                for b=1:D1
+                    A(a,b)=rho^abs(a-b);
+                end
+            end
+            K1=sum(A(:));
+            
+            A=nan(D);
+            for a=1:D
+                for b=1:D
+                    A(a,b)=rho^abs(a-b);
+                end
+            end
+            K=sum(A(:));
+            
+            mudelt=(K1*delta1^2/K)^0.5/2;
+            mu0 = ones(D,1);
+            mu0(2:2:end)=-1;
+            mu0=mudelt*mu0;
+            
+            R = uniform_rotation_matrix(D);
+            mu1=-R*mu0;
+            
+            Sig0=A;
+            Sig1=R*A*R';
+            
+        case ['Etoeplitz, D=', num2str(D)]
+            delta1=0.8; D1=10;
+            
+            rho=0.5;
+            A=nan(D1);
+            for a=1:D1
+                for b=1:D1
+                    A(a,b)=rho^abs(a-b);
+                end
+            end
+            K1=sum(A(:));
+            
+            A=nan(D);
+            for a=1:D
+                for b=1:D
+                    A(a,b)=rho^abs(a-b);
+                end
+            end
+            K=sum(A(:));
+            
+            mudelt=(K1*delta1^2/K)^0.5/2;
+            mu0 = ones(D,1);
+            mu0(2:2:end)=-1;
+            mu0=mudelt*mu0;
+            
+            mu1=-mu0;
+            
+            Sig0=A;
+            Sig1=eye(D);
+             
         case ['sparse toeplitz, D=', num2str(D)]        % toeplitz with sparse delta
             
             mudelt = 2.5;                                 % distance betwen dim 1 of means
@@ -449,7 +511,7 @@ if ~isfield(task,'P')
             
             Sig0=A;
             Sig1=A;
-                        
+            
             
         case 'decaying'
             
