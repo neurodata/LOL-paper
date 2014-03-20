@@ -45,12 +45,17 @@ for i=1:T.Nalgs
         F.markersize{i}=8;
         F.linewidth{i}=2;
     elseif strcmp(T.algs{i},'NaiveB') || strcmp(T.algs{i},'naivebayes')
-        F.colors{i}= [0.9 0.75 0];    % brown
+        F.colors{i}= [0.9 0.75 0];  % brown
         F.markers{i}='h';
         F.markersize{i}=8;
         F.linewidth{i}=2;
     elseif strcmp(T.algs{i},'QOL') 
-        F.colors{i}= 'r';    % brown
+        F.colors{i}= 'r';           % red
+        F.markers{i}='^';
+        F.markersize{i}=8;
+        F.linewidth{i}=2;
+    elseif strcmp(T.algs{i},'QOQ') 
+        F.colors{i}= 'k';           % brown
         F.markers{i}='^';
         F.markersize{i}=8;
         F.linewidth{i}=2;

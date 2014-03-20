@@ -1,8 +1,8 @@
 clearvars, clc,
 run([pwd,'/../helper_fcns/updatepath.m'])
 
-task.name='amen READINGS gender';
-task.algs={'QOL','LOL'};
+task.name='r';
+task.algs={'LOL','QOL','QOQ'};
 task.Ntrials=15;
 
 [T,P,S] = run_task(task);

@@ -63,6 +63,9 @@ if col==1
 end
 
 if ~isfield(F,'ylim'),
+    YU=1.01*min(maxloc); %YU = min(S.means.Lhats(:,1))*1.1;
+    YL=0.99*minAlg;
+    if YU<YL, YU=mean([YU,YL])*1.1; YL=mean([YU,YL])*0.9; end
     if F.plot_chance
         if Lchance>YU
             YU=Lchance*1.05;
@@ -71,9 +74,6 @@ if ~isfield(F,'ylim'),
             YL=Lchance*0.95;
         end
     end
-    YU=1.01*min(maxloc); %YU = min(S.means.Lhats(:,1))*1.1;
-    YL=0.99*minAlg;
-    if YU<YL, YU=mean([YU,YL])*1.1; YL=mean([YU,YL])*0.9; end
     ylim=[YL,YU];
 else
     ylim=F.ylim;

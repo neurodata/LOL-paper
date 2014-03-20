@@ -31,6 +31,3 @@ if k<length(idx), idx(k+1:end)=[]; end
 V=[delta, VV(:,idx(1:end-1))];
 [V_QOL, ~] = qr(V,0);           
 Proj = V_QOL';
-
-% features = Proj*X;
-% W = LDA_train(features',Y);       % estimate LDA discriminating boundary from training data
