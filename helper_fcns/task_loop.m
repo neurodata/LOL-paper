@@ -59,7 +59,11 @@ for k=1:task.Ntrials
             for l=1:task1.Nks
                 tic
                 Yhat = LOL_train_and_predict(Xtrain_centered,Z.Ytrain,Xtest_centered,Phat.delta,Phat.V(1:task1.ks(l),:));
-                loop{k}.time(i,l)=toc+loop{k}.svdtime;
+                if task1.ks(l)==1
+                    loop{k}.time(i,l)=toc;
+                else
+                    loop{k}.time(i,l)=toc+loop{k}.svdtime;
+                end
                 loop{k}.out(i,l) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
             end
             

@@ -1,4 +1,4 @@
-function [task,P,Stats] = run_task(task_in)
+function [task,Stats,P] = run_task(task_in)
 % this function does the following for the input task
 % 1) gets details for running the task
 % 2) runs a variety of classifiers on such task for a variety of embedding dimensions
@@ -11,6 +11,7 @@ function [task,P,Stats] = run_task(task_in)
 %   task:   a structure containing details about the tas
 %   Stats:  structure of statistics
 %   P:      structure of parameters, if task is a simulation, else just empty
+run([pwd,'/../helper_fcns/updatepath.m']) % update path
 
 %% store and generate parameters from a single simulation fo plotting the spectrum and getting performance bounds
 

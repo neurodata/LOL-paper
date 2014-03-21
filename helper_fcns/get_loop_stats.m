@@ -9,11 +9,7 @@ times=nan(T.Nalgs,T.Nks,T.Ntrials);
 for k=1:T.Ntrials
     for i=1:T.Nalgs;
         for l=1:T.Nks
-            try
-                Lhats(i,l,k)=loop{k}.out(i,l).Lhat;
-            catch
-                keyboard
-            end
+            Lhats(i,l,k)=loop{k}.out(i,l).Lhat;
             sensitivity(i,l,k)=loop{k}.out(i,l).sensitivity;
             specificity(i,l,k)=loop{k}.out(i,l).specificity;
             times(i,l,k)=loop{k}.time(i,l);

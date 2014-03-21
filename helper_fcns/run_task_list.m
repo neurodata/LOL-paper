@@ -1,14 +1,24 @@
-function [T,P,S] = run_task_list(task_list_name)
-updatepath
+function [T,S,P] = run_task_list(metatask)
+% runs a bunch of tasks and saves them
+% 
+% INPUT: metatask (char): name of metatask 
+% 
+% OUTPUT
+%   T (struct): task settings for each task
+%   S (struct): summary statistics for each task
+%   P (struct): parameters for simulated tasks
 
-[task_list, task] = set_task_list(task_list_name);
+run([pwd,'/../helper_fcns/updatepath.m'])
+[task_list, task] = set_task_list(metatask);
 
-for j=1:length(task_list)
-    fprintf('\n task name = %s\n\n',task_list{j})
-    task.name=task_list{j};
-    [T{j},P{j},S{j}] = run_task(task);
+Ntasks=length(task_list);
+T=cell(1,Ntasks); P=cell(1,Ntasks); S=cell(1,Ntasks);
+for j=1:Ntasks
+    task.name=task_list{j};    
+    fprintf('\n task name = %s\n\n',task.name)
+    [T{j},S{j},P{j}] = run_task(task);
 end
 
 if task.savestuff
-    save(['../../data/results/', task_list_name],'T','P','S')
+    save(['../../data/results/', metatask],'T','P','S')
 end

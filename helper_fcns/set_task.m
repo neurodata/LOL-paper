@@ -1,7 +1,7 @@
 function [task,X,Y,P] = set_task(task)
 % sets up all metadata associated with the input task
 %
-% INPUT: task: a structure containing various task settings
+% INPUT: task (struct or char): a structure containing various task settings
 % 
 % OUTPUT:
 %   task:   update task structure
@@ -9,9 +9,12 @@ function [task,X,Y,P] = set_task(task)
 %   Y:      a vector of predictees
 %   P:      a structure of parameters
 
-
-name=task.name;
-% change settings for certain cases
+if isstruct(task)
+    name=task.name;
+else
+    name=task;
+end
+    % change settings for certain cases
 if strfind(name,'DRL')
     task.QDA_model=0;
 elseif strcmp(name,'IPMN-HvL') || strcmp(name,'IPMN-HvML') || strcmp(name,'IPMN-HMvL') || strcmp(name,'IPMNvsAll') || strcmp(name,'MCNvsAll') || strcmp(name,'SCAvsAll')
@@ -50,14 +53,14 @@ elseif strcmp(name,'mnist')==1
 end
 
 % default settings
-if ~isfield(task,'algs'),       task.algs={'LDA','PDA','LOL','Bayes'}; end               % which algorithms to use
+if ~isfield(task,'algs'),       task.algs={'LDA','PDA','LOL'}; end               % which algorithms to use
 if ~isfield(task,'name'),       task.name=name;     end                         % name of task
 if ~isfield(task,'simulation'), task.simulation=1;  end                    % is this a simulation
 if ~isfield(task,'QDA_model'),  task.QDA_model=1;   end                   % does this simulation satisfy the QDA model
 if ~isfield(task,'ks'),         task.ks=1:100;      end                          % list of dimensions to embed into
 if ~isfield(task,'algs'),       task.algs={'PDA','LOL','QOL','DRDA','RDA','LDA'};  end % which algorithms to use
 if ~isfield(task,'savestuff'),  task.savestuff=1;   end                       % flag whether to save data & figures
-if ~isfield(task,'Ntrials'),    task.Ntrials = 20;  end                   % # of trials
+if ~isfield(task,'Ntrials'),    task.Ntrials = 5;   end                   % # of trials
 if ~isfield(task,'ntrain'),     task.ntrain  = 50;  end                  % # of training samples
 if ~isfield(task,'ntest'),      task.ntest   = 500; end                     % # of test samples
 if ~isfield(task,'percent_unlabeled'),      task.percent_unlabeled = 0; end                     % # of test samples
@@ -69,35 +72,6 @@ end
 task.Nalgs=length(task.algs);           % # of algorithms to use
 task.n=sum(task.ntrain)+task.ntest;     % # of total samples
 
-P = [];
-if task.simulation
-    if strcmp(task.name,'DRL')
-        [X,Y] = sample_DRL(a);
-    elseif strcmp(task.name,'xor')
-        [X,Y] = sample_xor(task);
-    elseif strcmp(task.name,'multiclass')
-        [X,Y] = sample_multiclass(task.n);
-    else
-        P = set_parameters(task);
-        [X,Y] = sample_QDA(task.n,P);
-    end
-else
-    [X,Y,task] = load_data(task);
-end
-[D, n]=size(X);
-
-if D==length(Y)
-    X=X';
-    task.D = n;
-    task.n = D;
-else
-    task.D = D;
-    task.n = n;
-end
-
-task.ks=task.ks(task.ks<=min(task.ntrain,min(task.D,max(task.ks))));
-task.Nks=length(task.ks);
-task.Kmax=max(task.ks);
-
+[task,X,Y,P] = get_data(task);
 
 task=orderfields(task);                 % sort fields

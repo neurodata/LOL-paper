@@ -1,4 +1,4 @@
-function plot_benchmarks(task_list_name,F)
+function plot_benchmarks(metatask,F)
 % plot results for a set of tasks
 % generate a row of panels for each task
 % each row has the following columns:
@@ -15,7 +15,7 @@ function plot_benchmarks(task_list_name,F)
 
 run([pwd,'/../helper_fcns/updatepath.m'])
 
-task_list = set_task_list(task_list_name);
+task_list = set_task_list(metatask);
 Ntasks=length(task_list);
 
 T = cell(1,Ntasks);
@@ -67,9 +67,9 @@ end
 % save plots
 if T{j}.savestuff
     if F.plot_time
-        F.fname=['../../figs/', char(strcat('performance_time_', task_list_name))];
+        F.fname=['../../figs/', char(strcat('performance_time_', metatask))];
     else
-        F.fname=['../../figs/', char(strcat('performance_', task_list_name))];
+        F.fname=['../../figs/', char(strcat('performance_', metatask))];
     end
     print_fig(h(1),F)
 end
