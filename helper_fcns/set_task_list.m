@@ -102,12 +102,12 @@ elseif strcmp(metatask,'bunch')
         'semisup cigars';'parallel cigars';'rotated cigars';...
         'model1, p100';'model1, p200';'model1, p400';'model1, p800';'model3, p100';'model3, p200';'model3, p400';'model3, p800';...
         'toeplitz, D=10';'toeplitz, D=20';'toeplitz, D=50';'toeplitz, D=100'};
-elseif strcmp(metatask,'thisisatest')
-    task_list={'s','w'};
+elseif strcmp(metatask,'timingtest')
+    task_list={'s','toeplitz, D=50'};
     task.algs={'LOL','PDA','LDA'};
     task.D=100;
     task.ntrain=50;
-    task.ks=[50, 100];
+    task.ks=[1, 30];
     task.Ntrials=5;
     
 elseif strfind(metatask,'amen READINGS')

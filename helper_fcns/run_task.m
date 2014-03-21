@@ -1,5 +1,6 @@
 function [task,Stats,P] = run_task(task_in)
 % this function does the following for the input task
+% 
 % 1) gets details for running the task
 % 2) runs a variety of classifiers on such task for a variety of embedding dimensions
 % 3) computes some summary statistics
