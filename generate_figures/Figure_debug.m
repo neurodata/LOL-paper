@@ -2,10 +2,10 @@ profile on
 clearvars, clc,
 run([pwd,'/../helper_fcns/updatepath.m'])
 
-task.ntrain=1000;
-task.D=100;
+task.D=1000;
+task.ntrain=50;
 task.name='s';
-task.ks=100;
+task.ks=[50, 100];
 task.algs={'LOL','PDA','LDA'};
 task.Ntrials=5;
 

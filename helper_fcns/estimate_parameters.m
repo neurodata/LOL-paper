@@ -22,8 +22,8 @@ Phat.mu0=mean(X0,2);
 Phat.mu1=mean(X1,2);
 Phat.muu=mean(Xu,2);
 Phat.delta=Phat.mu0-Phat.mu1;
-% Phat.rdelta=trimmean([X0,-X1],10);
 
+% Phat.rdelta=trimmean([X0,-X1],10);
 % Phat.sdelta=Phat.delta;
 % if D>nl
 %     t=quantile(abs(Phat.delta),sqrt(nl/D));
@@ -37,13 +37,14 @@ Phat.delta=Phat.mu0-Phat.mu1;
 X0=bsxfun(@minus,X0,Phat.mu0);
 X1=bsxfun(@minus,X1,Phat.mu1);
 Xu=bsxfun(@minus,Xu,Phat.muu);
-
 X_centered = [X0,X1,Xu]; %bsxfun(@minus,X,Phat.mu);
+
 [D,n]=size(X_centered);
-if D<n
-    [~,Phat.d,V] = svd(X_centered',0);
-    Phat.V=V(:,1:k)';
-else
+
+if D>n
     [U,Phat.d,~] = svd(X_centered,0);
     Phat.V=U(:,1:k)';
+else
+    [~,Phat.d,V] = svd(X_centered',0);
+    Phat.V=V(:,1:k)';
 end
