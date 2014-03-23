@@ -124,6 +124,13 @@ elseif strfind(metatask,'amen first')
     task_list={'amen depression';'amen adhd';'amen gender';'amen mood'};
 elseif strfind(metatask,'amen else')
     task_list={'amen dementia';'amen bipolar';'amen adjustment';'amen anxiety'};
+elseif strfind(metatask,'amen gender')
+    task_list={'amen READINGS gender';'amen COGNITIVE gender';'amen SPECT gender';'amen ACTIVATION gender';'amen X gender'};
+    task.algs={'LDA','LOL','RF'};
+    task.simulation = 0;
+    task.ntrain=5112;
+    task.ntest=569;
+    task.ks=unique(round(logspace(0,2.9,30))); 
 else
     task_list = {metatask};
     task.name = metatask;
