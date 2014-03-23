@@ -133,7 +133,7 @@ elseif strcmp(metatask,'amen gender')
     task.ks=unique(round(logspace(0,2.9,30))); 
 elseif strcmp(metatask,'amen dementia')
     task_list={'amen READINGS dementia';'amen COGNITIVE dementia';'amen SPECT dementia';'amen ACTIVATION dementia';'amen X dementia';'amen BASELINE dementia';'amen CONCENTRATION dementia';'amen CR dementia'};
-    task.algs={'NaiveB','LDA','QDA','RF'};
+    task.algs={'NaiveB','LDA','QDA','RF','LOL','QOL','QOQ'};
     task.simulation = 0;
     task.ntrain=5112;
     task.ntest=569;
