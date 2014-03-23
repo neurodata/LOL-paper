@@ -258,6 +258,24 @@ switch task.name
         X=data.ACTIVATION';
         Y=data.Mood_Disorder;
         [task.D, task.n] = size(X);
+    case 'amen BASELINE gender'
+        data=load('../../data/base/amen');
+        X=data.BASELINE';
+        Y=data.Gender;
+        Y(Y==2)=0;
+        [task.D, task.n] = size(X);
+    case 'amen CONCENTRATION gender'
+        data=load('../../data/base/amen');
+        X=data.CONCENTRATION';
+        Y=data.Gender;
+        Y(Y==2)=0;
+        [task.D, task.n] = size(X);
+    case 'amen CR gender'
+        data=load('../../data/base/amen');
+        X=data.CR';
+        Y=data.Gender;
+        Y(Y==2)=0;
+        [task.D, task.n] = size(X);
     case 'mnist'
         X=load('/ztmp/Data Sets/MNIST/Data/TrainImages.mat');
         Y=load('/ztmp/Data Sets/MNIST/Data/TrainImageLabels.mat');

@@ -36,7 +36,7 @@ elseif strcmp(name,'semisup cigars')
 elseif strcmp(name,'semisup rotated cigars')
     task.ntrain = 500;
     task.percent_unlabeled=0.9;
-elseif strfind(name,'amen')==1
+elseif strcmp(name,'amen')==1
     task.simulation = 0;
     task.ntrain=5112;
     task.ntest=569;
@@ -53,7 +53,6 @@ elseif strcmp(name,'mnist')==1
 end
 
 % default settings
-if ~isfield(task,'algs'),       task.algs={'LDA','PDA','LOL'}; end               % which algorithms to use
 if ~isfield(task,'name'),       task.name=name;     end                         % name of task
 if ~isfield(task,'simulation'), task.simulation=1;  end                    % is this a simulation
 if ~isfield(task,'QDA_model'),  task.QDA_model=1;   end                   % does this simulation satisfy the QDA model

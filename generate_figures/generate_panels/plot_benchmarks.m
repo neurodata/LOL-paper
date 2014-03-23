@@ -15,6 +15,7 @@ function plot_benchmarks(metatask,F)
 
 run([pwd,'/../helper_fcns/updatepath.m'])
 
+if nargin==1, F=struct; end
 task_list = set_task_list(metatask);
 Ntasks=length(task_list);
 
