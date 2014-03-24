@@ -41,6 +41,8 @@ Adjustment_Disorder=adult_data.(names{j});
 
 %%
 Gender=adult_data.(names{8});
+idx=find(Gender>2);
+Gender(idx)=NaN;
 
 %%
 for i=1:length(names)
@@ -114,22 +116,7 @@ for i=1:length(names)
 end
 Baseline=Baseline(:,3:end);
 
-[u,d,v]=svd(Baseline);
 
-B0=Baseline(Depressed==0,:);
-B1=Baseline(Depressed==1,:);
-
-%%
-
-figure(1), imagesc(Baseline), colorbar
-figure(2), plot(diag(d))
-
-
-figure(3),
-subplot(211), imagesc(B0), colorbar
-subplot(212), imagesc(B1), colorbar
-
-figure(4), plot(mean(B0,1)), hold all, plot(mean(B1,1))
 
 %%
 
@@ -176,6 +163,11 @@ COGNITIVE=Xa;
 SPECT=Xb;
 ACTIVATION=Xc;
 READINGS=Xd;
+BASELINE=Xb(:,1:128);
+CONCENTRATION=Xb(:,129:end);
+CR=[COGNITIVE, READINGS];
+
+
 
 %%
 % [u,d,v]=svd(X);
@@ -198,3 +190,42 @@ READINGS=Xd;
 
 clear B0 B1 D X0 X1 Xa Xb Xc Xd adult_data d i j k n names temp u v Baseline
 save('../../data/base/amen')
+
+%%
+[u,d,v]=svd(BASELINE);
+%%
+
+B0=BASELINE(Gender==2,:);
+B1=BASELINE(Gender==1,:);
+
+figure(1), imagesc(BASELINE), colorbar
+figure(2), plot(diag(d))
+
+
+figure(3),
+subplot(211), imagesc(B0), colorbar
+subplot(212), imagesc(B1), colorbar
+
+figure(4), 
+subplot(211), cla, plot(mean(B0,1),'k'), hold all, plot(mean(B1,1),'r'), title('Baseline Gender mean')
+subplot(212), cla, plot(std(B0),'k'), hold all, plot(std(B1),'r'), title('Baseline Gender Std')
+legend('2','1')
+
+%%
+
+A0=ACTIVATION(Gender==2,:);
+A1=ACTIVATION(Gender==1,:);
+
+figure(11), imagesc(ACTIVATION), colorbar
+figure(12), plot(diag(d))
+
+
+figure(13),
+subplot(211), imagesc(A0), colorbar
+subplot(212), imagesc(A1), colorbar
+
+figure(14), 
+subplot(211), cla, plot(mean(A0,1),'k'), hold all, plot(mean(A1,1),'r'), title('Activation Gender mean')
+subplot(212), cla, plot(std(A0),'k'), hold all, plot(std(A1),'r'), title('Activation Gender Std')
+
+

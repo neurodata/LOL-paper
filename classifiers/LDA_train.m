@@ -23,9 +23,10 @@ Phat.lnpi1 = log(n1/n);
 
 Phat.mu0 = mean(X0,2);
 Phat.mu1 = mean(X1,2);
+Phat.mu = (Phat.mu0+Phat.mu1)/2;            % useful for classification via LDA 
+Phat.del = (Phat.mu0-Phat.mu1);             % useful for classification via LDA
+
 Phat.Sigma = (n0*cov(X0') +  n1*cov(X1'))/n; % pooled covariance matrix
 
-Phat.mu = (Phat.mu0+Phat.mu1)/2;            % required for classification via LDA 
-Phat.del = (Phat.mu0-Phat.mu1);             
 Phat.InvSig = pinv(Phat.Sigma);             
 Phat.thresh = (Phat.lnpi0-Phat.lnpi1)/2;    % classification threshold

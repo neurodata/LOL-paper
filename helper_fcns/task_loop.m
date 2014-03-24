@@ -3,7 +3,7 @@ function loop = task_loop(task)
 % results
 
 loop = cell(1,task.Ntrials);
-for k=1:task.Ntrials
+parfor k=1:task.Ntrials
         
     if mod(k,10)==0, display(['trial # ', num2str(k)]); end
     
@@ -26,6 +26,16 @@ for k=1:task.Ntrials
             D = size(Xtrain_centered,1);
             if D<1000 % skip LDA if the # of dimensions is too large such that pinv takes forever!
                 Yhat = LDA_train_and_predict(Xtrain_centered,Z.Ytrain,Xtest_centered);
+            else
+                Yhat = nan(size(Z.Ytest));
+            end
+            loop{k}.time(i,1)=toc;
+            loop{k}.out(i,1) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
+        elseif strcmp(task1.algs{i},'QDA')
+            tic
+            D = size(Xtrain_centered,1);
+            if D<1000 % skip LDA if the # of dimensions is too large such that pinv takes forever!
+                Yhat = QDA_train_and_predict(Xtrain_centered,Z.Ytrain,Xtest_centered);
             else
                 Yhat = nan(size(Z.Ytest));
             end
@@ -59,7 +69,11 @@ for k=1:task.Ntrials
             for l=1:task1.Nks
                 tic
                 Yhat = LOL_train_and_predict(Xtrain_centered,Z.Ytrain,Xtest_centered,Phat.delta,Phat.V(1:task1.ks(l),:));
-                loop{k}.time(i,l)=toc+loop{k}.svdtime;
+                if task1.ks(l)==1
+                    loop{k}.time(i,l)=toc;
+                else
+                    loop{k}.time(i,l)=toc+loop{k}.svdtime;
+                end
                 loop{k}.out(i,l) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
             end
             

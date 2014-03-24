@@ -13,5 +13,5 @@ function [Yhat, eta] = LDA_predict(X,P)
 %   Yhat in {0,1}^n: vector of predictions
 %   eta in R^{n x 1}: vector of magnitudes
 
-eta = P.del'*P.InvSig*X -P.del'*P.InvSig*P.mu - P.thresh;
+eta = P.del'*P.InvSig*X - P.del'*P.InvSig*P.mu - P.thresh;
 Yhat = eta' < 0;

@@ -4,9 +4,8 @@ function P = set_parameters(task)
 % them correspond to QDA models, that is, two classes, each with a mean and
 % covariance.
 %
-% INPUT: the name of of simulation
-% OUTPUT:  P structure containing parameters
-
+% INPUT: task (struct): task settings
+% OUTPUT:  P (struct):  parameters
 
 if ~isfield(task,'permute'), task.permute=0; end % whether or not to permute the coordinates, this is really for debugging purposes
 if ~isfield(task,'D'), D=100; else D=task.D; end % ambient # of dimensions
