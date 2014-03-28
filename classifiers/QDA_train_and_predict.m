@@ -1,4 +1,4 @@
-function [Yhat] = QDA_train_and_predict(Xtrain, Ytrain, Xtest)
+function [Yhat, Phat] = QDA_train_and_predict(Xtrain, Ytrain, Xtest)
 
 % Bayes optimal under QDA model
 X0 = Xtrain(:,Ytrain==0);
@@ -29,6 +29,3 @@ for mm=1:ntest
     l0=-0.5*Phat.d0(:,mm)'*Phat.InvSig0* Phat.d0(:,mm)-Phat.a0;
     Yhat(mm)= l1 > l0;
 end
-
-% parms = QDA_train(Xtrain,Ytrain);
-% [Yhat, eta] = QDA_predict(Xtest,parms);

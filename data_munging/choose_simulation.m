@@ -468,6 +468,6 @@ if p1>0 || p2>0
     error('Sig1 or Sig2 is not positive definite')
 end
 
-% [X, Y] = sample_data(n,P.mu1,P.mu2,P.Sig1,P.Sig2);
+[X, Y] = sample_data(n,P.mu1,P.mu2,P.Sig1,P.Sig2);
 
 
