@@ -20,6 +20,7 @@ Phat.InvSig1 = pinv(Phat.Sigma1);
 
 Phat.a1= -0.5*logdet(Phat.Sigma0)+lnp1;
 Phat.a0= -0.5*logdet(Phat.Sigma1)+lnp0;
+
 if logdet(Phat.Sigma1) == -inf
     disp('Phat.Sigma1 is singular.')
 elseif logdet(Phat.Sigma0) == -inf
