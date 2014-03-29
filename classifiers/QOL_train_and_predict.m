@@ -1,4 +1,5 @@
-function [Yhat, eta, Proj] = QOL_train_and_predict(Xtrain, Ytrain, Xtest, delta,k)
+function [Yhat, eta, Proj] = QOL_train_and_predict(Xtrain, Ytrain, Xtest, varargin)
+% function [Yhat, eta, Proj] = QOL_train_and_predict(Xtrain, Ytrain, Xtest, del)
 % trains and predicts Quadratic Low-rank Optimal projection LDA
 % 
 % INPUT
@@ -14,7 +15,12 @@ function [Yhat, eta, Proj] = QOL_train_and_predict(Xtrain, Ytrain, Xtest, delta,
 %                   plane, prior to thresholding
 %   Proj in R^{k x D}: projection matrix
 
-Proj = QOL_train(Xtrain,Ytrain,delta,k);
+if nargin == 5
+    Proj = QOL_train(Xtrain,Ytrain,varargin{1},varargin{2});
+else
+    Proj = QOL_train(Xtrain,Ytrain,varargin{1});
+end
+% Proj = QOL_train(Xtrain,Ytrain,delta,k);
 Xtilde=Proj*Xtrain;
 parms = LDA_train(Xtilde,Ytrain);
 [Yhat, eta] = LDA_predict(Proj*Xtest,parms);

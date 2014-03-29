@@ -18,14 +18,11 @@ Phat.Sigma1 = cov(X1');
 Phat.InvSig0 = pinv(Phat.Sigma0);
 Phat.InvSig1 = pinv(Phat.Sigma1);
 
-Phat.a1= -0.5*logdet(Phat.Sigma0)+lnp1;
-Phat.a0= -0.5*logdet(Phat.Sigma1)+lnp0;
+Phat.a1= -0.5*logdet(Phat.Sigma1)+lnp1;
+Phat.a0= -0.5*logdet(Phat.Sigma0)+lnp0;
 if logdet(Phat.Sigma1) == -inf
     disp('Phat.Sigma1 is singular.')
-elseif logdet(Phat.Sigma0) == -inf
-    disp('Phat.Sigma0 is singular.');
-end
-
+    
 Phat.d1 = bsxfun(@minus,Phat.mu1,Xtest);
 Phat.d0 = bsxfun(@minus,Phat.mu0,Xtest);
 
@@ -34,4 +31,3 @@ for mm=1:ntest
     l0=-0.5*Phat.d0(:,mm)'*Phat.InvSig0* Phat.d0(:,mm)-Phat.a0;
     Yhat(mm)= l1 > l0;
 end
-
