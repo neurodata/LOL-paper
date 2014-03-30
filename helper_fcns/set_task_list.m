@@ -126,7 +126,7 @@ elseif strcmp(metatask,'amen else')
     task_list={'amen dementia';'amen bipolar';'amen adjustment';'amen anxiety'};
 elseif strcmp(metatask,'amen gender')
     task_list={'amen READINGS gender';'amen COGNITIVE gender';'amen SPECT gender';'amen ACTIVATION gender';'amen X gender';'amen BASELINE gender';'amen CONCENTRATION gender';'amen CR gender'};
-    task.algs={'NaiveB','LDA','QDA','LOL','QOL','QOQ'};
+    task.algs={'NaiveB','LDA','QDA','RF','LOL','QOL','QOQ'};
     task.simulation = 0;
     task.ntrain=5112;
     task.ntest=569;
