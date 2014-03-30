@@ -31,6 +31,16 @@ parfor k=1:task_in.Ntrials
             end
             loop{k}.time(i,1)=toc;
             loop{k}.out(i,1) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
+        elseif strcmp(task.algs{i},'mLDA')
+            tic
+            D = size(Xtrain_centered,1);
+            if D<1000 % skip LDA if the # of dimensions is too large such that pinv takes forever!
+                Yhat = mLDA_train_and_predict(Xtrain_centered,Z.Ytrain,Xtest_centered);
+            else
+                Yhat = nan(size(Z.Ytest));
+            end
+            loop{k}.time(i,1)=toc;
+            loop{k}.out(i,1) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
         elseif strcmp(task.algs{i},'LDA2')
             tic
             D = size(Xtrain_centered,1);
