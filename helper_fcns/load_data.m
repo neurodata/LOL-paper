@@ -243,6 +243,11 @@ switch task.name
         X=data.BASELINE';
         Y=data.Dementia;
         [task.D, task.n] = size(X);
+    case 'amen BASELINE depression'
+        data=load('../../Data/Preprocessed/amen');
+        X=data.BASELINE';
+        Y=data.Depressed;
+        [task.D, task.n] = size(X);
     case 'amen CONCENTRATION dementia'
         data=load('../../Data/Preprocessed/amen');
         X=data.CONCENTRATION';
@@ -280,6 +285,12 @@ switch task.name
         Y=data.Gender;
         Y(Y==2)=0;
         [task.D, task.n] = size(X);
+    case 'amen CONCENTRATION depression'
+        data=load('../../Data/Preprocessed/amen');
+        X=data.CONCENTRATION';
+        Y=data.Depressed;
+        Y(Y==2)=0;
+        [task.D, task.n] = size(X);
     case 'amen CR dementia'
         data=load('../../Data/Preprocessed/amen');
         X=data.CR';
@@ -290,6 +301,11 @@ switch task.name
         X=data.CR';
         Y=data.Gender;
         Y(Y==2)=0;
+        [task.D, task.n] = size(X);
+    case 'amen CR depression'
+        data=load('../../Data/Preprocessed/amen');
+        X=data.CR';
+        Y=data.Depressed;
         [task.D, task.n] = size(X);
     case 'mnist'
         X=load('/ztmp/Data Sets/MNIST/Data/TrainImages.mat');
