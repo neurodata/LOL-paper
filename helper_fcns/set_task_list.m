@@ -173,7 +173,7 @@ elseif strcmp(metatask,'test_lda2')
     task.ks=unique(round(logspace(0,log10(task.ntrain),30))); 
 elseif strcmp(metatask,'test_lda3')
     task_list={'wra, D=5','toeplitz, D=5'};
-    task.algs={'LDA','LOL'};
+    task.algs={'LDA','lda'};
     task.ntrain=5000;
     task.ntest=500;
     task.Ntrials=2;
