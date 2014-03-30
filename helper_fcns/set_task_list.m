@@ -139,6 +139,14 @@ elseif strcmp(metatask,'amen dementia')
     task.ntest=569;
     task.ks=unique(round(logspace(0,2.9,30))); 
 
+elseif strcmp(metatask,'amen depression')
+    task_list={'amen READINGS depression';'amen COGNITIVE depression';'amen SPECT depression';'amen ACTIVATION depression';'amen X depression';'amen BASELINE depression';'amen CONCENTRATION depression';'amen CR depression'};
+    task.algs={'NaiveB','LDA','QDA','RF','LOL','QOL','QOQ'};
+    task.simulation = 0;
+    task.ntrain=5112;
+    task.ntest=569;
+    task.ks=unique(round(logspace(0,2.9,30))); 
+
 elseif strcmp(metatask,'test_qda')
     task_list={'wra, D=5', 'wra, D=20'};
     task.algs={'QDA','qda'};

@@ -1,6 +1,6 @@
 clearvars, clc,
 
-task_list_names={'amen READINGS';'amen COGNITIVE';'amen SPECT'; 'amen X'; 'amen ACTIVATION'};
+task_list_names={'amen gender';'amen demensia';'amen depression'};
 
 for i=1:length(task_list_names)
     task_list_name=task_list_names{i};
