@@ -1,6 +1,6 @@
 clearvars, clc,
 
-task_list_names={'amen gender READINGS'};%'amen demensia';'amen depression'};
+task_list_names={'amen gender';'amen demensia';'amen depression'};
 profile on
 for i=1:length(task_list_names)
     task_list_name=task_list_names{i};
