@@ -24,18 +24,16 @@ Phat.mu1 = mean(X1,2);
 
 X0=bsxfun(@minus,X0,Phat.mu0);
 [u0,d0,~] = svd(X0,0);
-s0 = diag(d0);                        % find min singular value for numerical stability
-tol0 = max(size(X0)) * eps(max(s0));
-r0 = sum(s0 > tol0);
+tol0 = max(size(X0)) * eps(max(d0(:)));
+r0 = sum(d0(:) > tol0);
 dd0=d0(1:r0,1:r0);
 L0 = u0(:,1:r0)/dd0;
 Phat.InvSig0 = (L0*L0')*n0;         % useful for classification via LDA
 
 X1=bsxfun(@minus,X1,Phat.mu1);
 [u1,d1,~] = svd(X1,0);
-s1 = diag(d1);                        % find min singular value for numerical stability
-tol1 = max(size(X1)) * eps(max(s1));
-r1 = sum(s1 > tol1);
+tol1 = max(size(X1)) * eps(max(d1(:)));
+r1 = sum(d1(:) > tol1);
 dd1=d1(1:r1,1:r1);
 L1 = u1(:,1:r1)/dd1;
 Phat.InvSig1 = (L1*L1')*n1;         % useful for classification via LDA
