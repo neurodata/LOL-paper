@@ -1,5 +1,4 @@
 clearvars, clc,
-run([pwd,'/../helper_fcns/updatepath.m'])
 
 savestuff=1;
 task_list_name='both_cigars';

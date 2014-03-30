@@ -1,5 +1,4 @@
 clearvars, clc,
-run([pwd,'/../helper_fcns/updatepath.m'])
 
 task_list_names={'amen READINGS';'amen COGNITIVE';'amen SPECT'; 'amen X'; 'amen ACTIVATION'};
 

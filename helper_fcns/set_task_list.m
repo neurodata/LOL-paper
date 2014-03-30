@@ -138,6 +138,21 @@ elseif strcmp(metatask,'amen dementia')
     task.ntrain=5112;
     task.ntest=569;
     task.ks=unique(round(logspace(0,2.9,30))); 
+
+elseif strcmp(metatask,'test_qda')
+    task_list={'wra, D=10', 'wra, D=20'};
+    task.algs={'QDA','qda'};
+    task.ks=unique(round(logspace(0,2.9,30))); 
+    task.ntrain=100;
+    task.Ntrials=20;
+
+elseif strcmp(metatask,'test_lda')
+    task_list={'s, D=10', 's, D=100'};
+    task.algs={'LDA','lda'};
+    task.ks=unique(round(logspace(0,2.9,30))); 
+    task.ntrain=100;
+    task.ntest=500;
+    task.Ntrials=20;
 else
     task_list = {metatask};
     task.name = metatask;

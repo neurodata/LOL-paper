@@ -1,6 +1,5 @@
 profile on
 clearvars, clc,
-run([pwd,'/../helper_fcns/updatepath.m'])
 
 
 metatask='timingtest';
