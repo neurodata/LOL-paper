@@ -25,6 +25,12 @@ Phat.mu0 = mean(X0,2);
 Phat.mu1 = mean(X1,2);
 Phat.Sigma0 = cov(X0');
 Phat.Sigma1 = cov(X1'); 
+% figure; imagesc(Phat.Sigma0); colorbar;
+% title('Covariance of class 0')
+% % hold on;
+% figure;
+% imagesc(Phat.Sigma1); colorbar;
+% title('Covariance of class 1')
 
 Phat.mu = (Phat.mu0+Phat.mu1)/2;            % required for classification via LDA 
 Phat.del = (Phat.mu0-Phat.mu1);             
