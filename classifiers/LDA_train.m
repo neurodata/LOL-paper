@@ -16,7 +16,7 @@ n=n0+n1;
 lnpi0 = log(n0/n);
 lnpi1 = log(n1/n);
 
-Phat.thresh = (lnpi0-lnpi1)/2;    % classification threshold
+Phat.thresh = (lnpi0-lnpi1)/2;    % useful for classification via LDA
 
 X0 = X(:,Y==0);
 X1 = X(:,Y==1);
@@ -37,6 +37,6 @@ tol = max(size(X_centered)) * eps(max(s));
 r = sum(s > tol);
 dd=d(1:r,1:r);
 L = u(:,1:r)/dd;
-Phat.InvSig = (L*L')*n;
+Phat.InvSig = (L*L')*n;         % useful for classification via LDA
 
 
