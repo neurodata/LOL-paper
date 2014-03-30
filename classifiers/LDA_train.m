@@ -13,10 +13,7 @@ n0=sum(Y==0);
 n1=sum(Y==1);
 n=n0+n1;
 
-lnpi0 = log(n0/n);
-lnpi1 = log(n1/n);
-
-Phat.thresh = (lnpi0-lnpi1)/2;    % useful for classification via LDA
+Phat.thresh = log(n0/n1)/2;    % useful for classification via LDA
 
 X0 = X(:,Y==0);
 X1 = X(:,Y==1);
