@@ -13,20 +13,30 @@ n0=sum(Y==0);
 n1=sum(Y==1);
 n=n0+n1;
 
+lnpi0 = log(n0/n);
+lnpi1 = log(n1/n);
+
+Phat.thresh = (lnpi0-lnpi1)/2;    % classification threshold
+
 X0 = X(:,Y==0);
 X1 = X(:,Y==1);
 
-Phat.pi0 = n0/n;
-Phat.pi1 = n1/n;
-Phat.lnpi0 = log(n0/n);
-Phat.lnpi1 = log(n1/n);
+mu0 = mean(X0,2);
+mu1 = mean(X1,2);
 
-Phat.mu0 = mean(X0,2);
-Phat.mu1 = mean(X1,2);
-Phat.mu = (Phat.mu0+Phat.mu1)/2;            % useful for classification via LDA 
-Phat.del = (Phat.mu0-Phat.mu1);             % useful for classification via LDA
+Phat.mu = (mu0+mu1)/2;            % useful for classification via LDA 
+Phat.del = (mu0-mu1);             % useful for classification via LDA
 
-Phat.Sigma = (n0*cov(X0') +  n1*cov(X1'))/n; % pooled covariance matrix
+X0=bsxfun(@minus,X0,mu0);
+X1=bsxfun(@minus,X1,mu1);
+X_centered = [X0,X1]; 
 
-Phat.InvSig = pinv(Phat.Sigma);             
-Phat.thresh = (Phat.lnpi0-Phat.lnpi1)/2;    % classification threshold
+[u,d,~] = svd(X_centered,0);
+s = diag(d);                        % find min singular value for numerical stability
+tol = max(size(X_centered)) * eps(max(s));
+r = sum(s > tol);
+dd=d(1:r,1:r);
+L = u(:,1:r)/dd;
+Phat.InvSig = (L*L')*n;
+
+

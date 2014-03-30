@@ -4,4 +4,3 @@ metatask='test_qda';
 
 F.plot_bayes=true;
 plot_benchmarks(metatask,F)
-

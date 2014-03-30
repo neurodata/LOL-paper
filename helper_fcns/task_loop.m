@@ -3,7 +3,7 @@ function loop = task_loop(task_in)
 % results
 
 loop = cell(1,task_in.Ntrials);
-for k=1:task_in.Ntrials
+parfor k=1:task_in.Ntrials
         
     if mod(k,10)==0, display(['trial # ', num2str(k)]); end
     
@@ -26,6 +26,16 @@ for k=1:task_in.Ntrials
             D = size(Xtrain_centered,1);
             if D<1000 % skip LDA if the # of dimensions is too large such that pinv takes forever!
                 Yhat = LDA_train_and_predict(Xtrain_centered,Z.Ytrain,Xtest_centered);
+            else
+                Yhat = nan(size(Z.Ytest));
+            end
+            loop{k}.time(i,1)=toc;
+            loop{k}.out(i,1) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
+        elseif strcmp(task.algs{i},'LDA2')
+            tic
+            D = size(Xtrain_centered,1);
+            if D<1000 % skip LDA if the # of dimensions is too large such that pinv takes forever!
+                Yhat = LDA_train2_and_predict(Xtrain_centered,Z.Ytrain,Xtest_centered);
             else
                 Yhat = nan(size(Z.Ytest));
             end
