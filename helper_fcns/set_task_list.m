@@ -131,7 +131,7 @@ elseif strcmp(metatask,'amen gender')
     task.ntrain=5112;
     task.ntest=569;
     task.ks=unique(round(logspace(0,2.9,30))); 
-    task.Ntrials = 20;
+    task.Ntrials = 5;
 elseif strcmp(metatask,'amen dementia')
     task_list={'amen READINGS dementia';'amen COGNITIVE dementia';'amen SPECT dementia';'amen ACTIVATION dementia';'amen X dementia';'amen BASELINE dementia';'amen CONCENTRATION dementia';'amen CR dementia'};
     task.algs={'NaiveB','LDA','QDA','RF','LOL','QOL','QOQ'};
@@ -139,7 +139,7 @@ elseif strcmp(metatask,'amen dementia')
     task.ntrain=5112;
     task.ntest=569;
     task.ks=unique(round(logspace(0,2.9,30))); 
-    task.Ntrials = 20;
+    task.Ntrials = 5;
 
 elseif strcmp(metatask,'amen depression')
     task_list={'amen READINGS depression';'amen COGNITIVE depression';'amen SPECT depression';'amen ACTIVATION depression';'amen X depression';'amen BASELINE depression';'amen CONCENTRATION depression';'amen CR depression'};
@@ -148,7 +148,7 @@ elseif strcmp(metatask,'amen depression')
     task.ntrain=5112;
     task.ntest=569;
     task.ks=unique(round(logspace(0,2.9,30))); 
-    task.Ntrials = 20;
+    task.Ntrials = 5;
 
 elseif strcmp(metatask,'test_qda')
     task_list={'wra, D=5', 'wra, D=20'};
@@ -171,6 +171,12 @@ elseif strcmp(metatask,'test_lda2')
     task.ntest=500;
     task.Ntrials=20;
     task.ks=unique(round(logspace(0,log10(task.ntrain),30))); 
+elseif strcmp(metatask,'test_mlda')
+    task_list={'s','wra, D=5', 'wra, D=20'};
+    task.algs={'mLDA','lda'};
+    task.ntrain=50;
+    task.ntest=500;
+    task.Ntrials=20;
 else
     task_list = {metatask};
     task.name = metatask;
