@@ -29,9 +29,8 @@ X1=bsxfun(@minus,X1,mu1);
 X_centered = [X0,X1]; 
 
 [u,d,~] = svd(X_centered,0);
-s = diag(d);                        % find min singular value for numerical stability
-tol = max(size(X_centered)) * eps(max(s));
-r = sum(s > tol);
+tol = max(size(X_centered)) * eps(max(d(:)));
+r = sum(d(:) > tol);
 dd=d(1:r,1:r);
 L = u(:,1:r)/dd;
 Phat.InvSig = (L*L')*n;         % useful for classification via LDA
