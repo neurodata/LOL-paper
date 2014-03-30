@@ -1,4 +1,4 @@
-function [Yhat, eta, Proj] = QOQ_train_and_predict(Xtrain, Ytrain, Xtest, delta,k)
+function [Yhat, Proj] = QOQ_train_and_predict(Xtrain, Ytrain, Xtest, delta,k)
 % trains and predicts Quadratic Low-rank Optimal projection QDA
 % 
 % INPUT
@@ -16,5 +16,6 @@ function [Yhat, eta, Proj] = QOQ_train_and_predict(Xtrain, Ytrain, Xtest, delta,
 
 Proj = QOL_train(Xtrain,Ytrain,delta,k);
 Xtilde=Proj*Xtrain;
-parms = QDA_train(Xtilde,Ytrain);
-[Yhat, eta] = QDA_predict(Proj*Xtest,parms);
+% parms = QDA_train(Xtilde,Ytrain);
+% [Yhat, eta] = QDA_predict(Proj*Xtest,parms);
+[Yhat, Phat] = QDA_train_and_predict(Xtilde, Ytrain, Proj*Xtest);
