@@ -1,5 +1,4 @@
 clearvars, clc,
-run([pwd,'/../helper_fcns/updatepath.m'])
 
 task.name='mnist';
 [T,P,S] = run_task(task);

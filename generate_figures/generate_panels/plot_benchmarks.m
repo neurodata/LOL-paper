@@ -13,8 +13,6 @@ function plot_benchmarks(metatask,F)
 %
 % OUTPUT: none
 
-run([pwd,'/../helper_fcns/updatepath.m'])
-
 if nargin==1, F=struct; end
 task_list = set_task_list(metatask);
 Ntasks=length(task_list);
@@ -22,7 +20,7 @@ Ntasks=length(task_list);
 T = cell(1,Ntasks);
 S = cell(1,Ntasks);
 for j=1:Ntasks
-    load(['../../data/results/', task_list{j}])
+    load(['../../Data/Results/', task_list{j}])
     T{j}=task;
     S{j}=Stats;
 end

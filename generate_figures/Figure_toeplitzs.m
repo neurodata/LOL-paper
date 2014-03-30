@@ -1,5 +1,4 @@
 clearvars, clc, 
-run([pwd,'/../helper_fcns/updatepath.m'])
 
 task_list_name='toeplitzs';
 

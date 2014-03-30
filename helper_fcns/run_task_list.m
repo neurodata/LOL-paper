@@ -8,7 +8,6 @@ function [T,S,P] = run_task_list(metatask)
 %   S (struct): summary statistics for each task
 %   P (struct): parameters for simulated tasks
 
-run([pwd,'/../helper_fcns/updatepath.m'])
 [task_list, task] = set_task_list(metatask);
 
 Ntasks=length(task_list);
@@ -20,5 +19,5 @@ for j=1:Ntasks
 end
 
 if task.savestuff
-    save(['../../data/results/', metatask],'T','P','S')
+    save(['../../Data/Results/', metatask],'T','P','S')
 end

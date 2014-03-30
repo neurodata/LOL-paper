@@ -25,15 +25,13 @@ Phat.mu0 = mean(X0,2);
 Phat.mu1 = mean(X1,2);
 Phat.Sigma0 = cov(X0');
 Phat.Sigma1 = cov(X1'); 
-% figure; imagesc(Phat.Sigma0); colorbar;
-% title('Covariance of class 0')
-% % hold on;
-% figure;
-% imagesc(Phat.Sigma1); colorbar;
-% title('Covariance of class 1')
 
 Phat.mu = (Phat.mu0+Phat.mu1)/2;            % required for classification via LDA 
 Phat.del = (Phat.mu0-Phat.mu1);             
 Phat.InvSig0 = pinv(Phat.Sigma0);             
 Phat.InvSig1 = pinv(Phat.Sigma1);             
 Phat.thresh = (Phat.lnpi0-Phat.lnpi1)/2;    % classification threshold
+
+Phat.a0= -0.5*logdet(Phat.Sigma1)+Phat.lnpi0;
+Phat.a1= -0.5*logdet(Phat.Sigma0)+Phat.lnpi1;
+

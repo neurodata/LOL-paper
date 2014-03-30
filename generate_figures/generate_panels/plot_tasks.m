@@ -1,4 +1,4 @@
-clearvars, clc, updatepath
+clearvars, clc, 
 
 just_plot=true;
 task_list_name='amen first';
