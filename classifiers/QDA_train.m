@@ -23,7 +23,12 @@ Phat.mu0 = mean(X0,2);
 Phat.mu1 = mean(X1,2);
 
 X0=bsxfun(@minus,X0,Phat.mu0);
-[u0,d0,~] = svd(X0,0);
+[D,n]=size(X0);
+if n>D
+    [~,d0,u0] = svd(X0',0);
+else
+    [u0,d0,~] = svd(X0,0);
+end
 tol0 = max(size(X0)) * eps(max(d0(:)));
 r0 = sum(d0(:) > tol0);
 dd0=d0(1:r0,1:r0);
@@ -31,7 +36,12 @@ L0 = u0(:,1:r0)/dd0;
 Phat.InvSig0 = (L0*L0')*n0;         % useful for classification via LDA
 
 X1=bsxfun(@minus,X1,Phat.mu1);
-[u1,d1,~] = svd(X1,0);
+[D,n]=size(X1);
+if n>D
+    [~,d1,u1] = svd(X1',0);
+else
+    [u1,d1,~] = svd(X1,0);
+end
 tol1 = max(size(X1)) * eps(max(d1(:)));
 r1 = sum(d1(:) > tol1);
 dd1=d1(1:r1,1:r1);

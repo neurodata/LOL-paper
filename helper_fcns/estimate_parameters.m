@@ -42,9 +42,8 @@ X_centered = [X0,X1,Xu]; %bsxfun(@minus,X,Phat.mu);
 [D,n]=size(X_centered);
 
 if D>n
-    [U,Phat.d,~] = svd(X_centered,0);
-    Phat.V=U(:,1:k)';
+    [V,Phat.d,~] = svd(X_centered,0);
 else
     [~,Phat.d,V] = svd(X_centered',0);
-    Phat.V=V(:,1:k)';
 end
+Phat.V=V(:,1:k)';
