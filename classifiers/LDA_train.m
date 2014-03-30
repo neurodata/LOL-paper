@@ -28,11 +28,21 @@ X0=bsxfun(@minus,X0,mu0);
 X1=bsxfun(@minus,X1,mu1);
 X_centered = [X0,X1]; 
 
-[u,d,~] = svd(X_centered,0);
-tol = max(size(X_centered)) * eps(max(d(:)));
-r = sum(d(:) > tol);
-dd=d(1:r,1:r);
-L = u(:,1:r)/dd;
-Phat.InvSig = (L*L')*n;         % useful for classification via LDA
+[D,n]=size(X_centered);
 
+if n>D
+    [~,d,v] = svd(X_centered',0);
+    tol = max(size(X_centered)) * eps(max(d(:)));
+    r = sum(d(:) > tol);
+    dd=d(1:r,1:r);
+    L = v(:,1:r)/dd;
+    Phat.InvSig = (L*L')*n;         % useful for classification via LDA
+else
+    [u,d,~] = svd(X_centered,0);
+    tol = max(size(X_centered)) * eps(max(d(:)));
+    r = sum(d(:) > tol);
+    dd=d(1:r,1:r);
+    L = u(:,1:r)/dd;
+    Phat.InvSig = (L*L')*n;         % useful for classification via LDA
+end
 

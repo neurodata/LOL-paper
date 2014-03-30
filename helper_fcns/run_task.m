@@ -20,5 +20,5 @@ display(task)                           % display task details
 loop = task_loop(task);                 % loop over Ntrials for this task running the specified algorithms
 Stats = get_loop_stats(task,loop);      % get stats
 if isfield(P,'Risk'), Stats.Risk=P.Risk; else Stats.Risk=nan; end % save risk
-if isstruct(task_in), name=task_in.name; else, name=task_in; end % store name to save as
+if isstruct(task_in), name=task_in.name; else name=task_in; end % store name to save as
 if task.savestuff, save(['../../Data/Results/', name],'task','Stats','P'), end % save results

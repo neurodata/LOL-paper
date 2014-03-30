@@ -171,6 +171,20 @@ elseif strcmp(metatask,'test_lda2')
     task.ntest=500;
     task.Ntrials=20;
     task.ks=unique(round(logspace(0,log10(task.ntrain),30))); 
+elseif strcmp(metatask,'test_lda3')
+    task_list={'wra, D=5','toeplitz, D=5'};
+    task.algs={'LDA','LOL'};
+    task.ntrain=5000;
+    task.ntest=500;
+    task.Ntrials=2;
+    task.ks=unique(round(logspace(0,log10(task.ntrain),30))); 
+elseif strcmp(metatask,'test_lda4')
+    task_list={'wra, D=100'};
+    task.algs={'LDA','LOL'};
+    task.ntrain=50;
+    task.ntest=500;
+    task.Ntrials=2;
+    task.ks=unique(round(logspace(0,log10(task.ntrain),30))); 
 elseif strcmp(metatask,'test_mlda')
     task_list={'s','wra, D=5', 'wra, D=20'};
     task.algs={'mLDA','lda'};
