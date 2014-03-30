@@ -13,25 +13,40 @@ n0=sum(Y==0);
 n1=sum(Y==1);
 n=n0+n1;
 
+lnpi0 = log(n0/n);
+lnpi1 = log(n1/n);
+
 X0 = X(:,Y==0);
 X1 = X(:,Y==1);
 
-Phat.pi0 = n0/n;
-Phat.pi1 = n1/n;
-Phat.lnpi0 = log(n0/n);
-Phat.lnpi1 = log(n1/n);
-
 Phat.mu0 = mean(X0,2);
 Phat.mu1 = mean(X1,2);
-Phat.Sigma0 = cov(X0');
-Phat.Sigma1 = cov(X1'); 
 
-Phat.mu = (Phat.mu0+Phat.mu1)/2;            % required for classification via LDA 
-Phat.del = (Phat.mu0-Phat.mu1);             
-Phat.InvSig0 = pinv(Phat.Sigma0);             
-Phat.InvSig1 = pinv(Phat.Sigma1);             
-Phat.thresh = (Phat.lnpi0-Phat.lnpi1)/2;    % classification threshold
+X0=bsxfun(@minus,X0,Phat.mu0);
+[u0,d0,~] = svd(X0,0);
+s0 = diag(d0);                        % find min singular value for numerical stability
+tol0 = max(size(X0)) * eps(max(s0));
+r0 = sum(s0 > tol0);
+dd0=d0(1:r0,1:r0);
+L0 = u0(:,1:r0)/dd0;
+Phat.InvSig0 = (L0*L0')*n0;         % useful for classification via LDA
 
-Phat.a0= -0.5*logdet(Phat.Sigma1)+Phat.lnpi0;
-Phat.a1= -0.5*logdet(Phat.Sigma0)+Phat.lnpi1;
+X1=bsxfun(@minus,X1,Phat.mu1);
+[u1,d1,~] = svd(X1,0);
+s1 = diag(d1);                        % find min singular value for numerical stability
+tol1 = max(size(X1)) * eps(max(s1));
+r1 = sum(s1 > tol1);
+dd1=d1(1:r1,1:r1);
+L1 = u1(:,1:r1)/dd1;
+Phat.InvSig1 = (L1*L1')*n1;         % useful for classification via LDA
+
+% Sigma0 = cov(X0');
+% InvSig0 = pinv(Sigma0);             
+% 
+% Sigma1 = cov(X1'); 
+% InvSig1 = pinv(Sigma1);             
+
+
+Phat.a0= -0.5*logdet(cov(X0'))+lnpi0;
+Phat.a1= -0.5*logdet(cov(X1'))+lnpi1;
 
