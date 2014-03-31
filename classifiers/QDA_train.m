@@ -26,6 +26,6 @@ Phat.mu1 = mean(X1,2);
 X1=bsxfun(@minus,X1,Phat.mu1);
 Phat.InvSig1 = inverse_covariance(X1);
 
-Phat.a0= -0.5*logdet(cov(X0'))+lnpi0;
-Phat.a1= -0.5*logdet(cov(X1'))+lnpi1;
+Phat.a0= -0.5*logdet(cov(X1'))+lnpi0;
+Phat.a1= -0.5*logdet(cov(X0'))+lnpi1;
 
