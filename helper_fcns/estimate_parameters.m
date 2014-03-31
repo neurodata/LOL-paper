@@ -40,7 +40,6 @@ Xu=bsxfun(@minus,Xu,Phat.muu);
 X_centered = [X0,X1,Xu]; %bsxfun(@minus,X,Phat.mu);
 
 [D,n]=size(X_centered);
-
 if D>n
     [V,Phat.d,~] = svd(X_centered,0);
 else

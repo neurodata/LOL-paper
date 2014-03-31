@@ -154,7 +154,7 @@ elseif strcmp(metatask,'test_qda')
     task_list={'wra, D=5', 'wra, D=20'};
     task.algs={'QDA','qda','QOQ'};
     task.ntrain=100;
-    task.Ntrials=20;
+    task.Ntrials=5;
     task.ks=unique(round(logspace(0,log10(task.ntrain),30))); 
 
 elseif strcmp(metatask,'test_lda')
@@ -177,7 +177,7 @@ elseif strcmp(metatask,'test_lda3')
     task.ntrain=5000;
     task.ntest=500;
     task.Ntrials=2;
-    task.ks=unique(round(logspace(0,log10(task.ntrain),30))); 
+    task.ks=1; 
 elseif strcmp(metatask,'test_lda4')
     task_list={'wra, D=100'};
     task.algs={'LDA','LOL'};
