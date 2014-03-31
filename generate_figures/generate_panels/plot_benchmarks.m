@@ -27,7 +27,8 @@ end
 
 
 %% set some figure parameters
-h(1)=figure(1); clf
+if ~isfield(F,'fig_num'), F.fig_num=1; end
+h(F.fig_num)=figure(F.fig_num); clf
 % figure('visible','off');
 if ~isfield(F,'plot_time'), F.plot_time=true; end
 if F.plot_time, F.Nrows=3; else F.Nrows=2; end
@@ -70,5 +71,5 @@ if T{j}.savestuff
     else
         F.fname=['../../figs/', char(strcat('performance_', metatask))];
     end
-    print_fig(h(1),F)
+    print_fig(h(F.fig_num),F)
 end

@@ -17,43 +17,14 @@ lnpi0 = log(n0/n);
 lnpi1 = log(n1/n);
 
 X0 = X(:,Y==0);
-X1 = X(:,Y==1);
-
 Phat.mu0 = mean(X0,2);
-Phat.mu1 = mean(X1,2);
-
 X0=bsxfun(@minus,X0,Phat.mu0);
-[D,n]=size(X0);
-if n>D
-    [~,d0,u0] = svd(X0',0);
-else
-    [u0,d0,~] = svd(X0,0);
-end
-tol0 = max(size(X0)) * eps(max(d0(:)));
-r0 = sum(d0(:) > tol0);
-dd0=d0(1:r0,1:r0);
-L0 = u0(:,1:r0)/dd0;
-Phat.InvSig0 = (L0*L0')*n0;         % useful for classification via LDA
+Phat.InvSig0 = inverse_covariance(X0);
 
+X1 = X(:,Y==1);
+Phat.mu1 = mean(X1,2);
 X1=bsxfun(@minus,X1,Phat.mu1);
-[D,n]=size(X1);
-if n>D
-    [~,d1,u1] = svd(X1',0);
-else
-    [u1,d1,~] = svd(X1,0);
-end
-tol1 = max(size(X1)) * eps(max(d1(:)));
-r1 = sum(d1(:) > tol1);
-dd1=d1(1:r1,1:r1);
-L1 = u1(:,1:r1)/dd1;
-Phat.InvSig1 = (L1*L1')*n1;         % useful for classification via LDA
-
-% Sigma0 = cov(X0');
-% InvSig0 = pinv(Sigma0);             
-% 
-% Sigma1 = cov(X1'); 
-% InvSig1 = pinv(Sigma1);             
-
+Phat.InvSig1 = inverse_covariance(X1);
 
 Phat.a0= -0.5*logdet(cov(X0'))+lnpi0;
 Phat.a1= -0.5*logdet(cov(X1'))+lnpi1;

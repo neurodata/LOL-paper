@@ -16,28 +16,18 @@ n=n0+n1;
 Phat.thresh = log(n0/n1)/2;    % useful for classification via LDA
 
 X0 = X(:,Y==0);
-X1 = X(:,Y==1);
-
 mu0 = mean(X0,2);
+X0=bsxfun(@minus,X0,mu0);
+
+X1 = X(:,Y==1);
 mu1 = mean(X1,2);
+X1=bsxfun(@minus,X1,mu1);
 
 Phat.mu = (mu0+mu1)/2;            % useful for classification via LDA 
 Phat.del = (mu0-mu1);             % useful for classification via LDA
 
-X0=bsxfun(@minus,X0,mu0);
-X1=bsxfun(@minus,X1,mu1);
+% estimate the inverse covariance matrix via svd
 X_centered = [X0,X1]; 
+Phat.InvSig = inverse_covariance(X_centered);
 
-[D,n]=size(X_centered);
-
-if n>D
-    [~,d,u] = svd(X_centered',0);
-else
-    [u,d,~] = svd(X_centered,0);
-end
-tol = max(size(X_centered)) * eps(max(d(:)));
-r = sum(d(:) > tol);
-dd=d(1:r,1:r);
-L = u(:,1:r)/dd;
-Phat.InvSig = (L*L')*n;         % useful for classification via LDA
 
