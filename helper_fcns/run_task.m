@@ -15,7 +15,7 @@ function [task,Stats,P] = run_task(task_in)
 
 %% store and generate parameters from a single simulation fo plotting the spectrum and getting performance bounds
 
-[task, ~, ~, P] = set_task(task_in);    % get task details
+[task,~,~,P] = get_task(task_in);               % get task details
 display(task)                           % display task details
 loop = task_loop(task);                 % loop over Ntrials for this task running the specified algorithms
 Stats = get_loop_stats(task,loop);      % get stats

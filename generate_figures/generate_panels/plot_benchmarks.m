@@ -1,4 +1,4 @@
-function plot_benchmarks(metatask,F)
+function F = plot_benchmarks(metatask,F)
 % plot results for a set of tasks
 % generate a row of panels for each task
 % each row has the following columns:

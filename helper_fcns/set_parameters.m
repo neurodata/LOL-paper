@@ -405,20 +405,12 @@ if ~isfield(task,'P')
             delta1=0.4; D1=10;
             
             rho=0.5;
-            A=nan(D1);
-            for a=1:D1
-                for b=1:D1
-                    A(a,b)=rho^abs(a-b);
-                end
-            end
+            c=rho.^(0:D1-1);
+            A = toeplitz(c);
             K1=sum(A(:));
             
-            A=nan(D);
-            for a=1:D
-                for b=1:D
-                    A(a,b)=rho^abs(a-b);
-                end
-            end
+            c=rho.^(0:D-1);
+            A = toeplitz(c);
             K=sum(A(:));
             
             mudelt=(K1*delta1^2/K)^0.5/2;
@@ -431,67 +423,6 @@ if ~isfield(task,'P')
             Sig0=A;
             
             
-        case ['Rtoeplitz, D=', num2str(D)]
-            delta1=0.4; D1=10;
-            
-            rho=0.5;
-            A=nan(D1);
-            for a=1:D1
-                for b=1:D1
-                    A(a,b)=rho^abs(a-b);
-                end
-            end
-            K1=sum(A(:));
-            
-            A=nan(D);
-            for a=1:D
-                for b=1:D
-                    A(a,b)=rho^abs(a-b);
-                end
-            end
-            K=sum(A(:));
-            
-            mudelt=(K1*delta1^2/K)^0.5/2;
-            mu0 = ones(D,1);
-            mu0(2:2:end)=-1;
-            mu0=mudelt*mu0;
-            
-            R = uniform_rotation_matrix(D);
-            mu1=-R*mu0;
-            
-            Sig0=A;
-            Sig1=R*A*R';
-            
-        case ['Etoeplitz, D=', num2str(D)]
-            delta1=0.8; D1=10;
-            
-            rho=0.5;
-            A=nan(D1);
-            for a=1:D1
-                for b=1:D1
-                    A(a,b)=rho^abs(a-b);
-                end
-            end
-            K1=sum(A(:));
-            
-            A=nan(D);
-            for a=1:D
-                for b=1:D
-                    A(a,b)=rho^abs(a-b);
-                end
-            end
-            K=sum(A(:));
-            
-            mudelt=(K1*delta1^2/K)^0.5/2;
-            mu0 = ones(D,1);
-            mu0(2:2:end)=-1;
-            mu0=mudelt*mu0;
-            
-            mu1=-mu0;
-            
-            Sig0=A;
-            Sig1=eye(D);
-             
         case ['sparse toeplitz, D=', num2str(D)]        % toeplitz with sparse delta
             
             mudelt = 2.5;                                 % distance betwen dim 1 of means
@@ -501,12 +432,8 @@ if ~isfield(task,'P')
             mu0(2)=mu0(2)/3;
             
             rho=0.5;
-            A=nan(D);
-            for a=1:D
-                for b=1:D
-                    A(a,b)=rho^abs(a-b);
-                end
-            end
+            c=rho.^(0:D-1);
+            A = toeplitz(c);
             
             Sig0=A;
             Sig1=A;
@@ -588,12 +515,8 @@ if ~isfield(task,'P')
             
             
             rho=0.8;
-            A=nan(D);
-            for a=1:D
-                for b=1:D
-                    A(a,b)=rho^abs(a-b);
-                end
-            end
+            c=rho.^(0:D-1);
+            A = toeplitz(c);
             
             Sig0=A;
             Sig1=A;
@@ -607,12 +530,8 @@ if ~isfield(task,'P')
             
             
             rho=0.8;
-            A=nan(D);
-            for a=1:D
-                for b=1:D
-                    A(a,b)=rho^abs(a-b);
-                end
-            end
+            c=rho.^(0:D-1);
+            A = toeplitz(c);
             
             Sig0=A;
             Sig1=A;
@@ -626,12 +545,8 @@ if ~isfield(task,'P')
             
             
             rho=0.8;
-            A=nan(D);
-            for a=1:D
-                for b=1:D
-                    A(a,b)=rho^abs(a-b);
-                end
-            end
+            c=rho.^(0:D-1);
+            A = toeplitz(c);
             
             Sig0=A;
             Sig1=A;
@@ -645,12 +560,8 @@ if ~isfield(task,'P')
             
             
             rho=0.8;
-            A=nan(D);
-            for a=1:D
-                for b=1:D
-                    A(a,b)=rho^abs(a-b);
-                end
-            end
+            c=rho.^(0:D-1);
+            A = toeplitz(c);
             
             Sig0=A;
             Sig1=A;
@@ -660,12 +571,9 @@ if ~isfield(task,'P')
             P.ntrain=100;
             D=400;
             rho=0.5;
-            A=nan(D);
-            for a=1:D
-                for b=1:D
-                    A(a,b)=rho^abs(a-b);
-                end
-            end
+            c=rho.^(0:D-1);
+            A = toeplitz(c);
+
             mu1=zeros(D,1);
             beta=0.556*[3;1.5;0;0;2;zeros(D-5,1)];
             mu0=A*beta;
@@ -675,12 +583,9 @@ if ~isfield(task,'P')
             P.ntrain=100;
             D=400;
             rho=0.5;
-            A=nan(D);
-            for a=1:D
-                for b=1:D
-                    A(a,b)=rho^abs(a-b);
-                end
-            end
+            c=rho.^(0:D-1);
+            A = toeplitz(c);
+
             mu1=zeros(D,1);
             beta=0.582*[3;2.5;-2.8;zeros(D-3,1)];
             mu0=A*beta;
@@ -779,31 +684,24 @@ if ~isfield(task,'P')
     
     if task.permute
         perm=randperm(D);
+        Q=eye(D);
+        Q=Q(perm,:);
+        P.mu1=Q*mu1;
+        P.mu0=Q*mu0;
+        P.Sig1=Q*Sig1*Q';
+        P.Sig0=Q*Sig0*Q';
+        P.perm=perm;
     else
-        perm=1:D;
+        P.mu1=mu1;
+        P.mu0=mu0;
+        P.Sig1=Sig1;
+        P.Sig0=Sig0;
     end
     
     if ~exist('pi0','var'), P.pi0=0.5; end
     if ~exist('pi1','var'), P.pi1=0.5; end
     if ~exist('piu','var'), P.piu=0.5; end
     
-    Q=eye(D);
-    Q=Q(perm,:);
-    P.mu1=Q*mu1;
-    P.mu0=Q*mu0;
-    P.Sig1=Q*Sig1*Q';
-    P.Sig0=Q*Sig0*Q';
-    P.perm=perm;
-    [~,d1, v1]=svd(Sig1);
-    P.d1=diag(d1);
-    idx1=find(diff(P.d1)==0,1);
-    P.v1=v1(:,1:idx1);
-    
-    [~,d0, v0]=svd(Sig0);
-    P.d0=diag(d0);
-    idx0=find(diff(P.d0)==0,1);
-    P.v0=v0(:,1:idx0);
-    P.Q=Q;
     P.name=task.name;
 else
     P=task.P;

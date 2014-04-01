@@ -3,7 +3,7 @@ function loop = task_loop(task_in)
 % results
 
 loop = cell(1,task_in.Ntrials);
-parfor k=1:task_in.Ntrials
+for k=1:task_in.Ntrials
         
     if mod(k,10)==0, display(['trial # ', num2str(k)]); end
     
@@ -16,16 +16,16 @@ parfor k=1:task_in.Ntrials
     loop{k}.svdtime = toc;
     
     % center data
-    Xtrain_centered = bsxfun(@minus,Z.Xtrain,Phat.mu);
-    Xtest_centered = bsxfun(@minus,Z.Xtest,Phat.mu);
+%     Xtrain_centered = bsxfun(@minus,Z.Xtrain,Phat.mu);
+%     Xtest_centered = bsxfun(@minus,Z.Xtest,Phat.mu);
     
     % classify
     for i=1:task.Nalgs
         if strcmp(task.algs{i},'LDA')
             tic
-            D = size(Xtrain_centered,1);
+            D = size(Z.Xtrain,1);
             if D<1000 % skip LDA if the # of dimensions is too large such that pinv takes forever!
-                Yhat = LDA_train_and_predict(Xtrain_centered,Z.Ytrain,Xtest_centered);
+                Yhat = LDA_train_and_predict(Z.Xtrain,Z.Ytrain,Z.Xtest);
             else
                 Yhat = nan(size(Z.Ytest));
             end
@@ -33,9 +33,9 @@ parfor k=1:task_in.Ntrials
             loop{k}.out(i,1) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
         elseif strcmp(task.algs{i},'mLDA')
             tic
-            D = size(Xtrain_centered,1);
+            D = size(Z.Xtrain,1);
             if D<1000 % skip LDA if the # of dimensions is too large such that pinv takes forever!
-                Yhat = mLDA_train_and_predict(Xtrain_centered,Z.Ytrain,Xtest_centered);
+                Yhat = mLDA_train_and_predict(Z.Xtrain,Z.Ytrain,Z.Xtest);
             else
                 Yhat = nan(size(Z.Ytest));
             end
@@ -43,9 +43,9 @@ parfor k=1:task_in.Ntrials
             loop{k}.out(i,1) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
         elseif strcmp(task.algs{i},'LDA2')
             tic
-            D = size(Xtrain_centered,1);
+            D = size(Z.Xtrain,1);
             if D<1000 % skip LDA if the # of dimensions is too large such that pinv takes forever!
-                Yhat = LDA_train2_and_predict(Xtrain_centered,Z.Ytrain,Xtest_centered);
+                Yhat = LDA_train2_and_predict(Z.Xtrain,Z.Ytrain,Z.Xtest);
             else
                 Yhat = nan(size(Z.Ytest));
             end
@@ -53,15 +53,15 @@ parfor k=1:task_in.Ntrials
             loop{k}.out(i,1) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
         elseif strcmp(task.algs{i},'lda')
             tic
-            Yhat = classify(Xtest_centered',Xtrain_centered',Z.Ytrain);
+            Yhat = classify(Z.Xtest',Z.Xtrain',Z.Ytrain);
             loop{k}.time(i,1)=toc;
             loop{k}.out(i,1) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
 
         elseif strcmp(task.algs{i},'QDA')
             tic
-            D = size(Xtrain_centered,1);
+            D = size(Z.Xtrain,1);
             if D<1000 % skip LDA if the # of dimensions is too large such that pinv takes forever!
-                Yhat = QDA_train_and_predict(Xtrain_centered,Z.Ytrain,Xtest_centered);
+                Yhat = QDA_train_and_predict(Z.Xtrain,Z.Ytrain,Z.Xtest);
             else
                 Yhat = nan(size(Z.Ytest));
             end
@@ -70,14 +70,14 @@ parfor k=1:task_in.Ntrials
 
         elseif strcmp(task.algs{i},'qda')
             tic
-            Yhat = classify(Xtest_centered',Xtrain_centered',Z.Ytrain,'quadratic');
+            Yhat = classify(Z.Xtest',Z.Xtrain',Z.Ytrain,'quadratic');
             loop{k}.time(i,1)=toc;
             loop{k}.out(i,1) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
 
         elseif strcmp(task.algs{i},'PDA')
             for l=1:task.Nks
                 tic
-                Yhat = PDA_train_and_predict(Xtrain_centered,Z.Ytrain,Xtest_centered,Phat.V(1:task.ks(l),:));
+                Yhat = PDA_train_and_predict(Z.Xtrain,Z.Ytrain,Z.Xtest,Phat.V(1:task.ks(l),:));
                 loop{k}.time(i,l)=toc+loop{k}.svdtime;
                 loop{k}.out(i,l) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
             end
@@ -96,7 +96,7 @@ parfor k=1:task_in.Ntrials
         elseif strcmp(task.algs{i},'LOL')
             for l=1:task.Nks
                 tic
-                Yhat = LOL_train_and_predict(Xtrain_centered,Z.Ytrain,Xtest_centered,Phat.delta,Phat.V(1:task.ks(l),:));
+                Yhat = LOL_train_and_predict(Z.Xtrain,Z.Ytrain,Z.Xtest,Phat.delta,Phat.V(1:task.ks(l),:));
                 if task.ks(l)==1
                     loop{k}.time(i,l)=toc;
                 else
@@ -108,7 +108,7 @@ parfor k=1:task_in.Ntrials
         elseif strcmp(task.algs{i},'SLOL')
             for l=1:task.Nks
                 tic
-                Yhat = LOL_train_and_predict(Xtrain_centered,Z.Ytrain,Xtest_centered,Phat.sdelta,Phat.V(1:task.ks(l),:));
+                Yhat = LOL_train_and_predict(Z.Xtrain,Z.Ytrain,Z.Xtest,Phat.sdelta,Phat.V(1:task.ks(l),:));
                 loop{k}.time(i,l)=toc+loop{k}.svdtime;
                 loop{k}.out(i,l) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
             end
@@ -116,7 +116,7 @@ parfor k=1:task_in.Ntrials
         elseif strcmp(task.algs{i},'RLOL')
             for l=1:task.Nks
                 tic
-                Yhat = LOL_train_and_predict(Xtrain_centered,Z.Ytrain,Xtest_centered,Phat.rdelta,Phat.rV(1:task.ks(l),:));
+                Yhat = LOL_train_and_predict(Z.Xtrain,Z.Ytrain,Z.Xtest,Phat.rdelta,Phat.rV(1:task.ks(l),:));
                 loop{k}.time(i,l)=toc+loop{k}.svdtime;
                 loop{k}.out(i,l) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
             end
@@ -124,7 +124,7 @@ parfor k=1:task_in.Ntrials
         elseif strcmp(task.algs{i},'QOL')
             for l=1:task.Nks
                 tic
-                Yhat = QOL_train_and_predict(Xtrain_centered,Z.Ytrain,Xtest_centered,Phat.delta,task.ks(l));
+                Yhat = QOL_train_and_predict(Z.Xtrain,Z.Ytrain,Z.Xtest,Phat.delta,task.ks(l));
                 loop{k}.time(i,l)=toc;
                 loop{k}.out(i,l) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
             end
@@ -132,7 +132,7 @@ parfor k=1:task_in.Ntrials
         elseif strcmp(task.algs{i},'QOQ')
             for l=1:task.Nks
                 tic
-                Yhat = QOQ_train_and_predict(Xtrain_centered,Z.Ytrain,Xtest_centered,Phat.delta,task.ks(l));
+                Yhat = QOQ_train_and_predict(Z.Xtrain,Z.Ytrain,Z.Xtest,Phat.delta,task.ks(l));
                 loop{k}.time(i,l)=toc;
                 loop{k}.out(i,l) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
             end
@@ -140,7 +140,7 @@ parfor k=1:task_in.Ntrials
         elseif strcmp(task.algs{i},'RDA')
             for l=1:task.Nks
                 tic
-                Yhat = RDA_train_and_predict(Xtrain_centered,Z.Ytrain,Xtest_centered,task.ks(l));
+                Yhat = RDA_train_and_predict(Z.Xtrain,Z.Ytrain,Z.Xtest,task.ks(l));
                 loop{k}.time(i,l)=toc;
                 loop{k}.out(i,l) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
             end
@@ -148,7 +148,7 @@ parfor k=1:task_in.Ntrials
         elseif strcmp(task.algs{i},'DRDA')
             for l=1:task.Nks
                 tic
-                Yhat = DRDA_train_and_predict(Xtrain_centered,Z.Ytrain,Xtest_centered,Phat.delta,task.ks(l));
+                Yhat = DRDA_train_and_predict(Z.Xtrain,Z.Ytrain,Z.Xtest,Phat.delta,task.ks(l));
                 loop{k}.time(i,l)=toc;
                 loop{k}.out(i,l) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
             end
