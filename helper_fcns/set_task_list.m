@@ -186,11 +186,33 @@ elseif strcmp(metatask,'test_lda4')
     task.Ntrials=2;
     task.ks=unique(round(logspace(0,log10(task.ntrain),30))); 
 elseif strcmp(metatask,'test_mlda')
-    task_list={'s','wra, D=5', 'wra, D=20'};
+    task_list={'wra, D=5', 'wra, D=10'};
     task.algs={'mLDA','lda'};
     task.ntrain=50;
     task.ntest=500;
-    task.Ntrials=20;
+    task.Ntrials=25;
+elseif strcmp(metatask,'test_mlda2')
+    task_list={'s','toeplitz, D=500'};
+    task.algs={'mLDA','LDA'};
+    task.ntrain=50;
+    task.ntest=500;
+    task.Ntrials=10;
+elseif strcmp(metatask,'test_mlda3')
+    task_list={'s'};
+    task.algs={'mLDA','LDA'};
+    task.ntrain=5000;
+    task.ntest=500;
+    task.Ntrials=10;
+elseif strcmp(metatask,'test_mlda4')
+    task_list={'gmm'};
+    task.algs={'mLDA','lda'};
+    task.Ngroups=5;
+    task.ntrain=task.Ngroups*25;
+    task.ntest=500;
+    task.n=task.ntrain+task.ntest;
+    task.Ntrials=25;
+    task.D=100;
+    task.QDA_model=0;
 else
     task_list = {metatask};
     task.name = metatask;

@@ -15,8 +15,12 @@ if task.simulation
         [X,Y] = sample_DRL(a);
     elseif strcmp(task.name,'xor')
         [X,Y] = sample_xor(task);
-    elseif strcmp(task.name,'multiclass')
-        [X,Y] = sample_multiclass(task.n);
+    elseif strcmp(task.name,'gmm')
+        P.mu=bsxfun(@times,ones(task.D,1),1:task.Ngroups);
+        P.Sigma=eye(task.D);
+        P.w=1/task.Ngroups*ones(task.Ngroups,1);
+        gmm = gmdistribution(P.mu',P.Sigma,P.w);
+        [X,Y] = random(gmm,task.n);
     else
         P = set_parameters(task);
         [X,Y] = sample_QDA(task.n,P);

@@ -1,13 +1,8 @@
-function [task,X,Y,P] = set_task(task)
+function task = set_task(task)
 % sets up all metadata associated with the input task
 %
 % INPUT: task (struct or char): a structure containing various task settings
-% 
-% OUTPUT:
-%   task:   update task structure
-%   X:      a matrix of predictors
-%   Y:      a vector of predictees
-%   P:      a structure of parameters
+% OUTPUT: task:   update task structure
 
 if isstruct(task)
     name=task.name;
@@ -61,6 +56,8 @@ if ~isfield(task,'name'),       task.name=name;     end                         
 if ~isfield(task,'simulation'), task.simulation=1;  end                    % is this a simulation
 if ~isfield(task,'QDA_model'),  task.QDA_model=1;   end                   % does this simulation satisfy the QDA model
 if ~isfield(task,'ks'),         task.ks=1:100;      end                          % list of dimensions to embed into
+if ~isfield(task,'Kmax'),       task.Kmax=max(task.ks); end                          % list of dimensions to embed into
+if ~isfield(task,'Nks'),        task.Nks=length(task.ks); end                          % list of dimensions to embed into
 if ~isfield(task,'algs'),       task.algs={'PDA','LOL','QOL','DRDA','RDA','LDA'};  end % which algorithms to use
 if ~isfield(task,'savestuff'),  task.savestuff=1;   end                       % flag whether to save data & figures
 if ~isfield(task,'Ntrials'),    task.Ntrials = 5;   end                   % # of trials
@@ -74,7 +71,4 @@ end
 
 task.Nalgs=length(task.algs);           % # of algorithms to use
 task.n=sum(task.ntrain)+task.ntest;     % # of total samples
-
-[task,X,Y,P] = get_data(task);
-
 task=orderfields(task);                 % sort fields

@@ -11,7 +11,6 @@ function Phat = LDA_train(X,Y)
 
 n0=sum(Y==0);
 n1=sum(Y==1);
-n=n0+n1;
 
 Phat.thresh = log(n0/n1)/2;    % useful for classification via LDA
 
