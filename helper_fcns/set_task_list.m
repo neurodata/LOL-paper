@@ -187,25 +187,25 @@ elseif strcmp(metatask,'test_lda4')
     task.ks=unique(round(logspace(0,log10(task.ntrain),30))); 
 elseif strcmp(metatask,'test_mlda')
     task_list={'wra, D=5', 'wra, D=10'};
-    task.algs={'mLDA','lda'};
+    task.algs={'LORD','lda'};
     task.ntrain=50;
     task.ntest=500;
     task.Ntrials=25;
 elseif strcmp(metatask,'test_mlda2')
     task_list={'s','toeplitz, D=500'};
-    task.algs={'mLDA','LDA'};
+    task.algs={'LORD','LDA'};
     task.ntrain=50;
     task.ntest=500;
     task.Ntrials=10;
 elseif strcmp(metatask,'test_mlda3')
     task_list={'s'};
-    task.algs={'mLDA','LDA'};
+    task.algs={'LORD','LDA'};
     task.ntrain=5000;
     task.ntest=500;
     task.Ntrials=10;
 elseif strcmp(metatask,'test_mlda4')
     task_list={'gmm'};
-    task.algs={'mLDA','lda'};
+    task.algs={'LORD','lda'};
     task.Ngroups=5;
     task.ntrain=task.Ngroups*25;
     task.ntest=500;
@@ -213,6 +213,27 @@ elseif strcmp(metatask,'test_mlda4')
     task.Ntrials=25;
     task.D=100;
     task.QDA_model=0;
+elseif strcmp(metatask,'test_mlda5')
+    task_list={'gmm'};
+    task.algs={'LORD'};
+    task.Ngroups=5;
+    task.ntrain=task.Ngroups*25;
+    task.ntest=500;
+    task.n=task.ntrain+task.ntest;
+    task.Ntrials=25;
+    task.D=200;
+    task.QDA_model=0;
+elseif strcmp(metatask,'test_mlda6')
+    task_list={'gmm'};
+    task.algs={'LORD','LOL'};
+    task.Ngroups=2;
+    task.ntrain=task.Ngroups*25;
+    task.ntest=500;
+    task.n=task.ntrain+task.ntest;
+    task.Ntrials=25;
+    task.D=100;
+    task.QDA_model=0;
+    task.ks=unique(round(logspace(0,log10(task.ntrain),30))); 
 else
     task_list = {metatask};
     task.name = metatask;
