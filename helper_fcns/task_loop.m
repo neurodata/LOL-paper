@@ -11,9 +11,11 @@ for k=1:task_in.Ntrials
     [task, X, Y, P] = get_task(task_in);
     Z = parse_data(X,Y,task.ntrain,task.ntest,task.percent_unlabeled);
 
-    tic % get delta and eigenvectors
-    Phat = estimate_parameters(Z.Xtrain,Z.Ytrain,task.Kmax);
-    loop{k}.svdtime = toc;
+    if any(any([strcmp(task.algs,'PDA');strcmp(task.algs,'LOL');strcmp(task.algs,'SLOL');strcmp(task.algs,'rLOL');strcmp(task.algs,'QOL');strcmp(task.algs,'QOQ');strcmp(task.algs,'DRDA')]))
+        tic % get delta and eigenvectors
+        Phat = estimate_parms(Z.Xtrain,Z.Ytrain);
+        loop{k}.svdtime = toc;
+    end
     
     % center data
 %     Xtrain_centered = bsxfun(@minus,Z.Xtrain,Phat.mu);
@@ -23,32 +25,12 @@ for k=1:task_in.Ntrials
     for i=1:task.Nalgs
         if strcmp(task.algs{i},'LDA')
             tic
-            D = size(Z.Xtrain,1);
-            if D<1000 % skip LDA if the # of dimensions is too large such that pinv takes forever!
-                Yhat = LDA_train_and_predict(Z.Xtrain,Z.Ytrain,Z.Xtest);
-            else
-                Yhat = nan(size(Z.Ytest));
-            end
+            Yhat = LDA_train_and_predict(Z.Xtrain,Z.Ytrain,Z.Xtest);
             loop{k}.time(i,1)=toc;
             loop{k}.out(i,1) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
         elseif strcmp(task.algs{i},'mLDA')
             tic
-            D = size(Z.Xtrain,1);
-            if D<1000 % skip LDA if the # of dimensions is too large such that pinv takes forever!
-                Yhat = mLDA_train_and_predict(Z.Xtrain,Z.Ytrain,Z.Xtest);
-            else
-                Yhat = nan(size(Z.Ytest));
-            end
-            loop{k}.time(i,1)=toc;
-            loop{k}.out(i,1) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
-        elseif strcmp(task.algs{i},'LDA2')
-            tic
-            D = size(Z.Xtrain,1);
-            if D<1000 % skip LDA if the # of dimensions is too large such that pinv takes forever!
-                Yhat = LDA_train2_and_predict(Z.Xtrain,Z.Ytrain,Z.Xtest);
-            else
-                Yhat = nan(size(Z.Ytest));
-            end
+            Yhat = mLDA_train_and_predict(Z.Xtrain,Z.Ytrain,Z.Xtest);
             loop{k}.time(i,1)=toc;
             loop{k}.out(i,1) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
         elseif strcmp(task.algs{i},'lda')
@@ -96,7 +78,7 @@ for k=1:task_in.Ntrials
         elseif strcmp(task.algs{i},'LOL')
             for l=1:task.Nks
                 tic
-                Yhat = LOL_train_and_predict(Z.Xtrain,Z.Ytrain,Z.Xtest,Phat.delta,Phat.V(1:task.ks(l),:));
+                Yhat = LOL_train_and_predict(Z.Xtrain,Z.Ytrain,Z.Xtest,Phat.delta,Phat.V(:,1:task.ks(l))');
                 if task.ks(l)==1
                     loop{k}.time(i,l)=toc;
                 else
