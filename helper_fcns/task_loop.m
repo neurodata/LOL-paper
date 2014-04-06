@@ -11,7 +11,7 @@ for k=1:task_in.Ntrials
     [task, X, Y, P] = get_task(task_in);
     Z = parse_data(X,Y,task.ntrain,task.ntest,task.percent_unlabeled);
 
-    if any(any([strcmp(task.algs,'PDA');strcmp(task.algs,'LOL');strcmp(task.algs,'SLOL');strcmp(task.algs,'rLOL');strcmp(task.algs,'QOL');strcmp(task.algs,'QOQ');strcmp(task.algs,'DRDA')]))
+    if any(any([strcmp(task.algs,'PDA');strcmp(task.algs,'LOL');strcmp(task.algs,'SLOL');strcmp(task.algs,'rLOL');strcmp(task.algs,'QOL');strcmp(task.algs,'QOQ');strcmp(task.algs,'DRDA');strcmp(task.algs,'mLOL')]))
         tic % get delta and eigenvectors
         Phat = estimate_parms(Z.Xtrain,Z.Ytrain);
         loop{k}.svdtime = toc;
@@ -79,11 +79,15 @@ for k=1:task_in.Ntrials
             for l=1:task.Nks
                 tic
                 Yhat = LOL_train_and_predict(Z.Xtrain,Z.Ytrain,Z.Xtest,Phat.delta,Phat.V(:,1:task.ks(l))');
-                if task.ks(l)==1
-                    loop{k}.time(i,l)=toc;
-                else
-                    loop{k}.time(i,l)=toc+loop{k}.svdtime;
-                end
+                loop{k}.time(i,l)=toc+loop{k}.svdtime;
+                loop{k}.out(i,l) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
+            end
+            
+        elseif strcmp(task.algs{i},'mLOL')
+            for l=1:task.Nks
+                tic
+                Yhat = mLOL_train_and_predict(Z.Xtrain,Z.Ytrain,Z.Xtest,Phat.delta,Phat.V(:,1:task.ks(l))');
+                loop{k}.time(i,l)=toc+loop{k}.svdtime;
                 loop{k}.out(i,l) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
             end
             

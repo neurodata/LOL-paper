@@ -19,7 +19,7 @@ function [Yhat,eta] = mLDA_predict(X,P)
 
 if P.Ngroups==2
    eta = P.del'*P.InvSig*X - P.del'*P.InvSig*P.mu - P.thresh;
-   Yhat = eta' < 0;
+   Yhat = P.groups((eta' < 0)+1);
 else
     [~,ntest]=size(X);
     l=nan(ntest,P.Ngroups);
@@ -28,4 +28,5 @@ else
     end
     [~, ymax] = min(l,[],2);
     Yhat=P.groups(ymax);
+    eta=[];
 end
