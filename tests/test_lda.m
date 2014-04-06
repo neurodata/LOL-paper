@@ -79,3 +79,19 @@ metatask='test_mlda6';
 
 F.plot_bayes=true;
 plot_benchmarks(metatask,F);
+
+%%
+clearvars, clc,
+metatask='test_mlda7';
+[T,S,P] = run_task_list(metatask); 
+
+F.plot_bayes=true;
+plot_benchmarks(metatask,F);
+
+%%
+clearvars, clc,
+metatask='test_mlda8';
+[T,S,P] = run_task_list(metatask); 
+
+F.plot_bayes=true;
+plot_benchmarks(metatask,F);
