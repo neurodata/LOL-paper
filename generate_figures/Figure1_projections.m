@@ -3,99 +3,105 @@ clearvars, clc,
 savestuff=1;
 task_list_name='both_cigars';
 task_list = set_task_list(task_list_name);
+task.ks=5;
+task.ntest=1000;
+task.algs={'LOL','Bayes'};
+task.types={'NENL';'DENL'};
+
+
 Nsims=length(task_list);
-nrows=Nsims;
+Nalgs=length(task.algs)+length(task.types)-1;
 
 h(1)=figure(1); clf
+nrows=Nsims;
+ncols=Nalgs+1;
+
 for j=1:Nsims
     
-    figure(1)
-    % generate data and embed it
     task.name=task_list{j};
-    task.ks=5;
-    task.ntest=1000;
-    task.algs={'LDA','PDA','LOL','Bayes'};
+    % generate data and embed it
     [task1, X, Y, P] = get_task(task);
     Z = parse_data(X,Y,task1.ntrain,task1.ntest,0);
-    task1 = update_k(task1);
-    
-    Phat = estimate_parameters(Z.Xtrain,Z.Ytrain,task1.Kmax);
-    
-    Xtrain_centered = bsxfun(@minus,Z.Xtrain,Phat.mu);
-    Xtest_centered = bsxfun(@minus,Z.Xtest,Phat.mu);
-    
-    
-    Nalgs=length(task1.algs);
-    ncols=Nalgs+1;
     
     subplot(nrows,ncols,1+ncols*(j-1)), hold on
-    plot(X(1,Y==0),X(2,Y==0),'o','color',[0 0 0]),
-    plot(X(1,Y==1),X(2,Y==1),'x','color',0.7*[1 1 1])
-%     axis('equal')
+    plot(Z.Xtrain(1,Z.Ytrain==2),Z.Xtrain(2,Z.Ytrain==2),'o','color',[0 0 0],'LineWidth',2),
+    plot(Z.Xtrain(1,Z.Ytrain==1),Z.Xtrain(2,Z.Ytrain==1),'x','color',0.7*[1 1 1],'LineWidth',2)
+    axis('equal')
     title(task1.name)
-    set(gca,'XTick',[-2:2:2],'YTick',[-2:2:2],'XLim',[-2 2], 'YLim',[-2 2])
+    set(gca,'XTick',[-2:2:2],'YTick',[-2:1:2],'XLim',[-2 2], 'YLim',[-2 2])
     grid('on')
     
+    
+    [transformers, deciders] = parse_algs(task1.types);
+    Proj = LOL(Z.Xtrain,Z.Ytrain,transformers,task1.Kmax);
+    
+    
+    
     for i=1:ncols-1
-        subplot(nrows,ncols,(i+1)+ncols*(j-1)), hold on
-        
-        if strcmp(task1.algs{i},'LDA')
-            [Yhat, eta] = LDA_train_and_predict(Xtrain_centered,Z.Ytrain,Xtest_centered);
-            col='g';
-        elseif strcmp(task1.algs{i},'PDA')
-            [Yhat, eta] = PDA_train_and_predict(Xtrain_centered,Z.Ytrain,Xtest_centered,Phat.V(1:3,:));
-            col='m';
-        elseif strcmp(task1.algs{i},'LOL')
-            [Yhat, eta] = LOL_train_and_predict(Xtrain_centered,Z.Ytrain,Xtest_centered,Phat.delta,Phat.V(1:3,:));
-            col='c';
-        elseif strcmp(task1.algs{i},'ROAD')
-            fit = road(Xtrain_centered, Z.Ytrain);
-        elseif strcmp(task1.algs{i},'Bayes')
-            parms.thresh=(log(P.pi0)-log(P.pi1))/2;
-            parms.del=P.delta;
-            parms.InvSig=pinv(P.Sig0);
-            parms.mu=P.mu0+P.mu1;
-            [Yhat, eta] = LDA_predict(Xtest_centered,parms);
-            tit='Bayes';
-            col='k';
+        if i<3
+            Xtest=Proj{i}.V*Z.Xtest;
+            Xtrain=Proj{i}.V*Z.Xtrain;
+            [Yhat, parms, eta] = LDA_train_and_predict(Xtrain, Z.Ytrain, Xtest);
+        else
+            parms.del=P.del;
+            parms.InvSig=pinv(P.Sigma);
+            parms.mu=P.mu*P.w;
+            
+            parms.del=P.mu(:,1)-P.mu(:,2);
+            parms.mu=P.mu*P.w;
+            parms.thresh=(log(P.w(1))-log(P.w(2)))/2;
+            eta = parms.del'*parms.InvSig*Z.Xtest - parms.del'*parms.InvSig*parms.mu - parms.thresh;
         end
-        
-        % class 0 parms
-        eta0=eta(Z.Ytest==0);
-        mu0=mean(eta0);
-        sig0=std(eta0);
+            
         
         % class 1 parms
         eta1=eta(Z.Ytest==1);
         mu1=mean(eta1);
         sig1=std(eta1);
-
+        
+        % class 2 parms
+        eta2=eta(Z.Ytest==2);
+        mu2=mean(eta2);
+        sig2=std(eta2);
+        
         % get plotting bounds
-        min0=mu0-3*sig0;
-        max0=mu0+3*sig0;
+        min2=mu2-3*sig2;
+        max2=mu2+3*sig2;
         min1=mu1-3*sig1;
         max1=mu1+3*sig1;
-
-        t=linspace(min(min0,min1),max(max0,max1),100);
-        y0=normpdf(t,mu0,sig0);
+        
+        t=linspace(min(min2,min1),max(max2,max1),100);
+        y2=normpdf(t,mu2,sig2);
         y1=normpdf(t,mu1,sig1);
-        maxy=max(max(y0),max(y1));
-
-        plot(t,y0,'-','color',col,'linewidth',2)
+        maxy=max(max(y2),max(y1));
+        
+        subplot(nrows,ncols,(i+1)+ncols*(j-1)), hold on
+        if i==1
+            col='g';
+            tit='LOL';
+        elseif i==2
+            col='m';
+            tit='PDA';
+        elseif i==3
+            tit='Bayes';
+            col='k';
+        end
+        
+        plot(t,y2,'-','color',col,'linewidth',2)
         plot(t,y1,'--','color',col, 'linewidth',2)
         plot([0,0],[0, maxy],'k')
         
         grid on
-        axis([min(min0,min1), max(max0,max1), 0, 1.05*maxy])
-        title(task1.algs{i})
+        axis([min(min2,min1), max(max2,max1), 0, 1.05*maxy])
+        title(tit)
         set(gca,'XTickLabel',[],'YTickLabel',[])
     end
 end
 
 
 %% save figs
-fname=['../../figs/projections_', task_list_name];
+F.fname=['../../figs/projections_', task_list_name];
 if savestuff
-    wh=[6 nrows]*1.2;
-    print_fig(h(1),wh,fname,'painters')
+    F.wh=[6 nrows]*1.2;
+    print_fig(h(1),F)
 end

@@ -1,4 +1,4 @@
-function Phat = LDA_train(X,Y)
+function P = LDA_train(X,Y)
 % learns all the parameters necessary for LDA
 % note that this function supports semi-supervised learning via encoding
 % NaN's into Y
@@ -7,26 +7,20 @@ function Phat = LDA_train(X,Y)
 %   X in R^{D x n}: predictor matrix
 %   Y in {0,1,NaN}^n: predictee matrix
 % 
-% OUTPUT: Phat, a structure of parameters 
-
-n0=sum(Y==0);
-n1=sum(Y==1);
-
-Phat.thresh = log(n0/n1)/2;    % useful for classification via LDA
-
-X0 = X(:,Y==0);
-mu0 = mean(X0,2);
-X0=bsxfun(@minus,X0,mu0);
-
-X1 = X(:,Y==1);
-mu1 = mean(X1,2);
-X1=bsxfun(@minus,X1,mu1);
-
-Phat.mu = (mu0+mu1)/2;            % useful for classification via LDA 
-Phat.del = (mu0-mu1);             % useful for classification via LDA
-
-% estimate the inverse covariance matrix via svd
-X_centered = [X0,X1]; 
-Phat.InvSig = inverse_covariance(X_centered);
+% OUTPUT: P, a structure of parameters required for classification
 
 
+P = estimate_parms(X,Y);
+P.InvSig = inverse_cov(P);
+lnprior=log(P.nvec/P.n);
+
+P.c=nan(P.Ngroups,1);
+for k=1:P.Ngroups
+   P.c(k)=P.mu(:,k)'*P.InvSig*P.mu(:,k)+2*lnprior(k);
+end
+
+if P.Ngroups==2
+   P.del=P.mu(:,1)-P.mu(:,2);
+   P.mu=P.mu*P.nvec/P.n;
+   P.thresh=(lnprior(1)-lnprior(2))/2;
+end

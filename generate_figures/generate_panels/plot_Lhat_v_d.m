@@ -12,8 +12,15 @@ function plot_Lhat_v_d(T,S,F,row,col)
 subplot(F.Nrows,F.Ncols,F.Ncols*(row-1)+col), hold all
 miny=0.5;
 maxy=0;
-legendcell=[];
 maxx=0;
+if isfield(T,'types')
+    Nalgs=T.Nalgs+length(T.types)-1;
+else
+    Nalgs=T.Nalgs;
+end
+
+
+legendcell=[];
 for i=1:T.Nalgs
     if strcmp(T.algs{i},'LOL') % plot rectangle demarking region that is better than LOL
         p=patch([0 S.mins.mean.k(i) S.mins.mean.k(i) 0],[0 0 S.mins.mean.Lhats(i) S.mins.mean.Lhats(i)],0.8*[1 1 1]);
@@ -22,7 +29,17 @@ for i=1:T.Nalgs
         hLegendEntry = get(hAnnotation,'LegendInformation');
         set(hLegendEntry,'IconDisplayStyle','off')
     end
+    legendcell=[legendcell; T.algs(i)];
 
+end
+if isfield(T,'types')
+    legendcell(end)=[];
+    for i=1:length(T.types)
+        legendcell=[legendcell; T.types(i)];
+    end
+end
+
+for i=1:Nalgs
     location=S.means.Lhats(i,:);
     if length(location)>1
         if ~isnan(location(2))
@@ -32,13 +49,12 @@ for i=1:T.Nalgs
             
             miny=min(miny,S.mins.mean.Lhats(i));
             maxy=max(maxy,S.mins.mean.Lhats(i));
-            legendcell=[legendcell; T.algs(i)];
             maxx=max(maxx,max(S.mins.mean.k));
-            display([T.name,' ', T.algs{i},', dhat=',num2str(S.mins.mean.Lhats(i)),', Lhat=',num2str(S.mins.mean.k(i))])
         end
     end
 end
 Lchance=mean(S.Lchance);
+
 
 
 % plot([1 10^4], Lchance*[1 1],'-k','linewidth',2)

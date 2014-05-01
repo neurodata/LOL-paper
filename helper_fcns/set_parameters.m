@@ -21,9 +21,7 @@ if ~isfield(task,'P')
             m=0.1;
             mu1 = m*ones(D,1);
             mu0 = -mu1*0;
-            A = eye(D);
-            Sig1 = A;
-            Sig0 = A;
+            Sigma = eye(D);
             
         case 'w' % wide
             
@@ -34,8 +32,7 @@ if ~isfield(task,'P')
             sv = ones(D,1)/sqrt(D);
             sv(2)=1;
             A  = eye(D,D);
-            Sig1=A*diag(sv);                            % class 1 cov
-            Sig0=A*diag(sv);                            % class 2 cov
+            Sigma=A*diag(sv);                            % class 1 cov
             
         case 'w1' % wide
             
@@ -47,8 +44,7 @@ if ~isfield(task,'P')
             sv = sd/sqrt(100)*ones(D,1);
             if D>1, sv(2)=1; end
             A  = eye(D,D);
-            Sig1=A*diag(sv);                            % class 1 cov
-            Sig0=A*diag(sv);                            % class 2 cov
+            Sigma=A*diag(sv);                            % class 1 cov
             
         case 'w2' % wide
             
@@ -61,12 +57,11 @@ if ~isfield(task,'P')
             sv(2)=1;
             A  = eye(D,D);
             
-            Sig0=A*diag(sv);                            % class 2 cov
-            Sig0(1,1) = 0.5;
-            Sig0(1,2)=0.25;
-            Sig0(2,1)=0.25;
+            Sigma=A*diag(sv);                            % class 2 cov
+            Sigma(1,1) = 0.5;
+            Sigma(1,2)=0.25;
+            Sigma(2,1)=0.25;
             
-            Sig1=Sig0;
             
         case 'w3' % wide
             
@@ -79,8 +74,7 @@ if ~isfield(task,'P')
             sv = sd/sqrt(100)*ones(D,1);
             sv(2)=1;
             A  = eye(D,D);
-            Sig1=A*diag(sv);                            % class 1 cov
-            Sig0=A*diag(sv);                            % class 2 cov
+            Sigma=A*diag(sv);                            % class cov
             
         case 's' % simple
             
@@ -91,8 +85,7 @@ if ~isfield(task,'P')
             sv = ones(D,1)/sqrt(D);
             sv(2)=1;
             A  = eye(D,D);
-            Sig1=A*diag(sv);                            % class 1 cov
-            Sig0=A*diag(sv);                            % class 2 cov
+            Sigma=A*diag(sv);                            % class 1 cov
             
         case 'parallel cigars' % simple
             
@@ -103,10 +96,7 @@ if ~isfield(task,'P')
             sv = ones(D,1)/sqrt(D);
             sv(2)=0.5;
             
-            A  = eye(D,D)*diag(sv);
-            Sig1=A;                            % class 1 cov
-            Sig0=A;                            % class 2 cov
-            
+            Sigma  = eye(D,D)*diag(sv);
             
         case 'semisup cigars' % simple
             
@@ -117,9 +107,7 @@ if ~isfield(task,'P')
             sv = ones(D,1)/sqrt(D);
             sv(2)=0.5;
             
-            A  = eye(D,D)*diag(sv);
-            Sig1=A;                            % class 1 cov
-            Sig0=A;                            % class 2 cov
+            Sigma = eye(D,D)*diag(sv);
             
         case 'rotated cigars' % simple angle
             
@@ -141,9 +129,7 @@ if ~isfield(task,'P')
             sv(2)=0.5;
             
             A  = eye(D,D)*diag(sv);
-            A = R*A*R';
-            Sig1=A;                            % class 1 cov
-            Sig0=A;                            % class 2 cov
+            Sigma = R*A*R';
             
         case 'semisup rotated cigars' % simple angle
             
@@ -165,9 +151,7 @@ if ~isfield(task,'P')
             sv(2)=0.5;
             
             A  = eye(D,D)*diag(sv);
-            A = R*A*R';
-            Sig1=A;                            % class 1 cov
-            Sig0=A;                            % class 2 cov
+            Sigma = R*A*R';
             
         case 'sa' % simple angle
             
@@ -180,18 +164,12 @@ if ~isfield(task,'P')
             sv = ones(D,1)/sqrt(D);
             sv(2)=4;
             A  = eye(D,D); %A(1:2,1:2)=[1,2;0,1];       % singular vectors
-            Sig1=A*diag(sv);                            % class 1 cov
-            Sig0=A*diag(sv);                            % class 2 cov
+            Sigma=A*diag(sv);                            % class 2 cov
             
-            Sig1(1,2) = sv(2)/2;
-            Sig1(2,1) = sv(2)/2;
-            Sig0(1,2) = sv(2)/2;
-            Sig0(2,1) = sv(2)/2;
+            Sigma(1,2) = sv(2)/2;
+            Sigma(2,1) = sv(2)/2;
             
-            Sig1=Sig1+eye(D);
-            Sig0=Sig0+eye(D);
-            
-            
+            Sigma=Sigma+eye(D);
             
         case 'sa2' % simple angle
             
@@ -205,16 +183,11 @@ if ~isfield(task,'P')
             sv = sd/sqrt(D)*ones(D,1);
             sv(2)=4;
             A  = eye(D,D); %A(1:2,1:2)=[1,2;0,1];       % singular vectors
-            Sig1=A*diag(sv);                            % class 1 cov
-            Sig0=A*diag(sv);                            % class 2 cov
+            Sigma=A*diag(sv);                            % class 1 cov
             
-            Sig1(1,2) = sv(2)/2;
-            Sig1(2,1) = sv(2)/2;
-            Sig0(1,2) = sv(2)/2;
-            Sig0(2,1) = sv(2)/2;
-            
-            Sig1=Sig1+eye(D);
-            Sig0=Sig0+eye(D);
+            Sigma(1,2) = sv(2)/2;
+            Sigma(2,1) = sv(2)/2;
+            Sigma=Sigma+eye(D);
             
         case 'wa' % wide angle
             
@@ -227,16 +200,10 @@ if ~isfield(task,'P')
             mu1 = [-mudelt/2*ones(2,1); zeros(D-2,1)];                   % class 1 mean
             mu0 = [mudelt/2*ones(2,1); zeros(D-2,1)];                   % class 1 mean
             
-            Sig1=A*diag(sv);                            % class 1 cov
-            Sig0=A*diag(sv);                            % class 2 cov
-            
-            Sig1(1,2) = sv(2)/2;
-            Sig1(2,1) = sv(2)/2;
-            Sig0(1,2) = sv(2)/2;
-            Sig0(2,1) = sv(2)/2;
-            
-            Sig1=Sig1+eye(D);
-            Sig0=Sig0+eye(D);
+            Sigma=A*diag(sv);                            % class 1 cov
+            Sigma(1,2) = sv(2)/2;
+            Sigma(2,1) = sv(2)/2;
+            Sigma=Sigma+eye(D);
             
         case 'r' % rotated
             
@@ -249,14 +216,15 @@ if ~isfield(task,'P')
             mu1 = [-mudelt/2; zeros(D-1,1)];                   % class 1 mean
             mu0 = [mudelt/2; zeros(D-1,1)];                     % class 2 mean
             
-            sv1=sv;
-            sv1(2)=1;
-            Sig1=A*diag(sv1);                            % class 1 cov
+            Sigma=nan(D,D,2);
             
             sv0=sv;
             sv0(1)=1;
-            Sig0=A*diag(sv0);                            % class 2 cov
+            Sigma(:,:,1)=A*diag(sv0);                            % class 2 cov
             
+            sv1=sv;
+            sv1(2)=1;
+            Sigma(:,:,2)=A*diag(sv1);                            % class 1 cov
             
         case 'wra' % wide angle
             
@@ -275,17 +243,19 @@ if ~isfield(task,'P')
             mu1(2)=mu1(2)/3;
             mu0(2)=mu0(2)/3;
             
-            Sig1=A*diag(sv);                            % class 1 cov
-            Sig0=A*diag(sv);                            % class 2 cov
+            Sigma=nan(D,D,2);
             
-            Sig1(1,2) = sv(2)/2;
-            Sig1(2,1) = sv(2)/2;
+            Sigma(:,:,2)=A*diag(sv);                            % class 1 cov
+            Sigma(:,:,1)=A*diag(sv);                            % class 2 cov
             
-            Sig0(1,2) = -sv(2)/2;
-            Sig0(2,1) = -sv(2)/2;
+            Sigma(1,2,2) = sv(2)/2;
+            Sigma(2,1,2) = sv(2)/2;
             
-            Sig1=Sig1+eye(D);
-            Sig0=Sig0+eye(D);
+            Sigma(1,2,1) = -sv(2)/2;
+            Sigma(2,1,1) = -sv(2)/2;
+            
+            Sigma(:,:,2)=Sigma(:,:,2)+eye(D);
+            Sigma(:,:,1)=Sigma(:,:,1)+eye(D);
             
         case 'wra2' % wide angle
             
@@ -304,17 +274,17 @@ if ~isfield(task,'P')
             mu1(2)=mu1(2)/3;
             mu0(2)=mu0(2)/3;
             
-            Sig1=A*diag(sv);                            % class 1 cov
-            Sig0=A*diag(sv);                            % class 2 cov
+            Sigma(:,:,2)=A*diag(sv);                            % class 1 cov
+            Sigma(:,:,1)=A*diag(sv);                            % class 2 cov
             
-            Sig1(1,2) = sv(2)/2;
-            Sig1(2,1) = sv(2)/2;
+            Sigma(1,2,2) = sv(2)/2;
+            Sigma(1,1,2) = sv(2)/2;
             
-            Sig0(1,2) = -sv(2)/2;
-            Sig0(2,1) = -sv(2)/2;
+            Sigma(1,2,1) = -sv(2)/2;
+            Sigma(2,1,1) = -sv(2)/2;
             
-            Sig1=Sig1+eye(D);
-            Sig0=Sig0+eye(D);
+            Sigma(:,:,2)=Sigma(:,:,2)+eye(D);
+            Sigma(:,:,1)=Sigma(:,:,1)+eye(D);
             
         case 'pca'
             
@@ -326,8 +296,7 @@ if ~isfield(task,'P')
             mu1 = zeros(D,1);
             mu0 = [2;zeros(D-1,1)];                     % PCA good, lda ok.
             
-            Sig1=A*diag(sv);                            % class 1 cov
-            Sig0=A*diag(sv);                            % class 2 cov
+            Sigma=A*diag(sv);                            % class 1 cov
             
         case 'lda'
             
@@ -338,11 +307,8 @@ if ~isfield(task,'P')
             mu1 = zeros(D,1);
             mu0 = 0.5*[zeros(k,1);1;zeros(D-k-1,1)];        % PCA screws up, lda kaboom!, SDA kaboon!
             
-            Sig1=A*diag(sv);                            % class 1 cov
-            Sig0=A*diag(sv);                            % class 2 cov
-            
-            Sig1=Sig1+eye(D);
-            Sig0=Sig0+eye(D);
+            Sigma=A*diag(sv);                            % class 1 cov
+            Sigma=Sigma+eye(D);
             
         case 'lda2'
             
@@ -353,11 +319,8 @@ if ~isfield(task,'P')
             mu1 = zeros(D,1);
             mu0 = 0.5*[zeros(k,1);1;zeros(D-k-1,1)];        % PCA screws up, lda kaboom!, SDA kaboon!
             
-            Sig1=A*diag(sv);                            % class 1 cov
-            Sig0=A*diag(sv);                            % class 2 cov
-            
-            Sig1=Sig1+eye(D);
-            Sig0=Sig0+eye(D);
+            Sigma=A*diag(sv);                            % class 1 cov
+            Sigma=Sigma+eye(D);
             
         case 'weird'
             
@@ -369,36 +332,29 @@ if ~isfield(task,'P')
             mu0 = mu1;                     % PCA good, lda ok.
             mu0(10:20)=1;
             
-            Sig1=A*diag(sv);                            % class 1 cov
-            Sig0=A*diag(sv);                            % class 2 cov
+            Sigma=A*diag(sv);                            % class 1 cov
             
         case 'trunk'
             
             mu1=1./sqrt(1:D)';
             mu0=-mu1;
-            A = sqrt(D)*0.5*eye(D);
-            Sig1 = A;
-            Sig0 = A;
+            Sigma = sqrt(D)*0.5*eye(D);
             
         case 'trunk2'
             
             mu1=2./sqrt(D:-1:1)';
             mu0=-mu1;
             
-            A=eye(D);
-            A(1:D+1:end)=100./sqrt(1:D);
-            Sig1=A;
-            Sig0=A;
+            Sigma=eye(D);
+            Sigma(1:D+1:end)=100./sqrt(1:D);
             
         case 'trunk3'
             
             mu1=3./sqrt(D:-1:1)';
             mu0=-mu1;
             
-            A=eye(D);
-            A(1:D+1:end)=100./sqrt(1:D);
-            Sig1=A;
-            Sig0=A;
+            Sigma=eye(D);
+            Sigma(1:D+1:end)=100./sqrt(1:D);
             
         case ['toeplitz, D=', num2str(D)]
             
@@ -419,8 +375,7 @@ if ~isfield(task,'P')
             mu0=mudelt*mu0;
             mu1=-mu0;
             
-            Sig1=A;
-            Sig0=A;
+            Sigma=A;
             
             
         case ['sparse toeplitz, D=', num2str(D)]        % toeplitz with sparse delta
@@ -435,8 +390,7 @@ if ~isfield(task,'P')
             c=rho.^(0:D-1);
             A = toeplitz(c);
             
-            Sig0=A;
-            Sig1=A;
+            Sigma=A;
             
             
         case 'decaying'
@@ -446,8 +400,7 @@ if ~isfield(task,'P')
             
             mu1=1*ones(D,1);
             mu0=-mu1;
-            Sig1=A;
-            Sig0=A;
+            Sigma=A;
             
             
         case 'model1, p100'
@@ -461,8 +414,7 @@ if ~isfield(task,'P')
             A=rho*ones(D);
             A(1:D+1:end)=1;
             
-            Sig0=A;
-            Sig1=A;
+            Sigma=A;
             
         case 'model1, p200'
             
@@ -475,8 +427,7 @@ if ~isfield(task,'P')
             A=rho*ones(D);
             A(1:D+1:end)=1;
             
-            Sig0=A;
-            Sig1=A;
+            Sigma=A;
             
         case 'model1, p400'
             
@@ -489,8 +440,7 @@ if ~isfield(task,'P')
             A=rho*ones(D);
             A(1:D+1:end)=1;
             
-            Sig0=A;
-            Sig1=A;
+            Sigma=A;
             
         case 'model1, p800'
             
@@ -503,8 +453,7 @@ if ~isfield(task,'P')
             A=rho*ones(D);
             A(1:D+1:end)=1;
             
-            Sig0=A;
-            Sig1=A;
+            Sigma=A;
             
         case 'model3, p100'
             
@@ -516,10 +465,7 @@ if ~isfield(task,'P')
             
             rho=0.8;
             c=rho.^(0:D-1);
-            A = toeplitz(c);
-            
-            Sig0=A;
-            Sig1=A;
+            Sigma = toeplitz(c);
             
         case 'model3, p200'
             
@@ -531,10 +477,7 @@ if ~isfield(task,'P')
             
             rho=0.8;
             c=rho.^(0:D-1);
-            A = toeplitz(c);
-            
-            Sig0=A;
-            Sig1=A;
+            Sigma = toeplitz(c);
             
         case 'model3, p400'
             
@@ -546,10 +489,7 @@ if ~isfield(task,'P')
             
             rho=0.8;
             c=rho.^(0:D-1);
-            A = toeplitz(c);
-            
-            Sig0=A;
-            Sig1=A;
+            Sigma = toeplitz(c);
             
         case 'model3, p800'
             
@@ -561,48 +501,43 @@ if ~isfield(task,'P')
             
             rho=0.8;
             c=rho.^(0:D-1);
-            A = toeplitz(c);
-            
-            Sig0=A;
-            Sig1=A;
-            
+            Sigma = toeplitz(c);
             
         case '1'
-            P.ntrain=100;
+            ntrain=100;
             D=400;
             rho=0.5;
             c=rho.^(0:D-1);
-            A = toeplitz(c);
-
+            Sigma = toeplitz(c);
+            
             mu1=zeros(D,1);
             beta=0.556*[3;1.5;0;0;2;zeros(D-5,1)];
-            mu0=A*beta;
-            Sig1=A;
-            Sig0=A;
+            mu0=Sigma*beta;
+            
         case '2'
-            P.ntrain=100;
+            ntrain=100;
             D=400;
             rho=0.5;
             c=rho.^(0:D-1);
             A = toeplitz(c);
-
+            
             mu1=zeros(D,1);
             beta=0.582*[3;2.5;-2.8;zeros(D-3,1)];
             mu0=A*beta;
-            Sig1=A;
-            Sig0=A;
+            Sigma=A;
+            
         case '3'
-            P.ntrain=400;
+            ntrain=400;
             D=800;
             rho=0.5;
             A=0.5*eye(D)+0.5*ones(D);
             mu1=zeros(D,1);
             beta=0.395*[3;1.7;-2.2;-2.1;2.55;zeros(D-5,1)];
             mu0=A*beta;
-            Sig1=A;
-            Sig0=A;
+            Sigma=A;
+            
         case '4'
-            P.ntrain=300;
+            ntrain=300;
             D=800;
             p=D/5;
             A0=0.4*eye(p)+0.6*ones(p);
@@ -611,10 +546,10 @@ if ~isfield(task,'P')
             beta=0.916*[1.2;-1.4;1.15;-1.64;1.5;-1;2;zeros(D-7,1)];
             mu1=zeros(D,1);
             mu0=A*beta;
-            Sig1=A;
-            Sig0=A;
+            Sigma=A;
+            
         case '5'
-            P.ntrain=400;
+            ntrain=400;
             D=800;
             A=0.5*eye(D)+0.5*ones(D);
             beta=0.551*[3;1.7;-2.2;-2.1;2.55;(D-5)^(-1)*ones(D-5,1)];
@@ -623,14 +558,13 @@ if ~isfield(task,'P')
             Sig1=A;
             Sig0=A;
         case '6'
-            P.ntrain=400;
+            ntrain=400;
             D=800;
             A=0.5*eye(D)+0.5*ones(D);
             mu1=zeros(D,1);
             beta=0.362*[3;1.7;-2.2;-2.1;2.55;(D-5)^(-1)*ones(D-5,1)];
             mu0=A*beta;
-            Sig1=A;
-            Sig0=A;
+            Sigma=A;
             
         case 'DRL' % simple angle
             
@@ -644,12 +578,10 @@ if ~isfield(task,'P')
             sv = sd/sqrt(D)*ones(D,1);
             sv(2)=4;
             A  = eye(D,D); %A(1:2,1:2)=[1,2;0,1];       % singular vectors
-            Sig=A*diag(sv);                            % class 1 cov
-            Sig(1,2) = sv(2)/2;
-            Sig(2,1) = sv(2)/2;
-            Sig=Sig+eye(D);
-            Sig1=Sig;
-            Sig0=Sig;
+            Sigma=A*diag(sv);                            % class 1 cov
+            Sigma(1,2) = sv(2)/2;
+            Sigma(2,1) = sv(2)/2;
+            Sigma=Sigma+eye(D);
             
         case 'debug'
             
@@ -658,12 +590,9 @@ if ~isfield(task,'P')
             mu0=0.5*rand(D,1);
             mu1=-0.5*rand(D,1);
             
-            Sig=eye(D);
-            Sig=Sig+0.5*ones(D);
-            Sig(1:D+1:end)=ones(D,1);
-            
-            Sig0=Sig;
-            Sig1=Sig;
+            Sigma=eye(D);
+            Sigma=Sigma+0.5*ones(D);
+            Sigma(1:D+1:end)=ones(D,1);
             
         case 'simple'
             
@@ -672,11 +601,8 @@ if ~isfield(task,'P')
             mu1=-mu0;
             
             rho=0.5;
-            Sig=rho*ones(D);
-            Sig(1:D+1:end)=1;
-            
-            Sig0=Sig;
-            Sig1=Sig;
+            Sigma=rho*ones(D);
+            Sigma(1:D+1:end)=1;
             
         otherwise
             error('no known parameter setting provided')
@@ -686,50 +612,42 @@ if ~isfield(task,'P')
         perm=randperm(D);
         Q=eye(D);
         Q=Q(perm,:);
-        P.mu1=Q*mu1;
-        P.mu0=Q*mu0;
-        P.Sig1=Q*Sig1*Q';
-        P.Sig0=Q*Sig0*Q';
+        mu1=Q*mu1;
+        mu0=Q*mu0;
+        Sig1=Q*Sig1*Q';
+        Sig0=Q*Sig0*Q';
         P.perm=perm;
-    else
-        P.mu1=mu1;
-        P.mu0=mu0;
-        P.Sig1=Sig1;
-        P.Sig0=Sig0;
     end
-    
-    if ~exist('pi0','var'), P.pi0=0.5; end
-    if ~exist('pi1','var'), P.pi1=0.5; end
-    if ~exist('piu','var'), P.piu=0.5; end
     
     P.name=task.name;
 else
     P=task.P;
 end
 
-mubar=(P.mu1+P.mu0)/2;
-P.mu1=P.mu1-mubar;
-P.mu0=P.mu0-mubar;
+mubar=(mu1+mu0)/2;
+mu1=mu1-mubar;
+mu0=mu0-mubar;
 
-
-% check for centered means
-if max(abs(P.mu1+P.mu0))>10^-4
-    error('means are not centered')
-end
-
-% check for positive definiteness
-[~,p1]=chol(P.Sig1);
-[~,p2]=chol(P.Sig0);
-if p1>0 || p2>0
-    error('Sig1 or Sig0 is not positive definite')
-end
-if norm(P.Sig0-P.Sig0')>10^-4 || norm(P.Sig1-P.Sig1')>10^-4
-    error('Sig0 or Sig1 is not symmetric')
-end
-
-P.delta=mu1-mu0;
+P.del=mu1-mu0;
 % compute risk when Sig1=Sig0
-if norm(Sig1-Sig0)<10^-4
-    P.Risk=1-normcdf(0.5*sqrt(P.delta'*(P.Sig1\P.delta)));
+[~,~,K]=size(Sigma);
+if K==1
+    P.Risk=1-normcdf(0.5*sqrt(P.del'*(Sigma\P.del)));
+end
+for k=1:K % check if covariance matrices are valid covariance matrices
+    [~,p]=chol(Sigma(:,:,k));
+    if p>0
+        error('some Sigma is not positive definite')
+    end
+    if norm(Sigma(:,:,k)-Sigma(:,:,k)')>10^-4 
+        error('some Sigma is not symmetric')
+    end
 end
 
+
+P.D=D;
+P.mu=[mu0 mu1];
+P.Sigma=Sigma;
+P.w=1/2*[1; 1];
+P.Ngroups=2;
+P.groups=[1 2];

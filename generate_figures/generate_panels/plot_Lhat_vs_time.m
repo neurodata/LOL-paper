@@ -41,7 +41,7 @@ for i=1:T.Nalgs;
     maxy=max(maxy,S.mins.mean.Lhats(i));
     minx=min(minx,min(S.mins.mean.times));
     maxx=max(maxx,max(S.mins.mean.times));
-    display([T.name,' ', T.algs{i},', dhat=',num2str(S.mins.mean.Lhats(i)),', Lhat=',num2str(S.mins.mean.k(i))])
+    display([T.name,' ', T.algs{i},', time=',num2str(S.mins.mean.times(i)),', Lhat=',num2str(S.mins.mean.Lhats(i))])
 end
 Lchance=mean(S.Lchance);
 plot(minx, Lchance,'.k','markersize',16)
