@@ -14,16 +14,17 @@ function F = plot_benchmarks(metatask,F)
 % OUTPUT: none
 
 if nargin==1, F=struct; end
-task_list = set_task_list(metatask);
+load(['../../Data/Results/', metatask])
 Ntasks=length(task_list);
 
-T = cell(1,Ntasks);
-S = cell(1,Ntasks);
-for j=1:Ntasks
-    load(['../../Data/Results/', task_list{j}])
-    T{j}=task;
-    S{j}=Stats;
-end
+% task_list = set_task_list(metatask);
+% T = cell(1,Ntasks);
+% S = cell(1,Ntasks);
+% for j=1:Ntasks
+%     load(['../../Data/Results/', task_list{j}])
+%     T{j}=task;
+%     S{j}=Stats;
+% end
 
 
 %% set some figure parameters
@@ -63,6 +64,17 @@ for j=1:F.Ncols
     plot_Lhat(T{j},S{j},F,j)                % column 1: plot Lhats
     plot_Lhat_v_d(T{j},S{j},F,2,j)          % column 2: Lhat vs dimension embedded
     if F.plot_time, plot_Lhat_vs_time(T{j},S{j},F,3,j), end     % column 3: Lhat vs. time
+
+    for i=1:length(T{j}.algs)
+        if ~strcmp(T{j}.algs{i},'LOL')
+            display([T{j}.name,' ', T{j}.algs{i},', Lhat=',num2str(S{j}.mins.mean.Lhats(i)),', dhat=',num2str(S{j}.mins.mean.k(i))])
+        else
+            for jj=1:length(T{j}.types)
+                display([T{j}.name,' ', T{j}.types{jj},', Lhat=',num2str(S{j}.mins.mean.Lhats(i-1+jj)),', dhat=',num2str(S{j}.mins.mean.k(i-1+jj))])
+            end
+        end
+    end
+
 end
 % save plots
 if T{j}.savestuff

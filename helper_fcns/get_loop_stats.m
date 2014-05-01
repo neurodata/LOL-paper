@@ -1,13 +1,18 @@
 function Stats = get_loop_stats(T,loop)
 % this function computes a bunch of statistics based on the output run task_loop
 
-Lhats=nan(T.Nalgs,T.Nks,T.Ntrials);
-sensitivity=nan(T.Nalgs,T.Nks,T.Ntrials);
-specificity=nan(T.Nalgs,T.Nks,T.Ntrials);
-times=nan(T.Nalgs,T.Nks,T.Ntrials);
+if isfield(T,'types')
+    Nalgs=T.Nalgs+length(T.types)-1;
+else
+    Nalgs=T.Nalgs;
+end
+Lhats=nan(Nalgs,T.Nks,T.Ntrials);
+sensitivity=nan(Nalgs,T.Nks,T.Ntrials);
+specificity=nan(Nalgs,T.Nks,T.Ntrials);
+times=nan(Nalgs,T.Nks,T.Ntrials);
 
 for k=1:T.Ntrials
-    for i=1:T.Nalgs;
+    for i=1:Nalgs;
         for l=1:T.Nks
             Lhats(i,l,k)=loop{k}.out(i,l).Lhat;
             sensitivity(i,l,k)=loop{k}.out(i,l).sensitivity;
@@ -44,7 +49,7 @@ Stats.stds.specificity=squeeze(nanstd(specificity,[],3));
 Stats.stds.times=squeeze(nanstd(times,[],3));
 
 % get mins of medians
-for i=1:T.Nalgs;
+for i=1:Nalgs;
     [~,k]=min(Stats.medians.Lhats(i,:));
     Stats.mins.med.k(i)=T.ks(k);
     Stats.mins.med.Lhats(i)=Stats.medians.Lhats(i,k);
@@ -58,7 +63,9 @@ for i=1:T.Nalgs;
     Stats.mins.mean.sensitivity(i)=Stats.means.sensitivity(i,k);
     Stats.mins.mean.specificity(i)=Stats.means.specificity(i,k);
     Stats.mins.mean.times(i)=Stats.means.times(i,k);
-    
+end
+
+for i=1:T.Nalgs
     if strcmp(T.algs{i},'LDA'),
         Stats.mins.mean.k(i) = min(T.ntrain,T.D);
         Stats.med.mean.k(i) = min(T.ntrain,T.D);

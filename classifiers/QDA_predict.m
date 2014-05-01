@@ -1,21 +1,27 @@
-function [Yhat] = QDA_predict(X,P)
-% make predictions using QDA
-% 
+function [Yhat,eta] = QDA_predict(X,P)
+% make predictions using LDA
+%
 % INPUT:
 %   X in R^{n x d}: data matrix where columns are data points
 %   P: structure containing all necessary parameters, including
-% 
-% OUTPUT: Yhat in {0,1}^n: vector of predictions
+%       InvSig in R^{d x d}: inverse covariance matrix
+%       if Ngroups>2
+%           mu in R^{d x k}: mean of each of k groups
+%           c in R^k: constant for each
+%       if Ngroups=2
+%           del in R^{d x 1}: mu0-mu1
+%           thresh: (lnpi0-lnpi1)/2 in R_+: classification threshold
+%           mu  in R^d: overall mean
 
-[~,n]=size(X);
+% Outuput:
+%   Yhat in {0,1}^n: vector of predictions
+%   eta in R^{n x 1}: vector of magnitudes
 
-d1 = bsxfun(@minus,P.mu1,X);
-d0 = bsxfun(@minus,P.mu0,X);
-
-Yhat=nan(n,1);
-for i=1:n
-    l1=-0.5*d1(:,i)'*P.InvSig1* d1(:,i)-P.a1;
-    l0=-0.5*d0(:,i)'*P.InvSig0* d0(:,i)-P.a0;
-    Yhat(i)= l1 > l0;
+[~,ntest]=size(X);
+l=nan(ntest,P.Ngroups);
+for k=1:P.Ngroups
+    l(:,k)=-2*X'*P.InvSig(:,:,k)*P.mu(:,k)+P.c(k);
 end
-
+[~, ymax] = min(l,[],2);
+Yhat=P.groups(ymax);
+eta=[];

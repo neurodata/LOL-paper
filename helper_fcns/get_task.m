@@ -23,7 +23,8 @@ if task.simulation
         [X,Y] = random(gmm,task.n);
     else
         P = set_parameters(task);
-        [X,Y] = sample_QDA(task.n,P);
+        gmm = gmdistribution(P.mu',P.Sigma,P.w);
+        [X,Y] = random(gmm,task.n);
     end
 else
     [X,Y,task] = load_data(task);

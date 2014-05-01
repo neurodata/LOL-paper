@@ -1,7 +1,8 @@
 function [task_list,task] = set_task_list(metatask)
 % this function generates a number of tasks to run
 % 
-% INPUT:   metatask (char): the name of a pre-defined task list
+% INPUT:   
+%   metatask (char): the name of a pre-defined task list
 % 
 % OUTPUT
 %   task_list: an array of strings, each 1 naming a task
@@ -11,7 +12,7 @@ if nargin==1, task=struct; end
         
 if strcmp(metatask,'thin')
     task_list={'sa';'s';'w'};
-    task.ks=unique(round(logspace(0,2,50)));
+    task.ks=unique(floor(logspace(0,2,50)));
     task.Ntrials=10;
     task.algs={'NaiveB','LDA','PDA','SLOL','LOL','DRDA','RDA','RF','svm'};
     task.savestuff=1;
@@ -21,23 +22,70 @@ elseif strcmp(metatask,'pancreas')
 
 elseif strcmp(metatask,'Mai13')
     task_list={'colon'; 'prostate'};
-    task.ks=unique(round(logspace(0,2,50)));
+    task.ks=unique(floor(logspace(0,2,50)));
     task.Ntrials=500;
     task.algs={'NaiveB','PDA','SLOL','LOL','DRDA','RDA','RF','svm'};
     task.savestuff=1;
     
+elseif strcmp(metatask,'test_Mai')
+    task_list={'colon'; 'prostate'};
+    task.ks=unique(floor(logspace(0,2,50)));
+    task.Ntrials=10;
+    task.algs={'LDA','QDA','LOL'};
+    task.savestuff=1;
+
 elseif strcmp(metatask,'little_toeplitzs')
     task_list={'toeplitz, D=10';'toeplitz, D=20';'toeplitz, D=50';'toeplitz, D=100'};
     task.ntrain=50;
-    task.ks=unique(round(logspace(0,log10(task.ntrain),task.ntrain)));
+    task.ks=unique(floor(logspace(0,log10(task.ntrain),task.ntrain)));
     task.Ntrials=10;
     task.algs={'NaiveB','LDA','PDA','SLOL','LOL','DRDA','RDA','RF','svm'};
+    task.savestuff=1;
+
+elseif strcmp(metatask,'little_toeplitzs500')
+    task_list={'toeplitz, D=10'};
+    task.ntrain=500;
+    task.ks=unique(floor(logspace(0,log10(task.ntrain),task.ntrain)));
+    task.Ntrials=10;
+    task.algs={'LDA','lda','QDA','qda'};
+    task.savestuff=1;
+
+elseif strcmp(metatask,'little_toeplitzslq')
+    task_list={'toeplitz, D=100';'a'};
+    task.ntrain=500;
+    task.ks=unique(floor(logspace(0,log10(task.ntrain),task.ntrain)));
+    task.Ntrials=500;
+    task.algs={'LDA','lda','QDA','qda'};
+    task.savestuff=1;
+    
+elseif strcmp(metatask,'little_toeplitzsl')
+    task_list={'toeplitz, D=100';'a'};
+    task.ntrain=50;
+    task.ks=unique(floor(logspace(0,log10(task.ntrain),task.ntrain)));
+    task.Ntrials=10;
+    task.algs={'LDA','lda'};
+    task.savestuff=1;
+
+elseif strcmp(metatask,'little_toeplitzsq')
+    task_list={'toeplitz, D=100';'a'};
+    task.ntrain=500;
+    task.ks=unique(floor(logspace(0,log10(task.ntrain),task.ntrain)));
+    task.Ntrials=10;
+    task.algs={'QDA','qda'};
+    task.savestuff=1;
+
+elseif strcmp(metatask,'little_toeplitzs100')
+    task_list={'toeplitz, D=10'};
+    task.ntrain=100;
+    task.ks=unique(floor(logspace(0,log10(task.ntrain),task.ntrain)));
+    task.Ntrials=10;
+    task.algs={'LDA','lda','QDA','qda'};
     task.savestuff=1;
 
 elseif strcmp(metatask,'toeplitzs')
     task_list={'toeplitz, D=10';'toeplitz, D=20';'toeplitz, D=50';'toeplitz, D=100';'toeplitz, D=1000'};
     task.ntrain=50;
-    task.ks=unique(round(logspace(0,log10(task.ntrain),task.ntrain)));
+    task.ks=unique(floor(logspace(0,log10(task.ntrain),task.ntrain)));
     task.Ntrials=10;
     task.algs={'NaiveB','LDA','PDA','SLOL','LOL','DRDA','RDA','RF','svm'};
     task.savestuff=1;
@@ -47,7 +95,7 @@ elseif strcmp(metatask,'both_cigars')
     
 elseif strcmp(metatask,'all_cigars')
     task_list={'semisup cigars';'parallel cigars'; 'semisup rotated cigars'; 'rotated cigars'};
-    task.ks=unique(round(logspace(0,2,50)));
+    task.ks=unique(floor(logspace(0,2,50)));
     task.Ntrials=100;
     task.algs={'PDA','SLOL','LOL','DRDA'};
     task.savestuff=1;
@@ -130,7 +178,7 @@ elseif strcmp(metatask,'amen gender')
     task.simulation = 0;
     task.ntrain=5112;
     task.ntest=569;
-    task.ks=unique(round(logspace(0,2.9,30))); 
+    task.ks=unique(floor(logspace(0,2.9,30))); 
     task.Ntrials = 5;
 elseif strcmp(metatask,'amen dementia')
     task_list={'amen READINGS dementia';'amen COGNITIVE dementia';'amen SPECT dementia';'amen ACTIVATION dementia';'amen X dementia';'amen BASELINE dementia';'amen CONCENTRATION dementia';'amen CR dementia'};
@@ -138,7 +186,7 @@ elseif strcmp(metatask,'amen dementia')
     task.simulation = 0;
     task.ntrain=5112;
     task.ntest=569;
-    task.ks=unique(round(logspace(0,2.9,30))); 
+    task.ks=unique(floor(logspace(0,2.9,30))); 
     task.Ntrials = 5;
 
 elseif strcmp(metatask,'amen depression')
@@ -147,126 +195,8 @@ elseif strcmp(metatask,'amen depression')
     task.simulation = 0;
     task.ntrain=5112;
     task.ntest=569;
-    task.ks=unique(round(logspace(0,2.9,30))); 
+    task.ks=unique(floor(logspace(0,2.9,30))); 
     task.Ntrials = 5;
-
-elseif strcmp(metatask,'test_qda')
-    task_list={'wra, D=5', 'wra, D=20'};
-    task.algs={'QDA','qda','QOQ'};
-    task.ntrain=100;
-    task.Ntrials=5;
-    task.ks=unique(round(logspace(0,log10(task.ntrain),30))); 
-
-elseif strcmp(metatask,'test_lda')
-    task_list={'wra, D=5', 'wra, D=20'};
-    task.algs={'LDA','lda','mLOL'};
-    task.ntrain=100;
-    task.ntest=500;
-    task.Ntrials=100;
-    task.ks=unique(round(logspace(0,log10(task.ntrain),30))); 
-elseif strcmp(metatask,'test_lda2')
-    task_list={'s','wra, D=5', 'wra, D=20'};
-    task.algs={'LDA','mLOL'};
-    task.ntrain=50;
-    task.ntest=500;
-    task.Ntrials=20;
-    task.ks=unique(round(logspace(0,log10(task.ntrain),30))); 
-elseif strcmp(metatask,'test_lda3')
-    task_list={'wra, D=5','toeplitz, D=5'};
-    task.algs={'LDA','lda'};
-    task.ntrain=5000;
-    task.ntest=500;
-    task.Ntrials=2;
-    task.ks=1; 
-elseif strcmp(metatask,'test_lda4')
-    task_list={'wra, D=100'};
-    task.algs={'LDA','mLOL'};
-    task.ntrain=50;
-    task.ntest=500;
-    task.Ntrials=2;
-    task.ks=unique(round(logspace(0,log10(task.ntrain),30))); 
-elseif strcmp(metatask,'test_mlda')
-    task_list={'wra, D=5', 'wra, D=10'};
-    task.algs={'mLDA','lda'};
-    task.ntrain=50;
-    task.ntest=500;
-    task.Ntrials=25;
-elseif strcmp(metatask,'test_mlda2')
-    task_list={'s','toeplitz, D=500'};
-    task.algs={'mLDA','LDA'};
-    task.ntrain=50;
-    task.ntest=500;
-    task.Ntrials=10;
-elseif strcmp(metatask,'test_mlda3')
-    task_list={'s'};
-    task.algs={'mLDA','LDA'};
-    task.ntrain=5000;
-    task.ntest=500;
-    task.Ntrials=10;
-elseif strcmp(metatask,'test_mlda4')
-    task_list={'gmm'};
-    task.algs={'mLDA','lda'};
-    task.Ngroups=5;
-    task.ntrain=task.Ngroups*25;
-    task.ntest=500;
-    task.n=task.ntrain+task.ntest;
-    task.Ntrials=25;
-    task.D=100;
-    task.QDA_model=0;
-elseif strcmp(metatask,'test_mlda5')
-    task_list={'gmm'};
-    task.algs={'mLDA'};
-    task.Ngroups=5;
-    task.ntrain=task.Ngroups*25;
-    task.ntest=500;
-    task.n=task.ntrain+task.ntest;
-    task.Ntrials=25;
-    task.D=200;
-    task.QDA_model=0;
-elseif strcmp(metatask,'test_mlda6')
-    task_list={'gmm'};
-    task.algs={'mLDA','LOL'};
-    task.Ngroups=2;
-    task.ntrain=task.Ngroups*25;
-    task.ntest=500;
-    task.n=task.ntrain+task.ntest;
-    task.Ntrials=25;
-    task.D=100;
-    task.QDA_model=0;
-    task.ks=unique(round(logspace(0,log10(task.ntrain),30))); 
-elseif strcmp(metatask,'test_mlda7')
-    task_list={'gmm'};
-    task.algs={'mLDA','mLOL'};
-    task.Ngroups=2;
-    task.ntrain=task.Ngroups*25;
-    task.ntest=500;
-    task.n=task.ntrain+task.ntest;
-    task.Ntrials=25;
-    task.D=100;
-    task.QDA_model=0;
-    task.ks=unique(round(logspace(0,log10(task.ntrain),30))); 
-elseif strcmp(metatask,'test_mlda8')
-    task_list={'gmm'};
-    task.algs={'mLDA','mLOL'};
-    task.Ngroups=5;
-    task.ntrain=task.Ngroups*25;
-    task.ntest=500;
-    task.n=task.ntrain+task.ntest;
-    task.Ntrials=25;
-    task.D=100;
-    task.QDA_model=0;
-    task.ks=unique(round(logspace(0,log10(task.ntrain),30))); 
-elseif strcmp(metatask,'test_mlda9')
-    task_list={'gmm'};
-    task.algs={'mLDA','mLOL'};
-    task.Ngroups=5;
-    task.ntrain=task.Ngroups*25;
-    task.ntest=500;
-    task.n=task.ntrain+task.ntest;
-    task.Ntrials=25;
-    task.D=10;
-    task.QDA_model=0;
-    task.ks=unique(round(logspace(0,log10(task.ntrain),30))); 
 else
     task_list = {metatask};
     task.name = metatask;
