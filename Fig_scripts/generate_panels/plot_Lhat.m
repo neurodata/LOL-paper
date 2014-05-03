@@ -7,7 +7,6 @@ function plot_Lhat(T,S,F,col)
 %   col: which col
 
 
-
 if ~isfield(F,'plot_chance'), F.plot_chance=false; end
 if ~isfield(F,'plot_bayes'), F.plot_bayes=false; end
 if ~isfield(F,'plot_risk'), F.plot_risk=false; end
@@ -29,10 +28,9 @@ for i=1:Nalgs;
     
     if length(location)>1
         if ~isnan(location(2))
-            h=plot(T.ks,location,'color',F.colors{i},'linewidth',2,...
-                'marker',F.markers{i},'markersize',F.markersize{i});
-            maxloc(i)=max(location(2:end));
-            set(get(get(h,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
+            plot(T.ks,location,'color',F.colors{i},'linewidth',2); %,'marker',F.markers{i},'markersize',F.markersize{i});
+            maxloc(i)=max(location(2:end-1));
+            legendcell=[legendcell, T.types(i)];
         end
     end
     minAlg=min(minAlg,minloc);

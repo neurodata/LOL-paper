@@ -72,3 +72,4 @@ end
 task.Nalgs=length(task.algs);           % # of algorithms to use
 task.n=sum(task.ntrain)+task.ntest;     % # of total samples
 task=orderfields(task);                 % sort fields
+[~, ~, task.types] = parse_algs(task.types); % sort types

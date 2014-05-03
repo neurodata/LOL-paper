@@ -17,7 +17,8 @@ for k=1:T.Ntrials
             Lhats(i,l,k)=loop{k}.out(i,l).Lhat;
             sensitivity(i,l,k)=loop{k}.out(i,l).sensitivity;
             specificity(i,l,k)=loop{k}.out(i,l).specificity;
-            times(i,l,k)=loop{k}.time(i,l);
+            if isfield(loop{k},'time'), time=loop{k}.time(i,l); else time=NaN; end
+            times(i,l,k)=time;
             if size(loop{k}.out,2)==1 || isempty(loop{k}.out(i,2).Lhat) % if we did not do cv across dimensions for this algorithm
                 break
             end

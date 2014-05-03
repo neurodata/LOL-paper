@@ -96,13 +96,13 @@ else
     xlim=F.xlim;
 end
 if isfield(F,'xtick'), xtick=F.xtick; end
-
-set(gca,'XTick',xtick,'XLim',xlim,'YLim',ylim,'YTick',ytick)
+if diff(ylim)<eps; ylim(1)=ylim(1)*0.9; ylim(2)=ylim(2)*1.1; end
+set(gca,'XTick',xtick,'XLim',xlim,'YLim',[0 ylim(2)],'YTick',[0:.1:.5])
 if col==F.Ncols,
     Position=get(gca,'Position');
-    legend(legendcell,'Location','EastOutside');
-    set(gca,'Position',[Position(1), 0.47, 0.15, 0.16]);
-    legend('boxoff')
+%     legend(legendcell,'Location','EastOutside');
+%     set(gca,'Position',[Position(1), 0.47, 0.15, 0.16]);
+%     legend('boxoff')
 end
 grid('on')
 set(gca,'layer','top')

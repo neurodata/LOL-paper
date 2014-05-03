@@ -12,9 +12,12 @@ function [Proj, P] = LOL(X,Y,types,Kmax)
 % Kmax in Z: max dimension to project into
 % 
 % DENL = LOL
+% DRNL = DRDA
+% NRNL = RDA
 % NENL = PDA
+% NNNN = NaiveBayes
 % NNNL = LDA
-% 
+% NNNQ = QDA
 
 %% get means
 ntypes=length(types);

@@ -17,15 +17,6 @@ if nargin==1, F=struct; end
 load(['../../Data/Results/', metatask])
 Ntasks=length(task_list);
 
-% task_list = set_task_list(metatask);
-% T = cell(1,Ntasks);
-% S = cell(1,Ntasks);
-% for j=1:Ntasks
-%     load(['../../Data/Results/', task_list{j}])
-%     T{j}=task;
-%     S{j}=Stats;
-% end
-
 
 %% set some figure parameters
 if ~isfield(F,'fig_num'), F.fig_num=1; end
@@ -56,10 +47,10 @@ for j=1:F.Ncols
     elseif F.xlim(2)<=100
         F.xtick=0:25:F.xlim(2);
     end
-    if ~isfield(F,'ylim')
-        F.ylim=[S{j}.Risk, mean(S{j}.Lchance)];
-        if isnan(F.ylim(1)), F.ylim(1)=0; end
-    end
+%     if ~isfield(F,'ylim')
+%         F.ylim=[S{j}.Risk, mean(S{j}.Lchance)];
+%         if isnan(F.ylim(1)), F.ylim(1)=0; end
+%     end
     
     plot_Lhat(T{j},S{j},F,j)                % column 1: plot Lhats
     plot_Lhat_v_d(T{j},S{j},F,2,j)          % column 2: Lhat vs dimension embedded
