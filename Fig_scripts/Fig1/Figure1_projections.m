@@ -24,11 +24,11 @@ for j=1:Nsims
     Z = parse_data(X,Y,task1.ntrain,task1.ntest,0);
     
     subplot(nrows,ncols,1+ncols*(j-1)), hold on
-    plot(Z.Xtrain(1,Z.Ytrain==2),Z.Xtrain(2,Z.Ytrain==2),'o','color',[0 0 0],'LineWidth',2),
-    plot(Z.Xtrain(1,Z.Ytrain==1),Z.Xtrain(2,Z.Ytrain==1),'x','color',0.7*[1 1 1],'LineWidth',2)
+    plot(Z.Xtrain(1,Z.Ytrain==2),Z.Xtrain(2,Z.Ytrain==2),'o','color',[0 0 0],'LineWidth',1.5),
+    plot(Z.Xtrain(1,Z.Ytrain==1),Z.Xtrain(2,Z.Ytrain==1),'x','color',0.7*[1 1 1],'LineWidth',1.5)
     axis('equal')
     title(task1.name)
-    set(gca,'XTick',[-2:2:2],'YTick',[-2:1:2],'XLim',[-2 2], 'YLim',[-2 2])
+    set(gca,'XTick',[-2:2:2],'YTick',[-2:2:2],'XLim',[-2 2], 'YLim',[-2 2])
     grid('on')
     
     

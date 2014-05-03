@@ -83,13 +83,33 @@ elseif strcmp(metatask,'little_toeplitzs100')
     task.savestuff=1;
 
 elseif strcmp(metatask,'toeplitzs')
+    task_list={'toeplitz, D=10';'toeplitz, D=20';'toeplitz, D=50';'toeplitz, D=100'};
+    task.ntrain=50;
+    task.ks=unique(floor(logspace(0,log10(task.ntrain),task.ntrain)));
+    task.Ntrials=40;
+    task.algs={'LOL'};
+    task.types={'NNNN';'NENL';'DENL';'DRNL';'NRNL'};
+    task.savestuff=1;
+    
+elseif strcmp(metatask,'toeplitz100')
+    task_list={'toeplitz, D=100'};
+    task.ntrain=50;
+    task.ks=unique(floor(logspace(0,log10(task.ntrain),task.ntrain)));
+    task.Ntrials=40;
+    task.algs={'LOL'};
+    task.types={'NNNN';'NENL';'DENL';'DRNL';'NRNL'};
+    task.savestuff=1;
+
+elseif strcmp(metatask,'toeplitz_timing')
     task_list={'toeplitz, D=10';'toeplitz, D=20';'toeplitz, D=50';'toeplitz, D=100';'toeplitz, D=1000'};
     task.ntrain=50;
     task.ks=unique(floor(logspace(0,log10(task.ntrain),task.ntrain)));
     task.Ntrials=10;
-    task.algs={'NaiveB','LDA','PDA','SLOL','LOL','DRDA','RDA','RF','svm'};
+%     task.algs={'NaiveB','LDA','PDA','SLOL','LOL','DRDA','RDA','RF','svm'};
+    task.algs={'LOL'};
+    task.types={'NNNN';'NENL';'DENL';'DRNL';'NRNL';'NNNS';'NNNR'};
     task.savestuff=1;
-    
+
 elseif strcmp(metatask,'both_cigars')
     task_list={'parallel cigars';'rotated cigars'};
     

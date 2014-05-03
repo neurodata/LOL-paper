@@ -12,10 +12,26 @@ for i=1:Nks
             nb = NaiveBayes.fit(training',group);
             Yhat = predict(nb,sample')';
         elseif strcmp(classifier,'svm')
-            
+            SVMStruct = svmtrain(training',group);
+            Yhat = svmclassify(SVMStruct,sample');
+        elseif strcmp(task.algs{i},'RF')
+            B = TreeBagger(100,training,group);
+            [~, scores] = predict(B,sample');
+            Yhat=scores(:,1)<scores(:,2);
+        elseif strcmp(task.algs{i},'kNN')
+            %             d=bsxfun(@minus,Z.Xtrain,Z.Xtest).^2;
+            %             [~,IX]=sort(d);
+            %             for l=1:tasks1.Nks
+            %                 Yhat(i)=sum(Z.Ytrain(IX(1:l,:)))>k/2;
+            %                 loop{k}.out(i,l) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
+            %             end
         end
     catch err
-        display(['the ', classifier, ' classifier barfed during embedding dimension ', num2str(ks(i))])
+        if i>1
+            display(['the ', classifier, ' classifier barfed during embedding dimension ', num2str(ks(i))])
+        else
+            display(['the ', classifier, ' classifier barfed '])
+        end
         display(err.message)
         break
     end
