@@ -1,12 +1,12 @@
 clearvars, clc,
 
-savestuff=1;
-task_list_name='both_cigars';
+savestuff=0;
+task_list_name='three_cigars';
 task_list = set_task_list(task_list_name);
 task.ks=5;
 task.ntest=1000;
 task.algs={'LOL','Bayes'};
-task.types={'NENL';'DENL'};
+task.types={'NENL';'DENL';'DVNL'};
 
 
 Nsims=length(task_list);
@@ -38,10 +38,14 @@ for j=1:Nsims
     
     
     for i=1:ncols-1
-        if i<3
+        if i<4
             Xtest=Proj{i}.V*Z.Xtest;
             Xtrain=Proj{i}.V*Z.Xtrain;
             [Yhat, parms, eta] = LDA_train_and_predict(Xtrain, Z.Ytrain, Xtest);
+        elseif i==4
+            Xtest=Proj{i}.V*Z.Xtest;
+            Xtrain=Proj{i}.V*Z.Xtrain;
+            Yhat = decide(Xtest,Xtrain,Z.Ytrain,'linear',ks)
         else
             parms.del=P.del;
             parms.InvSig=pinv(P.Sigma);
@@ -52,7 +56,7 @@ for j=1:Nsims
             parms.thresh=(log(P.w(1))-log(P.w(2)))/2;
             eta = parms.del'*parms.InvSig*Z.Xtest - parms.del'*parms.InvSig*parms.mu - parms.thresh;
         end
-            
+        
         
         % class 1 parms
         eta1=eta(Z.Ytest==1);
@@ -76,19 +80,36 @@ for j=1:Nsims
         maxy=max(max(y2),max(y1));
         
         subplot(nrows,ncols,(i+1)+ncols*(j-1)), hold on
-        if i==1
-            col='g';
-            tit='LOL';
-        elseif i==2
-            col='m';
-            tit='PDA';
-        elseif i==3
+        %         if i==1
+        %             col='g';
+        %             tit='LOL';
+        %         elseif i==2
+        %             col='m';
+        %             tit='PDA';
+        %         elseif i==3
+        %             tit='LOQ';
+        %             col='c';
+        %         elseif i==4
+        %             tit='Bayes';
+        %             col='k';
+        %         end
+        
+        F = figure_settings(task1);
+        if i<length(task1.types)+1
+            if strcmp(task1.types{i},'DENL')
+                tit='LOL';
+            elseif strcmp(task1.types{i},'DVNL')
+                tit='QOL';
+            elseif strcmp(task1.types{i},'NENL')
+                tit='PDA';
+            end
+        else
             tit='Bayes';
-            col='k';
+            F.colors{i}='k';
         end
         
-        plot(t,y2,'-','color',col,'linewidth',2)
-        plot(t,y1,'--','color',col, 'linewidth',2)
+        plot(t,y2,'-','color',F.colors{i},'linewidth',2)
+        plot(t,y1,'--','color',F.colors{i}, 'linewidth',2)
         plot([0,0],[0, maxy],'k')
         
         grid on

@@ -37,18 +37,19 @@ elseif strcmp(name,'amen')==1
     task.ntest=569;
     if ~isfield(task,'ks'), task.ks=unique(round(logspace(0,2.9,30))); end
     if ~isfield(task,'algs'), task.algs={'LDA','SLOL','LOL','RF'}; end
-elseif strfind(name,'toeplitz, D')==1 
-    Dind=strfind(task.name,'D');
-    task.D=str2double(task.name(Dind+2:end));
-elseif strfind(name,'wra, D')==1 
-    Dind=strfind(task.name,'D');
-    task.D=str2double(task.name(Dind+2:end));
-    task.name='wra';
-elseif strcmp(name,'mnist')==1
-    task.ks=unique(round(logspace(0,2,50)));
-    task.Ntrials=10;
-    task.algs={'NaiveB','RF','PDA','LOL'};
-    task.savestuff=1;
+% elseif strfind(name,'toeplitz, D')>0 
+%     Dind=strfind(task.name,'D');
+%     task.D=str2double(task.name(Dind+2:end));
+% elseif strfind(name,'wra, D')==1 
+%     Dind=strfind(task.name,'D');
+%     task.D=str2double(task.name(Dind+2:end));
+%     task.name='wra';
+end
+
+
+if strfind(name,', D=')>0 
+    Dind=strfind(task.name,', D=');
+    task.D=str2double(task.name(Dind+4:end));
 end
 
 % default settings
@@ -58,7 +59,7 @@ if ~isfield(task,'QDA_model'),  task.QDA_model=1;   end                   % does
 if ~isfield(task,'ks'),         task.ks=1:100;      end                          % list of dimensions to embed into
 if ~isfield(task,'Kmax'),       task.Kmax=max(task.ks); end                          % list of dimensions to embed into
 if ~isfield(task,'Nks'),        task.Nks=length(task.ks); end                          % list of dimensions to embed into
-if ~isfield(task,'algs'),       task.algs={'PDA','LOL','QOL','DRDA','RDA','LDA'};  end % which algorithms to use
+if ~isfield(task,'algs'),       task.algs={'LOL'};  end % which algorithms to use
 if ~isfield(task,'savestuff'),  task.savestuff=1;   end                       % flag whether to save data & figures
 if ~isfield(task,'Ntrials'),    task.Ntrials = 5;   end                   % # of trials
 if ~isfield(task,'ntrain'),     task.ntrain  = 50;  end                  % # of training samples
@@ -72,4 +73,4 @@ end
 task.Nalgs=length(task.algs);           % # of algorithms to use
 task.n=sum(task.ntrain)+task.ntest;     % # of total samples
 task=orderfields(task);                 % sort fields
-[~, ~, task.types] = parse_algs(task.types); % sort types
+if isfield(task,'types'), [~, ~, task.types] = parse_algs(task.types); end % sort types

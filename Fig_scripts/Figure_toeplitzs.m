@@ -8,7 +8,7 @@ task_list_name='toeplitzs';
 clear F
 F.plot_chance=true;
 F.plot_bayes=false; 
-F.plot_risk=true; 
+F.plot_risk=false; 
 F.plot_time=false;
 
 plot_benchmarks(task_list_name,F)

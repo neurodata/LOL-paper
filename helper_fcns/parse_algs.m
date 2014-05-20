@@ -32,9 +32,9 @@ for j=1:Ntransformers
     for i=1:length(algs)
         if strcmp(algs{i}(1:3),transformers{j})
             k=k+1;
-            if strcmp(algs{i}(4),'L')
+            if strcmp(algs{i}(4),'L') || strcmp(algs{i}(4),'E')
                 deciders{j}{k}='linear';
-            elseif strcmp(algs{i}(4),'Q')
+            elseif strcmp(algs{i}(4),'Q') || strcmp(algs{i}(4),'V')
                 deciders{j}{k}='quadratic';
             elseif strcmp(algs{i}(4),'l')
                 deciders{j}{k}='diagLinear';

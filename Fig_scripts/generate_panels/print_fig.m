@@ -7,7 +7,9 @@ if isfield(F,'wh')
     F.PaperSize=F.wh;
     F.PaperPosition=[0 0 F.wh];
 end
-
+if ~isfield(F,'PaperSize'), F.PaperSize=[2 2]; end
+if ~isfield(F,'PaperPosition'), F.PaperPosition=[0 0 F.PaperSize]; end
+if ~isfield(F,'fname'), F.fname='temp_fig'; end
 set(h,'PaperSize',F.PaperSize,'PaperPosition',F.PaperPosition,'color','w');
 set(h, 'InvertHardCopy', 'off');
 set(h,'renderer',F.renderer)

@@ -1,3 +1,16 @@
+% Important initial analyses:
+%  
+% PTSD vs Healthy
+%  
+% TBI vs Healthy
+%  
+% Non-comorbid PTSD vs TBI
+%  
+% Here is the select statement I used.
+%  
+% (Diagnosed_Brain_Trauma=1 and MoodDisorder =0 and AnxietyDisorder = 0 and ChildHoodDisorder =0 and dementia = 0 and SchizoPsycho =0) or (Diagnosed_Brain_Trauma =0 and MoodDisorder =0 and PTSD = 1 and ChildHoodDisorder =0 and dementia = 0 and SchizoPsycho =0)
+%%
+
 clearvars,clf, clc
 
 load('~/Research/working/A/amen/data/adult_data_no_missing.mat')
@@ -13,6 +26,25 @@ for i=1:length(names)
 end
 
 Depressed=adult_data.(names{j});
+
+%%
+for i=1:length(names)
+    if strfind(names{i},'PTSD')==1
+        j=i;
+    end
+end
+
+PTSD=adult_data.(names{j});
+
+
+%%
+for i=1:length(names)
+    if strfind(names{i},'Diagnosed_Brain_Trauma')==1
+        j=i;
+    end
+end
+
+TBI=adult_data.(names{j});
 
 %%
 for i=1:length(names)
@@ -130,16 +162,6 @@ for i=80:length(names)
 end
 
 
-%%
-
-% raw=nan(D,n);
-% for i=1:D
-%     if isnumeric(adult_data.(names{i})(i))
-%         if ~strfind(adult_data.(names{i}),'_id')
-%             raw(:,i)=adult_data.(names{i});
-%         end
-%     end
-% end
 
 %%
 Xa=X(:,1:299);
@@ -168,6 +190,16 @@ CONCENTRATION=Xb(:,129:end);
 CR=[COGNITIVE, READINGS];
 
 
+%%
+
+% raw=nan(D,n);
+% for i=1:D
+%     if isnumeric(adult_data.(names{i})(i))
+%         if ~strfind(adult_data.(names{i}),'_id')
+%             raw(:,i)=adult_data.(names{i});
+%         end
+%     end
+% end
 
 %%
 % [u,d,v]=svd(X);

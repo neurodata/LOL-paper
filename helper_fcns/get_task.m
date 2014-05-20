@@ -46,3 +46,5 @@ task.ks=task.ks(task.ks<=k_max);
 task.Nks=length(task.ks);
 task.Kmax=max(task.ks);
 
+[~, ~,types] = parse_algs(task.types);
+task.types=types;

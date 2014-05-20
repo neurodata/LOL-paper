@@ -14,7 +14,11 @@ times=nan(Nalgs,T.Nks,T.Ntrials);
 for k=1:T.Ntrials
     for i=1:Nalgs;
         for l=1:T.Nks
-            Lhats(i,l,k)=loop{k}.out(i,l).Lhat;
+            try
+                Lhats(i,l,k)=loop{k}.out(i,l).Lhat;
+            catch
+                keyboard
+            end
             sensitivity(i,l,k)=loop{k}.out(i,l).sensitivity;
             specificity(i,l,k)=loop{k}.out(i,l).specificity;
             if isfield(loop{k},'time'), time=loop{k}.time(i,l); else time=NaN; end
@@ -77,8 +81,10 @@ end
 Stats.Lchance=nan(T.Ntrials,1);
 Stats.Lbayes=nan(T.Ntrials,1);
 for k=1:T.Ntrials
-    Stats.Lchance(k)=loop{k}.Lchance;
-    if T.QDA_model
+    if isfield(loop{k},'Lchance')
+        Stats.Lchance(k)=loop{k}.Lchance;
+    end
+    if isfield(loop{k},'Lbayes')
         Stats.Lbayes(k)=loop{k}.Lbayes;
     end
 end

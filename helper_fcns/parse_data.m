@@ -2,7 +2,8 @@ function Z = parse_data(X,Y,ntrain,ntest,percent_unlabeled)
 % parse data into training and testing sets and output everything in a
 % structure to make it easier to save stuff
 
-n=ntrain+ntest;
+n=length(Y);
+if ntrain+ntest>n, error('ntrain+ntest>length(Y)'), end
 idx=randperm(n);
 
 Z.Xtrain=X(:,idx(1:ntrain));

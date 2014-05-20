@@ -15,7 +15,7 @@ if ~isfield(task,'P')
     
     switch task.name
         
-        case 'a' % for debuggin purposes
+        case 'b' % for debuggin purposes
             
             D=100;
             m=0.1;
@@ -97,6 +97,24 @@ if ~isfield(task,'P')
             sv(2)=0.5;
             
             Sigma  = eye(D,D)*diag(sv);
+            
+        case 'angled cigars' % simple
+            
+            mudelt = 6/sqrt(D);                                 % distance betwen dim 1 of means
+            mu1 = [-mudelt/2; zeros(D-1,1)];                   % class 1 mean
+            mu0 = [mudelt/2; zeros(D-1,1)];                     % class 2 mean
+            
+            sv = ones(D,1)/sqrt(D);
+            sv(2)=0.5;
+            
+            Sigma  = eye(D,D)*diag(sv);
+            
+            [Q, ~] = qr(randn(D));
+            if det(Q)<-.99
+                Q(:,1)=-Q(:,1);
+            end
+            
+            Sigma(:,:,2)=Q*Sigma*Q';
             
         case 'semisup cigars' % simple
             
@@ -348,9 +366,9 @@ if ~isfield(task,'P')
             Sigma=eye(D);
             Sigma(1:D+1:end)=100./sqrt(1:D);
             
-        case 'trunk3'
+        case ['trunk3, D=', num2str(D)] 
             
-            mu1=3./sqrt(D:-1:1)';
+            mu1=2./sqrt(D:-1:1)';
             mu0=-mu1;
             
             Sigma=eye(D);
@@ -377,6 +395,61 @@ if ~isfield(task,'P')
             
             Sigma=A;
             
+        case ['rtoeplitz, D=', num2str(D)]
+            
+            delta1=0.4; D1=10;
+            
+            rho=0.5;
+            c=rho.^(0:D1-1);
+            A = toeplitz(c);
+            K1=sum(A(:));
+            
+            c=rho.^(0:D-1);
+            A = toeplitz(c);
+            K=sum(A(:));
+            Sigma=A;
+            
+            mudelt=(K1*delta1^2/K)^0.5/2;
+            mu0 = ones(D,1);
+            mu0(2:2:end)=-1;
+            mu0=mudelt*mu0;
+            mu1=-mu0;
+            
+            
+            [Q, ~] = qr(randn(task.D));
+            if det(Q)<-.99
+                Q(:,1)=-Q(:,1);
+            end
+            Sigma(:,:,2)=Q*Sigma*Q';
+            
+        case ['atoeplitz, D=', num2str(D)]
+            
+            delta1=0.4; D1=10;
+            
+            rho=0.5;
+            c=rho.^(0:D1-1);
+            A = toeplitz(c);
+            K1=sum(A(:));
+            
+            c=rho.^(0:D-1);
+            A = toeplitz(c);
+            K=sum(A(:));
+            
+            mudelt=(K1*delta1^2/K)^0.5/2;
+            mu0 = ones(D,1);
+            mu0(2:2:end)=-1;
+            mu0=mudelt*mu0;
+            mu1=-mu0;
+            
+            
+            [Q, ~] = qr(randn(task.D));
+            if det(Q)<-.99
+                Q(:,1)=-Q(:,1);
+            end
+            
+            Sigma=Q*A*Q';
+            mu0=Q*mu0;
+            mu1=Q*mu1;
             
         case ['sparse toeplitz, D=', num2str(D)]        % toeplitz with sparse delta
             
@@ -402,10 +475,20 @@ if ~isfield(task,'P')
             mu0=-mu1;
             Sigma=A;
             
+        case ['model0, D=', num2str(D)] 
             
-        case 'model1, p100'
+            mudelt = 0.5;                                 % distance betwen dim 1 of means
+            mu0=mudelt*ones(D,1);
+            mu1=-mudelt*ones(D,1);
             
-            D=100;
+            rho=0.5;
+            A=rho*ones(D);
+            A(1:D+1:end)=1;
+            
+            Sigma=A;
+            
+        case ['model1, D=', num2str(D)] 
+            
             s0=10;
             mu0=zeros(D,1);
             mu1=[ones(s0,1); zeros(D-s0,1)];
@@ -415,10 +498,10 @@ if ~isfield(task,'P')
             A(1:D+1:end)=1;
             
             Sigma=A;
+
+
+        case ['amodel1, D=', num2str(D)] 
             
-        case 'model1, p200'
-            
-            D=200;
             s0=10;
             mu0=zeros(D,1);
             mu1=[ones(s0,1); zeros(D-s0,1)];
@@ -426,50 +509,41 @@ if ~isfield(task,'P')
             rho=0.5;
             A=rho*ones(D);
             A(1:D+1:end)=1;
+                        
+            [Q, ~] = qr(randn(task.D));
+            if det(Q)<-.99
+                Q(:,1)=-Q(:,1);
+            end
             
-            Sigma=A;
+            Sigma=Q*A*Q';
+            mu0=Q*mu0;
+            mu1=Q*mu1;
             
-        case 'model1, p400'
             
-            D=400;
+        case ['aROAD1, D=', num2str(D)] 
+            
             s0=10;
             mu0=zeros(D,1);
             mu1=[ones(s0,1); zeros(D-s0,1)];
             
-            rho=0.5;
+            rho=0.2;
             A=rho*ones(D);
             A(1:D+1:end)=1;
             
             Sigma=A;
+
+            [Q, ~] = qr(randn(task.D));
+            if det(Q)<-.99
+                Q(:,1)=-Q(:,1);
+            end
             
-        case 'model1, p800'
+            Sigma=Q*A*Q';
+            mu0=Q*mu0;
+            mu1=Q*mu1;
             
-            D=200;
-            s0=10;
-            mu0=zeros(D,1);
-            mu1=[ones(s0,1); zeros(D-s0,1)];
+
+        case ['model3, D=', num2str(D)] 
             
-            rho=0.5;
-            A=rho*ones(D);
-            A(1:D+1:end)=1;
-            
-            Sigma=A;
-            
-        case 'model3, p100'
-            
-            D=100;
-            s0=10;
-            mu0=zeros(D,1);
-            mu1=[ones(s0,1); zeros(D-s0,1)];
-            
-            
-            rho=0.8;
-            c=rho.^(0:D-1);
-            Sigma = toeplitz(c);
-            
-        case 'model3, p200'
-            
-            D=200;
             s0=10;
             mu0=zeros(D,1);
             mu1=[ones(s0,1); zeros(D-s0,1)];
@@ -478,30 +552,7 @@ if ~isfield(task,'P')
             rho=0.8;
             c=rho.^(0:D-1);
             Sigma = toeplitz(c);
-            
-        case 'model3, p400'
-            
-            D=400;
-            s0=10;
-            mu0=zeros(D,1);
-            mu1=[ones(s0,1); zeros(D-s0,1)];
-            
-            
-            rho=0.8;
-            c=rho.^(0:D-1);
-            Sigma = toeplitz(c);
-            
-        case 'model3, p800'
-            
-            D=800;
-            s0=10;
-            mu0=zeros(D,1);
-            mu1=[ones(s0,1); zeros(D-s0,1)];
-            
-            
-            rho=0.8;
-            c=rho.^(0:D-1);
-            Sigma = toeplitz(c);
+
             
         case '1'
             ntrain=100;
@@ -614,8 +665,13 @@ if ~isfield(task,'P')
         Q=Q(perm,:);
         mu1=Q*mu1;
         mu0=Q*mu0;
-        Sig1=Q*Sig1*Q';
-        Sig0=Q*Sig0*Q';
+        siz=size(Sigma);
+        if length(siz)==3
+            Sigma(:,:,1)=Q*Sigma(:,:,1)*Q';
+            Sigma(:,:,2)=Q*Sigma(:,:,2)*Q';
+        else
+            Sigma=Q*Sigma*Q';
+        end
         P.perm=perm;
     end
     
@@ -639,9 +695,9 @@ for k=1:K % check if covariance matrices are valid covariance matrices
     if p>0
         error('some Sigma is not positive definite')
     end
-    if norm(Sigma(:,:,k)-Sigma(:,:,k)')>10^-4 
-        error('some Sigma is not symmetric')
-    end
+%     if norm(Sigma(:,:,k)-Sigma(:,:,k)')>10^-4
+%         error('some Sigma is not symmetric')
+%     end
 end
 
 

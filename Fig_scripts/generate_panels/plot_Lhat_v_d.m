@@ -21,19 +21,19 @@ end
 
 
 legendcell=[];
-for i=1:T.Nalgs
-    if strcmp(T.algs{i},'LOL') % plot rectangle demarking region that is better than LOL
-        p=patch([0 S.mins.mean.k(i) S.mins.mean.k(i) 0],[0 0 S.mins.mean.Lhats(i) S.mins.mean.Lhats(i)],0.8*[1 1 1]);
-        set(p,'FaceAlpha',0.01,'EdgeColor','none');
-        hAnnotation = get(p,'Annotation');
-        hLegendEntry = get(hAnnotation,'LegendInformation');
-        set(hLegendEntry,'IconDisplayStyle','off')
-    end
-    legendcell=[legendcell; T.algs(i)];
-
-end
+% for i=1:T.Nalgs
+%     if strcmp(T.algs{i},'LOL') % plot rectangle demarking region that is better than LOL
+%         p=patch([0 S.mins.mean.k(i) S.mins.mean.k(i) 0],[0 0 S.mins.mean.Lhats(i) S.mins.mean.Lhats(i)],0.8*[1 1 1]);
+%         set(p,'FaceAlpha',0.01,'EdgeColor','none');
+%         hAnnotation = get(p,'Annotation');
+%         hLegendEntry = get(hAnnotation,'LegendInformation');
+%         set(hLegendEntry,'IconDisplayStyle','off')
+%     end
+%     legendcell=[legendcell; T.algs(i)];
+% 
+% end
 if isfield(T,'types')
-    legendcell(end)=[];
+%     legendcell(end)=[];
     for i=1:length(T.types)
         legendcell=[legendcell; T.types(i)];
     end
@@ -97,7 +97,8 @@ else
 end
 if isfield(F,'xtick'), xtick=F.xtick; end
 if diff(ylim)<eps; ylim(1)=ylim(1)*0.9; ylim(2)=ylim(2)*1.1; end
-set(gca,'XTick',xtick,'XLim',xlim,'YLim',[0 ylim(2)],'YTick',[0:.1:.5])
+yticks=(linspace(ylim(1),ylim(2),3));
+set(gca,'XTick',xtick,'XLim',xlim,'YLim',ylim,'YTick',yticks)
 if col==F.Ncols,
     Position=get(gca,'Position');
 %     legend(legendcell,'Location','EastOutside');
