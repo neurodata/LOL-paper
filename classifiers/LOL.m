@@ -1,4 +1,4 @@
-function [Proj, P, times] = LOL(X,Y,types,Kmax)
+function [Proj, P] = LOL(X,Y,types,Kmax)
 % learn linear-optimal-low-rank discriminant subspace under a variety of
 % differnt models
 %
@@ -13,7 +13,6 @@ function [Proj, P, times] = LOL(X,Y,types,Kmax)
 
 
 %% get means
-tic
 ntypes=length(types);
 P.groups=unique(Y);
 P.Ngroups=length(P.groups);
@@ -33,13 +32,11 @@ P.groups=P.groups(IX);
 P.mu=P.mu(:,IX);
 for k=1:P.Ngroups, P.idx{k}=idx{IX(k)}; end
 if nargin<4, Kmax=min(P.n,P.D); end
-times.mu=toc;
 
 %% get delta matrix (in R^{D x K-1}
 Ds=nan(ntypes,1);
 for i=1:ntypes, Ds(i)=types{i}(1); end; Ds=char(Ds)';
 if any(strfind(Ds,'D')),
-    tic
     if any(isnan(P.groups)),
         nangroup= isnan(P.groups);
         mu=P.mu;
@@ -50,8 +47,6 @@ if any(strfind(Ds,'D')),
         mu=P.mu;
     end
     P.delta=bsxfun(@minus,mu(:,2:end),mu(:,1));
-    
-    times.delta=toc;
 end
 
 if any(strfind(Ds,'S')),
@@ -85,23 +80,17 @@ if any(strfind(Vs,'N')), no_embed = true;           else no_embed=false; end
 % if subspaces are shared
 if get_Equal_Subspaces
     if get_EN==true
-        tic
         [P.ds,Ve] = get_svd(X,P.n,P.D,'N');
-        times.EN=toc;
     end
     if get_EF==true
-        tic
         [P.dsf,Vef] = get_svd(X,P.n,P.D,'F');
-        times.EF=toc;
     end
 end
 
 
 % if subspace is random
 if get_Random_Subspaces
-    tic
     Vr = rand(P.D,Kmax)';
-    times.R=true;
 end
 
 if no_embed,
@@ -110,7 +99,6 @@ end
 % if each class has its own subspace
 if get_Varied_Subspaces
     dv=[]; Vv=[];
-    tic
     for k=1:P.Ngroups
         [d,V] = get_svd(X(:,P.idx{k}),P.nvec(k),P.D,'N');
         dv = [dv; d];
@@ -118,7 +106,6 @@ if get_Varied_Subspaces
     end
     [P.dv, idx]=sort(dv,'descend');
     Vv=Vv(:,idx)';
-    times.VN=toc;
 end
 
 %% generate projection matrices
@@ -134,13 +121,9 @@ for i=1:ntypes
         end
         if strcmp(types{i}(2),'E')
             if strcmp(types{i}(3),'N')
-                tic
                 [V, ~] = qr([delta,Ve'],0);
-                times.DEN=times.delta+times.mu+times.EN+toc;
             elseif strcmp(types{i}(3),'F')
-                tic
                 [V, ~] = qr([delta,Vef'],0);
-                times.DEF=times.delta+times.mu+times.EF+toc;
             end
         elseif strcmp(types{i}(2),'V')
             [V, ~] = qr([delta,Vv'],0);
