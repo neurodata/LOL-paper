@@ -100,8 +100,9 @@ end
 
 
 %% save figs
-F.fname=['../../Figs/projections_', task_list_name];
 if savestuff
+    run('install_LOL')
+    F.fname=[rootdir '/Figs/projections_', task_list_name];
     F.wh=[6 nrows]*1.2;
     print_fig(h(1),F)
 end

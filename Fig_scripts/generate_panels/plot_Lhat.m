@@ -19,7 +19,7 @@ end
 legendcell=[];
 
 % plot accuracies
-subplot(F.Ncols,F.Nrows,subplot_id), cla, hold all
+subplot(F.Nrows,F.Ncols,subplot_id), cla, hold all
 minAlg=0.5;
 maxloc=ones(1,Nalgs);
 for i=1:Nalgs;

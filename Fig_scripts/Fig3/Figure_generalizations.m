@@ -93,7 +93,6 @@ save('../../Data/Results/generalizations')
 
 
 %% make figs
-load('../../Data/Results/generalizations')
 
 clear F
 h=figure(1); clf, 
@@ -149,7 +148,7 @@ F.xlim=[0, 10];
 F.xtick=[0:2:10];
 % F=rmfield(F,'legend');
 F.legendOn=0;
-F.yscale='linear';
+F.yscale='log';
 plot_Lhat(T{j},S{j},F,j)                
 
 %
@@ -168,7 +167,7 @@ F.title='(E) Multiple Subspaces';
 F.legendOn=0;
 F.colors = {'g';'c';'y';F.orange};
 F.ylim=[0.2 0.5];
-F.xlim=[0 20];
+F.xlim=[0 25];
 F.xtick=[0:10:50];
 F.legend={'LOL'; 'LOQ'; 'QOL'; 'QOQ'};
 F.ylim=[0.2, 0.45];
@@ -190,19 +189,19 @@ F.linestyle={'-';'-';'-';'-'};
 F.doxlabel=0;
 plot_Lhat(T{j},S{j},F,j)                % column 1: plot Lhats
 
-%
+%%
 j=8;
 subplot(F.Ncols,F.Nrows,j);
 hold all
-g(1)=plot(0.5,0.5,'color','m','linewidth',2);
-g(2)=plot(0.5,0.5,'color','g','linewidth',2);
-g(3)=plot(0.5,0.5,'color','c','linewidth',2);
-g(4)=plot(0.5,0.5,'color','y','linewidth',2);
-g(5)=plot(0.5,0.5,'color',F.orange,'linewidth',2);
-g(6)=plot(0.5,0.5,'color','k','linewidth',2);
-g(7)=plot(0.5,0.5,'color',F.gray,'linewidth',2);
+g(1)=plot(0,0,'color','g','linewidth',2);
+g(2)=plot(1,1,'color','m','linewidth',2);
+g(3)=plot(0,0,'color','c','linewidth',2);
+g(4)=plot(0,0,'color','y','linewidth',2);
+g(5)=plot(0,0,'color',F.orange,'linewidth',2);
+g(6)=plot(0,0,'color','k','linewidth',2);
+g(7)=plot(0,0,'color',F.gray,'linewidth',2);
 
-legend(g,'PCA','LOL','LOQ','QOL','QOQ','FOL','RAL','location','NorthEast')
+legend(g,'LOL','PCA','LOQ','QOL','QOQ','FOL','RAL','location','NorthEast')
 
 set(gca,'XTick',[],'YTick',[],'Box','off','xcolor','w','ycolor','w')
 

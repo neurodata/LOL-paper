@@ -10,15 +10,15 @@ for i=1:Nks
             Yhat(i,:) = classify(sample(1:ks(i),:)',training(1:ks(i),:)',group,classifier);
         elseif strcmp(classifier,'NaiveBayes')
             nb = NaiveBayes.fit(training',group);
-            Yhat = predict(nb,sample')';
+            Yhat(i,:) = predict(nb,sample')';
         elseif strcmp(classifier,'svm')
-            SVMStruct = svmtrain(training',group);
-            Yhat = svmclassify(SVMStruct,sample');
-        elseif strcmp(task.algs{i},'RF')
-            B = TreeBagger(100,training,group);
-            [~, scores] = predict(B,sample');
-            Yhat=scores(:,1)<scores(:,2);
-        elseif strcmp(task.algs{i},'kNN')
+            SVMStruct = svmtrain(training(1:ks(i),:)',group);
+            Yhat(i,:) = svmclassify(SVMStruct,sample(1:ks(i),:)');
+        elseif strcmp(classifier,'RF')
+            B = TreeBagger(100,training(1:ks(i),:)',group);
+            [~, scores] = predict(B,sample(1:ks(i),:)');
+            Yhat(i,:) = scores(:,1)<scores(:,2);
+        elseif strcmp(classifier,'kNN')
             %             d=bsxfun(@minus,Z.Xtrain,Z.Xtest).^2;
             %             [~,IX]=sort(d);
             %             for l=1:tasks1.Nks

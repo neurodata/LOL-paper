@@ -5,14 +5,16 @@ clearvars, clc
 
 %%
 
-ntrain=100;
+ntrain=300;
 ntrials=20;
-label_keepers=[3, 7, 8];
+label_keepers=[0, 1, 2];
 
-types={'DENE';'NENE'};
+types={'DENE';'NENV';'NENE';'DVNE';'DVNV';'DENV'};
 [transformers, deciders, types] = parse_algs(types);
 
-datadir='~/Research/working/A/LOL/Data/Raw/MNIST/';
+run('install_LOL')
+
+datadir=[rootdir, '/Data/Raw/MNIST/'];
 images = loadMNISTImages([datadir, 'train-images.idx3-ubyte']);
 labels = loadMNISTLabels([datadir, 'train-labels.idx1-ubyte']);
 
@@ -102,7 +104,7 @@ for i=1:2;
     
 end
 
-F.fname = ['../../Figs/MNIST_', num2str(label_keepers), '_ntrain_', num2str(ntrain)];
+F.fname = ['~/Research/working/A/LOL//Figs/MNIST_', num2str(label_keepers), '_ntrain_', num2str(ntrain)];
 F.PaperSize = [4 5]*2;
 print_fig(h(1),F)
 
@@ -179,10 +181,6 @@ title(['MNIST: ', num2str(label_keepers),';  ntrain=', num2str(ntrain)])
 %% save plot
 
 F.wh=[5 2]*1.5;
-F.fname=['~/Research/working/A/LOL/Figs/MNIST_', num2str(label_keepers), '_meta_ntrain_',num2str(ntrain)];
+F.fname=[rootdir, '/Figs/MNIST_', num2str(label_keepers), '_meta_ntrain_',num2str(ntrain)];
 print_fig(h(6),F)
-
-%% save
-
-F.fname=['~/Research/working/A/LOL/Data/Results/MNIST_', num2str(label_keepers), '_meta_ntrain_',num2str(ntrain)];
 save(F.fname,'Proj','P')

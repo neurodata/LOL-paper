@@ -23,7 +23,11 @@ elseif strfind(task.name,'pancreas')
     task.ntrain = task.n-2;
     task.ntest = 2;
 elseif strfind(task.name,'amen')
-    [X,Y] = load_amen(task.name);
+    [X,Y] = load_amen(task.name);    
+    if size(X,2)~=length(Y), X=X'; end
+    [task.D, task.n] = size(X);
+    task.ntrain=round(task.n*.9);
+    task.ntest=task.n-task.ntrain;
 elseif strcmp(task.name,'mnist')
     X = loadMNISTImages('~/Research/working/A/LOL/Data/Raw/MNIST/t10k-images.idx3-ubyte');
     Y = loadMNISTLabels('~/Research/working/A/LOL/Data/Raw/MNIST/t10k-labels.idx1-ubyte');

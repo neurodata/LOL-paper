@@ -29,6 +29,27 @@ Depressed=adult_data.(names{j});
 
 %%
 for i=1:length(names)
+    if strfind(names{i},'ChildHoodDisorder')==1
+        j=i;
+    end
+end
+
+ChildHoodDisorder=adult_data.(names{j});
+
+
+%%
+for i=1:length(names)
+    if strfind(names{i},'SchizoPsycho')==1
+        j=i;
+    end
+end
+
+SchizoPsycho=adult_data.(names{j});
+
+
+
+%%
+for i=1:length(names)
     if strfind(names{i},'PTSD')==1
         j=i;
     end
@@ -128,6 +149,14 @@ end
 Dementia=adult_data.(names{j});
 
 %%
+temp=[TBI, Mood_Disorder, AnxietyDisorder, ChildHoodDisorder, Dementia, SchizoPsycho];
+Healthy=sum(temp')<0.5;
+
+
+% (Diagnosed_Brain_Trauma=1 and MoodDisorder =0 and AnxietyDisorder = 0 and ChildHoodDisorder =0 and dementia = 0 and SchizoPsycho =0) or (Diagnosed_Brain_Trauma =0 and MoodDisorder =0 and PTSD = 1 and ChildHoodDisorder =0 and dementia = 0 and SchizoPsycho =0)
+
+
+%%
 k=0;
 for i=1:length(names)
     if strfind(names{i},'Baseline')==1
@@ -220,8 +249,8 @@ CR=[COGNITIVE, READINGS];
 % figure(4), clf, plot(mean(X0,1)), hold all, plot(mean(X1,1))
 %%
 
-clear B0 B1 D X0 X1 Xa Xb Xc Xd adult_data d i j k n names temp u v Baseline
-save('../../data/base/amen')
+clear B0 B1 D X0 X1 Xa Xb Xc Xd adult_data d i j k names temp u v Baseline
+save('~/Research/working/A/LOL/Data/Preprocessed/amen')
 
 %%
 [u,d,v]=svd(BASELINE);

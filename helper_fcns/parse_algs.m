@@ -44,6 +44,10 @@ for j=1:Ntransformers
                 deciders{j}{k}='mahalanobis';
             elseif strcmp(algs{i}(4),'N')
                 deciders{j}{k}='NaiveBayes';
+            elseif strcmp(algs{i}(4),'R')
+                deciders{j}{k}='RF';
+            elseif strcmp(algs{i}(4),'S')
+                deciders{j}{k}='svm';
             end
             l=l+1;
             types{l}=[transformers{j}, algs{i}(4)];

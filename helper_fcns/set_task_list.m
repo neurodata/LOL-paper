@@ -117,53 +117,21 @@ elseif strcmp(metatask,'timingtest')
     task.ks=[1, 30];
     task.Ntrials=5;
     
-elseif strcmp(metatask,'amen READINGS')
-    task_list={'amen READINGS depression';'amen READINGS adhd';'amen READINGS gender'}; %'amen mood';'amen dementia';'amen bipolar';'amen adjustment';'amen anxiety'};
-elseif strcmp(metatask,'amen COGNITIVE')
-    task_list={'amen COGNITIVE depression';'amen COGNITIVE adhd';'amen COGNITIVE gender'}; %'amen mood';'amen dementia';'amen bipolar';'amen adjustment';'amen anxiety'};
-elseif strcmp(metatask,'amen SPECT')
-    task_list={'amen SPECT depression';'amen SPECT adhd';'amen SPECT gender'}; %'amen mood';'amen dementia';'amen bipolar';'amen adjustment';'amen anxiety'};
-elseif strcmp(metatask,'amen X')
-    task_list={'amen X depression';'amen X adhd';'amen X gender'}; %'amen mood';'amen dementia';'amen bipolar';'amen adjustment';'amen anxiety'};
-elseif strcmp(metatask,'amen ACTIVATION')
-    task_list={'amen ACTIVATION depression';'amen ACTIVATION adhd';'amen ACTIVATION gender'}; %'amen mood';'amen dementia';'amen bipolar';'amen adjustment';'amen anxiety'};
-elseif strcmp(metatask,'amen first')
-    task_list={'amen depression';'amen adhd';'amen gender';'amen mood'};
-elseif strcmp(metatask,'amen else')
-    task_list={'amen dementia';'amen bipolar';'amen adjustment';'amen anxiety'};
-elseif strcmp(metatask,'amen gender')
-    task_list={'amen READINGS gender';'amen COGNITIVE gender';'amen SPECT gender';'amen ACTIVATION gender';'amen X gender';'amen BASELINE gender';'amen CONCENTRATION gender';'amen CR gender'};
-    task.algs={'NaiveB','LDA','QDA','RF','LOL','QOL','QOQ'};
-    task.simulation = 0;
-    task.ntrain=5112;
-    task.ntest=569;
-    task.ks=unique(floor(logspace(0,2.9,30))); 
-    task.Ntrials = 5;
-elseif strcmp(metatask,'amen dementia')
-    task_list={'amen READINGS dementia';'amen COGNITIVE dementia';'amen SPECT dementia';'amen ACTIVATION dementia';'amen X dementia';'amen BASELINE dementia';'amen CONCENTRATION dementia';'amen CR dementia'};
-    task.algs={'NaiveB','LDA','QDA','RF','LOL','QOL','QOQ'};
-    task.simulation = 0;
-    task.ntrain=5112;
-    task.ntest=569;
-    task.ks=unique(floor(logspace(0,2.9,30))); 
-    task.Ntrials = 5;
 
-elseif strcmp(metatask,'amen depression')
-    task_list={'amen READINGS depression';'amen COGNITIVE depression';'amen SPECT depression';'amen ACTIVATION depression';'amen X depression';'amen BASELINE depression';'amen CONCENTRATION depression';'amen CR depression'};
-    task.algs={'NaiveB','LDA','QDA','RF','LOL','QOL','QOQ'};
-    task.simulation = 0;
-    task.ntrain=5112;
-    task.ntest=569;
-    task.ks=unique(floor(logspace(0,2.9,30))); 
-    task.Ntrials = 5;
 elseif strcmp(metatask,'amen tasks')
-    task_list={'amen READINGS PTSD vs Healthy';'amen READINGS TBI vs Healthy';'amen READINGS Non-comorbid PTSD vs TBI'};
+    task_list={...
+        'amen COGNITIVE PTSD vs Healthy';'amen COGNITIVE TBI vs Healthy';'amen COGNITIVE NC PTSD vs TBI';...
+        'amen ACTIVATION PTSD vs Healthy';'amen ACTIVATION TBI vs Healthy';'amen ACTIVATION NC PTSD vs TBI';...
+        'amen READINGS PTSD vs Healthy';'amen READINGS TBI vs Healthy';'amen READINGS NC PTSD vs TBI';...
+        'amen BASELINE PTSD vs Healthy';'amen BASELINE TBI vs Healthy';'amen BASELINE NC PTSD vs TBI';...
+        'amen SPECT PTSD vs Healthy';'amen SPECT TBI vs Healthy';'amen SPECT NC PTSD vs TBI';...
+        'amen CONCENTRATION PTSD vs Healthy';'amen CONCENTRATION TBI vs Healthy';'amen CONCENTRATION NC PTSD vs TBI';...
+        'amen CR PTSD vs Healthy';'amen CR TBI vs Healthy';'amen CR NC PTSD vs TBI';...
+        };
     task.simulation = 0;
-    task.types={'DENE'; 'NENE'};
+    task.types={'NENE';'NENV';'DENE';'DVNE';'DENV';'DVNV';'DVNR';'DVNS'}; %'
     task.algs={'LOL'};
-    task.ntrain=5112;
-    task.ntest=569;
-    task.ks=unique(floor(logspace(0,2.9,30))); 
+    task.ks=[1:40, 50:10:120]; %unique(floor(logspace(0,2.9,30))); 
     task.Ntrials = 5;
 else
     task_list = {metatask};
