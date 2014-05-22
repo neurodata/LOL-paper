@@ -1,21 +1,24 @@
 clearvars, clc,
+fpath = mfilename('fullpath');
+run([fpath(1:end-29),'install_LOL.m'])
 
-savestuff=0;
+%%
 task_list_name='both_cigars';
 task_list = set_task_list(task_list_name);
 task.ks=5;
 task.ntest=1000;
 task.algs={'LOL','Bayes'};
 task.types={'NENL';'DENL'};
+task.savestuff=1;
 
 
-Nsims=length(task_list);
-Nalgs=length(task.algs)+length(task.types)-1;
 
 h(1)=figure(1); clf
-nrows=Nsims;
-ncols=Nalgs+1;
-
+Nsims=length(task_list);
+Nalgs=length(task.algs)+length(task.types)-1;
+Nrows=Nsims;
+Ncols=Nalgs+1;
+gray=0.7*[1 1 1];
 for j=1:Nsims
     
     task.name=task_list{j};
@@ -23,9 +26,9 @@ for j=1:Nsims
     [task1, X, Y, P] = get_task(task);
     Z = parse_data(X,Y,task1.ntrain,task1.ntest,0);
     
-    subplot(nrows,ncols,1+ncols*(j-1)), hold on
+    subplot(Nrows,Ncols,1+Ncols*(j-1)), hold on
     plot(Z.Xtrain(1,Z.Ytrain==2),Z.Xtrain(2,Z.Ytrain==2),'o','color',[0 0 0],'LineWidth',1.5),
-    plot(Z.Xtrain(1,Z.Ytrain==1),Z.Xtrain(2,Z.Ytrain==1),'x','color',0.7*[1 1 1],'LineWidth',1.5)
+    plot(Z.Xtrain(1,Z.Ytrain==1),Z.Xtrain(2,Z.Ytrain==1),'x','color',gray,'LineWidth',1.5)
     axis('equal')
     title(task1.name)
     set(gca,'XTick',[-2:2:2],'YTick',[-2:2:2],'XLim',[-2 2], 'YLim',[-2 2])
@@ -36,8 +39,7 @@ for j=1:Nsims
     Proj = LOL(Z.Xtrain,Z.Ytrain,transformers,task1.Kmax);
     
     
-    
-    for i=1:ncols-1
+    for i=1:Ncols-1
         if i<3
             Xtest=Proj{i}.V*Z.Xtest;
             Xtrain=Proj{i}.V*Z.Xtrain;
@@ -75,20 +77,21 @@ for j=1:Nsims
         y1=normpdf(t,mu1,sig1);
         maxy=max(max(y2),max(y1));
         
-        subplot(nrows,ncols,(i+1)+ncols*(j-1)), hold on
+        subplot(Nrows,Ncols,(i+1)+Ncols*(j-1)), hold on
         if i==1
-            col='g';
+            col1='g'; col2=col1;
             tit='LOL';
         elseif i==2
-            col='m';
+            col1='m'; col2=col1;
             tit='PCA';
         elseif i==3
             tit='Bayes';
-            col='k';
+            col1='k';
+            col2=gray;
         end
         
-        plot(t,y2,'-','color',col,'linewidth',2)
-        plot(t,y1,'--','color',col, 'linewidth',2)
+        plot(t,y2,'-','color',col2,'linewidth',2)
+        plot(t,y1,'--','color',col1, 'linewidth',2)
         plot([0,0],[0, maxy],'k')
         
         grid on
@@ -100,9 +103,8 @@ end
 
 
 %% save figs
-if savestuff
-    run('install_LOL')
-    F.fname=[rootdir '/Figs/projections_', task_list_name];
-    F.wh=[6 nrows]*1.2;
+if task.savestuff
+    F.fname=[fpath(1:end-34) 'Figs/projections_', task_list_name];
+    F.wh=[6 Nrows]*1.2;
     print_fig(h(1),F)
 end

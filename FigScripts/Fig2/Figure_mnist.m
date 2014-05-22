@@ -2,6 +2,8 @@
 % On some platforms, the files might be saved as
 % train-images.idx3-ubyte / train-labels.idx1-ubyte
 clearvars, clc
+fpath = mfilename('fullpath');
+run([fpath(1:end-28),'install_LOL.m'])
 
 %%
 
@@ -12,9 +14,8 @@ label_keepers=[0, 1, 2];
 types={'DENE';'NENV';'NENE';'DVNE';'DVNV';'DENV'};
 [transformers, deciders, types] = parse_algs(types);
 
-run('install_LOL')
 
-datadir=[rootdir, '/Data/Raw/MNIST/'];
+datadir=[fpath(1:end-33), '/Data/Raw/MNIST/'];
 images = loadMNISTImages([datadir, 'train-images.idx3-ubyte']);
 labels = loadMNISTLabels([datadir, 'train-labels.idx1-ubyte']);
 
