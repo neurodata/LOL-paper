@@ -1,5 +1,7 @@
 % generalizations figure
 clearvars, clc, 
+fpath = mfilename('fullpath');
+run([fpath(1:end-38),'install_LOL.m'])
 
 
 %% even with relatively low dimension, embedding helps
