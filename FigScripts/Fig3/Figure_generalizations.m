@@ -86,7 +86,7 @@ task.name='toeplitz, D=50';
 task.simulation=1;
 task.percent_unlabeled=0;
 task.ntrain=50;
-task.types={'DEFE'; 'DRNE';'NENE'};
+task.types={'DEFE'; 'DENE';'DERE';'NENE'};
 [T{j},S{j},P{j}] = run_task(task);
 
 %% save generalizations
@@ -184,10 +184,10 @@ F.ytick = [F.ylim(1): 0.1: F.ylim(2)];
 F.xlim = [0 50];
 F.xtick=[0:10:50];
 F.legendOn=0;
-F.colors = {'k';F.gray;'m'};
+F.colors = {F.gray;'g';'k';'m'};
 F.yscale='linear';
 F.legendOn=0;
-F.linestyle={'-';'-';'-';'-'};
+F.linestyle={'-';'-.';'-';'-'};
 F.doxlabel=0;
 plot_Lhat(T{j},S{j},F,j)                % column 1: plot Lhats
 
@@ -200,8 +200,8 @@ g(2)=plot(1,1,'color','m','linewidth',2);
 g(3)=plot(0,0,'color','c','linewidth',2);
 g(4)=plot(0,0,'color','y','linewidth',2);
 g(5)=plot(0,0,'color',F.orange,'linewidth',2);
-g(6)=plot(0,0,'color','k','linewidth',2);
-g(7)=plot(0,0,'color',F.gray,'linewidth',2);
+g(6)=plot(0,0,'color',F.gray,'linewidth',2);
+g(7)=plot(0,0,'color','k','linewidth',2);
 
 legend(g,'LOL','PCA','LOQ','QOL','QOQ','FOL','RAL','location','NorthEast')
 

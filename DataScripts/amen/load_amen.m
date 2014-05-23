@@ -1,7 +1,7 @@
 function [X,Y] = load_amen(tname)
 
 fpath = mfilename('fullpath');
-load([fpath(1:end-27), 'Data/Preprocessed/amen'])
+load([fpath(1:end-31), 'Data/Preprocessed/amen'])
 
 %% parse tname
 
