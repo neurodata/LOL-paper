@@ -9,9 +9,9 @@ run([fpath(1:end-28),'install_LOL.m'])
 
 ntrain=300;
 ntrials=20;
-label_keepers=[0, 1, 2];
+label_keepers=[0:9];
 
-types={'DENE';'NENV';'NENE';'DVNE';'DVNV';'DENV'};
+types={'NENE';'NENV';'DENE';'DVNE';'DENV';'DVNV'};
 [transformers, deciders, types] = parse_algs(types);
 
 
