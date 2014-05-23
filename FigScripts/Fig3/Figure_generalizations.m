@@ -91,7 +91,7 @@ task.types={'DEFE'; 'DENE';'DERE';'NENE'};
 
 %% save generalizations
 
-save('../../Data/Results/generalizations')
+save([fpath(1:end-43), 'Data/Results/generalizations'])
 
 
 %% make figs

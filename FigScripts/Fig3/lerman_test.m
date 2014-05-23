@@ -49,11 +49,11 @@ Kmax=5;
 
 clearvars, clc
 j=6;
-task.name='robust';
+task.name='gms';
 task.simulation=1;
 task.ntrials=5;
 task.percent_unlabeled=0;
 task.ntrain=250;
 task.D=50;
-task.types={'DENE'; 'DERE'};
+task.types={'DVNV'; 'DVRV'};
 [T{j},S{j},P{j}] = run_task(task);
