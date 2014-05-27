@@ -6,12 +6,11 @@ fpath = mfilename('fullpath');
 run([fpath(1:end-28),'install_LOL.m'])
 
 %%
-
-ntrain=300;
-ntrials=20;
+ntrain=20000;
+ntrials=1;
 label_keepers=[0:9];
 
-types={'NENE';'NENV';'DENE';'DVNE';'DENV';'DVNV'};
+types={'DVNV';'NENE';'NENV'; 'NVNV'};
 [transformers, deciders, types] = parse_algs(types);
 
 
@@ -22,6 +21,7 @@ labels = loadMNISTLabels([datadir, 'train-labels.idx1-ubyte']);
 test_images = loadMNISTImages([datadir, 't10k-images.idx3-ubyte']);
 test_labels = loadMNISTLabels([datadir, 't10k-labels.idx1-ubyte']);
 
+tic
 
 for kk=1:ntrials
     
@@ -75,7 +75,7 @@ for kk=1:ntrials
     end
     
 end
-
+toc
 
 %% plot projections
 

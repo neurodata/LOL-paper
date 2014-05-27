@@ -1,6 +1,9 @@
 clearvars, clc,
 fpath = mfilename('fullpath');
-run([fpath(1:end-29),'install_LOL.m'])
+
+%%
+p = genpath(fpath(1:end-11));
+
 
 %%
 task_list_name='both_cigars';
