@@ -129,7 +129,7 @@ elseif strcmp(metatask,'amen tasks')
         'amen CR PTSD vs Healthy';'amen CR TBI vs Healthy';'amen CR NC PTSD vs TBI';...
         };
     task.simulation = 0;
-    task.types={'NENE';'NENV';'DENE';'DVNE';'DENV';'DVNV';'DVNR';'DVNS'}; %'
+    task.types={'NENE';'NENV';'DENE';'DVNE';'DENV';'DVNV'}; %;'DVNR';'DVNS'
     task.algs={'LOL'};
     task.ks=[1:40, 50:10:120]; %unique(floor(logspace(0,2.9,30))); 
     task.Ntrials = 5;

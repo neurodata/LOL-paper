@@ -29,6 +29,7 @@ function [Proj, P, Q] = LOL(X,Y,types,Kmax)
 %% get means
 ntypes=length(types);
 P.groups=unique(Y);
+if any(isnan(P.groups)), P.groups(isnan(P.groups))=[]; P.groups=[P.groups; NaN]; end % remove nan groups from mean (NB: NaN~=NaN)
 P.Ngroups=length(P.groups);
 [D,n]=size(X);
 if n~=length(Y), X=X'; [D,n]=size(X); end
@@ -37,18 +38,12 @@ P.mu=nan(D,P.Ngroups);
 idx=cell(P.Ngroups,1);
 for k=1:P.Ngroups
     idx{k}=find(Y==P.groups(k));
+    if isempty(idx{k}), idx{k}=find(isnan(Y)); end % for the NaN's
     P.nvec(k)=length(idx{k});
     P.mu(:,k)=mean(X(:,idx{k}),2);
     X(:,idx{k})=bsxfun(@minus,X(:,idx{k}),P.mu(:,k));
 end
-% remove nan groups from mean (NB: NaN~=NaN)
-if any(isnan(P.groups)),
-    nangroup = isnan(P.groups);
-    P.mu(:,nangroup)=[];
-    P.groups(nangroup)=[];
-    P.Ngroups=length(P.groups);
-end
-% resort in order of # of samples per class
+% sort classes in order of # of samples per class
 [~, IX] = sort(P.nvec);
 P.nvec=P.nvec(IX);
 P.groups=P.groups(IX);
@@ -60,7 +55,7 @@ if nargin<4, Kmax=min(n,D); end
 
 for i=1:ntypes
     
-    % get deltas
+    % get diff bases
     if strcmp(types{i}(1),'D')
         if ~isfield(P,'Delta')
             P.Delta = bsxfun(@minus,P.mu(:,2:end),P.mu(:,1));
@@ -83,7 +78,7 @@ for i=1:ntypes
             dv=[]; Vv=[];
             for k=1:P.Ngroups
                 [d,V] = get_svd(X(:,P.idx{k}),P.nvec(k),D,types{i}(3));
-                dv = [dv; d];
+                dv = [dv; d]; 
                 Vv = [Vv, V'];
             end
             [P.(['DV', types{i}(3)]), idx]=sort(dv,'descend');
@@ -106,15 +101,11 @@ Proj=cell(1:ntypes);
 for i=1:ntypes
     if ~strcmp(types{i}(1),'N') % if we are appending something to "eigenvectors"
         [V, ~] = qr([P.([types{i}(1), 'elta']),Q.(['V', types{i}(2), types{i}(3)])'],0);
-        siz=size(V);
-        if Kmax>siz(1), temp=siz(1); else temp=Kmax; end
-        Proj{i}.V = V(:,1:temp)';
     elseif strcmp(types{i}(1),'N')
-        V=Q.(['V', types{i}(2), types{i}(3)]);
-        siz=size(V);
-        if Kmax>siz(1), temp=siz(1); else temp=Kmax; end
-        Proj{i}.V=V(1:temp,:);
+        V=Q.(['V', types{i}(2), types{i}(3)])';
     end
+    if Kmax>size(V,1), Kmax=siz(1); end
+    Proj{i}.V = V(:,1:Kmax)';
     Proj{i}.name=types{i};
 end
 
@@ -122,27 +113,19 @@ end
 function [d,V] = get_svd(X,n,D,type)
 
 if strcmp(type,'N')
-    if n>D
-        [~,d,V] = svd(X',0);
-    else
-        [V,d,~] = svd(X,0);
+    if n>D, [~,d,V] = svd(X',0);
+    else [V,d,~] = svd(X,0);
     end
     d=diag(d);
-    
 elseif strcmp(type,'F')
-    if n>D
-        [~,d,V] = fsvd(X',min(n,D));
-    else
-        [V,d,~] = fsvd(X,min(n,D));
+    if n>D, [~,d,V] = fsvd(X',min(n,D));
+    else [V,d,~] = fsvd(X,min(n,D));
     end
-    
 elseif strcmp(type,'R')
-    if n>D
-        cov = m_estimator_gms(X);
-    else
-        cov = m_estimator_gms(X');
+    if n>D, cov = m_estimator_gms(X');
+    else cov = m_estimator_gms(X);
     end
-    [d,V]= eig(cov);
+    [V,d]= eig(cov);
+    d=diag(d);
 end
-
 V=V';

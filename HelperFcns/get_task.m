@@ -21,6 +21,21 @@ if task.simulation
         P.w=1/task.Ngroups*ones(task.Ngroups,1);
         gmm = gmdistribution(P.mu',P.Sigma,P.w);
         [X,Y] = random(gmm,task.n);
+    elseif strcmp(task.name,'gms')
+        
+        N0=125*2;
+        N1=N0;
+        D=10;
+        d=5;
+        noise=0.1;
+        
+        X0=lerman_model(N0,N1,D,d,noise);
+        X1=lerman_model(N0,N1,D,d,noise);
+        
+        X=[X0', X1'];
+        Y=[zeros(N0+N1,1); ones(N0+N1,1)];
+        task.QDA_model=0;
+        
     else
         P = set_parameters(task);
         gmm = gmdistribution(P.mu',P.Sigma,P.w);

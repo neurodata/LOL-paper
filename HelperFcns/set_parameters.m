@@ -9,7 +9,6 @@ function P = set_parameters(task)
 
 if ~isfield(task,'permute'), task.permute=0; end % whether or not to permute the coordinates, this is really for debugging purposes
 if ~isfield(task,'D'), D=100; else D=task.D; end % ambient # of dimensions
-if ~isfield(task,'n'), n=550; else n=task.n; end % total # of samples
 
 if ~isfield(task,'P')
     
@@ -115,18 +114,7 @@ if ~isfield(task,'P')
             end
             
             Sigma(:,:,2)=Q*Sigma*Q';
-            
-        case 'semisup cigars' % simple
-            
-            mudelt = 6/sqrt(D);                                 % distance betwen dim 1 of means
-            mu1 = [-mudelt/2; zeros(D-1,1)];                   % class 1 mean
-            mu0 = [mudelt/2; zeros(D-1,1)];                     % class 2 mean
-            
-            sv = ones(D,1)/sqrt(D);
-            sv(2)=0.5;
-            
-            Sigma = eye(D,D)*diag(sv);
-            
+                        
         case 'rotated cigars' % simple angle
             
             R = eye(D);
@@ -149,27 +137,6 @@ if ~isfield(task,'P')
             A  = eye(D,D)*diag(sv);
             Sigma = R*A*R';
             
-        case 'semisup rotated cigars' % simple angle
-            
-            R = eye(D);
-            theta=pi/4;
-            R(1,1)=cos(theta);
-            R(2,2)=cos(theta);
-            R(1,2)=sin(theta);
-            R(2,1)=-R(1,2);
-            
-            mudelt = 6/sqrt(D);                                 % distance betwen dim 1 of means
-            mu1 = [-mudelt/2; zeros(D-1,1)];                   % class 1 mean
-            mu0 = [mudelt/2; zeros(D-1,1)];                     % class 2 mean
-            
-            mu1=R*mu1;
-            mu0=R*mu0;
-            
-            sv = ones(D,1)/sqrt(D);
-            sv(2)=0.5;
-            
-            A  = eye(D,D)*diag(sv);
-            Sigma = R*A*R';
             
         case 'sa' % simple angle
             
@@ -304,45 +271,8 @@ if ~isfield(task,'P')
             Sigma(:,:,2)=Sigma(:,:,2)+eye(D);
             Sigma(:,:,1)=Sigma(:,:,1)+eye(D);
             
-        case 'pca'
-            
-            sd = 1;
-            k = 2;
-            sv = [ones(k,1);sd/sqrt(D)*ones(D-k,1)];
-            A  = eye(D,D);
-            A(1:2,1:2)=[1,2;0,1];
-            mu1 = zeros(D,1);
-            mu0 = [2;zeros(D-1,1)];                     % PCA good, lda ok.
-            
-            Sigma=A*diag(sv);                            % class 1 cov
-            
-        case 'lda'
-            
-            sd = 1;
-            k = 2;
-            sv = [ones(k,1);2*sd/sqrt(D)*ones(D-k,1)];
-            A  = eye(D,D); A(1:2,1:2)=[1,2;2,1];
-            mu1 = zeros(D,1);
-            mu0 = 0.5*[zeros(k,1);1;zeros(D-k-1,1)];        % PCA screws up, lda kaboom!, SDA kaboon!
-            
-            Sigma=A*diag(sv);                            % class 1 cov
-            Sigma=Sigma+eye(D);
-            
-        case 'lda2'
-            
-            sd = 1;
-            k = 2;
-            sv = [ones(k,1);sd/sqrt(D)*ones(D-k,1)];
-            A  = eye(D,D); %A(1:2,1:2)=[1,2;0,1];
-            mu1 = zeros(D,1);
-            mu0 = 0.5*[zeros(k,1);1;zeros(D-k-1,1)];        % PCA screws up, lda kaboom!, SDA kaboon!
-            
-            Sigma=A*diag(sv);                            % class 1 cov
-            Sigma=Sigma+eye(D);
-            
         case 'weird'
             
-            %         k = 2;
             sd = 1;
             sv = [0.05*sd/sqrt(D)*ones(D,1)];
             A  = eye(D,D); %A(1:2,1:2)=[1,2;0,1];
@@ -606,8 +536,8 @@ if ~isfield(task,'P')
             beta=0.551*[3;1.7;-2.2;-2.1;2.55;(D-5)^(-1)*ones(D-5,1)];
             mu1=zeros(D,1);
             mu0=A*beta;
-            Sig1=A;
-            Sig0=A;
+            Sigma=A;
+            
         case '6'
             ntrain=400;
             D=800;
@@ -616,23 +546,6 @@ if ~isfield(task,'P')
             beta=0.362*[3;1.7;-2.2;-2.1;2.55;(D-5)^(-1)*ones(D-5,1)];
             mu0=A*beta;
             Sigma=A;
-            
-        case 'DRL' % simple angle
-            
-            mudelt = 2.5;                                 % distance betwen dim 1 of means
-            mu1 = [-mudelt/2*ones(2,1); zeros(D-2,1)];                   % class 1 mean
-            mu0 = [mudelt/2*ones(2,1); zeros(D-2,1)];                   % class 1 mean
-            mu1(2)=mu1(2)/3;
-            mu0(2)=mu0(2)/3;
-            
-            sd = 1;
-            sv = sd/sqrt(D)*ones(D,1);
-            sv(2)=4;
-            A  = eye(D,D); %A(1:2,1:2)=[1,2;0,1];       % singular vectors
-            Sigma=A*diag(sv);                            % class 1 cov
-            Sigma(1,2) = sv(2)/2;
-            Sigma(2,1) = sv(2)/2;
-            Sigma=Sigma+eye(D);
             
         case 'debug'
             
@@ -658,26 +571,26 @@ if ~isfield(task,'P')
         otherwise
             error('no known parameter setting provided')
     end
-    
-    if task.permute
-        perm=randperm(D);
-        Q=eye(D);
-        Q=Q(perm,:);
-        mu1=Q*mu1;
-        mu0=Q*mu0;
-        siz=size(Sigma);
-        if length(siz)==3
-            Sigma(:,:,1)=Q*Sigma(:,:,1)*Q';
-            Sigma(:,:,2)=Q*Sigma(:,:,2)*Q';
-        else
-            Sigma=Q*Sigma*Q';
-        end
-        P.perm=perm;
-    end
-    
     P.name=task.name;
 else
     P=task.P;
+end
+
+
+if task.permute
+    perm=randperm(D);
+    Q=eye(D);
+    Q=Q(perm,:);
+    mu1=Q*mu1;
+    mu0=Q*mu0;
+    siz=size(Sigma);
+    if length(siz)==3
+        Sigma(:,:,1)=Q*Sigma(:,:,1)*Q';
+        Sigma(:,:,2)=Q*Sigma(:,:,2)*Q';
+    else
+        Sigma=Q*Sigma*Q';
+    end
+    P.perm=perm;
 end
 
 mubar=(mu1+mu0)/2;
@@ -685,20 +598,20 @@ mu1=mu1-mubar;
 mu0=mu0-mubar;
 
 P.del=mu1-mu0;
-% compute risk when Sig1=Sig0
-[~,~,K]=size(Sigma);
-if K==1
+% compute risk analytically when covariances are equal
+if size(Sigma,3)==1
     P.Risk=1-normcdf(0.5*sqrt(P.del'*(Sigma\P.del)));
 end
-for k=1:K % check if covariance matrices are valid covariance matrices
-    [~,p]=chol(Sigma(:,:,k));
-    if p>0
-        error('some Sigma is not positive definite')
-    end
+
+% for k=1:K % check if covariance matrices are valid covariance matrices
+%     [~,p]=chol(Sigma(:,:,k));
+%     if p>0 
+%         error('some Sigma is not positive definite')
+%     end
 %     if norm(Sigma(:,:,k)-Sigma(:,:,k)')>10^-4
 %         error('some Sigma is not symmetric')
 %     end
-end
+% end
 
 
 P.D=D;

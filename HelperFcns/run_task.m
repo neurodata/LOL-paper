@@ -23,5 +23,5 @@ if isfield(P,'Risk'), S.Risk=P.Risk; else S.Risk=nan; end % save risk
 if isstruct(task), name=task.name; else name=task; end % store name to save as
 if T.savestuff, 
     fpath = mfilename('fullpath');
-    save([fpath(1:end-25), 'Data/Results/', name],'T','S','P'), 
+    save([fpath(1:end-24), 'Data/Results/', name],'T','S','P'), 
 end % save results

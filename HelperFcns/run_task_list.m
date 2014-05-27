@@ -27,5 +27,5 @@ end
 
 if task.savestuff
     fpath = mfilename('fullpath');
-    save([fpath(1:end-30), 'Data/Results/', metatask],'T','P','S','task_list','metatask')
+    save([fpath(1:end-29), 'Data/Results/', metatask],'T','P','S','task_list','metatask')
 end

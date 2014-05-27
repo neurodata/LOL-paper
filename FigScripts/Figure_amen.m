@@ -1,7 +1,7 @@
 clearvars,
 clc,
 fpath = mfilename('fullpath');
-run([fpath(1:end-23), 'install_LOL.m'])
+run([fpath(1:end-22), 'install_LOL.m'])
 %%
 
 task_list_name='amen tasks';
