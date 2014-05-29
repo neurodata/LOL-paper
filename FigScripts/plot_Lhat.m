@@ -33,7 +33,9 @@ for i=1:Nalgs;
             eh=errorbar(T.ks(1:10:end),location(1:10:end),scale(1:10:end),'.','linewidth',2,'color',F.colors{i});
             errorbar_tick(eh,50000);
             maxloc(i)=max(location(2:end-1));
-            legendcell=[legendcell, T.types(i)];
+            if i<=length(T.types)
+                legendcell=[legendcell, T.types(i)];
+            end
         end
     end
     minAlg=min(minAlg,minloc);

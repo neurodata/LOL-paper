@@ -14,7 +14,7 @@ if strfind(name,'DRL')
     task.QDA_model=0;
 elseif strcmp(name,'IPMN-HvL') || strcmp(name,'IPMN-HvML') || strcmp(name,'IPMN-HMvL') || strcmp(name,'IPMNvsAll') || strcmp(name,'MCNvsAll') || strcmp(name,'SCAvsAll')
     task.simulation=0;
-    task.Ntrials=1000;                        % # of trials
+    task.ntrials=1000;                        % # of trials
 elseif strcmp(name,'colon')
     task.simulation=0;
 elseif strcmp(name,'prostate')
@@ -59,9 +59,9 @@ if ~isfield(task,'QDA_model'),  task.QDA_model=1;   end                   % does
 if ~isfield(task,'ks'),         task.ks=1:100;      end                          % list of dimensions to embed into
 if ~isfield(task,'Kmax'),       task.Kmax=max(task.ks); end                          % list of dimensions to embed into
 if ~isfield(task,'Nks'),        task.Nks=length(task.ks); end                          % list of dimensions to embed into
-if ~isfield(task,'algs'),       task.algs={'LOL'};  end % which algorithms to use
+if ~isfield(task,'algs'),       task.algs={'LOL';'ROAD'};  end % which algorithms to use
 if ~isfield(task,'savestuff'),  task.savestuff=1;   end                       % flag whether to save data & figures
-if ~isfield(task,'Ntrials'),    task.Ntrials = 5;   end                   % # of trials
+if ~isfield(task,'ntrials'),    task.ntrials = 5;   end                   % # of trials
 if ~isfield(task,'ntrain'),     task.ntrain  = 50;  end                  % # of training samples
 if ~isfield(task,'ntest'),      task.ntest   = 500; end                     % # of test samples
 if ~isfield(task,'percent_unlabeled'),      task.percent_unlabeled = 0; end                     % # of test samples

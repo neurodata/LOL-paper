@@ -13,7 +13,7 @@ if nargin==1, task=struct; end
 if strcmp(metatask,'thin')
     task_list={'sa';'s';'w'};
     task.ks=unique(floor(logspace(0,2,50)));
-    task.Ntrials=10;
+    task.ntrials=10;
     task.algs={'NaiveB','LDA','PDA','SLOL','LOL','DRDA','RDA','RF','svm'};
     task.savestuff=1;
     
@@ -23,7 +23,7 @@ elseif strcmp(metatask,'pancreas')
 elseif strcmp(metatask,'Mai13')
     task_list={'colon'; 'prostate'};
     task.ks=unique(floor(logspace(0,2,50)));
-    task.Ntrials=500;
+    task.ntrials=500;
     task.algs={'NaiveB','PDA','SLOL','LOL','DRDA','RDA','RF','svm'};
     task.savestuff=1;
     
@@ -31,7 +31,7 @@ elseif strcmp(metatask,'toeplitzs')
     task_list={'toeplitz, D=10';'toeplitz, D=20';'toeplitz, D=50';'toeplitz, D=100'};
     task.ntrain=50;
     task.ks=unique(floor(logspace(0,log10(task.ntrain),task.ntrain)));
-    task.Ntrials=40;
+    task.ntrials=40;
     task.algs={'LOL'};
     task.types={'NNNN';'NENL';'DENL';'DRNL';'NRNL'};
     task.savestuff=1;
@@ -41,7 +41,7 @@ elseif strcmp(metatask,'rotated_toeplitzs')
     task_list={'rtoeplitz, D=10';'rtoeplitz, D=20';'rtoeplitz, D=50';'rtoeplitz, D=100'};
     task.ntrain=50;
     task.ks=unique(floor(logspace(0,log10(task.ntrain),task.ntrain)));
-    task.Ntrials=40;
+    task.ntrials=40;
     task.algs={'LOL'};
     task.types={'DENL';'DVNL';'DVNQ';'DENQ'};
     task.savestuff=1;
@@ -55,7 +55,7 @@ elseif strcmp(metatask,'three_cigars')
 elseif strcmp(metatask,'all_cigars')
     task_list={'semisup cigars';'parallel cigars'; 'semisup rotated cigars'; 'rotated cigars'};
     task.ks=unique(floor(logspace(0,2,50)));
-    task.Ntrials=100;
+    task.ntrials=100;
     task.algs={'PDA','SLOL','LOL','DRDA'};
     task.savestuff=1;
 
@@ -115,7 +115,7 @@ elseif strcmp(metatask,'timingtest')
     task.D=100;
     task.ntrain=50;
     task.ks=[1, 30];
-    task.Ntrials=5;
+    task.ntrials=5;
     
 
 elseif strcmp(metatask,'amen tasks')
@@ -132,7 +132,7 @@ elseif strcmp(metatask,'amen tasks')
     task.types={'NENE';'NENV';'DENE';'DVNE';'DENV';'DVNV'}; %;'DVNR';'DVNS'
     task.algs={'LOL'};
     task.ks=[1:40, 50:10:120]; %unique(floor(logspace(0,2.9,30))); 
-    task.Ntrials = 5;
+    task.ntrials = 5;
 else
     task_list = {metatask};
     task.name = metatask;

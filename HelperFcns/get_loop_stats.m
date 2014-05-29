@@ -6,19 +6,15 @@ if isfield(T,'types')
 else
     Nalgs=T.Nalgs;
 end
-Lhats=nan(Nalgs,T.Nks,T.Ntrials);
-sensitivity=nan(Nalgs,T.Nks,T.Ntrials);
-specificity=nan(Nalgs,T.Nks,T.Ntrials);
-times=nan(Nalgs,T.Nks,T.Ntrials);
+Lhats=nan(Nalgs,T.Nks,T.ntrials);
+sensitivity=nan(Nalgs,T.Nks,T.ntrials);
+specificity=nan(Nalgs,T.Nks,T.ntrials);
+times=nan(Nalgs,T.Nks,T.ntrials);
 
-for k=1:T.Ntrials
+for k=1:T.ntrials
     for i=1:Nalgs;
         for l=1:T.Nks
-            try
-                Lhats(i,l,k)=loop{k}.out(i,l).Lhat;
-            catch
-                keyboard
-            end
+            Lhats(i,l,k)=loop{k}.out(i,l).Lhat;
             sensitivity(i,l,k)=loop{k}.out(i,l).sensitivity;
             specificity(i,l,k)=loop{k}.out(i,l).specificity;
             if isfield(loop{k},'time'), time=loop{k}.time(i,l); else time=NaN; end
@@ -30,9 +26,23 @@ for k=1:T.Ntrials
     end
 end
 
+ii=1;
+if isfield(loop{1},'ROAD')
+    for k=1:T.ntrials
+        for i=1:Nalgs;
+            for l=1:T.Nks
+                Lhats(ii+i,l,k)=loop{k}.ROAD(i,l).Lhat;
+                if size(loop{k}.out,2)==1 || isempty(loop{k}.out(i,2).Lhat) % if we did not do cv across dimensions for this algorithm
+                    break
+                end
+            end
+        end
+    end
+end
+
 for i=1:T.Nalgs
     if strcmp(T.algs{i},'RF')
-        for k=1:T.Ntrials
+        for k=1:T.ntrials
             Stats.NumParents(k)=loop{k}.NumParents;
         end
     end
@@ -78,9 +88,9 @@ for i=1:T.Nalgs
 end
 
 % also get chance & bayes stats
-Stats.Lchance=nan(T.Ntrials,1);
-Stats.Lbayes=nan(T.Ntrials,1);
-for k=1:T.Ntrials
+Stats.Lchance=nan(T.ntrials,1);
+Stats.Lbayes=nan(T.ntrials,1);
+for k=1:T.ntrials
     if isfield(loop{k},'Lchance')
         Stats.Lchance(k)=loop{k}.Lchance;
     end

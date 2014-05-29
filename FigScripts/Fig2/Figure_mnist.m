@@ -1,20 +1,19 @@
-% Change the filenames if you've saved the files under different names
-% On some platforms, the files might be saved as
-% train-images.idx3-ubyte / train-labels.idx1-ubyte
-clearvars, clc
+clearvars, clc,
 fpath = mfilename('fullpath');
-run([fpath(1:end-28),'install_LOL.m'])
+findex=strfind(fpath,'/');
+p = genpath(fpath(1:findex(end-2)));
+addpath(p);
 
 %%
-ntrain=20000;
-ntrials=1;
-label_keepers=[0:9];
+ntrain=100;
+ntrials=20; %if <2, plotting will barf
+label_keepers=[3,7,8];
 
-types={'DVNV';'NENE';'NENV'; 'NVNV'};
+types={'DENE';'NENE'};
 [transformers, deciders, types] = parse_algs(types);
 
 
-datadir=[fpath(1:end-33), '/Data/Raw/MNIST/'];
+datadir=[fpath(1:findex(end-3)), '/Data/Raw/MNIST/'];
 images = loadMNISTImages([datadir, 'train-images.idx3-ubyte']);
 labels = loadMNISTLabels([datadir, 'train-labels.idx1-ubyte']);
 
@@ -25,7 +24,7 @@ tic
 
 for kk=1:ntrials
     
-    %%
+    %% subselect training data
     training=[]; group=[];
     for jj=1:length(label_keepers)
         training = [training, images(:,labels==label_keepers(jj))];
@@ -43,10 +42,10 @@ for kk=1:ntrials
         ntrain=n;
     end
     
-    %%
+    %% learn projections
     [Proj, P] = LOL(training,group,transformers);
     
-    %% test
+    %% subselect prediction data
     sample=[]; Y=[];
     for jj=1:length(label_keepers)
         sample = [sample, test_images(:,test_labels==label_keepers(jj))];
@@ -105,9 +104,9 @@ for i=1:2;
     
 end
 
-F.fname = ['~/Research/working/A/LOL//Figs/MNIST_', num2str(label_keepers), '_ntrain_', num2str(ntrain)];
-F.PaperSize = [4 5]*2;
-print_fig(h(1),F)
+% F.fname = [fpath(1:findex(end-3)), 'Figs/MNIST_', num2str(label_keepers), '_ntrain_', num2str(ntrain)];
+% F.PaperSize = [4 5]*2;
+% print_fig(h(1),F)
 
 
 %% final fig
@@ -119,10 +118,7 @@ for i=1:2;
     iproj=i;
     Xtest=Proj{iproj}.V*sample;
     Xtrain=Proj{iproj}.V*training;
-    
-    %     subplot(1,3,1), imagesc(reshape(Proj{i}.V(1,:),[28 28])), colormap('gray'), set(gca,'XTickLabel',[],'YTickLabel',[]), axis('square')
-    %     subplot(1,3,2), imagesc(reshape(Proj{i}.V(2,:),[28 28])), colormap('gray'), set(gca,'XTickLabel',[],'YTickLabel',[]), axis('square')
-    
+        
     subplot(1,3,i),hold all
     for jjj=1:length(label_keepers)
         if jjj==1
@@ -182,6 +178,7 @@ title(['MNIST: ', num2str(label_keepers),';  ntrain=', num2str(ntrain)])
 %% save plot
 
 F.wh=[5 2]*1.5;
-F.fname=[rootdir, '/Figs/MNIST_', num2str(label_keepers), '_meta_ntrain_',num2str(ntrain)];
+F.fname=[fpath(1:findex(end-3)), '/Figs/MNIST_', num2str(label_keepers), '_ntrain_',num2str(ntrain)];
 print_fig(h(6),F)
-save(F.fname,'Proj','P')
+% fname=[fpath(1:findex(end-3)), '/Data/MNIST_', num2str(label_keepers), '_ntrain_',num2str(ntrain)];
+% save(F.fname,'Proj','P')

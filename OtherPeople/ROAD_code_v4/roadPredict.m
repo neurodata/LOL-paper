@@ -6,16 +6,19 @@
 function [class, classAll] = roadPredict(xtest, fit, fitCV)
 %%%%%%%%%%K: number of lambdas on the log-scale
 %%%%%%%%%%epsilon: lamMin=lamMax*epsilon
-w = fitCV.w;
-mua = fit.mua;
-wPath = fit.wPath;
 
+mua = fit.mua;
 ntest = size(xtest,1);
 if(fit.para.sRoad)
     xtest = xtest(:,fit.para.sInd);
 end
-class = (xtest-repmat(mua', ntest, 1))*w>0;
-classAll = (xtest-repmat(mua', ntest, 1))*wPath>0;
+classAll = (xtest-repmat(mua', ntest, 1))*fit.wPath>0;
+if nargin==3,
+    class    = (xtest-repmat(mua', ntest, 1))*fitCV.w>0;
+else
+    class = [];
+end
+
 
 
 

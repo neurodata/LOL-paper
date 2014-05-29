@@ -17,7 +17,7 @@ function [T,S,P] = run_task(task)
 
 [T,~,~,P] = get_task(task);       % get T details
 display(T)                           % display task details
-loop = task_loop(T);                 % loop over Ntrials for this task running the specified algorithms
+loop = task_loop(T);                 % loop over ntrials for this task running the specified algorithms
 S = get_loop_stats(T,loop);      % get stats
 if isfield(P,'Risk'), S.Risk=P.Risk; else S.Risk=nan; end % save risk
 if isstruct(task), name=task.name; else name=task; end % store name to save as

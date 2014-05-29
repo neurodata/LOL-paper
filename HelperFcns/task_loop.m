@@ -1,8 +1,8 @@
 function loop = task_loop(task_in)
-% this function implements a parloop for Ntrials iterations and outputs the results
+% this function implements a parloop for ntrials iterations and outputs the results
 
-loop = cell(1,task_in.Ntrials);
-for k=1:task_in.Ntrials
+loop = cell(1,task_in.ntrials);
+for k=1:task_in.ntrials
     
     if mod(k,10)==0, display(['trial # ', num2str(k)]); end
     
@@ -23,5 +23,12 @@ for k=1:task_in.Ntrials
     if task.QDA_model
         Yhat = gmm_predict(Z.Xtest,Z.Ytest,P);
         loop{k}.Lbayes=sum(Yhat~=Z.Ytest)/task.ntest;
+    end
+    
+    if any(strcmp(task.algs,'ROAD'))
+        fit = road(Z.Xtrain', Z.Ytrain);
+        [~,Yhat] = roadPredict(Z.Xtest', fit);
+        ROADhat{1}=Yhat';
+        loop{k}.out(length(task.types)+1,:)=get_task_stats(ROADhat,Z.Ytest);
     end
 end

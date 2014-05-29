@@ -1,18 +1,20 @@
+% this script generates the simulation and plots the results for Fig 1
+
+%% set path correctly
 clearvars, clc,
 fpath = mfilename('fullpath');
+findex=strfind(fpath,'/');
+p = genpath(fpath(1:findex(end-2)));
+addpath(p);
 
-%%
-p = genpath(fpath(1:end-11));
-
-
-%%
+%% set up tasks
 task_list_name='both_cigars';
 task_list = set_task_list(task_list_name);
 task.ks=5;
 task.ntest=1000;
-task.algs={'LOL','Bayes'};
+task.algs={'LOL'};
 task.types={'NENL';'DENL'};
-task.savestuff=1;
+task.savestuff=0;
 
 
 
@@ -20,7 +22,7 @@ h(1)=figure(1); clf
 Nsims=length(task_list);
 Nalgs=length(task.algs)+length(task.types)-1;
 Nrows=Nsims;
-Ncols=Nalgs+1;
+Ncols=Nalgs+2;
 gray=0.7*[1 1 1];
 for j=1:Nsims
     
@@ -40,7 +42,9 @@ for j=1:Nsims
     
     [transformers, deciders] = parse_algs(task1.types);
     Proj = LOL(Z.Xtrain,Z.Ytrain,transformers,task1.Kmax);
-    
+    PP{2}=Proj{1};
+    PP{1}=Proj{2};
+    Proj=PP;
     
     for i=1:Ncols-1
         if i<3
@@ -81,10 +85,10 @@ for j=1:Nsims
         maxy=max(max(y2),max(y1));
         
         subplot(Nrows,Ncols,(i+1)+Ncols*(j-1)), hold on
-        if i==1
+        if i==2
             col1='g'; col2=col1;
             tit='LOL';
-        elseif i==2
+        elseif i==1
             col1='m'; col2=col1;
             tit='PCA';
         elseif i==3

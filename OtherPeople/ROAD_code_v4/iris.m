@@ -1,4 +1,7 @@
+clearvars, clc
 load fisheriris
+
+%%
 se_indices = strcmp('setosa',species);
 se = meas(se_indices,:);
 ve_indices = strcmp('versicolor',species);
@@ -7,7 +10,7 @@ ve = meas(ve_indices,:);
 vi_indices = strcmp('virginica',species);
 vi = meas(vi_indices,:);
 
-%%%%Step 1:  separate Iris setosa from the cloud containing Iris versicolor and Iris virginica together
+%% %%Step 1:  separate Iris setosa from the cloud containing Iris versicolor and Iris virginica together
 display('Step 1:  separate Iris setosa from the cloud containing Iris versicolor and Iris virginica together');
 display('100 Random Splits. Inside each split, 50 training and 50 testing.');
 x1 = se;

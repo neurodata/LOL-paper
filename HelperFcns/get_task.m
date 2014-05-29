@@ -23,17 +23,23 @@ if task.simulation
         [X,Y] = random(gmm,task.n);
     elseif strcmp(task.name,'gms')
         
-        N0=125*2;
+      
+        Nnoise=round(task.n*0.5);
+        Nsignal=task.n-Nnoise;
+        N0=round(Nsignal/2);
         N1=N0;
-        D=10;
+        D=50;
         d=5;
         noise=0.1;
+        offset=0.5;
+        V=orth(rand(D,d));
+        X0=randn(N0,d)*V';
+        X1=randn(N0,d)*V'+offset;
+        X=[X0;X1; randn(Nnoise,D)];
+        X=X+randn(size(X))*noise;
+
+        Y=[zeros(N0,1); ones(N1,1); rand(Nnoise,1)>0.5];
         
-        X0=lerman_model(N0,N1,D,d,noise);
-        X1=lerman_model(N0,N1,D,d,noise);
-        
-        X=[X0', X1'];
-        Y=[zeros(N0+N1,1); ones(N0+N1,1)];
         task.QDA_model=0;
         
     else

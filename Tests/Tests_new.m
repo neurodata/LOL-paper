@@ -5,7 +5,7 @@ profile on
 task.name='mnist';
 task.types={'DENE';'DEFE'};
 task.algs={'LOL'};
-task.Ntrials=1;
+task.ntrials=1;
 task.simulation=false;
 
 [task, X, Y, parms] = get_task(task);
