@@ -1,5 +1,5 @@
 clearvars, clc
-D=1000;
+D=100;
 s0=10;
 mu0=zeros(D,1);
 mu1=[ones(s0,1); zeros(D-s0,1)];
@@ -44,7 +44,7 @@ road_errorlist =zeros(nsplits,1);
 road_numlist = zeros(nsplits,1);
 lda_errorlist = zeros(nsplits,1);
 lda_numlist = zeros(nsplits,1);
-for randSeed=1:nsplits
+parfor randSeed=1:nsplits
     
     display(randSeed)
     n1 = size(x1,1);
