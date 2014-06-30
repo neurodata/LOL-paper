@@ -1,8 +1,7 @@
 function Yhat = decide(sample,training,group,classifier,ks)
 
 Nks=length(ks);
-siz=size(sample);
-ntest=siz(2);
+ntest=size(sample,2);
 Yhat=nan(Nks,ntest);
 for i=1:Nks
     try

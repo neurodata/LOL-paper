@@ -19,6 +19,7 @@ for k=1:T.ntrials
             specificity(i,l,k)=loop{k}.out(i,l).specificity;
             if isfield(loop{k},'time'), time=loop{k}.time(i,l); else time=NaN; end
             times(i,l,k)=time;
+            if isfield(loop{k},'ROAD_num'), Stats.ROAD_num(k,:)=loop{k}.ROAD_num; end
             if size(loop{k}.out,2)==1 || isempty(loop{k}.out(i,2).Lhat) % if we did not do cv across dimensions for this algorithm
                 break
             end
@@ -26,19 +27,20 @@ for k=1:T.ntrials
     end
 end
 
-ii=1;
-if isfield(loop{1},'ROAD')
-    for k=1:T.ntrials
-        for i=1:Nalgs;
-            for l=1:T.Nks
-                Lhats(ii+i,l,k)=loop{k}.ROAD(i,l).Lhat;
-                if size(loop{k}.out,2)==1 || isempty(loop{k}.out(i,2).Lhat) % if we did not do cv across dimensions for this algorithm
-                    break
-                end
-            end
-        end
-    end
-end
+% ii=1;
+% if isfield(loop{1},'ROAD')
+%     for k=1:T.ntrials
+%         for i=1:Nalgs;
+%             for l=1:T.Nks
+%                 Lhats(ii+i,l,k)=loop{k}.ROAD(i,l).Lhat;
+%                 ks(i,l,k)=loop{k}.out(i,l).num;
+%                 if size(loop{k}.out,2)==1 || isempty(loop{k}.out(i,2).Lhat) % if we did not do cv across dimensions for this algorithm
+%                     break
+%                 end
+%             end
+%         end
+%     end
+% end
 
 for i=1:T.Nalgs
     if strcmp(T.algs{i},'RF')

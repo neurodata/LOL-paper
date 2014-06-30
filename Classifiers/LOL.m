@@ -6,11 +6,12 @@ function [Proj, P, Q] = LOL(X,Y,types,Kmax)
 %   X in R^{D x ntrain}: ntrain columns, each a D-dimensional example
 %   Y in [K]^ntrain: a categorical vector assigning each training sample a class
 %   types in cell: each element lists a different embedding type
-%       D/S/N: delta, sparse, or no delta matrix
-%       E/V/R/N: equal, varied, random, or no projection
+%       D/S/R/N: delta, sparse, robust, or no delta matrix
+%       E/V/R/N: equal, varied, random, or no projection (NB: if R or N,
+%       than the next option (F/R/N) does not come up)
 %       F/R/N: fast, robust, normal
 %   Kmax in Z: max dimension to project into
-% 
+%
 % OUTPUT:
 %   Proj (struct): one per types, with fields
 %       name (char): name of projection
@@ -19,7 +20,7 @@ function [Proj, P, Q] = LOL(X,Y,types,Kmax)
 %       Ngroups (int): # of groups
 %       groups (vec): name of groups (can be all ints or possibly chars, tho i've never tested that
 %       nvec (int^Ngroups): # of points per class
-%       idx (cell(Ngroups,1)): list of indices for each group 
+%       idx (cell(Ngroups,1)): list of indices for each group
 %       mu in R^{D x Ngroups}: means
 %       Delta in R^{D x (Ngroups-1)}: means minus first mean
 %       Selta in R^{D x (Ngroups-1)}: sparse version
@@ -27,6 +28,7 @@ function [Proj, P, Q] = LOL(X,Y,types,Kmax)
 %   Q (struct): containing eigenvectors
 
 %% get means
+Q=struct;
 ntypes=length(types);
 P.groups=unique(Y);
 if any(isnan(P.groups)), P.groups(isnan(P.groups))=[]; P.groups=[P.groups; NaN]; end % remove nan groups from mean (NB: NaN~=NaN)
@@ -46,6 +48,7 @@ end
 % sort classes in order of # of samples per class
 [~, IX] = sort(P.nvec);
 P.nvec=P.nvec(IX);
+maxk=min(P.nvec);
 P.groups=P.groups(IX);
 P.mu=P.mu(:,IX);
 for k=1:P.Ngroups, P.idx{k}=idx{IX(k)}; end
@@ -60,12 +63,18 @@ for i=1:ntypes
         if ~isfield(P,'Delta')
             P.Delta = bsxfun(@minus,P.mu(:,2:end),P.mu(:,1));
         end
-    elseif strcmp(types{i}(1),'S')
+    elseif strcmp(types{i}(1),'S') % sparse estimate of difference of means
         if ~isfield(P,'Selta')
             [~,idx] = sort(abs(P.delta),'descend');
             P.Selta=P.delta;
             P.Selta(idx(10:end))=0;
         end
+    elseif strcmp(types{i}(1),'R') % robust estimate of difference of means
+        P.median=nan(D,P.Ngroups);
+        for k=1:P.Ngroups
+            P.trimmean(:,k)=trimmean(X(:,idx{k})',10);
+        end
+        P.Relta = bsxfun(@minus,P.trimmean(:,2:end),P.trimmean(:,1));
     end
     
     % get 'eigs'
@@ -77,16 +86,16 @@ for i=1:ntypes
         if ~isfield(X,['VV',types{i}(3)])
             dv=[]; Vv=[];
             for k=1:P.Ngroups
-                [d,V] = get_svd(X(:,P.idx{k}),P.nvec(k),D,types{i}(3));
-                dv = [dv; d]; 
+                [d,V] = get_svd(X(:,P.idx{k}),maxk,D,types{i}(3));
+                dv = [dv; d];
                 Vv = [Vv, V'];
             end
             [P.(['DV', types{i}(3)]), idx]=sort(dv,'descend');
             Q.(['VV', types{i}(3)])=Vv(:,idx)';
         end
     elseif strcmp(types{i}(2),'R')
-        if ~isfield(Q,'VR')
-            Q.VR = rand(D,Kmax)';
+        if ~isfield(Q,'VRN')
+            Q.VRN = rand(D,Kmax)';
         end
     elseif strcmp(types{i}(2),'N')
         if ~isfield(Q,'VN')

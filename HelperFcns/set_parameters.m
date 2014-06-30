@@ -7,11 +7,11 @@ function P = set_parameters(task)
 % INPUT: task (struct): task settings
 % OUTPUT:  P (struct):  parameters
 
-if ~isfield(task,'permute'), task.permute=0; end % whether or not to permute the coordinates, this is really for debugging purposes
+if ~isfield(task,'permute'), task.permute=false; end % whether or not to permute the coordinates, this is really for debugging purposes
+if ~isfield(task,'rotate'), task.rotate=false; end % ambient # of dimensions
 if ~isfield(task,'D'), D=100; else D=task.D; end % ambient # of dimensions
 
-if ~isfield(task,'P')
-    
+if ~isfield(task,'P')    
     switch task.name
         
         case 'b' % for debuggin purposes
@@ -114,7 +114,7 @@ if ~isfield(task,'P')
             end
             
             Sigma(:,:,2)=Q*Sigma*Q';
-                        
+            
         case 'rotated cigars' % simple angle
             
             R = eye(D);
@@ -296,13 +296,32 @@ if ~isfield(task,'P')
             Sigma=eye(D);
             Sigma(1:D+1:end)=100./sqrt(1:D);
             
-        case ['trunk3, D=', num2str(D)] 
+        case ['trunk3, D=', num2str(D)]
             
             mu1=2./sqrt(D:-1:1)';
             mu0=-mu1;
             
             Sigma=eye(D);
             Sigma(1:D+1:end)=100./sqrt(1:D);
+            
+            
+        case ['atrunk3, D=', num2str(D)]
+            
+            mu1=2./sqrt(D:-1:1)';
+            mu0=-mu1;
+            
+            Sigma=eye(D);
+            Sigma(1:D+1:end)=100./sqrt(1:D);
+            
+            [Q, ~] = qr(randn(task.D));
+            if det(Q)<-.99
+                Q(:,1)=-Q(:,1);
+            end
+            
+            Sigma=Q*Sigma*Q';
+            mu0=Q*mu0;
+            mu1=Q*mu1;
+            
             
         case ['toeplitz, D=', num2str(D)]
             
@@ -405,7 +424,7 @@ if ~isfield(task,'P')
             mu0=-mu1;
             Sigma=A;
             
-        case ['model0, D=', num2str(D)] 
+        case ['model0, D=', num2str(D)]
             
             mudelt = 0.5;                                 % distance betwen dim 1 of means
             mu0=mudelt*ones(D,1);
@@ -417,7 +436,7 @@ if ~isfield(task,'P')
             
             Sigma=A;
             
-        case ['model1, D=', num2str(D)] 
+        case ['model1, D=', num2str(D)]
             
             s0=10;
             mu0=zeros(D,1);
@@ -428,9 +447,9 @@ if ~isfield(task,'P')
             A(1:D+1:end)=1;
             
             Sigma=A;
-
-
-        case ['amodel1, D=', num2str(D)] 
+            
+            
+        case ['amodel1, D=', num2str(D)]
             
             s0=10;
             mu0=zeros(D,1);
@@ -439,7 +458,7 @@ if ~isfield(task,'P')
             rho=0.5;
             A=rho*ones(D);
             A(1:D+1:end)=1;
-                        
+            
             [Q, ~] = qr(randn(task.D));
             if det(Q)<-.99
                 Q(:,1)=-Q(:,1);
@@ -450,7 +469,7 @@ if ~isfield(task,'P')
             mu1=Q*mu1;
             
             
-        case ['aROAD1, D=', num2str(D)] 
+        case ['aROAD1, D=', num2str(D)]
             
             s0=10;
             mu0=zeros(D,1);
@@ -460,8 +479,6 @@ if ~isfield(task,'P')
             A=rho*ones(D);
             A(1:D+1:end)=1;
             
-            Sigma=A;
-
             [Q, ~] = qr(randn(task.D));
             if det(Q)<-.99
                 Q(:,1)=-Q(:,1);
@@ -471,8 +488,8 @@ if ~isfield(task,'P')
             mu0=Q*mu0;
             mu1=Q*mu1;
             
-
-        case ['model3, D=', num2str(D)] 
+            
+        case ['model3, D=', num2str(D)]
             
             s0=10;
             mu0=zeros(D,1);
@@ -482,7 +499,7 @@ if ~isfield(task,'P')
             rho=0.8;
             c=rho.^(0:D-1);
             Sigma = toeplitz(c);
-
+            
             
         case '1'
             ntrain=100;
@@ -576,6 +593,17 @@ else
     P=task.P;
 end
 
+% this took too long, so i stopped checking 
+% for k=1:K % check if covariance matrices are valid covariance matrices
+%     [~,p]=chol(Sigma(:,:,k));
+%     if p>0
+%         error('some Sigma is not positive definite')
+%     end
+%     if norm(Sigma(:,:,k)-Sigma(:,:,k)')>10^-4
+%         error('some Sigma is not symmetric')
+%     end
+% end
+
 
 if task.permute
     perm=randperm(D);
@@ -603,20 +631,31 @@ if size(Sigma,3)==1
     P.Risk=1-normcdf(0.5*sqrt(P.del'*(Sigma\P.del)));
 end
 
-% for k=1:K % check if covariance matrices are valid covariance matrices
-%     [~,p]=chol(Sigma(:,:,k));
-%     if p>0 
-%         error('some Sigma is not positive definite')
-%     end
-%     if norm(Sigma(:,:,k)-Sigma(:,:,k)')>10^-4
-%         error('some Sigma is not symmetric')
-%     end
-% end
-
-
 P.D=D;
 P.mu=[mu0 mu1];
 P.Sigma=Sigma;
 P.w=1/2*[1; 1];
 P.Ngroups=2;
 P.groups=[1 2];
+
+if task.rotate
+    
+    % generate rotation matrix uniformly
+    [Q, ~] = qr(randn(task.D));
+    if det(Q)<-.99
+        Q(:,1)=-Q(:,1);
+    end
+    
+    % rotate means & covariances
+    nclasses=size(P.mu,2);
+    for i=1:nclasses
+        P.mu(:,i)=Q*P.mu(:,i);
+        if size(P.Sigma,3)>1
+            P.Sigma(:,:,i)=Q*P.Sigma(:,:,i)*Q';
+        end
+    end
+    if size(P.Sigma,3)==1
+       P.Sigma=Q*P.Sigma*Q'; 
+    end
+    
+end

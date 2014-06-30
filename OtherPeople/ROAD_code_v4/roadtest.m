@@ -1,5 +1,5 @@
-clearvars, clc
-D=100;
+clearvars, %clc
+D=1000;
 s0=10;
 mu0=zeros(D,1);
 mu1=[ones(s0,1); zeros(D-s0,1)];
@@ -9,28 +9,10 @@ A=rho*ones(D);
 A(1:D+1:end)=1;
 Sigma=A;
 
-% [Q, ~] = qr(randn(D));
-% if det(Q)<-.99
-%     Q(:,1)=-Q(:,1);
-% end
-% 
-% Sigma=Q*A*Q';
-% mu0=Q*mu0;
-% mu1=Q*mu1;
-
-  
-%% generate data
-
-P.mu=[mu0, mu1];
-gmm = gmdistribution(P.mu',Sigma,1/2*ones(2,1));
-
 ntrain=300;
 ntest=300;
 n=ntrain+ntest;
-[X,Y] = random(gmm,n);
 
-x1=X(Y==1,:);
-x2=X(Y==2,:);
 
 
 %% separate x1 & x2
@@ -44,9 +26,31 @@ road_errorlist =zeros(nsplits,1);
 road_numlist = zeros(nsplits,1);
 lda_errorlist = zeros(nsplits,1);
 lda_numlist = zeros(nsplits,1);
-parfor randSeed=1:nsplits
+for randSeed=1:nsplits
+    
     
     display(randSeed)
+    
+    %% generate data
+    
+    [Q, ~] = qr(randn(D));
+    if det(Q)<-.99
+        Q(:,1)=-Q(:,1);
+    end
+    
+    Sigma=Q*A*Q';
+    mu0=Q*mu0;
+    mu1=Q*mu1;
+    
+    P.mu=[mu0, mu1];
+    gmm = gmdistribution(P.mu',Sigma,1/2*ones(2,1));
+    
+    [X,Y] = random(gmm,n);
+    
+    x1=X(Y==1,:);
+    x2=X(Y==2,:);
+    
+    
     n1 = size(x1,1);
     n2 = size(x2,1);
     rand('state', randSeed);
@@ -77,7 +81,7 @@ parfor randSeed=1:nsplits
     lda_errorlist(randSeed)=ldaobj.testError;
     lda_numlist(randSeed)=ldaobj.num;
     
-    display(road_errorlist(randSeed))
+    display([road_errorlist(randSeed), road_numlist(randSeed)])
     
 end
 display(['median classification error for road: ', num2str(median(road_errorlist))]);

@@ -26,9 +26,38 @@ for k=1:task_in.ntrials
     end
     
     if any(strcmp(task.algs,'ROAD'))
-        fit = road(Z.Xtrain', Z.Ytrain);
+        para.K=task.Nks;
+        fit = road(Z.Xtrain', Z.Ytrain,0,0,para);
         [~,Yhat] = roadPredict(Z.Xtest', fit);
-        ROADhat{1}=Yhat';
-        loop{k}.out(length(task.types)+1,:)=get_task_stats(ROADhat,Z.Ytest);
+        Yhat_ROAD{1}=Yhat'+1;
+        loop{k}.out(size(loop{k}.out,1)+1,:)=get_task_stats(Yhat_ROAD,Z.Ytest);
+        loop{k}.ROAD_num=fit.num;
     end
+    
+    if any(strcmp(task.algs,'DR'))
+        [~,W] = DR(Z.Ytrain,Z.Xtrain','disc',task.Kmax);
+        Xtest=Z.Xtest'*W;
+        Xtrain=Z.Xtrain'*W;
+        Yhat_DR{1} = decide(Xtest',Xtrain,Z.Ytrain,'linear',task.ks);
+        loop{k}.out(size(loop{k}.out,1)+1,:)=get_task_stats(Yhat_DR,Z.Ytest);
+    end
+    
+    if any(strcmp(task.algs,'LAD'))
+        [~,W] = ldr(Z.Ytrain,Z.Xtrain','LAD','disc',task.Kmax,'initval',orth(rand(task.D,task.Kmax)));
+        Xtest=Z.Xtest'*W;
+        Xtrain=Z.Xtrain'*W;
+        Yhat_DR{1} = decide(Xtest',Xtrain,Z.Ytrain,'linear',task.ks);
+        loop{k}.out(size(loop{k}.out,1)+1,:)=get_task_stats(Yhat_DR,Z.Ytest);
+    end
+    
+    if any(strcmp(task.algs,'GLM'))
+        opts=struct('nlambda',task.Nks);
+        fit=glmnet(Z.Xtrain',Z.Ytrain,'multinomial',opts);
+        pfit=glmnetPredict(fit,Z.Xtest,fit.lambda,'response','false',fit.offset);
+        [~,yhat]=max(pfit,[],2);
+        Yhat_GLM{1}=squeeze(yhat)';
+        loop{k}.out(size(loop{k}.out,1)+1,:)=get_task_stats(Yhat_GLM,Z.Ytest);
+    end
+    
+    
 end

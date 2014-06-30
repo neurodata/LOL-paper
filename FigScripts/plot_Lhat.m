@@ -10,13 +10,15 @@ function plot_Lhat(T,S,F,subplot_id)
 if ~isfield(F,'plot_chance'), F.plot_chance=false; end
 if ~isfield(F,'plot_bayes'), F.plot_bayes=false; end
 if ~isfield(F,'plot_risk'), F.plot_risk=false; end
-if ~isfield(F,'doxlabel'),doxlabel=0; else, doxlabel=F.doxlabel; end
+if ~isfield(F,'doxlabel'),doxlabel=0; else doxlabel=F.doxlabel; end
 if isfield(T,'types')
     Nalgs=T.Nalgs+length(T.types)-1;
 else
     Nalgs=T.Nalgs;
 end
 legendcell=[];
+
+algs=[T.types; T.algs{2:end}];
 
 % plot accuracies
 subplot(F.Nrows,F.Ncols,subplot_id), cla, hold all
@@ -27,10 +29,12 @@ for i=1:Nalgs;
     scale=S.stds.Lhats(i,:);
     minloc=min(location);
     
+    if strcmp(algs{i},'ROAD'), ks=mean(S.ROAD_num); else ks=T.ks; end
+    
     if length(location)>1
         if ~isnan(location(2))
-            h(i)=plot(T.ks,location,'color',F.colors{i},'linewidth',2,'linestyle',F.linestyle{i}); %,'marker',F.markers{i},'markersize',F.markersize{i});
-            eh=errorbar(T.ks(1:10:end),location(1:10:end),scale(1:10:end),'.','linewidth',2,'color',F.colors{i});
+            h(i)=plot(ks,location,'color',F.colors{i},'linewidth',2,'linestyle',F.linestyle{i}); %,'marker',F.markers{i},'markersize',F.markersize{i});
+            eh=errorbar(ks(1:10:end),location(1:10:end),scale(1:10:end),'.','linewidth',2,'color',F.colors{i});
             errorbar_tick(eh,50000);
             maxloc(i)=max(location(2:end-1));
             if i<=length(T.types)

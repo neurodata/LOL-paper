@@ -23,7 +23,6 @@ if task.simulation
         [X,Y] = random(gmm,task.n);
     elseif strcmp(task.name,'gms')
         
-      
         Nnoise=round(task.n*0.5);
         Nsignal=task.n-Nnoise;
         N0=round(Nsignal/2);
@@ -37,8 +36,8 @@ if task.simulation
         X1=randn(N0,d)*V'+offset;
         X=[X0;X1; randn(Nnoise,D)];
         X=X+randn(size(X))*noise;
-
-        Y=[zeros(N0,1); ones(N1,1); rand(Nnoise,1)>0.5];
+                            
+        Y=[zeros(N0,1); ones(N1,1); rand(Nnoise,1)>0.5]+1;
         
         task.QDA_model=0;
         
