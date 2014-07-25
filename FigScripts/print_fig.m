@@ -13,7 +13,7 @@ if ~isfield(F,'fname'), F.fname='temp_fig'; end
 set(h,'PaperSize',F.PaperSize,'PaperPosition',F.PaperPosition,'color','w');
 set(h, 'InvertHardCopy', 'off');
 set(h,'renderer',F.renderer)
-saveas(h,F.fname,'fig')
 print(h,F.fname,'-dpdf')
 print(h,F.fname,'-dpng','-r300')
+saveas(h,F.fname,'fig')
 

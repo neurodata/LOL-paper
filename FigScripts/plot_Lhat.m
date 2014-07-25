@@ -18,7 +18,13 @@ end
 if any(strcmp(T.algs,'LOL')), Nalgs=Nalgs-1; end
 legendcell=[];
 
-algs=[T.types; T.algs{2:end}];
+algs=T.types; k=length(algs);
+for j=1:length(T.algs)
+    if ~strcmp(T.algs{j},'LOL')
+        algs{k+1}=T.algs{j};
+        k=k+1;
+    end
+end
 
 % plot accuracies
 subplot(F.Nrows,F.Ncols,subplot_id), cla, hold all
@@ -33,8 +39,8 @@ for i=1:Nalgs;
     
     if length(location)>1
         if ~isnan(location(2))
-            h(i)=plot(ks,location,'color',F.colors{i},'linewidth',2,'linestyle',F.linestyle{i}); %,'marker',F.markers{i},'markersize',F.markersize{i});
-            eh=errorbar(ks(1:10:end),location(1:10:end),scale(1:10:end),'.','linewidth',2,'color',F.colors{i});
+            h(i)=plot(ks,location,'color',F.colors{i},'linewidth',2,'linestyle',F.linestyle{i}); 
+            eh=errorbar(ks(10:10:end),location(10:10:end),scale(10:10:end),'.','linewidth',2,'color',F.colors{i});
             errorbar_tick(eh,50000);
             maxloc(i)=max(location(2:end-1));
             if i<=length(T.types)

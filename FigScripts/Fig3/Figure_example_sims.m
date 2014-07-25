@@ -84,14 +84,13 @@ G.yscale='linear';
 orange=[1 0.6 0];
 gray=0.75*[1 1 1];
 purple=[0.5 0 0.5];
-G.colors = {gray;'g';'k';'m';'c';orange};
+G.colors = {'g';'m';'c'};
 
 
 % sample
 
 for j=1:length(T)
     task1=T{j};
-%     if j==4, task1.rotate=false; end
     [task1, X, Y, PP] = get_task(task1);
     
     Z = parse_data(X,Y,task1.ntrain,task1.ntest,0);
@@ -164,11 +163,13 @@ for j=1:length(T)
     subplot(G.Nrows,G.Ncols,G.Ncols+j)    
     imagesc(PP.Sigma(ids,ids))
     colormap('bone')
-    if j<3
-        set(gca,'xtick',0:5:10,'xticklabel',0:50:100,'ytick',0:5:10,'yticklabel',0:50:100)
-    else
-        set(gca,'xtick',0:5:10,'ytick',0:5:10)
-    end
+    set(gca,'xtick',[],'ytick',[])
+    axis('square')
+%     if j<3
+%         set(gca,'xtick',0:5:10,'xticklabel',0:50:100,'ytick',0:5:10,'yticklabel',0:50:100)
+%     else
+%         set(gca,'xtick',0:5:10,'ytick',0:5:10)
+%     end
     if j==1, ylabel('covariance'), end
 end
 

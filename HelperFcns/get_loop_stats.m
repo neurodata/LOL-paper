@@ -43,14 +43,14 @@ end
 %         end
 %     end
 % end
-
-for i=1:T.Nalgs
-    if strcmp(T.algs{i},'RF')
-        for k=1:T.ntrials
-            Stats.NumParents(k)=loop{k}.NumParents;
-        end
-    end
-end
+% 
+% for i=1:T.Nalgs
+%     if strcmp(T.algs{i},'RF')
+%         for k=1:T.ntrials
+%             Stats.NumParents(k)=loop{k}.NumParents;
+%         end
+%     end
+% end
 
 Stats.means.Lhats=squeeze(nanmean(Lhats,3));
 Stats.means.sensitivity=squeeze(nanmean(sensitivity,3));

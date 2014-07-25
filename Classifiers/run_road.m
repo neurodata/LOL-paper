@@ -1,4 +1,4 @@
-function [out, ROAD_num] = run_road(Z,task)
+function [out, ROAD_num] = run_ROAD(Z,task)
 
 para.K=task.Nks;
 fit = road(Z.Xtrain', Z.Ytrain,0,0,para);

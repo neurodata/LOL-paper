@@ -73,6 +73,24 @@ if task.simulation
             X=[X0;X1];
             Y=[Y0;Y1];
             
+        case ['xor, D=', num2str(D)]
+
+            mu0=zeros(D,1);
+            mu1=repmat([1;0],D/2,1);
+            Sigma=1*eye(D);
+            
+            gmm = gmdistribution([mu0,mu1]',Sigma,[0.5,0.5]);
+            [X0,Y0] = random(gmm,task.n*0.5);
+
+            mu0=ones(D,1);
+            mu1=repmat([0;1],D/2,1);
+            gmm = gmdistribution([mu0,mu1]',Sigma,[0.5,0.5]);
+            [X1,Y1] = random(gmm,task.n*0.5);
+            
+            X=[X0;X1];
+            Y=[Y0;Y1];
+                        
+
         otherwise
             P = set_parameters(task);
             gmm = gmdistribution(P.mu',P.Sigma,P.w);

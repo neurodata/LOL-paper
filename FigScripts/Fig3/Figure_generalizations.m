@@ -11,75 +11,56 @@ task.algs={'LOL';'ROAD'};
 task.ntrials=10;
 task.simulation=1;
 task.percent_unlabeled=0;
-task.types={'DENE';'DRNE';'DEFE';'NENE'};
+task.types={'DRNE';'DEFE'};
 task.ntrain=50;
 task.savestuff=1;
 
 
-%% when D>n, LOL helps
-
-j=2;
-task1=task;
-task1.name='trunk4, D=100';
-task1.rotate=true;
-[T{j},S{j},P{j}] = run_task(task1);
-
-%% LOL on sparse models
-
-j=3;
-task1=task;
-task1.name='ROAD1, D=1000';
-task1.ntrain=300;
-task1.rotate=true;
-task1.ks=unique(round(logspace(0,log10(300),175)));
-[T{j},S{j},P{j}] = run_task(task1);
-
-%% even with relatively low dimension, embedding helps
+%% rotated trunk
 
 j=1;
 task1=task;
-task1.name='toeplitz, D=500';
-task1.ntrials=50;
+task1.name='trunk4, D=100';
+task1.rotate=true;
+task1.algs={'LOL'};
+task1.types={'DRNE';'DEFE'};
 [T{j},S{j},P{j}] = run_task(task1);
 
+%% union of affine spaces
 
-%% semi-supervised toeplitz, D=50, n=500; # observed samples = 50
-
-j=4;
+j=2;
 task1=task;
-task1.name='toeplitz, D=50';
-task1.percent_unlabeled=0.1;
-task1.ntrain=500;
-task1.ntrials=5;
-[T{j},S{j},P{j}] = run_task(task1);
-
-
-
-%% LOL vs LOQ vs QOL vs QOQ
-
-j=5;
-task1=task;
-task1.name='rtoeplitz, D=50';
-task1.types={'DEFE';'DEFV';'DVFE';'DVFV'};
-task1.ntrials=5;
+task1.name='rtoeplitz, D=100';
+task1.types={'DEFE';'DEFV';'DVFE';'DVFV';'DRNE'};
 [T{j},S{j},P{j}] = run_task(task1);
 
 
 %% robust
 
-j=6; 
+j=3; 
 task1=task;
 task1.name='gms';
 task1.D=500;
 task1.ntrain=100;
 task1.ntest=500;
 task1.n=task1.ntrain+task1.ntest;
-task1.ks=1:2:min(task1.D,task1.ntrain);
-task1.ntrials=50;
-types={'DEFE';'DENE';'DERE'};
+task1.ks=1:50;
+types={'DEFE';'DERE'};
 [~,~, task1.types] = parse_algs(types);
 [T{j},S{j},P{j}] = run_task(task1);
 
+
+%% multiscale
+
+j=4; 
+task1=task;
+task1.name='xor, D=100';
+task1.ntrain=50;
+task1.types={'DEFE';'NEFE';'DRNE';'NRNE';'DEFR';'NEFR';'DRNR';'NRNR'};
+task1.algs={'LOL';'RF'};
+task1.ks=unique(floor(logspace(0,log10(30),10)));
+task1.ntrials=2;
+[T{j},S{j},P{j}] = run_task(task1);
 
 
 %% save generalizations
@@ -99,7 +80,7 @@ G.plot_bayes=false;
 G.plot_risk=false; 
 G.plot_time=false;
 G.Nrows=2;
-G.Ncols=4;
+G.Ncols=ceil(length(T)/2);
 G.location = 'NorthEast';
 G.legend = {'LOL';'PCA'};
 G.ylim=[0.2, 0.5];
@@ -108,112 +89,114 @@ G.linestyle={'-';'-';'-';'-';'-';'-';'-'};
 orange=[1 0.6 0];
 gray=0.75*[1 1 1];
 purple=[0.5 0 0.5];
-G.colors = {'g';gray;'m';orange;'c';'k'};
-
+G.colors = {gray;'g';'k';'c';orange;'c';'m'};
 
 %%
-j=2; F=G;
-F.title='(A) Trunk';
+% 
+% for j=2:length(T)
+%     task1=T{j};
+%     [task1, X, Y, PP] = get_task(task1);
+%     
+%     Z = parse_data(X,Y,task1.ntrain,task1.ntest,0);
+%     
+%     subplot(G.Nrows,G.Ncols,j), hold on
+%     Xplot1=Z.Xtest(:,Z.Ytest==1);
+%     Xplot2=Z.Xtest(:,Z.Ytest==2);
+%     idx=randperm((task1.ntest-100)/2);
+%     idx=idx(1:100);
+%     plot3(Xplot1(1,idx),Xplot1(2,idx),Xplot1(3,idx),'o','color',[0 0 0],'LineWidth',1.5,'MarkerSize',4),
+%     plot3(Xplot2(1,idx),Xplot2(2,idx),Xplot2(3,idx),'x','color',gray,'LineWidth',1.5,'MarkerSize',4)
+%     view([0.5,0.5,0.5])
+%     axis('equal')
+%     ticks=[-2:2:2];
+%     if j==2
+%         zlabel('samples')
+%     end
+%     lims=[-2.0,2.0];
+%     set(gca,'XTick',ticks,'YTick',ticks,'ZTick',ticks,'XLim',lims, 'YLim',lims, 'ZLim',lims)
+%     grid('on')
+%     set(gca,'xticklabel',[],'yticklabel',[],'zticklabel',[])
+%     
+%     
+% end
+
+%%
+j=1; F=G;
+F.title='(A) Fast';
 F.legendOn=0;
-F.ylim=[0.15, 0.5];
 F.yscale='linear';
 % F.ytick=[0.1, 0.2, 0.4];
 F.doxlabel=1;
-F.xtick=[10:10:50];
+F.xtick=[0:20:50];
 F.xlim=[0, 49];
 F.ytick=[0:.1:.5];
-F.ylim=[0.32,0.5];
+F.ylim=[0.05,0.35];
 F.legend = {'LOL';'PCA'};
-F.linestyle={'-';'--';'-';'-';'-';'-'};
-plot_Lhat(T{j},S{j},F,1) 
+F.colors = {gray;'k'};
+F.xlabel='# of dimensions';
+F.ylabel='error rate';
+F.linestyle={'-';'-';'-';'-';'-';'-'};
+plot_Lhat(T{j},S{j},F,j) 
+
+%%
+j=2; F=G;
+F.title='(B) Union of Subspaces';
+F.legendOn=0;
+F.colors = {gray;purple;'k';'b';orange;'c'};
+F.ylim=[0.3 0.5];
+F.xlim=[0 21];
+F.xtick=[5:5:50];
+F.ytick=[0.2:0.1:0.5];
+plot_Lhat(T{j},S{j},F,j) 
+
+
 
 %%
 j=3; F=G;
-F.title = '(B) Sparse';
-% F.ytick=[0.1:.2:.4];
-F.ylim=[0.1, 0.5];
-F.xlim=[0, 300];
-F.xtick=[0:100:300];
-F.doxlabel=0;
+F.title = '(C) Robust';
+F.ylim = [0.25, 0.35];
+F.ytick = [0:0.025:0.5]; %[F.ylim(1): 0.01: F.ylim(2)];
+F.xlim = [1 31];
+F.xtick=[0:10:F.xlim(end)];
 F.legendOn=0;
-F.yscale='linear';
-plot_Lhat(T{j},S{j},F,2)                
+F.colors = {gray;'r';'c';orange};
+plot_Lhat(T{j},S{j},F,j) 
 
-%%
-j=1;F=G;
-F.title='(C) Toeplitz';
-F.legend = {'LOL';'PCA'};
-F.ylim=[0.3, 0.5];
-F.location='NorthEast';
-F.legendOn=0;
-F.xtick=[10:10:50];
-F.xlim=[0, 40];
-F.yscale='linear';
-F.ytick=[0.1:.1:.5];
-F.ylim=[0.45, 0.5];
-% F.colors = {gray;'g';'k';'m';orange};
-plot_Lhat(T{j},S{j},F,3)               
-
-
-%%
-j=5; F=G;
-F.title='(D) Union of Subspaces';
-F.legendOn=0;
-F.colors = {gray;'k';'b';purple;orange};
-F.ylim=[0.25 0.5];
-F.xlim=[0 20];
-F.xtick=[5:5:50];
-F.ytick=[0.2:0.1:0.5];
-plot_Lhat(T{j},S{j},F,j)                
-
-
-%%
-j=6; F=G;
-F.title = '(E) Robust';
-F.ylim = [0.27, 0.38];
-F.ytick = [0.28:0.04:0.4]; %[F.ylim(1): 0.01: F.ylim(2)];
-F.xlim = [1 15];
-F.xtick=[0:5:F.xlim(end)];
-F.legendOn=0;
-F.colors = {gray;'g';'r';orange};
-plot_Lhat(T{j},S{j},F,j)                % column 1: plot Lhats
 
 %%
 j=4; F=G;
-F.title = '(F) Semi-Sup Toeplitz';
-F.ylim = [0.1, 0.5];
-F.ytick = [F.ylim(1): 0.1: F.ylim(2)];
-F.xlim = [0 40];
-F.xtick=[10:10:50];
-F.yscale='linear';
-% F.colors = {'g';'m'};
-plot_Lhat(T{j},S{j},F,7)               
+F.title = '(D) Multiscale';
+F.ylim = [0.0, 0.5];
+F.ytick = [0:0.1:0.5]; %[F.ylim(1): 0.01: F.ylim(2)];
+F.xlim = [1 31];
+F.xtick=[0:10:F.xlim(end)];
+F.legendOn=0;
+F.colors = {gray;'r';'c';orange;gray;'r';'c';orange;'k'};
+F.linestyle={'-';'-';'-';'-';':';':';':';':';'--'};
+plot_Lhat(T{j},S{j},F,j) 
+
 
 %%
-j=4;
+j=length(T)+1;
 subplot(F.Nrows,F.Ncols,j);
 hold all, i=1; clear g
-g(i)=plot(0,0,'color','g','linewidth',2); i=i+1;
 g(i)=plot(0,0,'color',gray,'linewidth',2); i=i+1;
-g(i)=plot(1,1,'color','c','linewidth',2); i=i+1;
-g(i)=plot(0,0,'color','m','linewidth',2); i=i+1;
-g(i)=plot(0,0,'color',orange,'linewidth',2); i=i+1;
-g(i)=plot(0,0,'color',purple,'linewidth',2); i=i+1;
 g(i)=plot(0,0,'color','k','linewidth',2); i=i+1;
+g(i)=plot(1,1,'color',orange,'linewidth',2); i=i+1;
+g(i)=plot(0,0,'color',purple,'linewidth',2); i=i+1;
 g(i)=plot(0,0,'color','b','linewidth',2); i=i+1;
+g(i)=plot(0,0,'color','c','linewidth',2); i=i+1;
 g(i)=plot(0,0,'color','r','linewidth',2); i=i+1;
 
 
 
-l=legend(g,'LOL','LFL','RAL','PCA','ROAD','QOQ','LOQ','QOL','ROLOL','location',[0.1,0.1,0.2,0.4]);
+l=legend(g,'RAL','FOL','QOQ','LOQ','QOL','ROAD','ROL','location',[0,0,1,1]);
 legend(l,'boxoff')
-% legend(l,'location',[0.1,0.1,0.2,0.4]) %[left,bottom,width,height]
-% legend(l,'location',[0.8,1,0.2,0.4]) %[left,bottom,width,height]
 legend(g)
 
 set(gca,'XTick',[],'YTick',[],'Box','off','xcolor','w','ycolor','w')
  
-% print figure
+%% print figure
 if task.savestuff
     H.wh=[6.5 3]*1.2;
     H.fname=[fpath(1:findex(end-3)), 'Figs/generalizations'];

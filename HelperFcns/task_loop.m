@@ -27,9 +27,23 @@ parfor k=1:task_in.ntrials
         loop{k}.out=get_task_stats(Yhats,Z.Ytest);
     end
     
+    % multi-LOL
+    if any(strcmp(task.algs,'lolLOL'))    
+        Yhats = multiLOL_classify(Z.Xtest',Z.Xtrain',Z.Ytrain,task);
+        alg_num=size(loop{k}.out,1);
+        [loop{k}.out(alg_num+1,1)] = et_task_stats(Yhats,Z.Ytest);
+    end
+    
     % ROAD (sparse)
     if any(strcmp(task.algs,'ROAD'))        
-        [loop{k}.out(size(loop{k}.out,1)+1,:), loop{k}.ROAD_num] = run_road(Z,task);
+        alg_num=size(loop{k}.out,1);
+        [loop{k}.out(alg_num+1,:), loop{k}.ROAD_num] = run_ROAD(Z,task);
+    end
+    
+    % random forest
+    if any(strcmp(task.algs,'RF'))        
+        alg_num=size(loop{k}.out,1);
+        [loop{k}.out(alg_num+1,1)] = run_RF(Z);
     end
     
 %     if any(strcmp(task.algs,'DR'))

@@ -398,7 +398,6 @@ if ~isfield(task,'P')
             mu0 = ones(D,1);
             mu0(2:2:end)=-1;
             mu0=mudelt*mu0;
-            mu1=-mu0;
             
             
             [Q, ~] = qr(randn(task.D));
@@ -406,6 +405,7 @@ if ~isfield(task,'P')
                 Q(:,1)=-Q(:,1);
             end
             Sigma(:,:,2)=Q*Sigma*Q';
+            mu1=-Q*mu0;
             
         case ['atoeplitz, D=', num2str(D)]
             
@@ -484,7 +484,18 @@ if ~isfield(task,'P')
             
             Sigma=A;
             
+
+        case ['semisup, D=', num2str(D)]
             
+            mu0=0.5*ones(D,1);
+            mu1=-mu0;
+            
+            rho=0.5;
+            A=rho*ones(D);
+            A(1:D+1:end)=1;
+            
+            Sigma=A;
+
         case ['amodel1, D=', num2str(D)]
             
             s0=10;
@@ -670,9 +681,9 @@ if task.permute
     P.perm=perm;
 end
 
-mubar=(mu1+mu0)/2;
-mu1=mu1-mubar;
-mu0=mu0-mubar;
+% mubar=(mu1+mu0)/2;
+% mu1=mu1-mubar;
+% mu0=mu0-mubar;
 
 P.del=mu1-mu0;
 % compute risk analytically when covariances are equal

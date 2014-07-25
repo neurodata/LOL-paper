@@ -59,7 +59,7 @@ if nargin<4, Kmax=min(n,D); end
 for i=1:ntypes
     
     % get diff bases
-    if strcmp(types{i}(1),'D')
+    if strcmp(types{i}(1),'D') % default estimate of the different of the means
         if ~isfield(P,'Delta')
             P.Delta = bsxfun(@minus,P.mu(:,2:end),P.mu(:,1));
         end
@@ -78,11 +78,11 @@ for i=1:ntypes
     end
     
     % get 'eigs'
-    if strcmp(types{i}(2),'E')
+    if strcmp(types{i}(2),'E')  % equal covariances
         if ~isfield(X,['VE',types{i}(3)])
             [P.(['DE', types{i}(3)]),Q.(['VE', types{i}(3)])] = get_svd(X,n,D,types{i}(3));
         end
-    elseif strcmp(types{i}(2),'V')
+    elseif strcmp(types{i}(2),'V') % varied covariances
         if ~isfield(X,['VV',types{i}(3)])
             dv=[]; Vv=[];
             for k=1:P.Ngroups
@@ -93,14 +93,16 @@ for i=1:ntypes
             [P.(['DV', types{i}(3)]), idx]=sort(dv,'descend');
             Q.(['VV', types{i}(3)])=Vv(:,idx)';
         end
-    elseif strcmp(types{i}(2),'R')
+    elseif strcmp(types{i}(2),'R') % random projections
         if ~isfield(Q,'VRN')
             Q.VRN = rand(D,Kmax)';
         end
-    elseif strcmp(types{i}(2),'N')
+    elseif strcmp(types{i}(2),'N') % no projections
         if ~isfield(Q,'VN')
             Q.VN = eye(D);
         end
+    else
+        error('this is not a valid method to construct the eigenvectors')
     end
 end
 

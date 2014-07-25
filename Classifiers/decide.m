@@ -16,7 +16,7 @@ for i=1:Nks
         elseif strcmp(classifier,'RF')
             B = TreeBagger(100,training(1:ks(i),:)',group);
             [~, scores] = predict(B,sample(1:ks(i),:)');
-            Yhat(i,:) = scores(:,1)<scores(:,2);
+            Yhat(i,:) = [scores(:,1)<scores(:,2)]+1;
         elseif strcmp(classifier,'kNN')
             %             d=bsxfun(@minus,Z.Xtrain,Z.Xtest).^2;
             %             [~,IX]=sort(d);
