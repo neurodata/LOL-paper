@@ -2,10 +2,12 @@ function Stats = get_loop_stats(T,loop)
 % this function computes a bunch of statistics based on the output run task_loop
 
 if isfield(T,'types')
-    Nalgs=T.Nalgs+length(T.types)-1;
+    Nalgs=T.Nalgs+length(T.types);
 else
     Nalgs=T.Nalgs;
 end
+if any(strcmp(T.algs,'LOL')), Nalgs=Nalgs-1; end
+
 Lhats=nan(Nalgs,T.Nks,T.ntrials);
 sensitivity=nan(Nalgs,T.Nks,T.ntrials);
 specificity=nan(Nalgs,T.Nks,T.ntrials);

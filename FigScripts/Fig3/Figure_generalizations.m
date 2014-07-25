@@ -5,10 +5,10 @@ findex=strfind(fpath,'/');
 p = genpath(fpath(1:findex(end-2)));
 addpath(p);
 
-% task properties consistent across all tasks
+%% task properties consistent across all tasks
 clear task
 task.algs={'LOL';'ROAD'};
-task.ntrials=5;
+task.ntrials=10;
 task.simulation=1;
 task.percent_unlabeled=0;
 task.types={'DENE';'DRNE';'DEFE';'NENE'};
@@ -20,12 +20,9 @@ task.savestuff=1;
 
 j=2;
 task1=task;
-task1.name='trunk3, D=50';
+task1.name='trunk4, D=100';
 task1.rotate=true;
-task1.algs={'LOL';'GLM'};
-profile on
 [T{j},S{j},P{j}] = run_task(task1);
-profile viewer
 
 %% LOL on sparse models
 
@@ -125,7 +122,7 @@ F.doxlabel=1;
 F.xtick=[10:10:50];
 F.xlim=[0, 49];
 F.ytick=[0:.1:.5];
-F.ylim=[0.1,0.5];
+F.ylim=[0.32,0.5];
 F.legend = {'LOL';'PCA'};
 F.linestyle={'-';'--';'-';'-';'-';'-'};
 plot_Lhat(T{j},S{j},F,1) 
@@ -153,7 +150,7 @@ F.xtick=[10:10:50];
 F.xlim=[0, 40];
 F.yscale='linear';
 F.ytick=[0.1:.1:.5];
-F.ylim=[0.3, 0.5];
+F.ylim=[0.45, 0.5];
 % F.colors = {gray;'g';'k';'m';orange};
 plot_Lhat(T{j},S{j},F,3)               
 
@@ -198,8 +195,8 @@ subplot(F.Nrows,F.Ncols,j);
 hold all, i=1; clear g
 g(i)=plot(0,0,'color','g','linewidth',2); i=i+1;
 g(i)=plot(0,0,'color',gray,'linewidth',2); i=i+1;
-g(i)=plot(1,1,'color','m','linewidth',2); i=i+1;
-g(i)=plot(0,0,'color','c','linewidth',2); i=i+1;
+g(i)=plot(1,1,'color','c','linewidth',2); i=i+1;
+g(i)=plot(0,0,'color','m','linewidth',2); i=i+1;
 g(i)=plot(0,0,'color',orange,'linewidth',2); i=i+1;
 g(i)=plot(0,0,'color',purple,'linewidth',2); i=i+1;
 g(i)=plot(0,0,'color','k','linewidth',2); i=i+1;

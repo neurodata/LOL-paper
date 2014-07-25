@@ -31,11 +31,11 @@ elseif strfind(task.name,'amen')
 elseif strcmp(task.name,'mnist')
     X = loadMNISTImages('~/Research/working/A/LOL/Data/Raw/MNIST/t10k-images.idx3-ubyte');
     Y = loadMNISTLabels('~/Research/working/A/LOL/Data/Raw/MNIST/t10k-labels.idx1-ubyte');
-elseif strcmp(task.name,'mnist38')
+elseif strcmp(task.name,'mnist012')
     images = loadMNISTImages('~/Research/working/A/LOL/Data/Raw/MNIST/t10k-images.idx3-ubyte');
     labels = loadMNISTLabels('~/Research/working/A/LOL/Data/Raw/MNIST/t10k-labels.idx1-ubyte');
     X=[]; Y=[];
-    label_keepers=[3,8];
+    label_keepers=[0,1,2];
     for jj=1:length(label_keepers)
         X = [X, images(:,labels==label_keepers(jj))];
         Y = [Y; labels(labels==label_keepers(jj))];

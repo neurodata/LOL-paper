@@ -322,7 +322,43 @@ if ~isfield(task,'P')
             mu0=Q*mu0;
             mu1=Q*mu1;
             
+        case ['trunk4']
             
+            int=2;
+            mu1=2./sqrt(1:int:int*D)';
+            mu0=-mu1;
+            
+            Sigma=eye(D);
+            Sigma(1:D+1:end)=100./sqrt(D:-1:1);
+            
+        case ['trunk4, D=', num2str(D)]
+            
+            int=2;
+            mu1=4./sqrt(1:int:int*D)';
+            mu0=-mu1;
+            
+            Sigma=eye(D);
+            Sigma(1:D+1:end)=100./sqrt(D:-1:1);
+            
+            
+        case ['atrunk4, D=', num2str(D)]
+            
+            mu1=2./sqrt(1:D)';
+            mu0=-mu1;
+            
+            Sigma=eye(D);
+            Sigma(1:D+1:end)=100./sqrt(D:-1:1);
+            
+            [Q, ~] = qr(randn(task.D));
+            if det(Q)<-.99
+                Q(:,1)=-Q(:,1);
+            end
+            
+            Sigma=Q*Sigma*Q';
+            mu0=Q*mu0;
+            mu1=Q*mu1;
+            
+
         case ['toeplitz, D=', num2str(D)]
             
             delta1=0.4; D1=10;
@@ -469,6 +505,18 @@ if ~isfield(task,'P')
             mu1=Q*mu1;
             
             
+        case ['ROAD1, D=', num2str(D)]
+            
+            s0=10;
+            mu0=zeros(D,1);
+            mu1=[ones(s0,1); zeros(D-s0,1)];
+            
+            rho=0.2;
+            A=rho*ones(D);
+            A(1:D+1:end)=1;
+            Sigma=A;
+            
+            
         case ['aROAD1, D=', num2str(D)]
             
             s0=10;
@@ -483,6 +531,7 @@ if ~isfield(task,'P')
             if det(Q)<-.99
                 Q(:,1)=-Q(:,1);
             end
+            
             
             Sigma=Q*A*Q';
             mu0=Q*mu0;

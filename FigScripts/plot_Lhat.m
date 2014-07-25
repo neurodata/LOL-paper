@@ -6,16 +6,16 @@ function plot_Lhat(T,S,F,subplot_id)
 %   F: figure properties
 %   subplot_id: which subplot_id
 
-
+if nargin==3, subplot_id=1; F.Ncols=1; F.Nrows=1; end
 if ~isfield(F,'plot_chance'), F.plot_chance=false; end
 if ~isfield(F,'plot_bayes'), F.plot_bayes=false; end
 if ~isfield(F,'plot_risk'), F.plot_risk=false; end
-if ~isfield(F,'doxlabel'),doxlabel=0; else doxlabel=F.doxlabel; end
 if isfield(T,'types')
-    Nalgs=T.Nalgs+length(T.types)-1;
+    Nalgs=T.Nalgs+length(T.types);
 else
     Nalgs=T.Nalgs;
 end
+if any(strcmp(T.algs,'LOL')), Nalgs=Nalgs-1; end
 legendcell=[];
 
 algs=[T.types; T.algs{2:end}];
@@ -115,9 +115,9 @@ if legendOn
 else
     legend off
 end
-if doxlabel==1
-    xlabel('# of dimensions')
-end
+if isfield(F,'xlabel'),xlabel(F.xlabel); end
+if isfield(F,'ylabel'),ylabel(F.ylabel); end
+
 
 set(gca,'YScale',yscale,'XScale','linear','Ylim',ylim,'Xlim',xlim,'XTick',xtick,'YTick',ytick)
 title(tit)

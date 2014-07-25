@@ -49,6 +49,12 @@ elseif strcmp(metatask,'rotated_toeplitzs')
 elseif strcmp(metatask,'both_cigars')
     task_list={'parallel cigars';'rotated cigars'};
     
+elseif strcmp(metatask,'two_trunks')
+    task_list={'trunk4, D=100';'atrunk4, D=100'};
+
+elseif strcmp(metatask,'both_cigars')
+    task_list={'parallel cigars';'angled cigars'};
+
 elseif strcmp(metatask,'three_cigars')
     task_list={'parallel cigars';'rotated cigars';'angled cigars'};
 
