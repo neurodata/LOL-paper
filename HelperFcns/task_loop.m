@@ -15,61 +15,41 @@ parfor k=1:task_in.ntrials
     Yhatchance=pihat>0.5;
     loop{k}.Lchance=sum(Yhatchance*ones(size(Z.Ytest))~=Z.Ytest)/task.ntest;
     
-    % Bayes optimal under QDA model
+    % Bayes optimal under QDA model when parameters are given
     if task.QDA_model
         Yhat = gmm_predict(Z.Xtest,Z.Ytest,P);
         loop{k}.Lbayes=sum(Yhat~=Z.Ytest)/task.ntest;
     end
     
-    % LOL
-    if any(strcmp(task.algs,'LOL'))        
+    if any(strcmp(task.algs,'LOL'))      % LOL  
         Yhats = LOL_classify(Z.Xtest',Z.Xtrain',Z.Ytrain,task);
         loop{k}.out=get_task_stats(Yhats,Z.Ytest);
     end
     
-    % multi-LOL
-    if any(strcmp(task.algs,'lolLOL'))    
+    if any(strcmp(task.algs,'lolLOL'))    % multi-LOL
         Yhats = multiLOL_classify(Z.Xtest',Z.Xtrain',Z.Ytrain,task);
-        alg_num=size(loop{k}.out,1);
-        [loop{k}.out(alg_num+1,1)] = et_task_stats(Yhats,Z.Ytest);
+        [loop{k}.out(size(loop{k}.out,1)+1,1)] = get_task_stats(Yhats,Z.Ytest);
     end
     
-    % ROAD (sparse)
-    if any(strcmp(task.algs,'ROAD'))        
-        alg_num=size(loop{k}.out,1);
-        [loop{k}.out(alg_num+1,:), loop{k}.ROAD_num] = run_ROAD(Z,task);
+    if any(strcmp(task.algs,'ROAD'))        % ROAD
+        [loop{k}.out(size(loop{k}.out,1)+1,:), loop{k}.ROAD_num] = run_ROAD(Z,task);
     end
     
-    % random forest
-    if any(strcmp(task.algs,'RF'))        
-        alg_num=size(loop{k}.out,1);
-        [loop{k}.out(alg_num+1,1)] = run_RF(Z);
+    if any(strcmp(task.algs,'RF'))        % random forest
+        [loop{k}.out(size(loop{k}.out,1)+1,1)] = run_RF(Z);
     end
     
-%     if any(strcmp(task.algs,'DR'))
-%         [~,W] = DR(Z.Ytrain,Z.Xtrain','disc',task.Kmax);
-%         Xtest=Z.Xtest'*W;
-%         Xtrain=Z.Xtrain'*W;
-%         Yhat_DR{1} = decide(Xtest',Xtrain,Z.Ytrain,'linear',task.ks);
-%         loop{k}.out(size(loop{k}.out,1)+1,:)=get_task_stats(Yhat_DR,Z.Ytest);
-%     end
-%     
-%     if any(strcmp(task.algs,'LAD'))
-%         [~,W] = ldr(Z.Ytrain,Z.Xtrain','LAD','disc',task.Kmax,'initval',orth(rand(task.D,task.Kmax)));
-%         Xtest=Z.Xtest'*W;
-%         Xtrain=Z.Xtrain'*W;
-%         Yhat_DR{1} = decide(Xtest',Xtrain,Z.Ytrain,'linear',task.ks);
-%         loop{k}.out(size(loop{k}.out,1)+1,:)=get_task_stats(Yhat_DR,Z.Ytest);
-%     end
-%     
-%     if any(strcmp(task.algs,'GLM'))
-%         opts=struct('nlambda',task.Nks+11);
-%         fit=glmnet(Z.Xtrain',Z.Ytrain,'multinomial',opts);
-%         pfit=glmnetPredict(fit,Z.Xtest',fit.lambda,'response','false',fit.offset);
-%         [~,yhat]=max(pfit,[],2);
-%         Yhat_GLM{1}=squeeze(yhat)';
-%         loop{k}.out(size(loop{k}.out,1)+1,:)=get_task_stats(Yhat_GLM,Z.Ytest);
-%     end
+    if any(strcmp(task.algs,'DR'))      % sufficient dimensionality reduciton
+        [loop{k}.out(size(loop{k}.out,1)+1,1)] = run_DR(Z,task);
+    end
+    
+    if any(strcmp(task.algs,'LAD'))         % likelihood acquired directions (Cook and Forzani, 2009b)
+        [loop{k}.out(size(loop{k}.out,1)+1,1)] = run_LAD(Z,task);
+    end
+    
+    if any(strcmp(task.algs,'GLM'))
+        [loop{k}.out(size(loop{k}.out,1)+1,1)] = run_GLM(Z,task);
+    end
     
     
 end

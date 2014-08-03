@@ -1,6 +1,9 @@
 function Stats = get_loop_stats(T,loop)
 % this function computes a bunch of statistics based on the output run task_loop
 
+if ~isfield(T,'Nalgs'), T.Nalgs=length(T.algs); end
+if ~isfield(T,'Nks'), T.Nks=length(T.ks); end
+if ~isfield(T,'ntrials'), T.ntrials=1; end
 if isfield(T,'types')
     Nalgs=T.Nalgs+length(T.types);
 else

@@ -1,4 +1,17 @@
 function Yhat = decide(sample,training,group,classifier,ks)
+% for each element of ks, train a classifier and make predictions
+% 
+% INPUT
+%   sample (R^{D x ntest}): test sample
+%   training (R^{D x ntrain}): training sample
+%   group (Z^ntrain): classes of training sample
+%   classifier (str): name of classifier to use
+%   ks (vec of int): # of embedding dimensions to try
+% 
+% OUT:
+%   Yhat (Z^{length(ks) x ntest}): matrix where each column is predicted
+%       classes for a given element of ks
+
 
 Nks=length(ks);
 ntest=size(sample,2);
@@ -16,7 +29,7 @@ for i=1:Nks
         elseif strcmp(classifier,'RF')
             B = TreeBagger(100,training(1:ks(i),:)',group);
             [~, scores] = predict(B,sample(1:ks(i),:)');
-            Yhat(i,:) = [scores(:,1)<scores(:,2)]+1;
+            [~, Yhat(i,:)] = max(scores,[],2); 
         elseif strcmp(classifier,'kNN')
             %             d=bsxfun(@minus,Z.Xtrain,Z.Xtest).^2;
             %             [~,IX]=sort(d);

@@ -9,6 +9,18 @@ function [transformers, deciders, types] = parse_algs(algs)
 %   deciders (cell of cells):   each transformer has a cell containing the name of each
 %                               decider for that transformer
 %   types (cell of chars):      algs re-ordered
+% 
+% CODE FOR TYPES: each type is a 4 letter code: ABCD
+%   A: kind of difference matrix
+%   B: whether to share covariance matrices 
+%   C: how to compute/approximate eigenvectors
+%   D: which classifier to use
+%    
+%   OPTIONS FOR EACH:
+%       A: D=delta, N=none, R=robst, S=spase
+%       B: E=equal, V=varied
+%       C: N=normal, F=fast, R=robust, A=random
+%       D: N = NaiveBayes, L = LDA, Q = QDA, R = RandomForest, S = SVM
 
 
 

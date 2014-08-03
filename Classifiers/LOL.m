@@ -5,11 +5,7 @@ function [Proj, P, Q] = LOL(X,Y,types,Kmax)
 % INPUT:
 %   X in R^{D x ntrain}: ntrain columns, each a D-dimensional example
 %   Y in [K]^ntrain: a categorical vector assigning each training sample a class
-%   types in cell: each element lists a different embedding type
-%       D/S/R/N: delta, sparse, robust, or no delta matrix
-%       E/V/R/N: equal, varied, random, or no projection (NB: if R or N,
-%       than the next option (F/R/N) does not come up)
-%       F/R/N: fast, robust, normal
+%   types in cell: each element lists a different embedding type (see below for details)
 %   Kmax in Z: max dimension to project into
 %
 % OUTPUT:
@@ -27,14 +23,28 @@ function [Proj, P, Q] = LOL(X,Y,types,Kmax)
 %       DEN/DVN: eigenvalues for equal/varied subspace assumptions
 %   Q (struct): containing eigenvectors
 
+% CODE FOR TYPES: each type is a 3 letter code: ABC
+%   A: kind of difference matrix (D=delta, N=none, R=robust, S=sparse)
+%   B: whether to share covariance matrices (E=equal, V=varied)
+%   C: how to compute/approximate eigenvectors (N=normal, F=fast, R=robust, A=random)
+
+%% check and make sure inputs are all correct
+
+[D,n]=size(X);
+if n~=length(Y), X=X'; [D,n]=size(X); end
+ntypes=length(types);
+for i=1:ntypes
+    if isempty(strfind('DRNS',types{i}(1))), error('failed to specify a legit estimator of delta'), end
+    if isempty(strfind('EV',types{i}(2))), error('failed to specify a legit equal/varied subspace'), end
+    if isempty(strfind('NFRA',types{i}(3))), error('failed to specify a legit approx to eigenvectors'), end
+end
+Kmax=round(Kmax);
+
 %% get means
 Q=struct;
-ntypes=length(types);
 P.groups=unique(Y);
 if any(isnan(P.groups)), P.groups(isnan(P.groups))=[]; P.groups=[P.groups; NaN]; end % remove nan groups from mean (NB: NaN~=NaN)
 P.Ngroups=length(P.groups);
-[D,n]=size(X);
-if n~=length(Y), X=X'; [D,n]=size(X); end
 P.nvec=nan(P.Ngroups,1);
 P.mu=nan(D,P.Ngroups);
 idx=cell(P.Ngroups,1);
@@ -48,7 +58,7 @@ end
 % sort classes in order of # of samples per class
 [~, IX] = sort(P.nvec);
 P.nvec=P.nvec(IX);
-maxk=min(P.nvec);
+min_Ny=min(P.nvec);
 P.groups=P.groups(IX);
 P.mu=P.mu(:,IX);
 for k=1:P.Ngroups, P.idx{k}=idx{IX(k)}; end
@@ -59,7 +69,7 @@ if nargin<4, Kmax=min(n,D); end
 for i=1:ntypes
     
     % get diff bases
-    if strcmp(types{i}(1),'D') % default estimate of the different of the means
+    if strcmp(types{i}(1),'D')      % default estimate of the different of the means
         if ~isfield(P,'Delta')
             P.Delta = bsxfun(@minus,P.mu(:,2:end),P.mu(:,1));
         end
@@ -70,39 +80,30 @@ for i=1:ntypes
             P.Selta(idx(10:end))=0;
         end
     elseif strcmp(types{i}(1),'R') % robust estimate of difference of means
-        P.median=nan(D,P.Ngroups);
+        P.robustmean=nan(D,P.Ngroups);
         for k=1:P.Ngroups
-            P.trimmean(:,k)=trimmean(X(:,idx{k})',10);
+            %             P.robustmean(:,k)=median(X(:,idx{k})',1);
+            P.robustmean(:,k)=trimmean(X(:,idx{k})',10);
         end
-        P.Relta = bsxfun(@minus,P.trimmean(:,2:end),P.trimmean(:,1));
+        P.Relta = bsxfun(@minus,P.robustmean(:,2:end),P.robustmean(:,1));
     end
     
     % get 'eigs'
-    if strcmp(types{i}(2),'E')  % equal covariances
+    if strcmp(types{i}(2),'E')      % equal covariances
         if ~isfield(X,['VE',types{i}(3)])
-            [P.(['DE', types{i}(3)]),Q.(['VE', types{i}(3)])] = get_svd(X,n,D,types{i}(3));
+            [P.(['DE', types{i}(3)]),Q.(['VE', types{i}(3)])] = get_svd(X,n,D,types{i}(3),Kmax);
         end
-    elseif strcmp(types{i}(2),'V') % varied covariances
+    elseif strcmp(types{i}(2),'V')  % varied covariances
         if ~isfield(X,['VV',types{i}(3)])
             dv=[]; Vv=[];
             for k=1:P.Ngroups
-                [d,V] = get_svd(X(:,P.idx{k}),maxk,D,types{i}(3));
+                [d,V] = get_svd(X(:,P.idx{k}),min_Ny,D,types{i}(3),ceil(Kmax/P.Ngroups));
                 dv = [dv; d];
                 Vv = [Vv, V'];
             end
             [P.(['DV', types{i}(3)]), idx]=sort(dv,'descend');
             Q.(['VV', types{i}(3)])=Vv(:,idx)';
         end
-    elseif strcmp(types{i}(2),'R') % random projections
-        if ~isfield(Q,'VRN')
-            Q.VRN = rand(D,Kmax)';
-        end
-    elseif strcmp(types{i}(2),'N') % no projections
-        if ~isfield(Q,'VN')
-            Q.VN = eye(D);
-        end
-    else
-        error('this is not a valid method to construct the eigenvectors')
     end
 end
 
@@ -110,33 +111,40 @@ end
 %% generate projection matrices
 Proj=cell(1:ntypes);
 for i=1:ntypes
-    if ~strcmp(types{i}(1),'N') % if we are appending something to "eigenvectors"
+    if ~strcmp(types{i}(1),'N')     % if we are appending something to "eigenvectors"
         [V, ~] = qr([P.([types{i}(1), 'elta']),Q.(['V', types{i}(2), types{i}(3)])'],0);
-    elseif strcmp(types{i}(1),'N')
+    elseif strcmp(types{i}(1),'N')  % if not
         V=Q.(['V', types{i}(2), types{i}(3)])';
     end
-    if Kmax>size(V,1), Kmax=siz(1); end
+    
+    siz=size(V,2); if Kmax>siz, Kmax=siz; end
     Proj{i}.V = V(:,1:Kmax)';
     Proj{i}.name=types{i};
 end
 
 
-function [d,V] = get_svd(X,n,D,type)
+function [d,V] = get_svd(X,n,D,type,Kmax)
 
-if strcmp(type,'N')
+if strcmp(type,'N')             % normal svd, compute all eigenvectors
     if n>D, [~,d,V] = svd(X',0);
     else [V,d,~] = svd(X,0);
     end
     d=diag(d);
-elseif strcmp(type,'F')
-    if n>D, [~,d,V] = fsvd(X',min(n,D));
-    else [V,d,~] = fsvd(X,min(n,D));
+elseif strcmp(type,'F')         % fast svd, comput top min([n,D,Kmax]) eigvectors
+    if n>D, [~,d,V] = fsvd(X',min([n,D,Kmax]));
+    else [V,d,~] = fsvd(X,min([n,D,Kmax]));
     end
-elseif strcmp(type,'R')
+elseif strcmp(type,'R')         % compute all robust eigenvectors
     if n>D, cov = m_estimator_gms(X');
     else cov = m_estimator_gms(X);
     end
     [V,d]= eig(cov);
     d=diag(d);
+elseif strcmp(type,'A')         % random projections
+    V = rand(D,Kmax); d=[];
 end
-V=V';
+try
+    V=V';
+catch
+    keyboard
+end
