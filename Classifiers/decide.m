@@ -11,7 +11,7 @@ function Yhat = decide(sample,training,group,classifier,ks)
 % OUT:
 %   Yhat (Z^{length(ks) x ntest}): matrix where each column is predicted
 %       classes for a given element of ks
-
+ 
 
 Nks=length(ks);
 ntest=size(sample,2);
@@ -28,8 +28,10 @@ for i=1:Nks
             Yhat(i,:) = svmclassify(SVMStruct,sample(1:ks(i),:)');
         elseif strcmp(classifier,'RF')
             B = TreeBagger(100,training(1:ks(i),:)',group);
-            [~, scores] = predict(B,sample(1:ks(i),:)');
-            [~, Yhat(i,:)] = max(scores,[],2); 
+            [yhat, scores] = predict(B,sample(1:ks(i),:)');
+            [~, group_idx] = max(scores,[],2); 
+            group_names=unique(group);
+            Yhat(i,:)=group_names(group_idx);
         elseif strcmp(classifier,'kNN')
             %             d=bsxfun(@minus,Z.Xtrain,Z.Xtest).^2;
             %             [~,IX]=sort(d);

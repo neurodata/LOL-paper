@@ -11,7 +11,7 @@ if ~isfield(task,'permute'), task.permute=false; end % whether or not to permute
 if ~isfield(task,'rotate'), task.rotate=false; end % ambient # of dimensions
 if ~isfield(task,'D'), D=100; else D=task.D; end % ambient # of dimensions
 
-if ~isfield(task,'P')    
+if ~isfield(task,'P')
     switch task.name
         
         case 'b' % for debuggin purposes
@@ -85,6 +85,52 @@ if ~isfield(task,'P')
             sv(2)=1;
             A  = eye(D,D);
             Sigma=A*diag(sv);                            % class 1 cov
+            
+        case 'ac' % simple
+            
+            mu0=zeros(D,1);
+            mu1=mu0;
+            mu1(2)=8;
+            mu1(3:end)=0.15;
+            
+            Sigma  = eye(D);
+            Sigma(2,2)=4;
+            
+        case 'oc' % simple
+            
+            mu0=zeros(D,1);
+            mu1=mu0;
+            mu1(1)=2;
+            mu1(3:end)=0.15;
+            
+            Sigma  = eye(D);
+            Sigma(2,2)=4;
+                        
+        case 'rc' % simple
+            
+            mu0=zeros(D,1);
+            mu1=0.15+mu0;
+            
+            Sigma  = eye(D);
+            Sigma(2,2)=4;
+            
+            % generate rotation matrix uniformly
+            [Q, ~] = qr(randn(task.D));
+            if det(Q)<-.99
+                Q(:,1)=-Q(:,1);
+            end
+            
+            th=pi/4;
+            Q(1:2,1:2)=[cos(th) -sin(th); sin(th) cos(th)];
+            Q(1,3:end)=0;
+            Q(2,3:end)=0;
+            Q(3:end,1)=0;
+            Q(3:end,2)=0;
+
+            mu0=Q*mu0;
+            mu1=Q*mu1;
+            Sigma=Q*Sigma*Q';
+            
             
         case 'parallel cigars' % simple
             
@@ -341,9 +387,30 @@ if ~isfield(task,'P')
             Sigma(1:D+1:end)=100./sqrt(D:-1:1);
             
             
+        case ['ntrunk4, D=', num2str(D)]
+            
+            int=2;
+            mu1=4./sqrt(1:int:int*D)';
+            mu0=mu1;
+            mu0(1)=mu0(1)+10;
+            
+            Sigma=eye(D);
+            Sigma(1:D+1:end)=100./sqrt(D:-1:1);
+            
+        case ['otrunk4, D=', num2str(D)]
+            
+            int=2;
+            mu1=4./sqrt(1:int:int*D)';
+            mu0=mu1;
+            mu0(2)=mu0(2)+10;
+            
+            Sigma=eye(D);
+            Sigma(1:D+1:end)=100./sqrt(D:-1:1);
+            
         case ['atrunk4, D=', num2str(D)]
             
-            mu1=2./sqrt(1:D)';
+            int=2;
+            mu1=4./sqrt(1:int:int*D)';
             mu0=-mu1;
             
             Sigma=eye(D);
@@ -354,11 +421,11 @@ if ~isfield(task,'P')
                 Q(:,1)=-Q(:,1);
             end
             
-            Sigma=Q*Sigma*Q';
+            %             Sigma=Q*Sigma*Q';
             mu0=Q*mu0;
             mu1=Q*mu1;
             
-
+            
         case ['toeplitz, D=', num2str(D)]
             
             delta1=0.4; D1=10;
@@ -484,7 +551,7 @@ if ~isfield(task,'P')
             
             Sigma=A;
             
-
+            
         case ['semisup, D=', num2str(D)]
             
             mu0=0.5*ones(D,1);
@@ -495,7 +562,7 @@ if ~isfield(task,'P')
             A(1:D+1:end)=1;
             
             Sigma=A;
-
+            
         case ['amodel1, D=', num2str(D)]
             
             s0=10;
@@ -653,7 +720,7 @@ else
     P=task.P;
 end
 
-% this took too long, so i stopped checking 
+% this took too long, so i stopped checking
 % for k=1:K % check if covariance matrices are valid covariance matrices
 %     [~,p]=chol(Sigma(:,:,k));
 %     if p>0
@@ -715,7 +782,7 @@ if task.rotate
         end
     end
     if size(P.Sigma,3)==1
-       P.Sigma=Q*P.Sigma*Q'; 
+        P.Sigma=Q*P.Sigma*Q';
     end
     
 end

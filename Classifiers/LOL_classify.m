@@ -1,7 +1,7 @@
 function [Yhat, Proj, P] = LOL_classify(sample,training,group,task)
 % LOL_classify does the following:
 % (i) parses task types into transformers and deciders
-% (ii) runs LOL to learn all the transformers
+% (ii) runs LOL to learn all the linear transformers
 % (iii) for each (transformer,decider pair) makes prediction for each
 % specified k
 % 
