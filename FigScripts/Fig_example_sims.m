@@ -21,7 +21,7 @@ task.savestuff=1;
 
 j=1;
 task1=task;
-task1.name='trunk4, D=1000';
+task1.name='trunk4, D=100';
 task1.rotate=true;
 [T{j},S{j},P{j}] = run_task(task1);
 
@@ -30,7 +30,7 @@ task1.rotate=true;
 
 j=2;
 task1=task;
-task1.name='toeplitz, D=1000';
+task1.name='toeplitz, D=100';
 task1.ks=1:50;
 [T{j},S{j},P{j}] = run_task(task1);
 
@@ -38,17 +38,18 @@ task1.ks=1:50;
 
 j=3;
 task1=task;
-task1.name='fat tails, D=1000';
+task1.name='fat tails, D=100';
 task1.ks=1:50;
 task1.rotate=true;
+task1.QDA_model=false;
 [T{j},S{j},P{j}] = run_task(task1);
 
 
 %% save generalizations
 
-if task.savestuff
-    save([fpath(1:findex(end-2)), 'Data/Results/example_sims'])
-end
+% if task.savestuff
+%     save([fpath(1:findex(end-2)), 'Data/Results/example_sims'])
+% end
 load([fpath(1:findex(end-2)), 'Data/Results/example_sims'])
 
 
@@ -110,7 +111,8 @@ for j=1:length(T)
         F.title='';
         F.ylabel='error rate';
         F.xlabel='# dimensions';
-        F.ytick=[0.1:0.2:0.5];
+        F.ytick=[0.1:0.02:0.5];
+        F.ylim=[0.06,0.12];
         plot_Lhat(T{j},S{j},F,2*F.Ncols+j)
         ids=1:10:100;
     elseif j==2
