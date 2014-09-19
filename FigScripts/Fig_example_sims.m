@@ -12,8 +12,8 @@ task.ntrials=10;
 task.simulation=1;
 task.percent_unlabeled=0;
 task.types={'DENL';'NENL'};
-task.ntrain=50;
-task.ks=1:50; %unique(round(logspace(0,log10(50),30)));
+task.ntrain=100;
+task.ks=unique(round(logspace(0,log10(task.ntrain-1),50)));
 task.savestuff=1;
 
 
@@ -28,10 +28,9 @@ task1.rotate=true;
 
 %% toeplitz
 
-j=2;
+ j=2;
 task1=task;
 task1.name='toeplitz, D=100';
-task1.ks=1:50;
 [T{j},S{j},P{j}] = run_task(task1);
 
 %% fat tails
@@ -39,18 +38,17 @@ task1.ks=1:50;
 j=3;
 task1=task;
 task1.name='fat tails, D=100';
-task1.ks=1:50;
 task1.rotate=true;
 task1.QDA_model=false;
 [T{j},S{j},P{j}] = run_task(task1);
 
 
 %% save generalizations
-
-% if task.savestuff
-%     save([fpath(1:findex(end-2)), 'Data/Results/example_sims'])
-% end
-load([fpath(1:findex(end-2)), 'Data/Results/example_sims'])
+% 
+if task.savestuff
+    save([fpath(1:findex(end-2)), 'Data/Results/example_sims'])
+end
+% load([fpath(1:findex(end-2)), 'Data/Results/example_sims'])
 
 
 %% set figure parameters that are consistent across panels
@@ -70,8 +68,8 @@ G.linestyle={'-';'-';'-';'-';'-';'-';'-'};
 G.ytick=[0.1:.1:.5];
 G.ylim=[0, 0.5];
 
-G.xtick=[00:20:50];
-G.xlim=[0, 40];
+G.xtick=[0:20:task.ntrain];
+G.xlim=[0, 80];
 
 G.yscale='linear';
 
@@ -90,11 +88,12 @@ for j=1:length(T)
     Z = parse_data(X,Y,task1.ntrain,task1.ntest,0);
     
     subplot(G.Nrows,G.Ncols,j), hold on
-    maxd=10;
     delta=P{j}.mu(1:maxd,1)-P{j}.mu(1:maxd,2);
-    delta=delta(1:maxd);
-    delta=delta-mean(delta);
-    delta=delta/max(delta);
+%     maxd=task.ntrain;
+%     delta=delta(1:maxd);
+%     delta=delta-mean(delta);
+%     delta=delta/max(delta);
+delta=delta(1:10);
     if j==1, delta=sort(delta,'descend'); end
     plot(delta,'color','k','linestyle','-','linewidth',2)
     set(gca,'XTick',0:2:maxd*2,'xlim',[1,maxd])
@@ -111,17 +110,17 @@ for j=1:length(T)
         F.title='';
         F.ylabel='error rate';
         F.xlabel='# dimensions';
-        F.ytick=[0.1:0.02:0.5];
-        F.ylim=[0.06,0.12];
+        F.ytick=[0.05, [0.0:0.1:0.3]];
+        F.ylim=[0.02,0.4];
+        F.yscale='log';
         plot_Lhat(T{j},S{j},F,2*F.Ncols+j)
         ids=1:10:100;
     elseif j==2
         title('(B) Toeplitz')
         F=G;
         F.doxlabel=false;
-        F.ylim=[0.35,0.5];
+        F.ylim=[0.3,0.5];
         F.ytick=[0:0.05:0.5];
-        F.xlim=[0,49];
         F.title='';
         plot_Lhat(T{j},S{j},F,2*F.Ncols+j)
         ids=1:10;
@@ -132,7 +131,6 @@ for j=1:length(T)
         F.doxlabel=false;
         F.ylim=[0.15,0.5];
         F.ytick=[0:0.1:0.5];
-        F.xlim=[0,49];
         F.title='';
         F.xticklabel=[];
         plot_Lhat(T{j},S{j},F,2*F.Ncols+j)

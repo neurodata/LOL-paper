@@ -7,7 +7,7 @@ findex=strfind(fpath,'/');
 p = genpath(fpath(1:findex(end-2)));
 % addpath(p);
 s=rng;
-save('~/Research/working/A/LOL/Data/randstate','s')
+% save('~/Research/working/A/LOL/Data/randstate','s')
 % load([fpath(1:findex(end-2)), 'Data/randstate']);
 % rng(s);
 
@@ -46,8 +46,8 @@ for j=1:Nsims
     Xplot2=Z.Xtest(:,Z.Ytest==2);
     idx=randperm((task.ntest-100)/2);
     idx=idx(1:100);
-    plot(Xplot1(1,idx),Xplot1(2,idx),'o','color',[0 0 0],'LineWidth',1.0,'markersize',4),
-    plot(Xplot2(1,idx),Xplot2(2,idx),'x','color',gray,'LineWidth',1.0,'markersize',4)
+    plot(Xplot1(1,idx),Xplot1(2,idx),'.','color',[0 0 0],'LineWidth',1.0,'markersize',4),
+    plot(Xplot2(1,idx),Xplot2(2,idx),'.','color',gray,'LineWidth',1.0,'markersize',4)
     axis('equal')
     %     set(gca,'XTick',[-5:5:5],'YTick',[-10:5:10],'XLim',[-8 8], 'YLim',[-15 15])
     set(gca,'XTickLabel',[],'YTickLabel',[])
