@@ -53,9 +53,13 @@ if task.simulation
             A=rho*ones(D);
             A(1:D+1:end)=1;
             
-            [Q, ~] = qr(randn(task.D));
-            if det(Q)<-.99
-                Q(:,1)=-Q(:,1);
+            if task.rotate==true;
+                [Q, ~] = qr(randn(task.D));
+                if det(Q)<-.99
+                    Q(:,1)=-Q(:,1);
+                end
+            else
+                Q=eye(task.D);
             end
             
             P.Sigma=Q*A*Q';
@@ -77,7 +81,7 @@ if task.simulation
 
             mu0=zeros(D,1);
             mu1=repmat([1;0],D/2,1);
-            Sigma=1*eye(D);
+            Sigma=sqrt(D/2)*eye(D);
             
             gmm = gmdistribution([mu0,mu1]',Sigma,[0.5,0.5]);
             [X0,Y0] = random(gmm,task.n*0.5);
@@ -89,7 +93,6 @@ if task.simulation
             
             X=[X0;X1];
             Y=[Y0;Y1];
-                        
 
         otherwise
             P = set_parameters(task);

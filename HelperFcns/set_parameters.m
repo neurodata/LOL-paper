@@ -89,19 +89,17 @@ if ~isfield(task,'P')
         case 'ac' % simple
             
             mu0=zeros(D,1);
-            mu1=mu0;
+            mu1=0.15+mu0;
             mu1(2)=8;
-            mu1(3:end)=0.15;
             
-            Sigma  = eye(D);
+            Sigma = eye(D);
             Sigma(2,2)=4;
             
         case 'oc' % simple
             
             mu0=zeros(D,1);
-            mu1=mu0;
+            mu1=0.15+mu0;
             mu1(1)=2;
-            mu1(3:end)=0.15;
             
             Sigma  = eye(D);
             Sigma(2,2)=4;
@@ -110,6 +108,7 @@ if ~isfield(task,'P')
             
             mu0=zeros(D,1);
             mu1=0.15+mu0;
+            mu1(1)=2;
             
             Sigma  = eye(D);
             Sigma(2,2)=4;
@@ -371,7 +370,7 @@ if ~isfield(task,'P')
         case ['trunk4']
             
             int=2;
-            mu1=2./sqrt(1:int:int*D)';
+            mu1=4./sqrt(1:int:int*D)';
             mu0=-mu1;
             
             Sigma=eye(D);

@@ -5,7 +5,7 @@ clearvars, clc,
 fpath = mfilename('fullpath');
 findex=strfind(fpath,'/');
 p = genpath(fpath(1:findex(end-2)));
-% addpath(p);
+addpath(p);
 s=rng;
 % save('~/Research/working/A/LOL/Data/randstate','s')
 % load([fpath(1:findex(end-2)), 'Data/randstate']);
@@ -19,20 +19,20 @@ task.ntrain=100;
 k=10;
 task_list = set_task_list(task_list_name);
 task.ks=1:20;
-task.ntest=1000;
+task.ntest=500;
 task.rotate=false;
 task.algs={'LOL';'ROAD'};
 task.types={'NEFL';'DEFL'};
 task.savestuff=1;
 orange=[1 0.6 0];
 
-
 h(1)=figure(1); clf
 Nsims=length(task_list);
 Nalgs=length(task.algs)+length(task.types)-1;
-Nrows=Nsims;
-Ncols=Nalgs+3;
+Ncols=Nsims;
+Nrows=Nalgs+2;
 gray=0.7*[1 1 1];
+ms=4; % markersize
 for j=1:Nsims
     
     task.name=task_list{j};
@@ -41,13 +41,13 @@ for j=1:Nsims
     
     Z = parse_data(X,Y,task1.ntrain,task1.ntest,0);
         
-    subplot(Nrows,Ncols,1+Ncols*(j-1)), hold on
+    subplot(Nrows,Ncols,j), hold on
     Xplot1=Z.Xtest(:,Z.Ytest==1);
     Xplot2=Z.Xtest(:,Z.Ytest==2);
     idx=randperm((task.ntest-100)/2);
     idx=idx(1:100);
-    plot(Xplot1(1,idx),Xplot1(2,idx),'.','color',[0 0 0],'LineWidth',1.0,'markersize',4),
-    plot(Xplot2(1,idx),Xplot2(2,idx),'.','color',gray,'LineWidth',1.0,'markersize',4)
+    plot(Xplot1(1,idx),Xplot1(2,idx),'.','color',[0 0 0],'LineWidth',1.0,'markersize',ms),
+    plot(Xplot2(1,idx),Xplot2(2,idx),'.','color',gray,'LineWidth',1.0,'markersize',ms)
     axis('equal')
     %     set(gca,'XTick',[-5:5:5],'YTick',[-10:5:10],'XLim',[-8 8], 'YLim',[-15 15])
     set(gca,'XTickLabel',[],'YTickLabel',[])
@@ -57,7 +57,7 @@ for j=1:Nsims
         case 2, tit='Orthogonal';
         case 3, tit='Rotated';
     end
-    ylabel(tit)
+    title(tit)
     
     
     [transformers, deciders] = parse_algs(task1.types);
@@ -66,7 +66,7 @@ for j=1:Nsims
     PP{1}=Proj{2};
     Proj=PP;
     
-    for i=1:Ncols-1
+    for i=1:Nrows-1
         if i<3
             Xtest=Proj{i}.V(1:k,:)*Z.Xtest;
             Xtrain=Proj{i}.V(1:k,:)*Z.Xtrain;
@@ -128,12 +128,12 @@ for j=1:Nsims
             tit='LDA o PCA';
             si=1;
         elseif i==4
-            tit='Bayes';
+            tit=[{'Bayes'};{'Optimal'}];
             col1='k';
             col2='k';
             si=4;
         end
-        subplot(Nrows,Ncols,(si+1)+Ncols*(j-1)), hold on
+        subplot(Nrows,Ncols,j+Ncols*(si)), hold on
         
         plot(t,y2,'linestyle',ls1,'color',col2,'linewidth',2)
         plot(t,y1,'linestyle',ls2,'color',col1, 'linewidth',2)
@@ -146,20 +146,15 @@ for j=1:Nsims
         
         grid on
         axis([min(min2,min1), max(max2,max1), 0, 1.05*maxy])
-        if j==1, title(tit), end
+        if j==1, ylabel(tit,'fontsize',8), end
 
         set(gca,'XTickLabel',[],'YTickLabel',[])
     end
 end
 
-%%
-% [T,S,P] = run_task(task);
-
-
-
 %% save figs
 if task.savestuff
     F.fname=[fpath(1:findex(end-2)), 'Figs/cigars'];
-    F.wh=[4 2]*2;
+    F.wh=[2 1.5]*2.5;
     print_fig(h(1),F)
 end

@@ -53,13 +53,13 @@ else
 end
 
 if ~isfield(F,'xlim'), xlim=[1 T.Kmax+1]; else xlim=F.xlim; end
-if isfield(F,'xtick'), 
+if isfield(F,'xtick'),
     xtick=F.xtick;
 else
     xtick=round(linspace(min(T.ks),max(T.ks),4));   xtick=unique(xtick);
 end
 if max(xlim)<10, tick_ids=unique(round(linspace(1,max(xlim),4)));
-else tick_ids=1:10:length(T.ks);
+else tick_ids=[1, 15:15:max(T.ks)];
 end
 
 %% plot accuracies
@@ -71,13 +71,20 @@ for i=1:Nalgs;
     scale=S.stds.Lhats(i,:);
     minloc=min(location);
     
-    if strcmp(algs{i},'ROAD'), ks=mean(S.ROAD_num); else ks=T.ks; end
+    if strcmp(algs{i},'ROAD'), ks=round(mean(S.ROAD_num)); else ks=T.ks;  end  % get k's for ROAD
+    %     for kk=1:length(scale), if ~any(ks==tick_ids), scale(kk)=0; end; end      % don't show errorbars except at tick marks
+    ks(ks>max(xlim)+10)=[];
     
+    % resample for plotting errorbars
+    ks2=round(interp1q(ks',ks',[1:max(T.ks)]'));
+    location=interp1q(ks',location',[1:max(T.ks)]');
+    scale=interp1q(ks',scale',[1:max(T.ks)]');
+        
     if length(location)>1
         if ~isnan(location(2))
-            h(i)=plot(ks,location,'color',F.colors{i},'linewidth',2,'linestyle',F.linestyle{i}); 
-            eh=errorbar(ks(tick_ids),location(tick_ids),scale(tick_ids),'.','linewidth',2,'color',F.colors{i});
-            errorbar_tick(eh,50000);
+            h(i)=plot(ks2,location,'color',F.colors{i},'linewidth',2,'linestyle',F.linestyle{i});
+            eh=errorbar(ks2(tick_ids),location(tick_ids),scale(tick_ids),'.','linewidth',1,'color',F.colors{i});
+            errorbar_tick(eh,5000);
             maxloc(i)=max(location(2:end-1));
             if i<=length(T.types)
                 legendcell=[legendcell, T.types(i)];
@@ -112,7 +119,7 @@ end
 
 %% finishings
 if isfield(F,'title'), tit=F.title; else tit=T.name; end
-if subplot_id==1, 
+if subplot_id==1,
     ylabel('error rate')
 end
 if isfield(F,'legend'), legendcell=F.legend; end
