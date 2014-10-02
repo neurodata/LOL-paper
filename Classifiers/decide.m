@@ -28,7 +28,7 @@ for i=1:Nks
             Yhat(i,:) = svmclassify(SVMStruct,sample(1:ks(i),:)');
         elseif strcmp(classifier,'RF')
             B = TreeBagger(100,training(1:ks(i),:)',group);
-            [yhat, scores] = predict(B,sample(1:ks(i),:)');
+            [~, scores] = predict(B,sample(1:ks(i),:)');
             [~, group_idx] = max(scores,[],2); 
             group_names=unique(group);
             Yhat(i,:)=group_names(group_idx);

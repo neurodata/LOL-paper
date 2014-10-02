@@ -11,6 +11,7 @@ if nargin==3, subplot_id=1; F.Ncols=1; F.Nrows=1; end
 if ~isfield(F,'plot_chance'), F.plot_chance=false; end
 if ~isfield(F,'plot_bayes'), F.plot_bayes=false; end
 if ~isfield(F,'plot_risk'), F.plot_risk=false; end
+if ~isfield(F,'scale'), F.scale=1; end
 if isfield(T,'types')
     Nalgs=T.Nalgs+length(T.types);
 else
@@ -58,9 +59,12 @@ if isfield(F,'xtick'),
 else
     xtick=round(linspace(min(T.ks),max(T.ks),4));   xtick=unique(xtick);
 end
-if max(xlim)<10, tick_ids=unique(round(linspace(1,max(xlim),4)));
-else tick_ids=[1, 15:15:max(T.ks)];
-end
+% if max(xlim)<10, tick_ids=unique(round(linspace(1,max(xlim),4)));
+% elseif max(xlim)>100, tick_ids=[1:round(max(T.ks)/4):max(T.ks)];
+% else tick_ids=[1, 15:15:max(T.ks)];
+% end
+tick_ids=xtick;
+
 
 %% plot accuracies
 subplot(F.Nrows,F.Ncols,subplot_id), cla, hold all
@@ -71,19 +75,17 @@ for i=1:Nalgs;
     scale=S.stds.Lhats(i,:);
     minloc=min(location);
     
-    if strcmp(algs{i},'ROAD'), ks=round(mean(S.ROAD_num)); else ks=T.ks;  end  % get k's for ROAD
-    %     for kk=1:length(scale), if ~any(ks==tick_ids), scale(kk)=0; end; end      % don't show errorbars except at tick marks
-    ks(ks>max(xlim)+10)=[];
-    
     % resample for plotting errorbars
+    if strcmp(algs{i},'ROAD'), ks=round(mean(S.ROAD_num)); else ks=T.ks;  end  % get k's for ROAD
+    ks(ks>max(xlim)+10)=[];
     ks2=round(interp1q(ks',ks',[1:max(T.ks)]'));
     location=interp1q(ks',location',[1:max(T.ks)]');
     scale=interp1q(ks',scale',[1:max(T.ks)]');
-        
+    
     if length(location)>1
         if ~isnan(location(2))
             h(i)=plot(ks2,location,'color',F.colors{i},'linewidth',2,'linestyle',F.linestyle{i});
-            eh=errorbar(ks2(tick_ids),location(tick_ids),scale(tick_ids),'.','linewidth',1,'color',F.colors{i});
+            eh=errorbar(ks2(tick_ids),location(tick_ids),F.scale*scale(tick_ids),'.','linewidth',1,'color',F.colors{i});
             errorbar_tick(eh,5000);
             maxloc(i)=max(location(2:end-1));
             if i<=length(T.types)

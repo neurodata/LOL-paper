@@ -135,16 +135,13 @@ elseif strcmp(type,'F')         % fast svd, comput top min([n,D,Kmax]) eigvector
     else [V,d,~] = fsvd(X,min([n,D,Kmax]));
     end
 elseif strcmp(type,'R')         % compute all robust eigenvectors
-    if n>D, cov = m_estimator_gms(X');
-    else cov = m_estimator_gms(X);
-    end
+%     if n>D, cov = m_estimator_gms(X');
+%     else cov = m_estimator_gms(X);
+%     end
+    cov = m_estimator_gms(X');
     [V,d]= eig(cov);
     d=diag(d);
 elseif strcmp(type,'A')         % random projections
     V = rand(D,Kmax); d=[];
 end
-try
-    V=V';
-catch
-    keyboard
-end
+V=V';

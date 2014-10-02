@@ -4,7 +4,6 @@ function loop = task_loop(task_in)
 loop = cell(1,task_in.ntrials);
 parfor k=1:task_in.ntrials
     
-    try
         if mod(k,10)==0, display(['trial # ', num2str(k)]); end
         
         % prepare data
@@ -51,9 +50,5 @@ parfor k=1:task_in.ntrials
         if any(strcmp(task.algs,'GLM'))
             loop{k}.out(size(loop{k}.out,1)+1,:) = run_GLM(Z,task);
         end
-        
-    catch
-        keyboard
-    end
-    
+            
 end

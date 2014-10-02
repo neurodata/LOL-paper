@@ -24,22 +24,27 @@ if task.simulation
             gmm = gmdistribution(P.mu',P.Sigma,P.w);
             [X,Y] = random(gmm,task.n);
         case 'gms'
-            
-            Nnoise=round(task.n*0.5);
-            Nsignal=task.n-Nnoise;
-            N0=round(Nsignal/2);
-            N1=N0;
-            D=50;
-            d=5;
+                        
+            Ninlier=task.n/2; 
+            n0=Ninlier/2;
+            n1=n0;
+            Noutlier=task.n-Ninlier;
+            D=200;
+            d=round(D/10);
             noise=0.1;
             offset=0.5;
             V=orth(rand(D,d));
-            X0=randn(N0,d)*V';
-            X1=randn(N0,d)*V'+offset;
-            X=[X0;X1; randn(Nnoise,D)];
+            X0=randn(n0,d)*V';
+            X1=randn(n1,d)*V'+offset;
+            X=[X0;X1; randn(Noutlier,D)];
             X=X+randn(size(X))*noise;
+
+            P.mu(:,1)=mean(X0);
+            P.mu(:,2)=mean(X1);
+            P.Sigma=V*V';
+            P.w=1/2*[1,1];
             
-            Y=[zeros(N0,1); ones(N1,1); rand(Nnoise,1)>0.5]+1;
+            Y=[zeros(n0,1); ones(n1,1); rand(Noutlier,1)>0.5]+1;
             
             task.QDA_model=0;
             
@@ -79,12 +84,17 @@ if task.simulation
             
         case ['xor, D=', num2str(D)]
 
+            
             mu0=zeros(D,1);
             mu1=repmat([1;0],D/2,1);
-            Sigma=sqrt(D/2)*eye(D);
+            Sigma=sqrt(D/4)*eye(D);
             
             gmm = gmdistribution([mu0,mu1]',Sigma,[0.5,0.5]);
             [X0,Y0] = random(gmm,task.n*0.5);
+
+            P.Sigma=Sigma;
+            P.w=1/2*[1,1];
+            P.mu=[mu0,mu1];
 
             mu0=ones(D,1);
             mu1=repmat([0;1],D/2,1);
@@ -93,6 +103,8 @@ if task.simulation
             
             X=[X0;X1];
             Y=[Y0;Y1];
+
+            P.mu=[P.mu, mu0,mu1];
 
         otherwise
             P = set_parameters(task);

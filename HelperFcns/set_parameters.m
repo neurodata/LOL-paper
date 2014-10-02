@@ -86,7 +86,7 @@ if ~isfield(task,'P')
             A  = eye(D,D);
             Sigma=A*diag(sv);                            % class 1 cov
             
-        case 'ac' % simple
+        case 'ac' % aligned cigars
             
             mu0=zeros(D,1);
             mu1=0.15+mu0;
@@ -95,7 +95,7 @@ if ~isfield(task,'P')
             Sigma = eye(D);
             Sigma(2,2)=4;
             
-        case 'oc' % simple
+        case 'oc' % orthogonal cigars
             
             mu0=zeros(D,1);
             mu1=0.15+mu0;
@@ -104,7 +104,7 @@ if ~isfield(task,'P')
             Sigma  = eye(D);
             Sigma(2,2)=4;
                         
-        case 'rc' % simple
+        case 'rc' % orthogonal rotated cigars
             
             mu0=zeros(D,1);
             mu1=0.15+mu0;
@@ -131,6 +131,33 @@ if ~isfield(task,'P')
             Sigma=Q*Sigma*Q';
             
             
+        case 'r2c' % orthogonal only 1 rotated cigars
+            
+            mu0=zeros(D,1);
+            mu1=0.5+mu0;
+            mu1(1)=2;
+            
+            Sigma  = eye(D);
+            Sigma(2,2)=4;
+            
+            % generate rotation matrix uniformly
+            [Q, ~] = qr(randn(task.D));
+            if det(Q)<-.99
+                Q(:,1)=-Q(:,1);
+            end
+            
+            th=pi/4;
+            Q(1:2,1:2)=[cos(th) -sin(th); sin(th) cos(th)];
+            Q(1,3:end)=0;
+            Q(2,3:end)=0;
+            Q(3:end,1)=0;
+            Q(3:end,2)=0;
+
+%             mu0=Q*mu0;
+            mu1=Q*mu1;
+            Sigma(:,:,2)=Q*Sigma*Q';
+            
+
         case 'parallel cigars' % simple
             
             mudelt = 6/sqrt(D);                                 % distance betwen dim 1 of means
@@ -385,7 +412,17 @@ if ~isfield(task,'P')
             Sigma=eye(D);
             Sigma(1:D+1:end)=100./sqrt(D:-1:1);
             
+
+        case ['3trunk4, D=', num2str(D)]
             
+            int=2;
+            mu1=6./sqrt(1:int:int*D)';
+            mu0=-mu1;
+            mu2=0*mu0;
+            
+            Sigma=eye(D);
+            Sigma(1:D+1:end)=100./sqrt(D:-1:1);
+
         case ['ntrunk4, D=', num2str(D)]
             
             int=2;
@@ -446,7 +483,7 @@ if ~isfield(task,'P')
             
             Sigma=A;
             
-        case ['rtoeplitz, D=', num2str(D)]
+        case ['r2toeplitz, D=', num2str(D)]
             
             delta1=0.4; D1=10;
             
@@ -470,8 +507,16 @@ if ~isfield(task,'P')
             if det(Q)<-.99
                 Q(:,1)=-Q(:,1);
             end
+            
+            th=pi/4;
+            Q(1:2,1:2)=[cos(th) -sin(th); sin(th) cos(th)];
+            Q(1,3:end)=0;
+            Q(2,3:end)=0;
+            Q(3:end,1)=0;
+            Q(3:end,2)=0;
+            
             Sigma(:,:,2)=Q*Sigma*Q';
-            mu1=-Q*mu0;
+            mu1=-Q*(mu0+0.1);
             
         case ['atoeplitz, D=', num2str(D)]
             
@@ -737,6 +782,7 @@ if task.permute
     Q=Q(perm,:);
     mu1=Q*mu1;
     mu0=Q*mu0;
+    if exist('mu2','var'), mu2=Q*mu2; end
     siz=size(Sigma);
     if length(siz)==3
         Sigma(:,:,1)=Q*Sigma(:,:,1)*Q';
@@ -747,22 +793,20 @@ if task.permute
     P.perm=perm;
 end
 
-% mubar=(mu1+mu0)/2;
-% mu1=mu1-mubar;
-% mu0=mu0-mubar;
-
-P.del=mu1-mu0;
-% compute risk analytically when covariances are equal
-if size(Sigma,3)==1
-    P.Risk=1-normcdf(0.5*sqrt(P.del'*(Sigma\P.del)));
-end
-
 P.D=D;
 P.mu=[mu0 mu1];
+if exist('mu2','var'), P.mu=[mu0 mu1 mu2]; end
 P.Sigma=Sigma;
-P.w=1/2*[1; 1];
-P.Ngroups=2;
-P.groups=[1 2];
+P.del=diff(P.mu')';
+
+P.Ngroups=size(P.mu,2);
+P.w=1/P.Ngroups*ones(P.Ngroups,1);
+P.groups=1:P.Ngroups;
+
+% compute risk analytically when covariances are equal
+if size(Sigma,3)==1 && P.Ngroups==2
+    P.Risk=1-normcdf(0.5*sqrt(P.del'*(P.Sigma\P.del)));
+end
 
 if task.rotate
     

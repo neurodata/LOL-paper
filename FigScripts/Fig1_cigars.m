@@ -16,15 +16,13 @@ clear idx
 task_list_name='cs'; 
 task.D=1000;
 task.ntrain=100;
-k=10;
+k=20;
 task_list = set_task_list(task_list_name);
-task.ks=1:20;
 task.ntest=500;
 task.rotate=false;
 task.algs={'LOL';'ROAD'};
 task.types={'NEFL';'DEFL'};
 task.savestuff=1;
-orange=[1 0.6 0];
 
 h(1)=figure(1); clf
 Nsims=length(task_list);
@@ -53,9 +51,9 @@ for j=1:Nsims
     set(gca,'XTickLabel',[],'YTickLabel',[])
     grid('on')
     switch j
-        case 1, tit='Aligned';
-        case 2, tit='Orthogonal';
-        case 3, tit='Rotated';
+        case 1, tit='(A) Aligned';
+        case 2, tit='(B) Orthogonal';
+        case 3, tit='(C) Rotated Orthogonal';
     end
     title(tit)
     
