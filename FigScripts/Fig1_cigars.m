@@ -30,7 +30,19 @@ Nalgs=length(task.algs)+length(task.types)-1;
 Ncols=Nsims;
 Nrows=Nalgs+2;
 gray=0.7*[1 1 1];
+
+width=0.21;
+height=0.13;
+left=0.13;
+y3=0.63;
+hspace=0.07;
+vspace=0.05;
+bottom=0.02;
+dd=1;
+gg=0.75;
+marker='.';
 ms=4; % markersize
+
 for j=1:Nsims
     
     task.name=task_list{j};
@@ -39,24 +51,30 @@ for j=1:Nsims
     
     Z = parse_data(X,Y,task1.ntrain,task1.ntest,0);
         
-    subplot(Nrows,Ncols,j), hold on
-    Xplot1=Z.Xtest(:,Z.Ytest==1);
-    Xplot2=Z.Xtest(:,Z.Ytest==2);
+%     subplot(Nrows,Ncols,j), 
+    subplot('Position',[left+(j-1)*(width+hspace) bottom+4*(height+vspace), width, width ]) %[left,bottom,width,height]
+    hold on
+    Xtest=Z.Xtest(1:2,:);
+    Xtest=Xtest-repmat(mean(Xtest,2),1,length(Z.Ytest));
+    
+    Xplot1=Xtest(:,Z.Ytest==1);
+    Xplot2=Xtest(:,Z.Ytest==2);
     idx=randperm((task.ntest-100)/2);
     idx=idx(1:100);
-    plot(Xplot1(1,idx),Xplot1(2,idx),'.','color',[0 0 0],'LineWidth',1.0,'markersize',ms),
-    plot(Xplot2(1,idx),Xplot2(2,idx),'.','color',gray,'LineWidth',1.0,'markersize',ms)
+    plot(Xplot1(1,idx),Xplot1(2,idx),'linestyle','.','marker',marker,'color',[0 0 0],'LineWidth',1.0,'markersize',ms),
+    plot(Xplot2(1,idx),Xplot2(2,idx),'linestyle','.','marker',marker,'color',gray,'LineWidth',1.0,'markersize',ms)
     axis('equal')
-    %     set(gca,'XTick',[-5:5:5],'YTick',[-10:5:10],'XLim',[-8 8], 'YLim',[-15 15])
-    set(gca,'XTickLabel',[],'YTickLabel',[])
+    set(gca,'XTick',[0],'YTick',[0],'XTickLabel',[],'YTickLabel',[])
     grid('on')
+    set(gca,'TickDir','out')
+    
     switch j
         case 1, tit='(A) Aligned';
         case 2, tit='(B) Orthogonal';
         case 3, tit='(C) Rotated Orthogonal';
     end
     title(tit)
-    
+%     axis('square')
     
     [transformers, deciders] = parse_algs(task1.types);
     Proj = LOL(Z.Xtrain,Z.Ytrain,transformers,task1.Kmax);
@@ -105,8 +123,8 @@ for j=1:Nsims
         max1=mu1+3*sig1;
         
         t=linspace(min(min2,min1),max(max2,max1),100);
-        y2=normpdf(t,mu2,sig2);
-        y1=normpdf(t,mu1,sig1);
+        y2=normpdf(t,mu2,sig2); yy2=y2;
+        y1=normpdf(t,mu1,sig1); yy1=y1;
         maxy=max(max(y2),max(y1));
         ls1='-';
         ls2='--';
@@ -114,27 +132,28 @@ for j=1:Nsims
         if i==3
             col1='c'; col2=col1;
             tit='ROAD';
-            si=2;
-            ls1='--';
-            ls2='-';
+            si=3;
+            yy1=y2;
+            yy2=y1;
         elseif i==2
             col1='g'; col2=col1;
             tit='LOL';
-            si=3;
+            si=2;
         elseif i==1
             col1='m'; col2=col1;
             tit='LDA o PCA';
-            si=1;
+            si=4;
         elseif i==4
             tit=[{'Bayes'};{'Optimal'}];
             col1='k';
             col2='k';
-            si=4;
+            si=1;
         end
-        subplot(Nrows,Ncols,j+Ncols*(si)), hold on
-        
-        plot(t,y2,'linestyle',ls1,'color',col2,'linewidth',2)
-        plot(t,y1,'linestyle',ls2,'color',col1, 'linewidth',2)
+        subplot('Position',[left+(j-1)*(width+hspace) bottom+(si-1)*(height+vspace), width, height ]) %[left,bottom,width,height]
+        hold on
+    
+        plot(t,yy2,'linestyle',ls1,'color',col2,'linewidth',2)
+        dashline(t,yy1,dd,gg,dd,gg,'color',col1,'linewidth',2)
         if i~=3
             fill(t,[y1(1:50),y2(51:end)],col1,'EdgeColor',col1)
         else
@@ -142,11 +161,10 @@ for j=1:Nsims
         end
         plot([0,0],[0, maxy],'k')
         
-        grid on
         axis([min(min2,min1), max(max2,max1), 0, 1.05*maxy])
         if j==1, ylabel(tit,'fontsize',8), end
 
-        set(gca,'XTickLabel',[],'YTickLabel',[])
+        set(gca,'XTickLabel',[],'YTickLabel',[],'XTick',[],'YTick',[])
     end
 end
 

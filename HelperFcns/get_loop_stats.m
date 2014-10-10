@@ -24,7 +24,7 @@ for k=1:T.ntrials
             specificity(i,l,k)=loop{k}.out(i,l).specificity;
             if isfield(loop{k},'time'), time=loop{k}.time(i,l); else time=NaN; end
             times(i,l,k)=time;
-            if isfield(loop{k},'ROAD_num'), Stats.ROAD_num(k,:)=loop{k}.ROAD_num; end
+            if isfield(loop{k},'nnz'), Stats.nnz(k,:)=loop{k}.nnz; end
             if size(loop{k}.out,2)==1 || isempty(loop{k}.out(i,2).Lhat) % if we did not do cv across dimensions for this algorithm
                 break
             end

@@ -1,13 +1,13 @@
-function plot_Lhat(T,S,F,subplot_id)
+function plot_Lhat(T,S,F,pos)
 %  plot Lhats for each alg, one col per task
 % INPUT:
 %   T: task info
 %   S: statistics of algorithms
 %   F: figure properties
-%   subplot_id: which subplot_id
+%   pos: which pos
 
 %% set up what to print
-if nargin==3, subplot_id=1; F.Ncols=1; F.Nrows=1; end
+if nargin==3, pos=1; F.Ncols=1; F.Nrows=1; end
 if ~isfield(F,'plot_chance'), F.plot_chance=false; end
 if ~isfield(F,'plot_bayes'), F.plot_bayes=false; end
 if ~isfield(F,'plot_risk'), F.plot_risk=false; end
@@ -17,6 +17,7 @@ if isfield(T,'types')
 else
     Nalgs=T.Nalgs;
 end
+if ~isfield(F,'ti'), F.ti=1:Nalgs; end
 if any(strcmp(T.algs,'LOL')), Nalgs=Nalgs-1; end
 legendcell=[];
 
@@ -59,33 +60,37 @@ if isfield(F,'xtick'),
 else
     xtick=round(linspace(min(T.ks),max(T.ks),4));   xtick=unique(xtick);
 end
-% if max(xlim)<10, tick_ids=unique(round(linspace(1,max(xlim),4)));
-% elseif max(xlim)>100, tick_ids=[1:round(max(T.ks)/4):max(T.ks)];
-% else tick_ids=[1, 15:15:max(T.ks)];
-% end
-tick_ids=xtick;
+if ~isfield(F,'tick_ids'), for i=1:Nalgs; F.tick_ids{i}=xtick-i; end; end
+
 
 
 %% plot accuracies
-subplot(F.Nrows,F.Ncols,subplot_id), cla, hold all
+if numel(pos)==1, subplot(F.Nrows,F.Ncols,pos);
+else subplot('position',pos)
+end
+cla, hold all
 minAlg=0.5;
 maxloc=ones(1,Nalgs);
+
 for i=1:Nalgs;
     location=S.means.Lhats(i,:);
     scale=S.stds.Lhats(i,:);
     minloc=min(location);
     
     % resample for plotting errorbars
-    if strcmp(algs{i},'ROAD'), ks=round(mean(S.ROAD_num)); else ks=T.ks;  end  % get k's for ROAD
-    ks(ks>max(xlim)+10)=[];
-    ks2=round(interp1q(ks',ks',[1:max(T.ks)]'));
-    location=interp1q(ks',location',[1:max(T.ks)]');
-    scale=interp1q(ks',scale',[1:max(T.ks)]');
+    if isfield(S,'nnz'), ks=round(mean(S.nnz)); else ks=T.ks;  end  % get k's for other algs
     
+    ks(ks>max(xlim)+10)=[];
+    if isempty(ks), ks=round(mean(S.nnz)); end
+    ks2=round(interp1q(ks',ks',[1:max(T.ks)+1]'));
+    location=interp1q(ks',location',[1:max(T.ks)+1]');
+    scale=interp1q(ks',scale',[1:max(T.ks)+1]');
+    
+%     if i==1, ti=1; elseif i==2, ti=3; elseif i==3, ti=2; end
     if length(location)>1
         if ~isnan(location(2))
             h(i)=plot(ks2,location,'color',F.colors{i},'linewidth',2,'linestyle',F.linestyle{i});
-            eh=errorbar(ks2(tick_ids),location(tick_ids),F.scale*scale(tick_ids),'.','linewidth',1,'color',F.colors{i});
+            eh=errorbar(ks2(F.tick_ids{i}),location(F.tick_ids{i}),F.scale*scale(F.tick_ids{i}),'.','linewidth',1,'color',F.colors{i});
             errorbar_tick(eh,5000);
             maxloc(i)=max(location(2:end-1));
             if i<=length(T.types)
@@ -121,7 +126,7 @@ end
 
 %% finishings
 if isfield(F,'title'), tit=F.title; else tit=T.name; end
-if subplot_id==1,
+if pos==1,
     ylabel('error rate')
 end
 if isfield(F,'legend'), legendcell=F.legend; end
@@ -131,6 +136,7 @@ else
     location='EastOutside';
 end
 if isfield(F,'yscale'), yscale=F.yscale; else yscale='linear'; end
+if isfield(F,'xscale'), xscale=F.xscale; else xscale='linear'; end
 if isfield(F,'legendOn'), legendOn=F.legendOn; else legendOn=0; end
 if legendOn
     legend(h,legendcell,'Location',location);
@@ -141,6 +147,8 @@ if isfield(F,'xlabel'),xlabel(F.xlabel); end
 if isfield(F,'ylabel'),ylabel(F.ylabel); end
 
 
-set(gca,'YScale',yscale,'XScale','linear','Ylim',ylim,'Xlim',xlim,'XTick',xtick,'YTick',ytick)
+set(gca,'YScale',yscale,'XScale',xscale,'Ylim',ylim,'Xlim',xlim,'XTick',xtick,'YTick',ytick)
 title(tit)
-grid on
+grid('off')
+set(gca,'TickDir','out')
+

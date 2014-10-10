@@ -9,7 +9,7 @@ function [task,X,Y,P] = get_task(task_in)
 %   P:      a structure of parameters
 
 task = set_task(task_in);
-P = []; D=task.D;
+P = []; if ~isfield(task,'D'), task.D=[]; end
 if task.simulation
     
     switch task.name
@@ -29,14 +29,14 @@ if task.simulation
             n0=Ninlier/2;
             n1=n0;
             Noutlier=task.n-Ninlier;
-            D=200;
-            d=round(D/10);
+            task.D=200;
+            d=round(task.D/10);
             noise=0.1;
             offset=0.5;
-            V=orth(rand(D,d));
+            V=orth(rand(task.D,d));
             X0=randn(n0,d)*V';
             X1=randn(n1,d)*V'+offset;
-            X=[X0;X1; randn(Noutlier,D)];
+            X=[X0;X1; randn(Noutlier,task.D)];
             X=X+randn(size(X))*noise;
 
             P.mu(:,1)=mean(X0);
@@ -48,15 +48,15 @@ if task.simulation
             
             task.QDA_model=0;
             
-        case ['fat tails, D=', num2str(D)]
+        case ['fat tails, D=', num2str(task.D)]
             
             s0=10;
-            mu0=zeros(D,1);
-            mu1=[ones(s0,1); zeros(D-s0,1)];
+            mu0=zeros(task.D,1);
+            mu1=[ones(s0,1); zeros(task.D-s0,1)];
             
             rho=0.2;
-            A=rho*ones(D);
-            A(1:D+1:end)=1;
+            A=rho*ones(task.D);
+            A(1:task.D+1:end)=1;
             
             if task.rotate==true;
                 [Q, ~] = qr(randn(task.D));
@@ -82,12 +82,12 @@ if task.simulation
             X=[X0;X1];
             Y=[Y0;Y1];
             
-        case ['xor, D=', num2str(D)]
+        case ['xor, D=', num2str(task.D)]
 
             
-            mu0=zeros(D,1);
-            mu1=repmat([1;0],D/2,1);
-            Sigma=sqrt(D/4)*eye(D);
+            mu0=zeros(task.D,1);
+            mu1=repmat([1;0],task.D/2,1);
+            Sigma=sqrt(task.D/4)*eye(task.D);
             
             gmm = gmdistribution([mu0,mu1]',Sigma,[0.5,0.5]);
             [X0,Y0] = random(gmm,task.n*0.5);
@@ -96,8 +96,8 @@ if task.simulation
             P.w=1/2*[1,1];
             P.mu=[mu0,mu1];
 
-            mu0=ones(D,1);
-            mu1=repmat([0;1],D/2,1);
+            mu0=ones(task.D,1);
+            mu1=repmat([0;1],task.D/2,1);
             gmm = gmdistribution([mu0,mu1]',Sigma,[0.5,0.5]);
             [X1,Y1] = random(gmm,task.n*0.5);
             

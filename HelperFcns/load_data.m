@@ -4,14 +4,14 @@ function [X,Y,task] = load_data(task)
 if strcmp(task.name,'prostate')
     data=load('../../Data/Preprocessed/prostate_data');
     X=data.X';
-    Y=data.Y;
+    Y=data.Y+1;
     [task.D, task.n] = size(X);
     task.ntest=round(task.n/3);
     task.ntrain=task.n-task.ntest;
 elseif strcmp(task.name,'colon')
     data=load('../../Data/Preprocessed/colon_data');
     X=data.X';
-    Y=data.Y;
+    Y=data.Y+1;
     [task.D, task.n] = size(X);
     task.ntest = round(task.n/3);
     task.ntrain = task.n-task.ntest;
@@ -19,12 +19,14 @@ elseif strfind(task.name,'pancreas')
     %          {'IPMNvsAll','IPMN-HvsAll','IPMN-MvsAll','IPMN-LvsAll','MCNvsAll','SCAvsAll','IPMN-HvL','IPMN-HvML','IPMN-HMvL'}
     [X,Y] = load_pancreas(task.name);
     X=X';
+    Y=Y+1;
     [task.D, task.n] = size(X);
     task.ntrain = task.n-2;
     task.ntest = 2;
 elseif strfind(task.name,'amen')
     [X,Y] = load_amen(task.name);    
     if size(X,2)~=length(Y), X=X'; end
+    Y=Y+1;
     [task.D, task.n] = size(X);
     task.ntrain=round(task.n*.9);
     task.ntest=task.n-task.ntrain;
@@ -40,6 +42,7 @@ elseif strcmp(task.name,'mnist012')
         X = [X, images(:,labels==label_keepers(jj))];
         Y = [Y; labels(labels==label_keepers(jj))];
     end
+    Y=Y+1;
 end
 Y=double(Y);
 

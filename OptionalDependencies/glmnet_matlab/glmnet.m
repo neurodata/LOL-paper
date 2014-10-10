@@ -43,7 +43,7 @@ function fit = glmnet(x, y, family, options)
 %                options.alpha = 1.0  (elastic-net mixing parameter)
 %                options.nlambda = 100  (number of lambda values)
 %                options.lambda depends on data, nlambda and
-%                lambda_min(user spplied lambda sequence) 
+%                lambda_min(user supplied lambda sequence) 
 %                options.standardize = true  (variable standardization)
 %                options.weights = all ones vector (observation weights)
 %             For more details, type help glmnetSet.

@@ -2,7 +2,7 @@ function loop = task_loop(task_in)
 % this function implements a parloop for ntrials iterations and outputs the results
 
 loop = cell(1,task_in.ntrials);
-parfor k=1:task_in.ntrials
+for k=1:task_in.ntrials
     
         if mod(k,10)==0, display(['trial # ', num2str(k)]); end
         
@@ -32,7 +32,7 @@ parfor k=1:task_in.ntrials
         end
         
         if any(strcmp(task.algs,'ROAD'))        % ROAD
-            [loop{k}.out(size(loop{k}.out,1)+1,:), loop{k}.ROAD_num] = run_ROAD(Z,task);
+            [loop{k}.out(size(loop{k}.out,1)+1,:), loop{k}.nnz] = run_ROAD(Z,task);
         end
         
         if any(strcmp(task.algs,'RF'))        % random forest
@@ -48,7 +48,7 @@ parfor k=1:task_in.ntrials
         end
         
         if any(strcmp(task.algs,'GLM'))
-            loop{k}.out(size(loop{k}.out,1)+1,:) = run_GLM(Z,task);
+            [loop{k}.out(size(loop{k}.out,1)+1,:), loop{k}.nnz] = run_GLM(Z,task);
         end
             
 end
