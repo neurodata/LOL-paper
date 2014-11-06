@@ -1,5 +1,5 @@
 % generalizations figure
-clearvars, clc,
+% clearvars, clc,
 fpath = mfilename('fullpath');
 findex=strfind(fpath,'/');
 p = genpath(fpath(1:findex(end-2)));
@@ -11,17 +11,18 @@ clear task
 task0.algs={'LOL'};
 task0.simulation=1;
 task0.percent_unlabeled=0;
-task0.ntrials=10;
+task0.ntrials=2;
 task0.ntrain=100;
 task0.ntest=100;
 task0.n=task0.ntrain+task0.ntest;
-task0.savestuff=1;
 task0.name='oc';
 
-types={'NENL';'DENL';'DEFL';'DEAL'};
+savestuff=1;
+
+types={'NENL';'DENL';'DVFL';'NEAL';'DEFL';'DVFQ'};
 Ntypes=length(types);
 
-ks=[10:20:90];
+ks=10:20:90;
 Nks=length(ks);
 
 Ds=[1000, 2000, 5000]; % [100, 200, 500, 1000, 2000, 5000, 10000];
@@ -60,29 +61,38 @@ for j=1:task0.ntrials
             end
         end
     end
+    
+    % get stats
+    mean_learn=squeeze(mean(learn_time,2));
+    mean_class=squeeze(mean(classify_time,2));
+    mean_total=mean_learn+mean_class;
+    
+    std_learn=squeeze(std(learn_time,[],2));
+    std_class=squeeze(std(classify_time,[],2));
+    std_total=std_learn+std_class;
+    
+    % save speed
+    if savestuff
+        save([fpath(1:findex(end-2)), 'Data/Results/', fname])
+    end
+    % load([fpath(1:findex(end-2)), 'Data/Results/', fname])
+    
 end
 
-%% get stats
-mean_learn=squeeze(mean(learn_time,2));
-mean_class=squeeze(mean(classify_time,2));
-mean_total=mean_learn+mean_class;
 
-std_learn=squeeze(std(learn_time,[],2));
-std_class=squeeze(std(classify_time,[],2));
-std_total=std_learn+std_class;
-
-%% save speed
-
-if task.savestuff
-    save([fpath(1:findex(end-2)), 'Data/Results/', fname])
-end
-% load([fpath(1:findex(end-2)), 'Data/Results/', fname])
 
 
 %% plot time vs. k for several D's
-h=figure(1); clf, hold all
+h=figure(2); clf, hold all
 
-set(gcf,'DefaultAxesColorOrder',[1 0 1; 0 1 0; 0 0 0; 0 0 1])
+set(gcf,'DefaultAxesColorOrder',[...
+    0 0 0;...
+    0 0 1;...
+    0 1 0;...
+    0 1 1;...
+    1 0 0;...
+    1 0 1;...
+    ])
 
 for i=1:3
     subplot(2,3,i), hold all
@@ -118,9 +128,24 @@ for i=1:3
     
 end
 
+legend(types)
+
 %% print figure
-if task.savestuff
+if savestuff
     H.wh=[6.5 2.5]*1.2;
     H.fname=[fpath(1:findex(end-2)), 'Figs/', fname];
     print_fig(h,H)
 end
+
+%%
+
+% ass=squeeze(mean_total(1,:,:));
+% siz=size(mean_total);
+% 
+% figure(2);clf;hold on
+% [xx yy] = meshgrid(1:length(Ds),1:length(ks));
+% colormap([0 0 1;0 1 0; 0 1 1; 1 0 0]) %red and blue
+% for j=[1,3,4]
+%     surf(xx,yy,squeeze(mean_total(j,:,:))-squeeze(mean_total(2,:,:)),ones(size(ass))+j); %first color (red)
+% end
+% view(17,22)

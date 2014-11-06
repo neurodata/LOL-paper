@@ -60,7 +60,7 @@ if isfield(F,'xtick'),
 else
     xtick=round(linspace(min(T.ks),max(T.ks),4));   xtick=unique(xtick);
 end
-if ~isfield(F,'tick_ids'), for i=1:Nalgs; F.tick_ids{i}=xtick-i; end; end
+if ~isfield(F,'tick_ids'), for i=1:Nalgs; F.tick_ids{i}=xtick; end; end
 
 
 
@@ -74,7 +74,7 @@ maxloc=ones(1,Nalgs);
 
 for i=1:Nalgs;
     location=S.means.Lhats(i,:);
-    scale=S.stds.Lhats(i,:);
+    scale=S.stds.Lhats(i,:)/sqrt(T.ntrials);
     minloc=min(location);
     
     % resample for plotting errorbars
