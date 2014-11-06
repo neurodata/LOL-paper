@@ -13,6 +13,8 @@ P = []; if ~isfield(task,'D'), task.D=[]; end
 if task.simulation
     
     switch task.name
+        case 'regress'
+            [X,Y] = sample_regress(task);
         case  'DRL'
             [X,Y] = sample_DRL(a);
         case strcmp(task.name,'xor')

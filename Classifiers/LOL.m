@@ -21,6 +21,7 @@ function [Proj, P, Q] = LOL(X,Y,types,Kmax)
 %       Delta in R^{D x (Ngroups-1)}: means minus first mean
 %       Selta in R^{D x (Ngroups-1)}: sparse version
 %       DEN/DVN: eigenvalues for equal/varied subspace assumptions
+%       Ytiles in R^10: 0.1:0.1:1 percentiles of Y
 %   Q (struct): containing eigenvectors
 
 % CODE FOR TYPES: each type is a 3 letter code: ABC
@@ -39,6 +40,20 @@ for i=1:ntypes
     if isempty(strfind('NFRA',types{i}(3))), error('failed to specify a legit approx to eigenvectors'), end
 end
 Kmax=round(Kmax);
+
+%% check if regression, if so, convert to classification
+ngroups=length(unique(Y));
+if ngroups > length(Y)/2
+    P.Ytiles=quantile(Y,[0.1:0.1:1]);
+    YY=0*Y;
+    yind=find(Y<P.Ytiles(1));
+    YY(yind)=1;
+    for j=2:length(P.Ytiles)
+        yind=find(Y<P.Ytiles(j) & Y>P.Ytiles(j-1));
+        YY(yind)=j;
+    end
+end
+Y=YY;
 
 %% get means
 Q=struct;

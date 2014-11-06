@@ -21,6 +21,19 @@ function [Yhat, Proj, P] = LOL_classify(sample,training,group,task)
 [transformers, deciders] = parse_algs(task.types);
 [Proj, P] = LOL(training',group,transformers,max(task.ks));
 
+
+% if it is actually a regression problem
+if isfield(P,'Ytiles') 
+    YY=0*group;
+    yind=find(group<P.Ytiles(1));
+    YY(yind)=1;
+    for j=2:length(P.Ytiles)
+        yind=find(group<P.Ytiles(j) & group>P.Ytiles(j-1));
+        YY(yind)=j;
+    end
+    group=YY;
+end
+
 Yhat=cell(length(task.types),1);
 k=0;
 for i=1:length(transformers)

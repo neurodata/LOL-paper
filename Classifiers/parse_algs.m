@@ -20,7 +20,7 @@ function [transformers, deciders, types] = parse_algs(algs)
 %       A: D=delta, N=none, R=robst, S=spase
 %       B: E=equal, V=varied
 %       C: N=normal, F=fast, R=robust, A=random
-%       D: N = NaiveBayes, L = LDA, Q = QDA, R = RandomForest, S = SVM
+%       D: N = NaiveBayes, L = LDA, Q = QDA, R = RandomForest, S = SVM, Z = regression
 
 
 
@@ -60,6 +60,8 @@ for j=1:Ntransformers
                 deciders{j}{k}='RF';
             elseif strcmp(algs{i}(4),'S')
                 deciders{j}{k}='svm';
+            elseif strcmp(algs{i}(4),'Z')
+                deciders{j}{k}='regress';
             end
             l=l+1;
             types{l}=[transformers{j}, algs{i}(4)];

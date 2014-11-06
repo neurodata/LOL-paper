@@ -15,6 +15,7 @@ function Yhat = decide(sample,training,group,classifier,ks)
 
 Nks=length(ks);
 ntest=size(sample,2);
+ntrain=length(group);
 Yhat=nan(Nks,ntest);
 for i=1:Nks
     try
@@ -39,6 +40,9 @@ for i=1:Nks
             %                 Yhat(i)=sum(Z.Ytrain(IX(1:l,:)))>k/2;
             %                 loop{k}.out(i,l) = get_task_stats(Yhat,Z.Ytest);              % get accuracy
             %             end
+        elseif strcmp(classifier,'regress')
+            beta=[ones(ntrain,1), training(1:ks(i),:)']\group';
+            Yhat(i,:)= [ones(ntest,1), sample(1:ks(i),:)']'*beta;
         end
     catch err
         if i>1

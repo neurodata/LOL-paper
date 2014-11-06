@@ -40,13 +40,13 @@ purple=[0.5 0 0.5];
 G.colors = {'g';'m';'c'};
 dd=2;
 gg=dd*0.75;
-G.tick_ids{1}=G.xtick;
-G.tick_ids{2}=G.xtick-2;
-G.tick_ids{3}=G.xtick-1;
+% G.tick_ids{1}=G.xtick;
+% G.tick_ids{2}=G.xtick-2;
+% G.tick_ids{3}=G.xtick-1;
 
-height=0.11;
-vspace=0.07;
-bottom=0.08;
+height=0.12;
+vspace=0.08;
+bottom=0.06;
 left=0.09;
 width=0.17;
 hspace=0.06;
@@ -59,7 +59,7 @@ for j=1:length(T)
     
     Z = parse_data(X,Y,task1.ntrain,task1.ntest,0);
     
-    pos=[left+(j-1)*(width+hspace) bottom+(height+vspace)*4 width height];
+    pos=[left+(j-1)*(width+hspace) bottom+(height+vspace)*4-0.03 width height];
     subplot('position',pos), %[left,bottom,width,height]
     hold on
     
@@ -113,7 +113,7 @@ for j=1:length(T)
         F=G;
         F.doxlabel=false;
         F.ylim=[0.15,0.5];
-        F.ytick=[0:0.1:0.5];
+        F.ytick=[0.2,0.3,0.5]; %:0.1:0.5];
         F.title='';
         F.xticklabel=[];
         ids=1:10:100;
@@ -121,7 +121,7 @@ for j=1:length(T)
     plot_Lhat(T{j},S{j},F,pos)
     
     % plot covariances
-    pos=[left+(j-1)*(width+hspace) bottom+(height+vspace)*3-0.04 0.15 0.15]; %[left,bottom,width,height]
+    pos=[left+(j-1)*(width+hspace) bottom+(height+vspace)*3-0.06 0.15 0.15]; %[left,bottom,width,height]
     subplot('position',pos)
     imagesc(PP.Sigma(ids,ids))
     set(gca,'xticklabel',[],'yticklabel',[])
@@ -155,7 +155,7 @@ for j=1:length(T)
     Z = parse_data(X,Y,task1.ntrain,task1.ntest,0);
     
     siz=0.11;
-    pos=[left+(j-1)*(width+hspace)+0.02 bottom+(height+vspace)*1-0.05 siz siz]; %[left,bottom,width,height]
+    pos=[left+(j-1)*(width+hspace)+0.02 bottom+(height+vspace)*1-0.04 siz siz]; %[left,bottom,width,height]
     subplot('position',pos)
     cla, hold on
     Xplot1=Z.Xtest(:,Z.Ytest==1);
@@ -233,144 +233,95 @@ end
 
 %%
 G.title='';
-G=rmfield(G,'tick_ids');
+% G=rmfield(G,'tick_ids');
 
-j=1; F=G;
-F.title='';
-F.legendOn=0;
-F.yscale='linear';
-F.doxlabel=1;
-F.xtick=[20:20:50];
-F.xlim=[1, 49];
-F.ytick=[0.25:.2:.7];
-F.ylim=[0.24,0.67];
-F.legend = {'LOL';'PCA'};
-F.colors = {'g';'m'};
-F.ylabel='error rate';
-F.linestyle={'-';'-';'-';'-';'-';'-'};
-pos=[left+(j-1)*(width+hspace) bottom+(height+vspace)*0 width height]; %[left,bottom,width,height]
-plot_Lhat(T{j},S{j},F,pos)
-
-%%
-j=2; F=G;
-F.legendOn=0;
-F.colors = {'g';purple};
-F.ylim=[0.28 0.44];
-F.xlim=[1 19];
-F.xtick=[5:5:max(F.xlim)];
-F.ytick=[0.2:0.1:0.5];
-F.xlabel='';
-pos=[left+(j-1)*(width+hspace) bottom+(height+vspace)*0 width height]; %[left,bottom,width,height]
-plot_Lhat(T{j},S{j},F,pos)
-
-%%
-j=3; F=G;
-F.ylim = [0.25, 0.27];
-F.ytick = [0:0.01:0.5]; %[F.ylim(1): 0.01: F.ylim(2)];
-F.xlim = [1 150];
-F.xtick=[50:50:F.xlim(end)];
-F.legendOn=0;
-F.colors = {'g';'r'};
-F.scale=0.5;
-pos=[left+(j-1)*(width+hspace) bottom+(height+vspace)*0 width height]; %[left,bottom,width,height]
-plot_Lhat(T{j},S{j},F,pos)
-
-
-%%
-j=4; F=G;
-F.title = '';
-F.ylim = [0.2, 0.45];
-F.ytick = [0:0.1:0.5]; %[F.ylim(1): 0.01: F.ylim(2)];
-F.xlim = [1 15];
-F.xtick=[5:5:max(F.xlim)]; %:F.xlim(end)];
-F.legendOn=0;
-F.colors = {orange;purple;'y'};
-pos=[left+(j-1)*(width+hspace) bottom+(height+vspace)*0 width height]; %[left,bottom,width,height]
-plot_Lhat(T{j},S{j},F,pos)
-
+for j=1:4
+    F=G;
+    if j==1
+        F.title='';
+        F.legendOn=0;
+        F.yscale='linear';
+        F.doxlabel=1;
+        F.xtick=[20:20:50];
+        F.xlim=[1, 49];
+        F.ytick=[0.25:.2:.7];
+        F.ylim=[0.24,0.67];
+        F.legend = {'LOL';'PCA'};
+        F.colors = {'g';'m'};
+        F.ylabel='error rate';
+        
+    elseif j==2;
+        F.legendOn=0;
+        F.colors = {'g';'b'};
+        F.ylim=[0.28 0.44];
+        F.xlim=[1 19];
+        F.xtick=[5:5:max(F.xlim)];
+        F.ytick=[0.2:0.1:0.5];
+        F.xlabel='';
+        F.linestyle={'-';'--'};
+        
+    elseif j==3
+        F.ylim = [0.25, 0.27];
+        F.ytick = [0:0.01:0.5]; %[F.ylim(1): 0.01: F.ylim(2)];
+        F.xlim = [1 150];
+        F.xtick=[50:50:F.xlim(end)];
+        F.legendOn=0;
+        F.colors = {'g';'r'};
+        F.scale=1;
+        
+    elseif j==4
+        F.title = '';
+        F.ylim = [0.2, 0.45];
+        F.ytick = [0:0.1:0.5]; %[F.ylim(1): 0.01: F.ylim(2)];
+        F.xlim = [1 15];
+        F.xtick=[5:5:max(F.xlim)]; %:F.xlim(end)];
+        F.legendOn=0;
+        F.colors = {orange;purple;'y'};
+        F.linestyle={'--';'--';'--'};
+        
+    end
+    
+    pos=[left+(j-1)*(width+hspace) bottom+(height+vspace)*0+0.01 width height]; %[left,bottom,width,height]
+    plot_Lhat(T{j},S{j},F,pos)
+    
+end
 str = {'# of embedded dimensions'};
-annotation('textbox', [0.35,0.00,0.6,0.04],'String', str,'EdgeColor','w'); %[x y w h]
+annotation('textbox', [0.35,bottom-0.06,0.6,0.04],'String', str,'EdgeColor','none'); %[x y w h]
 
 
-%% plot time vs. k for several D's
+%% legend
 
-load([fpath(1:findex(end-2)), 'Data/Results/speed'])
-fpath = mfilename('fullpath');
-findex=strfind(fpath,'/');
-
-spacer=-0.02;
-h2=0.08;
-pos=[left+(4-1)*(width+hspace) bottom+(height+vspace)*3+spacer width h2]; %[left,bottom,width,height]
-
-set(gcf,'DefaultAxesColorOrder',[1 0 1; 0 1 0; 0 0 0; 0 0 1])
-ytick=[0.005, 0.01, 0.02, 0.05, 0.1];
-xtick=[10,30,50,90];
-i=3;
-subplot('position',pos), hold all
-for j=1:Ntypes
-    eh=errorbar(ks, mean_total(j,:,i),std_total(j,:,i),'linewidth',2);
-    set(gca,'xscale','log','Xtick',ks,'yscale','log')
-    errorbar_tick(eh,5000);
-end
-grid off, axis('tight')
-title(['D=', num2str(Ds(i)), ', n=', num2str(task.ntrain)])
-xlabel('# of embedded dim.'),
-ylabel('time (msec)')
-set(gca,'Ytick',ytick,'YTickLabel',ytick*1000,'XTick',xtick) %:0.02:0.09)
-
-pos=[left+(4-1)*(width+hspace) bottom+(height+vspace)*2+spacer width h2]; %[left,bottom,width,height]
-
-ytick=[0.005, 0.01, 0.02, 0.05, 0.1];
-subplot('position',pos), hold all
-if i==1, ii=1; elseif i==2, ii=3; else ii=5; end
-for j=1:Ntypes
-    eh=errorbar(Ds, squeeze(mean_total(j,ii,:)),squeeze(std_total(j,ii,:)),'linewidth',2);
-    set(gca,'xscale','log','Xtick',Ds,'yscale','log')
-    errorbar_tick(eh,5000);
-end
-grid off, axis('tight')
-title(['k=', num2str(ks(ii))])
-xlabel('# of ambient dim.'),
-set(gca,'Ytick',ytick,'YTickLabel',ytick*1000) %:0.02:0.09)
-
-%%
-
-% text(-15,1,str)
-
-
-pos=[left+(4-1)*(width+hspace)+0.07 bottom+(height+vspace)*4+0.10 width height]; %[left,bottom,width,height]
+pos=[left+(4-1)*(width+hspace)+0.05 bottom+(height+vspace)*2+0.07 width height]; %[left,bottom,width,height]
 % hl=subplot(F.Nrows,F.Ncols,F.Ncols);
 hl=subplot('position',pos);
 hold all, i=1; clear g
 g(i)=plot(0,0,'color','c','linewidth',2); i=i+1;
 g(i)=plot(0,0,'color','g','linewidth',2); i=i+1;
 g(i)=plot(0,0,'color','m','linewidth',2); i=i+1;
-g(i)=plot(1,1,'color',purple,'linewidth',2); i=i+1;
+g(i)=plot(0,0,'color','b','linewidth',2,'linestyle','--'); i=i+1;
 g(i)=plot(0,0,'color','r','linewidth',2); i=i+1;
-g(i)=plot(0,0,'color',orange,'linewidth',2); i=i+1;
-g(i)=plot(0,0,'color','y','linewidth',2); i=i+1;
-g(i)=plot(0,0,'color','b','linewidth',2); i=i+1;
-g(i)=plot(0,0,'color','k','linewidth',2); i=i+1;
+g(i)=plot(0,0,'color','y','linewidth',2,'linestyle','--'); i=i+1;
+g(i)=plot(0,0,'color',orange,'linewidth',2,'linestyle','--'); i=i+1;
+g(i)=plot(1,1,'color',purple,'linewidth',2,'linestyle','--'); i=i+1;
+% g(i)=plot(0,0,'color','k','linewidth',2); i=i+1;
 
 l=legend(g,...
     'ROAD',...
     'LDA o \delta+PCA',...
     'LDA o PCA',...
-    'QDA o \delta+PCA^m',...
+    'QDA o \delta+PCA \otimes m',...
     'LDA o \delta+rPCA',...
-    'QDA o \delta+RP',...
     'QDA o RP',...
-    'LDA o \delta+fPCA',...
-    'LDA o \delta+RP');
-legend1 = legend(hl,'show');
-set(legend1,'YColor',[1 1 1],'XColor',[1 1 1],'FontName','FixedWidth');
-
+    'QDA o \delta+RP',...
+    'QDA o \delta+fPCA \otimes m');
+legend1 = legend(hl,'show','FontSize',10);
+% set(legend1,'YColor',[1 1 1],'XColor',[1 1 1],'FontName','FixedWidth');
 set(gca,'XTick',[],'YTick',[],'Box','off','xcolor','w','ycolor','w')
 
 
 % print figure
 if task.savestuff
-    H.wh=[6 6];
+    H.wh=[7.5 6];
     H.fname=[fpath(1:findex(end-2)), 'Figs/properties'];
     print_fig(h,H)
 end
