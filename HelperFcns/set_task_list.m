@@ -16,7 +16,19 @@ if strcmp(metatask,'thin')
     task.ntrials=10;
     task.algs={'NaiveB','LDA','PDA','SLOL','LOL','DRDA','RDA','RF','svm'};
     task.savestuff=1;
-    
+
+elseif strcmp(metatask,'regress')
+    task_list={'p=D';'p=2D'; 'toeplitz'};
+    task.D=1000;
+    task.ntrain=100;
+    task.ks=unique(round(logspace(0,log10(task.ntrain-10),30)));
+    task.ntest=500;
+    task.rotate=false;
+    task.algs={'LOL';'lasso'};
+    task.types={'DENZ';'NENZ'};
+    task.savestuff=0;
+    task.ntrials=2;
+
 elseif strcmp(metatask,'pancreas')
     task_list={'IPMN-HvL';'IPMN-HvML'; 'IPMN-HMvL';'IPMNvsAll';'MCNvsAll';'SCAvsAll'};
 
@@ -56,7 +68,7 @@ elseif strcmp(metatask,'both_cigars')
     task_list={'parallel cigars';'angled cigars'};
 
 elseif strcmp(metatask,'cs')
-    task_list={'ac';'oc';'rc'};
+    task_list={'ac';'oc';'roc'};
 
 elseif strcmp(metatask,'four_cigars')
     task_list={'parallel cigars';'rotated cigars';'angled cigars'};

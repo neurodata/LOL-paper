@@ -95,6 +95,32 @@ if ~isfield(task,'P')
             Sigma = eye(D);
             Sigma(2,2)=4;
             
+        case 'rac' % aligned cigars
+            
+            mu0=zeros(D,1);
+            mu1=0.15+mu0;
+            mu1(2)=8;
+            
+            Sigma = eye(D);
+            Sigma(2,2)=4;
+
+            % generate rotation matrix uniformly
+            [Q, ~] = qr(randn(task.D));
+            if det(Q)<-.99
+                Q(:,1)=-Q(:,1);
+            end
+            
+            th=pi/4;
+            Q(1:2,1:2)=[cos(th) -sin(th); sin(th) cos(th)];
+            Q(1,3:end)=0;
+            Q(2,3:end)=0;
+            Q(3:end,1)=0;
+            Q(3:end,2)=0;
+
+            mu0=Q*mu0;
+            mu1=Q*mu1;
+            Sigma=Q*Sigma*Q';
+        
         case 'oc' % orthogonal cigars
             
             mu0=zeros(D,1);
@@ -104,7 +130,7 @@ if ~isfield(task,'P')
             Sigma  = eye(D);
             Sigma(2,2)=4;
                         
-        case 'rc' % orthogonal rotated cigars
+        case 'roc' % orthogonal rotated cigars
             
             mu0=zeros(D,1);
             mu1=0.15+mu0;

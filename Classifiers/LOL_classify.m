@@ -1,4 +1,4 @@
-function [Yhat, Proj, P] = LOL_classify(sample,training,group,task)
+function [Yhat, Proj, P, transformers, deciders] = LOL_classify(sample,training,group,task)
 % LOL_classify does the following:
 % (i) parses task types into transformers and deciders
 % (ii) runs LOL to learn all the linear transformers
@@ -17,22 +17,11 @@ function [Yhat, Proj, P] = LOL_classify(sample,training,group,task)
 %   Yhat ({0,1,2,...}^ntest):   vector of predicted classes
 %   Proj (struct):              containing projection matrix and type
 %   P (struct):                 containing various parameters estimated from data
+%   transformers:               see parse_algs.m
+%   deciders:                   see parse_algs.m
 
 [transformers, deciders] = parse_algs(task.types);
 [Proj, P] = LOL(training',group,transformers,max(task.ks));
-
-
-% if it is actually a regression problem
-if isfield(P,'Ytiles') 
-    YY=0*group;
-    yind=find(group<P.Ytiles(1));
-    YY(yind)=1;
-    for j=2:length(P.Ytiles)
-        yind=find(group<P.Ytiles(j) & group>P.Ytiles(j-1));
-        YY(yind)=j;
-    end
-    group=YY;
-end
 
 Yhat=cell(length(task.types),1);
 k=0;

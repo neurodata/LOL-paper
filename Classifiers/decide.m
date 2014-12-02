@@ -42,7 +42,7 @@ for i=1:Nks
             %             end
         elseif strcmp(classifier,'regress')
             beta=[ones(ntrain,1), training(1:ks(i),:)']\group';
-            Yhat(i,:)= [ones(ntest,1), sample(1:ks(i),:)']'*beta;
+            Yhat(i,:)= [ones(ntest,1), sample(1:ks(i),:)']*beta;
         end
     catch err
         if i>1

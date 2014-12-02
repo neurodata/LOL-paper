@@ -32,29 +32,6 @@ for k=1:T.ntrials
     end
 end
 
-% ii=1;
-% if isfield(loop{1},'ROAD')
-%     for k=1:T.ntrials
-%         for i=1:Nalgs;
-%             for l=1:T.Nks
-%                 Lhats(ii+i,l,k)=loop{k}.ROAD(i,l).Lhat;
-%                 ks(i,l,k)=loop{k}.out(i,l).num;
-%                 if size(loop{k}.out,2)==1 || isempty(loop{k}.out(i,2).Lhat) % if we did not do cv across dimensions for this algorithm
-%                     break
-%                 end
-%             end
-%         end
-%     end
-% end
-% 
-% for i=1:T.Nalgs
-%     if strcmp(T.algs{i},'RF')
-%         for k=1:T.ntrials
-%             Stats.NumParents(k)=loop{k}.NumParents;
-%         end
-%     end
-% end
-
 Stats.means.Lhats=squeeze(nanmean(Lhats,3));
 Stats.means.sensitivity=squeeze(nanmean(sensitivity,3));
 Stats.means.specificity=squeeze(nanmean(specificity,3));

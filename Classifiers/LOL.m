@@ -43,17 +43,18 @@ Kmax=round(Kmax);
 
 %% check if regression, if so, convert to classification
 ngroups=length(unique(Y));
+df=0.1;
 if ngroups > length(Y)/2
-    P.Ytiles=quantile(Y,[0.1:0.1:1]);
+    P.Ytiles=quantile(Y,linspace(df,1,1/df));
     YY=0*Y;
-    yind=find(Y<P.Ytiles(1));
+    yind=Y<P.Ytiles(1);
     YY(yind)=1;
     for j=2:length(P.Ytiles)
-        yind=find(Y<P.Ytiles(j) & Y>P.Ytiles(j-1));
+        yind=Y<P.Ytiles(j) & Y>P.Ytiles(j-1);
         YY(yind)=j;
     end
+    Y=YY;
 end
-Y=YY;
 
 %% get means
 Q=struct;

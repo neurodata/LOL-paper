@@ -39,19 +39,18 @@ hspace=0.07;
 vspace=0.05;
 bottom=0.02;
 dd=1;
-gg=0.75;
+gg=1;
 marker='.';
 ms=4; % markersize
 
 for j=1:Nsims
     
-    task.name=task_list{j};
     % generate data and embed it
+    task.name=task_list{j};
     [task1, X, Y, P] = get_task(task);
-    
     Z = parse_data(X,Y,task1.ntrain,task1.ntest,0);
         
-%     subplot(Nrows,Ncols,j), 
+    % scatter plots
     subplot('Position',[left+(j-1)*(width+hspace) bottom+4*(height+vspace), width, width ]) %[left,bottom,width,height]
     hold on
     Xtest=Z.Xtest(1:2,:);
@@ -61,8 +60,8 @@ for j=1:Nsims
     Xplot2=Xtest(:,Z.Ytest==2);
     idx=randperm((task.ntest-100)/2);
     idx=idx(1:100);
-    plot(Xplot1(1,idx),Xplot1(2,idx),'linestyle','.','marker',marker,'color',[0 0 0],'LineWidth',1.0,'markersize',ms),
-    plot(Xplot2(1,idx),Xplot2(2,idx),'linestyle','.','marker',marker,'color',gray,'LineWidth',1.0,'markersize',ms)
+    plot(Xplot1(1,idx),Xplot1(2,idx),'.','color',[0 0 0],'LineWidth',1.0,'markersize',ms),
+    plot(Xplot2(1,idx),Xplot2(2,idx),'.','color',gray,'LineWidth',1.0,'markersize',ms)
     axis('equal')
     set(gca,'XTick',[0],'YTick',[0],'XTickLabel',[],'YTickLabel',[])
     grid('on')
@@ -73,7 +72,7 @@ for j=1:Nsims
         case 2, tit='(B) Orthogonal';
         case 3, tit='(C) Rotated Orthogonal';
     end
-    title(tit)
+    title(tit,'fontsize',8)
 %     axis('square')
     
     [transformers, deciders] = parse_algs(task1.types);
