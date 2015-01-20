@@ -15,101 +15,47 @@ s=rng;
 %% set up tasks
 clear idx
 task.D=200;
-task.ntrain=100;
-task.ks=unique(round(logspace(0,log10(task.ntrain-10),30)));
-task.name='power';
-task.ntest=500;
-task.rotate=false;
-task.algs={'LOL'};
-task.types={'DENZ';'NERZ'};
+task.n=500;
+task.ks=unique(round(logspace(0,log10(task.D-10),30)));
+[~, ~,task.types] = parse_algs({'DENL';'NERL'});
 task.savestuff=1;
-task.ntrials=2;
-
-%% run trials
-subnames={'p=2D';'toeplitz'};
+task.Ntrials=3;
+task.Ntypes=length(task.types);
+task.Nks=length(task.ks);
+task.Kmax=max(task.ks);
+subnames={'diag_slow'}; %;'diag_fast';'rand_slow';'rand_fast'};
 Ns=length(subnames);
-lol_time=nan(Ns,1); lasso_time=nan(Ns,1); pls_time=nan(Ns,1); chance=nan(Ns,1); err_pls=nan(Ns,1);
 for subname=1:Ns
-    
-    task.subname=subnames{subname};
-    
-    err_lasso=nan(task.ntrials,length(task.ks));
-    for t=1:task.ntrials
+    task.name=subnames{subname};
+    pval=nan(task.Ntrials,task.Nks,task.Ntypes);
+    for t=1:task.Ntrials
         % generate data and embed it
-        [task1, X, Y, P] = get_task(task);
-        Z = parse_data(X,Y,task1.ntrain,task1.ntest,0);
+        P = set_parameters(task);
+        gmm = gmdistribution(P.mu',P.Sigma,P.w);
+        [X,Y] = random(gmm,task.n);
         
         % LOL
-        tic
-        [Yhats] = LOL_classify(Z.Xtest',Z.Xtrain',Z.Ytrain,task);
-        lol_time(t)=toc;
+        [transformers, deciders] = parse_algs(task.types);
+        [Proj, P] = LOL(X',Y,transformers,max(task.ks));
         
-        % LASSO
-        tic
-        [B,FitInfo] = lasso([ones(task.ntrain,1),Z.Xtrain'],Z.Ytrain,'NumLambda',length(task.ks));
-        lasso_time(t)=toc;
-        
-        % PLS
-        tic
-        [XL,YL,XS,YS,BETA] = plsregress(Z.Xtrain',Z.Ytrain',1);
-        Ypls = [ones(1,task.ntest);Z.Xtest]'*BETA;
-        pls_time(t)=toc;
-        
-        % display times
-        display(['lol ', num2str(lol_time(t)), ', lasso ', num2str(lasso_time(t)), ', pls ', num2str(pls_time(t))])
-        
-        % compute errors
-        
-        for k=1:length(Yhats)
-            for j=1:size(Yhats{1},1)
-                err_LOL(t,k,j)=sum((Yhats{k}(j,:)-Z.Ytest).^2);
+        % generate test statistics
+        for k=1:task.Nks
+            Xhat = X*Proj{1}.V(1:task.ks(k),:)';
+            for j=1:length(Proj)
+                pval(t,k,j)=Hotelling(Xhat,Y);
             end
         end
         
-        J=size(B,2);
-        Ylasso=nan(J,task.ntest);
-        for j=1:size(B,2)
-            Ylasso(j,:) = [ones(task.ntest,1),Z.Xtest']*B(:,j);
-            err_lasso(t,j)=sum((Ylasso(j,:)-Z.Ytest).^2);
-            nlambda{t}=FitInfo.DF;
-        end
-        
-        err_pls(t)=sum((Z.Ytest-Ypls').^2);
-        
-        chance(t)=sum((Z.Ytest-mean(Z.Ytrain)).^2);
     end
     
     %% get stats
     
-    mean_lasso = mean(err_lasso);
-    mean_lol = squeeze(mean(err_LOL,1));
-    if size(err_LOL,2)==1, mean_lol=mean_lol'; end
-    
-    se_lasso = std(err_lasso)/task.ntrials;
-    se_lol = squeeze(std(err_LOL))/task.ntrials;
-    
-    len=0;
-    for i=1:task.ntrials
-        len=max(len,length(nlambda{i}));
-    end
-    nlam=nan(task.ntrials,len);
-    for i=1:task.ntrials
-        nlam(i,1:length(nlambda{i}))=nlambda{i};
-    end
-    mean_nlam=mean(nlam);
-    
+    power=pval<0.05;
     % store stats for plotting
-    S{subname}.mean_nlam=mean_nlam;
-    S{subname}.mean_lol=mean_lol;
-    S{subname}.mean_lasso=mean_lasso;
-    S{subname}.mean_pls=mean(err_pls);
-    
-    S{subname}.lol_time=lol_time;
-    S{subname}.lasso_time=lasso_time;
-    S{subname}.pls_time=pls_time;
-    
+    S{subname}.mean_power=squeeze(mean(power,1));
+    S{subname}.std_power=squeeze(std(power,1));
+        
     S{subname}.subname=task.subname;
-    S{subname}.chance=mean(chance);
     S{subname}.ks=task.ks;
     S{subname}.savestuff=task.savestuff;
 end

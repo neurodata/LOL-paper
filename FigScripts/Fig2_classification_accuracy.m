@@ -6,7 +6,14 @@ p = genpath(fpath(1:findex(end-2)));
 addpath(p);
 
 %% load example data
-load([fpath(1:findex(end-2)), 'Data/Results/example_sims'])
+newsim=0;
+if newsim==1;
+    [T,S,P,task] = run_example_sims;
+else
+    load([fpath(1:findex(end-2)), 'Data/Results/example_sims'])
+end
+S{1}.savestuff=1;
+
 
 
 %% plot example panels
@@ -258,7 +265,7 @@ for j=1:4
         F.xtick=[5:5:max(F.xlim)];
         F.ytick=[0.2:0.1:0.5];
         F.xlabel='';
-        F.linestyle={'-';'--'};
+        F.linestyle={'-';'-'};
         
     elseif j==3
         F.ylim = [0.25, 0.27];
@@ -277,7 +284,7 @@ for j=1:4
         F.xtick=[5:5:max(F.xlim)]; %:F.xlim(end)];
         F.legendOn=0;
         F.colors = {orange;purple;'y'};
-        F.linestyle={'--';'--';'--'};
+        F.linestyle={'--';'-';'--'};
         
     end
     
@@ -298,10 +305,10 @@ hold all, i=1; clear g
 g(i)=plot(0,0,'color','c','linewidth',2); i=i+1;
 g(i)=plot(0,0,'color','m','linewidth',2); i=i+1;
 g(i)=plot(0,0,'color','g','linewidth',2); i=i+1;
-g(i)=plot(0,0,'color','b','linewidth',2,'linestyle','--'); i=i+1;
+g(i)=plot(0,0,'color','b','linewidth',2,'linestyle','-'); i=i+1;
 g(i)=plot(0,0,'color','r','linewidth',2); i=i+1;
 g(i)=plot(0,0,'color',orange,'linewidth',2,'linestyle','--'); i=i+1;
-g(i)=plot(1,1,'color',purple,'linewidth',2,'linestyle','--'); i=i+1;
+g(i)=plot(1,1,'color',purple,'linewidth',2,'linestyle','-'); i=i+1;
 g(i)=plot(0,0,'color','y','linewidth',2,'linestyle','--'); i=i+1;
 % g(i)=plot(0,0,'color','k','linewidth',2); i=i+1;
 

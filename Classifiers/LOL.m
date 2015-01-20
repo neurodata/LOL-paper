@@ -128,7 +128,8 @@ end
 Proj=cell(1:ntypes);
 for i=1:ntypes
     if ~strcmp(types{i}(1),'N')     % if we are appending something to "eigenvectors"
-        [V, ~] = qr([P.([types{i}(1), 'elta']),Q.(['V', types{i}(2), types{i}(3)])'],0);
+%          [V, ~] = qr([P.([types{i}(1), 'elta']),Q.(['V', types{i}(2), types{i}(3)])'],0);
+        V = [P.([types{i}(1), 'elta']),Q.(['V', types{i}(2), types{i}(3)])'];
     elseif strcmp(types{i}(1),'N')  % if not
         V=Q.(['V', types{i}(2), types{i}(3)])';
     end
@@ -151,9 +152,9 @@ elseif strcmp(type,'F')         % fast svd, comput top min([n,D,Kmax]) eigvector
     else [V,d,~] = fsvd(X,min([n,D,Kmax]));
     end
 elseif strcmp(type,'R')         % compute all robust eigenvectors
-%     if n>D, cov = m_estimator_gms(X');
-%     else cov = m_estimator_gms(X);
-%     end
+    %     if n>D, cov = m_estimator_gms(X');
+    %     else cov = m_estimator_gms(X);
+    %     end
     cov = m_estimator_gms(X');
     [V,d]= eig(cov);
     d=diag(d);

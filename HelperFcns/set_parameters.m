@@ -7,24 +7,86 @@ function P = set_parameters(task)
 % INPUT: task (struct): task settings
 % OUTPUT:  P (struct):  parameters
 
-if ~isfield(task,'permute'), task.permute=false; end % whether or not to permute the coordinates, this is really for debugging purposes
-if ~isfield(task,'rotate'), task.rotate=false; end % ambient # of dimensions
-if ~isfield(task,'D'), D=100; else D=task.D; end % ambient # of dimensions
+if ~isfield(task,'permute'),task.permute=false; end % whether or not to permute the coordinates, this is really for debugging purposes
+if ~isfield(task,'rotate'), task.rotate=false;  end % ambient # of dimensions
+if ~isfield(task,'D'),      task.D=100;         end % ambient # of dimensions
+
+D=task.D;
 
 if ~isfield(task,'P')
     switch task.name
         
+        case 'diag_slow' % From Lopes & Wainright, 2011
+            
+            if ~isfield(task,'b'), b=5; else b=task.b; end
+            mu0=zeros(D,1);
+            mu1=mvnrnd(mu0,eye(D))';
+            mu1=mu1/norm(mu1);
+            
+            fastdiag=linspace(0.01,1,D).^b;
+            Sigma=diag(fastdiag);
+            Sigma=Sigma/norm(Sigma,'fro')*50;
+
+        case 'diag_fast' % From Lopes & Wainright, 2011
+            
+            if ~isfield(task,'b'), b=20; else b=task.b; end
+            mu0=zeros(D,1);
+            mu1=mvnrnd(mu0,eye(D))';
+            mu1=mu1/norm(mu1);
+            
+            fastdiag=linspace(0.01,1,D).^b;
+            Sigma=diag(fastdiag);
+            Sigma=Sigma/norm(Sigma,'fro')*50;
+
+        case 'rand_slow' % From Lopes & Wainright, 2011
+            
+            if ~isfield(task,'b'), b=5; else b=task.b; end
+            mu0=zeros(D,1);
+            mu1=mvnrnd(mu0,eye(D))';
+            mu1=mu1/norm(mu1);
+            
+            L=randn(D);
+            S=L*L';
+            
+            [u,~,v]=svd(S);
+            fastdiag=linspace(0.01,1,D).^b;
+            S=u*diag(fliplr(fastdiag))*v';
+            S=S/norm(S,'fro')*50;
+            S=triu(S,0);
+            Sigma=S+S';
+            
+
+        case 'rand_fast' % From Lopes & Wainright, 2011
+            
+            if ~isfield(task,'b'), b=20; else b=task.b; end
+            mu0=zeros(D,1);
+            mu1=mvnrnd(mu0,eye(D))';
+            mu1=mu1/norm(mu1);
+            
+            L=randn(D);
+            S=L*L';
+            
+            [u,~,v]=svd(S);
+            fastdiag=linspace(0.01,1,D).^b;
+            S=u*diag(fliplr(fastdiag))*v';
+            S=S/norm(S,'fro')*50;
+            S=triu(S,0);
+            Sigma=S+S';
+
         case 'b' % for debuggin purposes
             
+            if ~isfield(task,'b'), b=0.1; else b=task.b; end
+
             D=100;
-            m=0.1;
-            mu1 = m*ones(D,1);
+            mu1 = b*ones(D,1);
             mu0 = -mu1*0;
             Sigma = eye(D);
             
         case 'w' % wide
             
-            mudelt = 8/sqrt(D);                                 % distance betwen dim 1 of means
+            if ~isfield(task,'b'), b=8; else b=task.b; end
+
+            mudelt = b/sqrt(D);                                 % distance betwen dim 1 of means
             mu1 = [-mudelt/2; zeros(D-1,1)];                   % class 1 mean
             mu0 = [mudelt/2; zeros(D-1,1)];                     % class 2 mean
             
@@ -35,7 +97,9 @@ if ~isfield(task,'P')
             
         case 'w1' % wide
             
-            mudelt = 6/sqrt(100);                                 % distance betwen dim 1 of means
+            if ~isfield(task,'b'), b=6; else b=task.b; end
+
+            mudelt = b/sqrt(100);                                 % distance betwen dim 1 of means
             mu1 = [-mudelt/2; zeros(D-1,1)];                   % class 1 mean
             mu0 = [mudelt/2; zeros(D-1,1)];                     % class 2 mean
             
@@ -47,7 +111,9 @@ if ~isfield(task,'P')
             
         case 'w2' % wide
             
-            mudelt = 8/sqrt(D);                                 % distance betwen dim 1 of means
+            if ~isfield(task,'b'), b=8; else b=task.b; end
+
+            mudelt = b/sqrt(D);                                 % distance betwen dim 1 of means
             mu1 = [-mudelt/2; zeros(D-1,1)];                   % class 1 mean
             mu0 = [mudelt/2; zeros(D-1,1)];                     % class 2 mean
             
@@ -64,8 +130,10 @@ if ~isfield(task,'P')
             
         case 'w3' % wide
             
+            if ~isfield(task,'b'), b=6; else b=task.b; end
+
             D = 3;
-            mudelt = 6/sqrt(100);                                 % distance betwen dim 1 of means
+            mudelt = b/sqrt(100);                                 % distance betwen dim 1 of means
             mu1 = [-mudelt/2; zeros(D-1,1)];                   % class 1 mean
             mu0 = [mudelt/2; zeros(D-1,1)];                     % class 2 mean
             
@@ -77,7 +145,9 @@ if ~isfield(task,'P')
             
         case 's' % simple
             
-            mudelt = 6/sqrt(D);                                 % distance betwen dim 1 of means
+            if ~isfield(task,'b'), b=6; else b=task.b; end
+
+            mudelt = b/sqrt(D);                                 % distance betwen dim 1 of means
             mu1 = [-mudelt/2; zeros(D-1,1)];                   % class 1 mean
             mu0 = [mudelt/2; zeros(D-1,1)];                     % class 2 mean
             
@@ -88,8 +158,10 @@ if ~isfield(task,'P')
             
         case 'ac' % aligned cigars
             
+            if ~isfield(task,'b'), b=0.15; else b=task.b; end
+
             mu0=zeros(D,1);
-            mu1=0.15+mu0;
+            mu1=b+mu0;
             mu1(2)=8;
             
             Sigma = eye(D);
@@ -97,15 +169,17 @@ if ~isfield(task,'P')
             
         case 'rac' % aligned cigars
             
+            if ~isfield(task,'b'), b=0.15; else b=task.b; end
+
             mu0=zeros(D,1);
-            mu1=0.15+mu0;
+            mu1=b+mu0;
             mu1(2)=8;
             
             Sigma = eye(D);
             Sigma(2,2)=4;
 
             % generate rotation matrix uniformly
-            [Q, ~] = qr(randn(task.D));
+            [Q, ~] = qr(randn(D));
             if det(Q)<-.99
                 Q(:,1)=-Q(:,1);
             end
@@ -123,8 +197,10 @@ if ~isfield(task,'P')
         
         case 'oc' % orthogonal cigars
             
+            if ~isfield(task,'b'), b=0.15; else b=task.b; end
+
             mu0=zeros(D,1);
-            mu1=0.15+mu0;
+            mu1=b+mu0;
             mu1(1)=2;
             
             Sigma  = eye(D);
@@ -132,15 +208,17 @@ if ~isfield(task,'P')
                         
         case 'roc' % orthogonal rotated cigars
             
+            if ~isfield(task,'b'), b=0.15; else b=task.b; end
+
             mu0=zeros(D,1);
-            mu1=0.15+mu0;
+            mu1=b+mu0;
             mu1(1)=2;
             
             Sigma  = eye(D);
             Sigma(2,2)=4;
             
             % generate rotation matrix uniformly
-            [Q, ~] = qr(randn(task.D));
+            [Q, ~] = qr(randn(D));
             if det(Q)<-.99
                 Q(:,1)=-Q(:,1);
             end
@@ -159,15 +237,17 @@ if ~isfield(task,'P')
             
         case 'r2c' % orthogonal only 1 rotated cigars
             
+            if ~isfield(task,'b'), b=0.5; else b=task.b; end
+
             mu0=zeros(D,1);
-            mu1=0.5+mu0;
+            mu1=b+mu0;
             mu1(1)=2;
             
             Sigma  = eye(D);
             Sigma(2,2)=4;
             
             % generate rotation matrix uniformly
-            [Q, ~] = qr(randn(task.D));
+            [Q, ~] = qr(randn(D));
             if det(Q)<-.99
                 Q(:,1)=-Q(:,1);
             end
@@ -186,7 +266,9 @@ if ~isfield(task,'P')
 
         case 'parallel cigars' % simple
             
-            mudelt = 6/sqrt(D);                                 % distance betwen dim 1 of means
+            if ~isfield(task,'b'), b=6; else b=task.b; end
+
+            mudelt = b/sqrt(D);                                 % distance betwen dim 1 of means
             mu1 = [-mudelt/2; zeros(D-1,1)];                   % class 1 mean
             mu0 = [mudelt/2; zeros(D-1,1)];                     % class 2 mean
             
@@ -197,7 +279,9 @@ if ~isfield(task,'P')
             
         case 'angled cigars' % simple
             
-            mudelt = 6/sqrt(D);                                 % distance betwen dim 1 of means
+            if ~isfield(task,'b'), b=6; else b=task.b; end
+
+            mudelt = b/sqrt(D);                                 % distance betwen dim 1 of means
             mu1 = [-mudelt/2; zeros(D-1,1)];                   % class 1 mean
             mu0 = [mudelt/2; zeros(D-1,1)];                     % class 2 mean
             
@@ -215,6 +299,8 @@ if ~isfield(task,'P')
             
         case 'rotated cigars' % simple angle
             
+            if ~isfield(task,'b'), b=6; else b=task.b; end
+
             R = eye(D);
             theta=pi/4;
             R(1,1)=cos(theta);
@@ -222,7 +308,7 @@ if ~isfield(task,'P')
             R(1,2)=sin(theta);
             R(2,1)=-R(1,2);
             
-            mudelt = 6/sqrt(D);                                 % distance betwen dim 1 of means
+            mudelt = b/sqrt(D);                                 % distance betwen dim 1 of means
             mu1 = [-mudelt/2; zeros(D-1,1)];                   % class 1 mean
             mu0 = [mudelt/2; zeros(D-1,1)];                     % class 2 mean
             
@@ -238,7 +324,9 @@ if ~isfield(task,'P')
             
         case 'sa' % simple angle
             
-            mudelt = 2.5;                                 % distance betwen dim 1 of means
+            if ~isfield(task,'b'), b=2.5; else b=task.b; end
+
+            mudelt = b;                                 % distance betwen dim 1 of means
             mu1 = [-mudelt/2*ones(2,1); zeros(D-2,1)];                   % class 1 mean
             mu0 = [mudelt/2*ones(2,1); zeros(D-2,1)];                   % class 1 mean
             mu1(2)=mu1(2)/3;
@@ -256,7 +344,9 @@ if ~isfield(task,'P')
             
         case 'sa2' % simple angle
             
-            mudelt = 3.5;                                 % distance betwen dim 1 of means
+            if ~isfield(task,'b'), b=3.5; else b=task.b; end
+
+            mudelt = b;                                 % distance betwen dim 1 of means
             mu1 = [-mudelt/2*ones(2,1); zeros(D-2,1)];                   % class 1 mean
             mu0 = [mudelt/2*ones(2,1); zeros(D-2,1)];                   % class 1 mean
             mu1(2)=mu1(2)/3;
@@ -274,14 +364,15 @@ if ~isfield(task,'P')
             
         case 'wa' % wide angle
             
+            if ~isfield(task,'b'), b=6; else b=task.b; end
+
             sd = 1;
             k = 1;                                      % # of latent dimensions with relatively high variance
-            mudelt = 3;                                 % distance betwen dim 1 of means
             sv = sd/sqrt(D)*ones(D,1);
             sv(2)=2;
             A  = eye(D,D); %A(1:2,1:2)=[1,2;0,1];       % singular vectors
-            mu1 = [-mudelt/2*ones(2,1); zeros(D-2,1)];                   % class 1 mean
-            mu0 = [mudelt/2*ones(2,1); zeros(D-2,1)];                   % class 1 mean
+            mu1 = [-b/2*ones(2,1); zeros(D-2,1)];                   % class 1 mean
+            mu0 = [b/2*ones(2,1); zeros(D-2,1)];                   % class 1 mean
             
             Sigma=A*diag(sv);                            % class 1 cov
             Sigma(1,2) = sv(2)/2;
@@ -290,14 +381,15 @@ if ~isfield(task,'P')
             
         case 'r' % rotated
             
+            if ~isfield(task,'b'), b=1; else b=task.b; end
+
             sd = 1;
             k = 1;                                      % # of latent dimensions with relatively high variance
-            mudelt = 1;                                 % distance betwen dim 1 of means
             sv = sd/sqrt(D)*ones(D,1);
             
             A  = eye(D,D); %A(1:2,1:2)=[1,2;0,1];       % singular vectors
-            mu1 = [-mudelt/2; zeros(D-1,1)];                   % class 1 mean
-            mu0 = [mudelt/2; zeros(D-1,1)];                     % class 2 mean
+            mu1 = [-b/2; zeros(D-1,1)];                   % class 1 mean
+            mu0 = [b/2; zeros(D-1,1)];                     % class 2 mean
             
             Sigma=nan(D,D,2);
             
@@ -311,14 +403,15 @@ if ~isfield(task,'P')
             
         case 'wra' % wide angle
             
+            if ~isfield(task,'b'), b=8/sqrt(D); else b=task.b; end
+
             sd = 1;
             k = 5;                                      % # of latent dimensions with relatively high variance
-            mudelt = 8/sqrt(D);                                 % distance betwen dim 1 of means
             sv = 1*sd/sqrt(D)*ones(D,1);
             sv(2)=2;
             A  = eye(D,D); %A(1:2,1:2)=[1,2;0,1];       % singular vectors
-            mu1 = [-mudelt/2*ones(k,1); zeros(D-k,1)];                   % class 1 mean
-            mu0 = [mudelt/2*ones(k,1); zeros(D-k,1)];                   % class 1 mean
+            mu1 = [-b/2*ones(k,1); zeros(D-k,1)];                   % class 1 mean
+            mu0 = [b/2*ones(k,1); zeros(D-k,1)];                   % class 1 mean
             
             mu1(1)=mu1(1)*2;
             mu0(1)=mu0(1)*2;
@@ -342,14 +435,15 @@ if ~isfield(task,'P')
             
         case 'wra2' % wide angle
             
+            if ~isfield(task,'b'), b=16/sqrt(D); else b=task.b; end
+
             sd = 1;
             k = 2;                                      % # of latent dimensions with relatively high variance
-            mudelt = 16/sqrt(D);                                 % distance betwen dim 1 of means
             sv = 3*sd/sqrt(D)*ones(D,1);
             sv(2)=2;
             A  = eye(D,D); %A(1:2,1:2)=[1,2;0,1];       % singular vectors
-            mu1 = [-mudelt/2*ones(k,1); zeros(D-k,1)];                   % class 1 mean
-            mu0 = [mudelt/2*ones(k,1); zeros(D-k,1)];                   % class 1 mean
+            mu1 = [-b/2*ones(k,1); zeros(D-k,1)];                   % class 1 mean
+            mu0 = [b/2*ones(k,1); zeros(D-k,1)];                   % class 1 mean
             
             mu1(1)=mu1(1)*2;
             mu0(1)=mu0(1)*2;
@@ -382,36 +476,44 @@ if ~isfield(task,'P')
             
         case 'trunk'
             
+            if ~isfield(task,'b'), b=0.5; else b=task.b; end
+
             mu1=1./sqrt(1:D)';
             mu0=-mu1;
-            Sigma = sqrt(D)*0.5*eye(D);
+            Sigma = b*sqrt(D)*eye(D);
             
         case 'trunk2'
             
+            if ~isfield(task,'b'), b=100; else b=task.b; end
+
             mu1=2./sqrt(D:-1:1)';
             mu0=-mu1;
             
             Sigma=eye(D);
-            Sigma(1:D+1:end)=100./sqrt(1:D);
+            Sigma(1:D+1:end)=b./sqrt(1:D);
             
         case ['trunk3, D=', num2str(D)]
             
+            if ~isfield(task,'b'), b=100; else b=task.b; end
+
             mu1=2./sqrt(D:-1:1)';
             mu0=-mu1;
             
             Sigma=eye(D);
-            Sigma(1:D+1:end)=100./sqrt(1:D);
+            Sigma(1:D+1:end)=b./sqrt(1:D);
             
             
         case ['atrunk3, D=', num2str(D)]
             
+            if ~isfield(task,'b'), b=100; else b=task.b; end
+
             mu1=2./sqrt(D:-1:1)';
             mu0=-mu1;
             
             Sigma=eye(D);
-            Sigma(1:D+1:end)=100./sqrt(1:D);
+            Sigma(1:D+1:end)=b./sqrt(1:D);
             
-            [Q, ~] = qr(randn(task.D));
+            [Q, ~] = qr(randn(D));
             if det(Q)<-.99
                 Q(:,1)=-Q(:,1);
             end
@@ -422,17 +524,17 @@ if ~isfield(task,'P')
             
         case ['trunk4']
             
-            int=2;
-            mu1=4./sqrt(1:int:int*D)';
+            if ~isfield(task,'b'), b=4; else b=task.b; end
+            mu1=b./sqrt(1:2:2*D)';
             mu0=-mu1;
             
             Sigma=eye(D);
-            Sigma(1:D+1:end)=100./sqrt(D:-1:1);
+            Sigma(1:D+1:end)=b./sqrt(D:-1:1);
             
         case ['trunk4, D=', num2str(D)]
             
-            int=2;
-            mu1=4./sqrt(1:int:int*D)';
+            if ~isfield(task,'b'), b=4; else b=task.b; end
+            mu1=b./sqrt(1:2:2*D)';
             mu0=-mu1;
             
             Sigma=eye(D);
@@ -441,8 +543,8 @@ if ~isfield(task,'P')
 
         case ['3trunk4, D=', num2str(D)]
             
-            int=2;
-            mu1=6./sqrt(1:int:int*D)';
+            if ~isfield(task,'b'), b=6; else b=task.b; end
+            mu1=b./sqrt(1:2:2*D)';
             mu0=-mu1;
             mu2=0*mu0;
             
@@ -451,8 +553,8 @@ if ~isfield(task,'P')
 
         case ['ntrunk4, D=', num2str(D)]
             
-            int=2;
-            mu1=4./sqrt(1:int:int*D)';
+            if ~isfield(task,'b'), b=4; else b=task.b; end
+            mu1=b./sqrt(1:2:2*D)';
             mu0=mu1;
             mu0(1)=mu0(1)+10;
             
@@ -461,8 +563,8 @@ if ~isfield(task,'P')
             
         case ['otrunk4, D=', num2str(D)]
             
-            int=2;
-            mu1=4./sqrt(1:int:int*D)';
+            if ~isfield(task,'b'), b=4; else b=task.b; end
+            mu1=b./sqrt(1:2:2*D)';
             mu0=mu1;
             mu0(2)=mu0(2)+10;
             
@@ -471,14 +573,14 @@ if ~isfield(task,'P')
             
         case ['atrunk4, D=', num2str(D)]
             
-            int=2;
-            mu1=4./sqrt(1:int:int*D)';
+            if ~isfield(task,'b'), b=4; else b=task.b; end
+            mu1=b./sqrt(1:2:2*D)';
             mu0=-mu1;
             
             Sigma=eye(D);
             Sigma(1:D+1:end)=100./sqrt(D:-1:1);
             
-            [Q, ~] = qr(randn(task.D));
+            [Q, ~] = qr(randn(D));
             if det(Q)<-.99
                 Q(:,1)=-Q(:,1);
             end
@@ -490,8 +592,9 @@ if ~isfield(task,'P')
             
         case ['toeplitz, D=', num2str(D)]
             
-            delta1=0.4; D1=10;
-            
+            if ~isfield(task,'b'), b=0.4; else b=task.b; end
+
+            D1=10;
             rho=0.5;
             c=rho.^(0:D1-1);
             A = toeplitz(c);
@@ -501,7 +604,7 @@ if ~isfield(task,'P')
             A = toeplitz(c);
             K=sum(A(:));
             
-            mudelt=(K1*delta1^2/K)^0.5/2;
+            mudelt=(K1*b^2/K)^0.5/2;
             mu0 = ones(D,1);
             mu0(2:2:end)=-1;
             mu0=mudelt*mu0;
@@ -511,7 +614,8 @@ if ~isfield(task,'P')
             
         case ['r2toeplitz, D=', num2str(D)]
             
-            delta1=0.4; D1=10;
+            if ~isfield(task,'b'), b=0.4; else b=task.b; end
+            D1=10;
             
             rho=0.5;
             c=rho.^(0:D1-1);
@@ -523,13 +627,13 @@ if ~isfield(task,'P')
             K=sum(A(:));
             Sigma=A;
             
-            mudelt=(K1*delta1^2/K)^0.5/2;
+            mudelt=(K1*b^2/K)^0.5/2;
             mu0 = ones(D,1);
             mu0(2:2:end)=-1;
             mu0=mudelt*mu0;
             
             
-            [Q, ~] = qr(randn(task.D));
+            [Q, ~] = qr(randn(D));
             if det(Q)<-.99
                 Q(:,1)=-Q(:,1);
             end
@@ -546,7 +650,8 @@ if ~isfield(task,'P')
             
         case ['atoeplitz, D=', num2str(D)]
             
-            delta1=0.4; D1=10;
+            if ~isfield(task,'b'), b=0.4; else b=task.b; end
+            D1=10;
             
             rho=0.5;
             c=rho.^(0:D1-1);
@@ -557,14 +662,14 @@ if ~isfield(task,'P')
             A = toeplitz(c);
             K=sum(A(:));
             
-            mudelt=(K1*delta1^2/K)^0.5/2;
+            mudelt=(K1*b^2/K)^0.5/2;
             mu0 = ones(D,1);
             mu0(2:2:end)=-1;
             mu0=mudelt*mu0;
             mu1=-mu0;
             
             
-            [Q, ~] = qr(randn(task.D));
+            [Q, ~] = qr(randn(D));
             if det(Q)<-.99
                 Q(:,1)=-Q(:,1);
             end
@@ -575,9 +680,10 @@ if ~isfield(task,'P')
             
         case ['sparse toeplitz, D=', num2str(D)]        % toeplitz with sparse delta
             
-            mudelt = 2.5;                                 % distance betwen dim 1 of means
-            mu1 = [-mudelt/2*ones(2,1); zeros(D-2,1)];                   % class 1 mean
-            mu0 = [mudelt/2*ones(2,1); zeros(D-2,1)];                   % class 1 mean
+            if ~isfield(task,'b'), b=2.5; else b=task.b; end
+
+            mu1 = [-b/2*ones(2,1); zeros(D-2,1)];                   % class 1 mean
+            mu0 = [b/2*ones(2,1); zeros(D-2,1)];                   % class 1 mean
             mu1(2)=mu1(2)/3;
             mu0(2)=mu0(2)/3;
             
@@ -589,19 +695,21 @@ if ~isfield(task,'P')
             
             
         case 'decaying'
-            
+
+            if ~isfield(task,'b'), b=1; else b=task.b; end
             A=eye(D);
             A(1:D+1:end)=100./sqrt(1:D);
             
-            mu1=1*ones(D,1);
+            mu1=b*ones(D,1);
             mu0=-mu1;
             Sigma=A;
             
         case ['model0, D=', num2str(D)]
             
-            mudelt = 0.5;                                 % distance betwen dim 1 of means
-            mu0=mudelt*ones(D,1);
-            mu1=-mudelt*ones(D,1);
+            if ~isfield(task,'b'), b=0.5; else b=task.b; end
+
+            mu0=b*ones(D,1);
+            mu1=-b*ones(D,1);
             
             rho=0.5;
             A=rho*ones(D);
@@ -624,7 +732,9 @@ if ~isfield(task,'P')
             
         case ['semisup, D=', num2str(D)]
             
-            mu0=0.5*ones(D,1);
+            if ~isfield(task,'b'), b=0.5; else b=task.b; end
+
+            mu0=b*ones(D,1);
             mu1=-mu0;
             
             rho=0.5;
@@ -643,7 +753,7 @@ if ~isfield(task,'P')
             A=rho*ones(D);
             A(1:D+1:end)=1;
             
-            [Q, ~] = qr(randn(task.D));
+            [Q, ~] = qr(randn(D));
             if det(Q)<-.99
                 Q(:,1)=-Q(:,1);
             end
@@ -675,7 +785,7 @@ if ~isfield(task,'P')
             A=rho*ones(D);
             A(1:D+1:end)=1;
             
-            [Q, ~] = qr(randn(task.D));
+            [Q, ~] = qr(randn(D));
             if det(Q)<-.99
                 Q(:,1)=-Q(:,1);
             end
@@ -763,13 +873,14 @@ if ~isfield(task,'P')
             
         case 'debug'
             
+            if ~isfield(task,'b'), b=0.5; else b=task.b; end
             D=5;
             rng('default')
-            mu0=0.5*rand(D,1);
-            mu1=-0.5*rand(D,1);
+            mu0=b*rand(D,1);
+            mu1=-b*rand(D,1);
             
             Sigma=eye(D);
-            Sigma=Sigma+0.5*ones(D);
+            Sigma=Sigma+b*ones(D);
             Sigma(1:D+1:end)=ones(D,1);
             
         case 'simple'
@@ -781,6 +892,35 @@ if ~isfield(task,'P')
             rho=0.5;
             Sigma=rho*ones(D);
             Sigma(1:D+1:end)=1;
+            
+        case 'Hotelling1'
+
+            if ~isfield(task,'b'), b=0.4; else b=task.b; end
+
+            mu0=b./ones(D,1);
+            mu1=-mu0;
+            Sigma=eye(D); %Lam'*Lam;
+            Sigma(1:D+1:end)=1./sqrt(linspace(1,10*D,D))';
+
+        case 'Hotelling2'
+            
+            if ~isfield(task,'b'), b=0.4; else b=task.b; end
+            mu0=b./sqrt(linspace(1,10*D,D))';
+            mu1=-mu0;
+            Lam=randn(D);
+            Sigma=Lam'*Lam;
+%             Sigma(1:D+1:end)=1./sqrt(linspace(1,10*D,D))';
+
+        case 'Hotelling3'
+            
+            if ~isfield(task,'b'), b=2; else b=task.b; end
+            mu1=4./sqrt(1:2:2*D);
+            mu0=-mu1;
+            
+            Sigma=eye(D);
+            Sigma(1:D+1:end)=100./sqrt(D:-1:1);
+
+            
             
         otherwise
             error('no known parameter setting provided')
@@ -837,7 +977,7 @@ end
 if task.rotate
     
     % generate rotation matrix uniformly
-    [Q, ~] = qr(randn(task.D));
+    [Q, ~] = qr(randn(D));
     if det(Q)<-.99
         Q(:,1)=-Q(:,1);
     end

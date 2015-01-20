@@ -12,6 +12,8 @@ task = set_task(task_in);
 P = []; if ~isfield(task,'D'), task.D=[]; end
 if task.simulation
     
+    % the 'otherwise' case is any gaussian mixture model, 
+    % the other cases are NOT that, for one reason or another
     switch task.name
         case 'regress'
             [X,Y] = sample_regress(task);
@@ -19,12 +21,6 @@ if task.simulation
             [X,Y] = sample_DRL(a);
         case strcmp(task.name,'xor')
             [X,Y] = sample_xor(task);
-        case 'gmm'
-            P.mu=bsxfun(@times,ones(task.D,1),1:task.Ngroups);
-            P.Sigma=eye(task.D);
-            P.w=1/task.Ngroups*ones(task.Ngroups,1);
-            gmm = gmdistribution(P.mu',P.Sigma,P.w);
-            [X,Y] = random(gmm,task.n);
         case 'gms'
                         
             Ninlier=task.n/2; 
@@ -107,7 +103,13 @@ if task.simulation
             Y=[Y0;Y1];
 
             P.mu=[P.mu, mu0,mu1];
-
+            
+%         case 'gmm'
+%             P.mu=bsxfun(@times,ones(task.D,1),1:task.Ngroups);
+%             P.Sigma=eye(task.D);
+%             P.w=1/task.Ngroups*ones(task.Ngroups,1);
+%             gmm = gmdistribution(P.mu',P.Sigma,P.w);
+%             [X,Y] = random(gmm,task.n);
         otherwise
             P = set_parameters(task);
             gmm = gmdistribution(P.mu',P.Sigma,P.w);

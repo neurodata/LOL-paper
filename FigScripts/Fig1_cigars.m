@@ -22,7 +22,7 @@ task.ntest=500;
 task.rotate=false;
 task.algs={'LOL';'ROAD'};
 task.types={'NEFL';'DEFL'};
-task.savestuff=1;
+task.savestuff=0;
 
 h(1)=figure(1); clf
 Nsims=length(task_list);
