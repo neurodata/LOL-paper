@@ -5,7 +5,7 @@ task.B=100;
 task.Ndim=5;
 task.D=200;
 task.n=100;
-task.bvec=[1,5,10,15,20,25,50];
+task.bvec=[1,5,10,15,20,25,50,100];
 task.Ntrials=100;
 
 [T,S] = run_hotelling_sims(tasknames,task);
