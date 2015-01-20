@@ -1,4 +1,10 @@
 clear, clf, clc
+
+fpath=pwd;
+findex=strfind(fpath,'/');
+p = genpath(fpath(1:findex(end)));
+addpath(p);
+
 tasknames={'diag_slow';'rand_slow'};
 task.save=0;
 task.B=100;
