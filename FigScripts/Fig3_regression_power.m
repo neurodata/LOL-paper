@@ -79,14 +79,13 @@ if newsim==1;
     task.save=1;
     [T,S] = run_hotelling_sims(tasknames,task);
 else
-    load([fpath(1:findex(end-2)), 'Data/results/test_sims'])
+    load([fpath(1:findex(end-2)), 'Data/results/Lopes11a'])
 end
 S{1}.savestuff=1;
 
 
 %% plot fig
-siz=[2,2];
-plot_hotelling(T,S,siz)
+plot_hotelling(T,S,2,2,2)
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%% save fig %%%%%%%%%%%%%%%%%
