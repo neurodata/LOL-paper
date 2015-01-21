@@ -10,18 +10,17 @@ for t=1:length(S)
         errorbar(T{t}.bvec,S{t}.mean_power(d,:),S{t}.std_power(d,:)/sqrt(T{t}.Ntrials),'linewidth',2,'color',col{d},'linestyle',ls{d})
     end
     ylabel('power')
-    xlabel('b')
+    xlabel('exponent')
     axis('tight')
-    % set(gca,'xscale','log')
-    legendcell={'H o \delta+RP','H o \delta+PCA','H o RP','H o PCA'}; %,transformers{3}};
     set(gca,'xscale','log')
+    legendcell={'H o \delta+RP','H o \delta+PCA','H o RP','H o PCA'}; %,transformers{3}};
     if T{t}.D < T{t}.n, legendcell{end+1}='Hotelling'; legendcell{end+1}='HotellingB'; end
      
+    set(gca,'XTick',[0.1, 1, 10, 100])
     if t==1
         title('Trunk: D=100, n=50')
-        legend(legendcell,'location','Northwest')
-        set(gca,'XTick',[0.1, 1, 10])
     elseif t==2
         title('Dense Toeplitz: D=100, n=50')
+        legend(legendcell,'location','Northwest')
    end
 end
