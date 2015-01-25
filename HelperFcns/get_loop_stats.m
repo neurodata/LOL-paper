@@ -22,8 +22,6 @@ for k=1:T.ntrials
             Lhats(i,l,k)=loop{k}.out(i,l).Lhat;
             sensitivity(i,l,k)=loop{k}.out(i,l).sensitivity;
             specificity(i,l,k)=loop{k}.out(i,l).specificity;
-            if isfield(loop{k},'time'), time=loop{k}.time(i,l); else time=NaN; end
-            times(i,l,k)=time;
             if isfield(loop{k},'nnz'), Stats.nnz(k,:)=loop{k}.nnz; end
             if size(loop{k}.out,2)==1 || isempty(loop{k}.out(i,2).Lhat) % if we did not do cv across dimensions for this algorithm
                 break
@@ -68,6 +66,12 @@ for i=1:T.Nalgs
     if strcmp(T.algs{i},'LDA'),
         Stats.mins.mean.k(i) = min(T.ntrain,T.D);
         Stats.med.mean.k(i) = min(T.ntrain,T.D);
+    end
+end
+
+for k=1:T.ntrials
+    for i=1:Nalgs;
+        Stats.time(k,i)=loop{k}.time(i);
     end
 end
 

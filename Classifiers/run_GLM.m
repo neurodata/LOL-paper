@@ -1,6 +1,10 @@
 function [out, GLM_num] = run_GLM(Z,task)
 
 opts=struct('nlambda',task.Nks);
+if max(Z.Ytrain)==9, 
+    Z.Ytest=Z.Ytest+1;
+    Z.Ytrain=Z.Ytrain+1;
+end
 fit=glmnet(Z.Xtrain',Z.Ytrain,'multinomial',opts);
 pfit=glmnetPredict(fit,Z.Xtest',fit.lambda,'response','false',fit.offset);
 [~,yhat]=max(pfit,[],2);
