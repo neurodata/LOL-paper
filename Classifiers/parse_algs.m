@@ -40,35 +40,36 @@ end
 l=0;
 types=cell(length(algs),1);
 for j=1:Ntransformers
-    if length(transformers{j})>3
-        k=0;
-        for i=1:length(algs)
-            if strcmp(algs{i}(1:3),transformers{j})
-                k=k+1;
-                if strcmp(algs{i}(4),'L') || strcmp(algs{i}(4),'E')
-                    deciders{j}{k}='linear';
-                elseif strcmp(algs{i}(4),'Q') || strcmp(algs{i}(4),'V')
-                    deciders{j}{k}='quadratic';
-                elseif strcmp(algs{i}(4),'l')
-                    deciders{j}{k}='diagLinear';
-                elseif strcmp(algs{i}(4),'Q')
-                    deciders{j}{k}='diagQuadratic';
-                elseif strcmp(algs{i}(4),'M')
-                    deciders{j}{k}='mahalanobis';
-                elseif strcmp(algs{i}(4),'N')
-                    deciders{j}{k}='NaiveBayes';
-                elseif strcmp(algs{i}(4),'R')
-                    deciders{j}{k}='RF';
-                elseif strcmp(algs{i}(4),'S')
-                    deciders{j}{k}='svm';
-                elseif strcmp(algs{i}(4),'Z')
-                    deciders{j}{k}='regress';
-                end
-                l=l+1;
-                types{l}=[transformers{j}, algs{i}(4)];
+    %     if length(transformers{j})>3
+    k=0;
+    for i=1:length(algs)
+        if strcmp(algs{i}(1:3),transformers{j})
+            k=k+1;
+            if strcmp(algs{i}(4),'L') || strcmp(algs{i}(4),'E')
+                deciders{j}{k}='linear';
+            elseif strcmp(algs{i}(4),'Q') || strcmp(algs{i}(4),'V')
+                deciders{j}{k}='quadratic';
+            elseif strcmp(algs{i}(4),'l')
+                deciders{j}{k}='diagLinear';
+            elseif strcmp(algs{i}(4),'Q')
+                deciders{j}{k}='diagQuadratic';
+            elseif strcmp(algs{i}(4),'M')
+                deciders{j}{k}='mahalanobis';
+            elseif strcmp(algs{i}(4),'N')
+                deciders{j}{k}='NaiveBayes';
+            elseif strcmp(algs{i}(4),'R')
+                deciders{j}{k}='RF';
+            elseif strcmp(algs{i}(4),'S')
+                deciders{j}{k}='svm';
+            elseif strcmp(algs{i}(4),'Z')
+                deciders{j}{k}='regress';
             end
+            l=l+1;
+            types{l}=[transformers{j}, algs{i}(4)];
         end
-    else
-        deciders=[];
     end
+    %     else
+    %         types{j}=transformers{j};
+    %         deciders=[];
+    %     end
 end

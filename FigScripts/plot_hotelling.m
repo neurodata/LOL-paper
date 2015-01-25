@@ -7,20 +7,24 @@ for t=1:length(S)
     subplot(Nrows,Ncols,substart+t), cla
     hold all
     for d=1:size(S{t}.mean_power,1)
-        errorbar(T{t}.bvec,S{t}.mean_power(d,:),S{t}.std_power(d,:)/sqrt(T{t}.Ntrials),'linewidth',2,'color',col{d},'linestyle',ls{d})
+        if d==2, dd=1;
+        elseif d==1, dd=2;
+        else dd=d;
+        end
+        errorbar(T{t}.bvec,S{t}.mean_power(dd,:),S{t}.std_power(dd,:)/sqrt(T{t}.Ntrials),'linewidth',2,'color',col{dd},'linestyle',ls{dd})
     end
     ylabel('power')
     xlabel('exponent')
     axis('tight')
     set(gca,'xscale','log')
-    legendcell={'H o \delta+RP','H o \delta+PCA','H o RP','H o PCA'}; %,transformers{3}};
+    legendcell={'H o \delta+PCA','H o \delta+RP','H o RP','H o PCA'}; %,transformers{3}};
     if T{t}.D < T{t}.n, legendcell{end+1}='Hotelling'; legendcell{end+1}='HotellingB'; end
      
     set(gca,'XTick',[0.1, 1, 10, 100])
     if t==1
-        title('Trunk: D=100, n=50')
+        title('Diagonal: D=200, n=100')
     elseif t==2
-        title('Dense Toeplitz: D=100, n=50')
+        title('Correlated: D=200, n=100')
         legend(legendcell,'location','Northwest')
    end
 end

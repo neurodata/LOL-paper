@@ -1,14 +1,14 @@
 function [X,Y,task] = load_data(task)
 
 
-if strcmp(task.name,'prostate')
+if strcmp(task.name,'Prostate')
     data=load('../../Data/Preprocessed/prostate_data');
     X=data.X';
     Y=data.Y+1;
     [task.D, task.n] = size(X);
     task.ntest=round(task.n/3);
     task.ntrain=task.n-task.ntest;
-elseif strcmp(task.name,'colon')
+elseif strcmp(task.name,'Colon')
     data=load('../../Data/Preprocessed/colon_data');
     X=data.X';
     Y=data.Y+1;
@@ -30,10 +30,10 @@ elseif strfind(task.name,'amen')
     [task.D, task.n] = size(X);
     task.ntrain=round(task.n*.9);
     task.ntest=task.n-task.ntrain;
-elseif strcmp(task.name,'mnist')
+elseif strcmpi(task.name,'MNIST')
     X = loadMNISTImages('~/Research/working/A/LOL/Data/Raw/MNIST/t10k-images.idx3-ubyte');
     Y = loadMNISTLabels('~/Research/working/A/LOL/Data/Raw/MNIST/t10k-labels.idx1-ubyte');
-elseif strcmp(task.name,'mnist012')
+elseif strcmp(task.name,'MNIST(012)')
     images = loadMNISTImages('~/Research/working/A/LOL/Data/Raw/MNIST/t10k-images.idx3-ubyte');
     labels = loadMNISTLabels('~/Research/working/A/LOL/Data/Raw/MNIST/t10k-labels.idx1-ubyte');
     X=[]; Y=[];
@@ -43,6 +43,10 @@ elseif strcmp(task.name,'mnist012')
         Y = [Y; labels(labels==label_keepers(jj))];
     end
     Y=Y+1;
+elseif strcmp(task.name,'CIFAR-10')
+    load('~/Research/working/A/LOL/Data/Raw/CIFAR-10/data_batch_1.mat')
+    X=double(data);
+    Y=labels;
 end
 Y=double(Y);
 

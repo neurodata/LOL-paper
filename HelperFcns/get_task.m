@@ -104,13 +104,7 @@ if task.simulation
 
             P.mu=[P.mu, mu0,mu1];
             
-%         case 'gmm'
-%             P.mu=bsxfun(@times,ones(task.D,1),1:task.Ngroups);
-%             P.Sigma=eye(task.D);
-%             P.w=1/task.Ngroups*ones(task.Ngroups,1);
-%             gmm = gmdistribution(P.mu',P.Sigma,P.w);
-%             [X,Y] = random(gmm,task.n);
-        otherwise
+        otherwise % simulation each class is a gaussian
             P = set_parameters(task);
             gmm = gmdistribution(P.mu',P.Sigma,P.w);
             [X,Y] = random(gmm,task.n);
