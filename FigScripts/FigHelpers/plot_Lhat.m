@@ -78,7 +78,7 @@ for i=1:Nalgs;
     minloc=min(location);
     
     % resample for plotting errorbars
-    if isfield(S,'nnz'), ks=nanmean(S.nnz); else ks=T.ks;  end  % get k's for other algs
+    if isfield(S,'nnz'), ks=round(mean(S.nnz)); else ks=T.ks;  end  % get k's for other algs
     
     ks(ks>max(xlim)+10)=[];
     if isempty(ks), ks=round(mean(S.nnz)); end
@@ -90,12 +90,8 @@ for i=1:Nalgs;
     if length(location)>1
         if ~isnan(location(2))
             h(i)=plot(ks2,location,'color',F.colors{i},'linewidth',2,'linestyle',F.linestyle{i});
-            eh=errorbar(...
-                ks2(F.tick_ids{i}),...
-                location(F.tick_ids{i}),...
-                F.scale*scale(F.tick_ids{i}),...
-                '.','linewidth',1,'color',F.colors{i});
-            if isfield(F,'ticksize'), errorbar_tick(eh,F.ticksize); end
+            eh=errorbar(ks2(F.tick_ids{i}),location(F.tick_ids{i}),F.scale*scale(F.tick_ids{i}),'.','linewidth',1,'color',F.colors{i});
+            errorbar_tick(eh,5000);
             maxloc(i)=max(location(2:end-1));
             if i<=length(T.types)
                 legendcell=[legendcell, T.types(i)];
@@ -108,7 +104,7 @@ end
 % plot lower bound
 if F.plot_chance,
     Lchance=mean(S.Lchance);
-    plot(1:T.Kmax,Lchance*ones(T.Kmax,1),'--k','linewidth',1),
+    plot(1:T.Kmax,Lchance*ones(T.Kmax,1),'-k','linewidth',2),
     legendcell=[legendcell, {'Chance'}];
 end
 

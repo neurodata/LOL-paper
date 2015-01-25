@@ -41,6 +41,7 @@ for s=1:length(S)
     set(gca,'Yscale','linear')
     xlim([0 90])
     if s==1
+        ylabel('relative error')
         title('Sparse Sphere: D=1000, n=100','interpreter','none')
         ylim([0,1.1])
         ylim([0.88,1.05])
@@ -56,7 +57,6 @@ for s=1:length(S)
         ylim([0,1])
     end
     set(gca,'XTick',[0, 25, 50, 75])
-%         ylabel('relative error')
     xlabel('# of embedded dimensions')
     if s==1, 
         legendcell={'LR o \delta+RP','LR o \delta+PCA','LR o RP','LR o PCA'}; %,transformers{3}};
@@ -79,7 +79,7 @@ if newsim==1;
     task.save=1;
     [T,S] = run_hotelling_sims(tasknames,task);
 else
-    load([fpath(1:findex(end-2)), 'Data/results/Lopes11a_Ndim50'])
+    load([fpath(1:findex(end-2)), 'Data/results/Lopes11a'])
 end
 S{1}.savestuff=1;
 
