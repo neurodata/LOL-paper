@@ -1,3 +1,3 @@
 this repo contains code for LOL.
 
-to install, run install_LOL.m
+running any of the Figure generation files or the demo will automatically install everything, which simply includes adding stuff to the path.
