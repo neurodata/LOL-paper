@@ -12,6 +12,7 @@ if ~isfield(F,'plot_chance'), F.plot_chance=false; end
 if ~isfield(F,'plot_bayes'), F.plot_bayes=false; end
 if ~isfield(F,'plot_risk'), F.plot_risk=false; end
 if ~isfield(F,'scale'), F.scale=1; end
+if ~isfield(F,'robust'), F.robust=0; end
 if isfield(T,'types')
     Nalgs=T.Nalgs+length(T.types);
 else
@@ -73,12 +74,17 @@ minAlg=0.5;
 maxloc=ones(1,Nalgs);
 
 for i=1:Nalgs;
-    location=S.means.Lhats(i,:);
-    scale=S.stds.Lhats(i,:)/sqrt(T.ntrials);
+    if F.robust
+        location=S.medians.Lhats(i,:);
+        scale=S.stds.Lhats(i,:)/sqrt(T.ntrials);
+    else
+        location=S.means.Lhats(i,:);
+        scale=S.stds.Lhats(i,:)/sqrt(T.ntrials);
+    end
     minloc=min(location);
     
     % resample for plotting errorbars
-    if isfield(S,'nnz'), ks=round(mean(S.nnz)); else ks=T.ks;  end  % get k's for other algs
+    if isfield(S,'nnz'), ks=nanmean(S.nnz); else ks=T.ks;  end  % get k's for other algs
     
     ks(ks>max(xlim)+10)=[];
     if isempty(ks), ks=round(mean(S.nnz)); end
@@ -90,8 +96,12 @@ for i=1:Nalgs;
     if length(location)>1
         if ~isnan(location(2))
             h(i)=plot(ks2,location,'color',F.colors{i},'linewidth',2,'linestyle',F.linestyle{i});
-            eh=errorbar(ks2(F.tick_ids{i}),location(F.tick_ids{i}),F.scale*scale(F.tick_ids{i}),'.','linewidth',1,'color',F.colors{i});
-            errorbar_tick(eh,5000);
+            eh=errorbar(...
+                ks2(F.tick_ids{i}),...
+                location(F.tick_ids{i}),...
+                F.scale*scale(F.tick_ids{i}),...
+                '.','linewidth',1,'color',F.colors{i});
+            if isfield(F,'ticksize'), errorbar_tick(eh,F.ticksize); end
             maxloc(i)=max(location(2:end-1));
             if i<=length(T.types)
                 legendcell=[legendcell, T.types(i)];
@@ -104,7 +114,7 @@ end
 % plot lower bound
 if F.plot_chance,
     Lchance=mean(S.Lchance);
-    plot(1:T.Kmax,Lchance*ones(T.Kmax,1),'-k','linewidth',2),
+    plot(1:T.Kmax,Lchance*ones(T.Kmax,1),'--k','linewidth',1),
     legendcell=[legendcell, {'Chance'}];
 end
 
@@ -145,9 +155,9 @@ else
 end
 if isfield(F,'xlabel'),xlabel(F.xlabel); end
 if isfield(F,'ylabel'),ylabel(F.ylabel); end
+if ~isfield(F,'xticklabel'), F.xticklabel=xtick; end
 
-
-set(gca,'YScale',yscale,'XScale',xscale,'Ylim',ylim,'Xlim',xlim,'XTick',xtick,'YTick',ytick)
+set(gca,'YScale',yscale,'XScale',xscale,'Ylim',ylim,'Xlim',xlim,'XTick',xtick,'YTick',ytick,'XTickLabel',F.xticklabel)
 title(tit)
 grid('off')
 set(gca,'TickDir','out')

@@ -2,7 +2,7 @@ function loop = task_loop(task_in)
 % this function implements a parloop for ntrials iterations and outputs the results
 
 loop = cell(1,task_in.ntrials);
-parfor k=1:task_in.ntrials
+for k=1:task_in.ntrials
     
     if mod(k,10)==0, display(['trial # ', num2str(k)]); end
     

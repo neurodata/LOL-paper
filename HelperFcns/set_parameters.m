@@ -157,16 +157,41 @@ if ~isfield(task,'P')
             Sigma=A*diag(sv);                            % class 1 cov
             
         case 'ac' % aligned cigars
-            
             if ~isfield(task,'b'), b=0.15; else b=task.b; end
-
             mu0=zeros(D,1);
             mu1=b+mu0;
             mu1(2)=8;
-            
             Sigma = eye(D);
             Sigma(2,2)=4;
+        case 'oc' % orthogonal cigars
+            if ~isfield(task,'b'), b=0.15; else b=task.b; end
+            mu0=zeros(D,1);
+            mu1=b+mu0;
+            mu1(1)=2;
+            Sigma  = eye(D);
+            Sigma(2,2)=4;
+        case 'roc' % orthogonal rotated cigars
+            if ~isfield(task,'b'), b=0.15; else b=task.b; end
+            mu0=zeros(D,1);
+            mu1=b+mu0;
+            mu1(1)=2;
+            Sigma  = eye(D);
+            Sigma(2,2)=4;
             
+            % generate rotation matrix uniformly
+            [Q, ~] = qr(randn(D));
+            if det(Q)<-.99
+                Q(:,1)=-Q(:,1);
+            end
+            th=pi/4;
+            Q(1:2,1:2)=[cos(th) -sin(th); sin(th) cos(th)];
+            Q(1,3:end)=0;
+            Q(2,3:end)=0;
+            Q(3:end,1)=0;
+            Q(3:end,2)=0;
+            mu0=Q*mu0;
+            mu1=Q*mu1;
+            Sigma=Q*Sigma*Q';
         case 'rac' % aligned cigars
             
             if ~isfield(task,'b'), b=0.15; else b=task.b; end
@@ -195,46 +220,6 @@ if ~isfield(task,'P')
             mu1=Q*mu1;
             Sigma=Q*Sigma*Q';
         
-        case 'oc' % orthogonal cigars
-            
-            if ~isfield(task,'b'), b=0.15; else b=task.b; end
-
-            mu0=zeros(D,1);
-            mu1=b+mu0;
-            mu1(1)=2;
-            
-            Sigma  = eye(D);
-            Sigma(2,2)=4;
-                        
-        case 'roc' % orthogonal rotated cigars
-            
-            if ~isfield(task,'b'), b=0.15; else b=task.b; end
-
-            mu0=zeros(D,1);
-            mu1=b+mu0;
-            mu1(1)=2;
-            
-            Sigma  = eye(D);
-            Sigma(2,2)=4;
-            
-            % generate rotation matrix uniformly
-            [Q, ~] = qr(randn(D));
-            if det(Q)<-.99
-                Q(:,1)=-Q(:,1);
-            end
-            
-            th=pi/4;
-            Q(1:2,1:2)=[cos(th) -sin(th); sin(th) cos(th)];
-            Q(1,3:end)=0;
-            Q(2,3:end)=0;
-            Q(3:end,1)=0;
-            Q(3:end,2)=0;
-
-            mu0=Q*mu0;
-            mu1=Q*mu1;
-            Sigma=Q*Sigma*Q';
-            
-            
         case 'r2c' % orthogonal only 1 rotated cigars
             
             if ~isfield(task,'b'), b=0.5; else b=task.b; end

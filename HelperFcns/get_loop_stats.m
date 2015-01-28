@@ -45,6 +45,11 @@ Stats.stds.sensitivity=squeeze(nanstd(sensitivity,[],3));
 Stats.stds.specificity=squeeze(nanstd(specificity,[],3));
 Stats.stds.times=squeeze(nanstd(times,[],3));
 
+% Stats.mads.Lhats=squeeze(nanstd(Lhats,[],3));
+% Stats.mads.sensitivity=squeeze(nanstd(sensitivity,[],3));
+% Stats.mads.specificity=squeeze(nanstd(specificity,[],3));
+% Stats.mads.times=squeeze(nanstd(times,[],3));
+
 % get mins of medians
 for i=1:Nalgs;
     [~,k]=min(Stats.medians.Lhats(i,:));
