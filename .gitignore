@@ -1,3 +1,5 @@
+*.DS_Store
+/OptionalDependencies/*
 /old/*
 /ingest_data/*
 *.m~
