@@ -186,7 +186,7 @@ if task.plot
     end
     
     
-    % print figure
+    %% print figure
     if task.savestuff
         H.wh=[F.Ncols F.Nrows]*1.4;
         H.fname=[fpath(1:findex(end-2)), 'Figs/example_sims'];

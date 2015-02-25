@@ -13,6 +13,7 @@ if ~isfield(F,'plot_bayes'), F.plot_bayes=false; end
 if ~isfield(F,'plot_risk'), F.plot_risk=false; end
 if ~isfield(F,'scale'), F.scale=1; end
 if ~isfield(F,'robust'), F.robust=0; end
+if ~isfield(F,'lfw'), F.lfw='normal'; end
 if isfield(T,'types')
     Nalgs=T.Nalgs+length(T.types);
 else
@@ -136,8 +137,8 @@ end
 
 %% finishings
 if isfield(F,'title'), tit=F.title; else tit=T.name; end
-if pos==1,
-    ylabel('error rate')
+if any(pos==1 | pos(1) < 0.1)
+    ylabel('error rate','fontweight',F.lfw)
 end
 if isfield(F,'legend'), legendcell=F.legend; end
 if isfield(F,'location'),
@@ -153,8 +154,8 @@ if legendOn
 else
     legend off
 end
-if isfield(F,'xlabel'),xlabel(F.xlabel); end
-if isfield(F,'ylabel'),ylabel(F.ylabel); end
+if isfield(F,'xlabel'),xlabel(F.xlabel,'fontweight',F.lfw); end
+if isfield(F,'ylabel'),ylabel(F.ylabel,'fontweight',F.lfw); end
 if ~isfield(F,'xticklabel'), F.xticklabel=xtick; end
 
 set(gca,'YScale',yscale,'XScale',xscale,'Ylim',ylim,'Xlim',xlim,'XTick',xtick,'YTick',ytick,'XTickLabel',F.xticklabel)

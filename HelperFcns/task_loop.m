@@ -22,29 +22,32 @@ for k=1:task_in.ntrials
     end
     
     % run all the classifiers
+    jj=0;
     for j=1:length(task.algs)
         tic
+        jj=jj+1;
         switch task.algs{j}
             case 'LOL'      
                 Yhats = LOL_classify(Z.Xtest',Z.Xtrain',Z.Ytrain,task);
-                loop{k}.out(j,:)=get_task_stats(Yhats,Z.Ytest);
+                loop{k}.out(jj:jj+length(task.types)-1,:)=get_task_stats(Yhats,Z.Ytest);
+                jj=jj+length(task.types)-1;
             case 'ROAD'        
-                [loop{k}.out(j,:), loop{k}.nnz] = run_ROAD(Z,task);
+                [loop{k}.out(jj,:), loop{k}.nnz] = run_ROAD(Z,task);
             case 'GLM'
-                [loop{k}.out(j,:), loop{k}.nnz] = run_GLM(Z,task);
+                [loop{k}.out(jj,:), loop{k}.nnz] = run_GLM(Z,task);
             case 'lolLOL'   % multi-LOL
                 Yhats = multiLOL_classify(Z.Xtest',Z.Xtrain',Z.Ytrain,task);
-                [loop{k}.out(j,1)] = get_task_stats(Yhats,Z.Ytest);
+                [loop{k}.out(jj,1)] = get_task_stats(Yhats,Z.Ytest);
             case 'RF'       % random forest
-                loop{k}.out(j,1) = run_RF(Z);
+                loop{k}.out(jj,1) = run_RF(Z);
             case 'DR'       % sufficient dimensionality reduciton
-                [loop{k}.out(j,1)] = run_DR(Z,task);
+                [loop{k}.out(jj,1)] = run_DR(Z,task);
             case 'LAD'      % likelihood acquired directions (Cook and Forzani, 2009b)
-                [loop{k}.out(j,1)] = run_LAD(Z,task);
+                [loop{k}.out(jj,1)] = run_LAD(Z,task);
             case 'SVM'
-                loop{k}.out(j,:) = run_SVM(Z,task.Nks);
+                loop{k}.out(jj,:) = run_SVM(Z,task.Nks);
         end
-        loop{k}.time(j)=toc;
+        loop{k}.time(jj)=toc;
         loop{k}.algs{j}=task.algs{j};
     end
     

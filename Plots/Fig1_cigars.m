@@ -43,6 +43,7 @@ gg=1;
 marker='.';
 ms=4; % markersize
 
+%%
 for j=1:Nsims
     
     % generate data and embed it
@@ -130,20 +131,20 @@ for j=1:Nsims
         
         if i==3
             col1='c'; col2=col1;
-            tit='ROAD';
+            ylab='ROAD';
             si=3;
             yy1=y2;
             yy2=y1;
         elseif i==2
             col1='g'; col2=col1;
-            tit='LOL';
+            ylab='LOL';
             si=2;
         elseif i==1
             col1='m'; col2=col1;
-            tit='LDA o PCA';
+            ylab='LDA o PCA';
             si=4;
         elseif i==4
-            tit=[{'Bayes'};{'Optimal'}];
+            ylab=[{'Bayes'};{'Optimal'}];
             col1='k';
             col2='k';
             si=1;
@@ -161,7 +162,7 @@ for j=1:Nsims
         plot([0,0],[0, maxy],'k')
         
         axis([min(min2,min1), max(max2,max1), 0, 1.05*maxy])
-        if j==1, ylabel(tit,'fontsize',8), end
+        if j==1, ylabel(ylab,'fontsize',8,'FontWeight','bold','FontName','FixedWidth'), end
 
         set(gca,'XTickLabel',[],'YTickLabel',[],'XTick',[],'YTick',[])
     end

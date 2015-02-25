@@ -5,11 +5,11 @@ if ~isfield(T,'Nalgs'), T.Nalgs=length(T.algs); end
 if ~isfield(T,'Nks'), T.Nks=length(T.ks); end
 if ~isfield(T,'ntrials'), T.ntrials=1; end
 if isfield(T,'types')
-    Nalgs=T.Nalgs+length(T.types);
+    Nalgs=T.Nalgs+length(T.types)-1;
 else
     Nalgs=T.Nalgs;
 end
-if any(strcmp(T.algs,'LOL')), Nalgs=Nalgs-1; end
+% if any(strcmp(T.algs,'LOL')), Nalgs=Nalgs-1; end
 
 Lhats=nan(Nalgs,T.Nks,T.ntrials);
 sensitivity=nan(Nalgs,T.Nks,T.ntrials);

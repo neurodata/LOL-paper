@@ -1,4 +1,4 @@
-function [out, GLM_num] = run_GLM(Z,task)
+function [out, GLM_num, fit] = run_GLM(Z,task)
 
 opts=struct('nlambda',task.Nks);
 if max(Z.Ytrain)==9, 

@@ -20,6 +20,11 @@ function [Yhat, Proj, P, transformers, deciders] = LOL_classify(sample,training,
 %   transformers:               see parse_algs.m
 %   deciders:                   see parse_algs.m
 
+if nargin==3, task=struct; end
+n=length(group);
+if ~isfield(task,'types'), task.types={'DENL'}; end
+if ~isfield(task,'ks'), task.ks=round(unique(logspace(0,log10(n-1),10))); end
+
 [transformers, deciders] = parse_algs(task.types);
 [Proj, P] = LOL(training',group,transformers,max(task.ks));
 

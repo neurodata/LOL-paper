@@ -31,18 +31,30 @@ elseif strfind(task.name,'amen')
     task.ntrain=round(task.n*.9);
     task.ntest=task.n-task.ntrain;
 elseif strcmpi(task.name,'MNIST')
-    X = loadMNISTImages('~/Research/working/A/LOL/Data/Raw/MNIST/t10k-images.idx3-ubyte');
-    Y = loadMNISTLabels('~/Research/working/A/LOL/Data/Raw/MNIST/t10k-labels.idx1-ubyte');
-elseif strcmp(task.name,'MNIST(012)')
-    images = loadMNISTImages('~/Research/working/A/LOL/Data/Raw/MNIST/t10k-images.idx3-ubyte');
-    labels = loadMNISTLabels('~/Research/working/A/LOL/Data/Raw/MNIST/t10k-labels.idx1-ubyte');
-    X=[]; Y=[];
-    label_keepers=[0,1,2];
-    for jj=1:length(label_keepers)
-        X = [X, images(:,labels==label_keepers(jj))];
-        Y = [Y; labels(labels==label_keepers(jj))];
+    X =     loadMNISTImages('~/Research/working/A/LOL/Data/Raw/MNIST/t10k-images.idx3-ubyte');
+    Y =     loadMNISTLabels('~/Research/working/A/LOL/Data/Raw/MNIST/t10k-labels.idx1-ubyte');
+elseif strcmpi(task.name,'MNIST(')
+    X =loadMNISTImages('~/Research/working/A/LOL/Data/Raw/MNIST/t10k-images.idx3-ubyte');
+    Y =loadMNISTLabels('~/Research/working/A/LOL/Data/Raw/MNIST/t10k-labels.idx1-ubyte');
+    lenName=length(task.name);
+    label_keepers=[];
+    for j=7:lenName-1
+        label_keepers=[label_keepers, str2num(task.name(j))];
     end
-    Y=Y+1;
+    Yind=[];
+    for j=len(label_keepers)
+        Yind=[Yind; find(Y==label_keepers(j))];
+    end
+    X = X(:,Yind);
+    Y = Y(Yind);
+    task.classIDs=label_keepers;
+elseif strcmpi(task.name,'MNIST(378)')
+    X =loadMNISTImages('~/Research/working/A/LOL/Data/Raw/MNIST/t10k-images.idx3-ubyte');
+    Y =loadMNISTLabels('~/Research/working/A/LOL/Data/Raw/MNIST/t10k-labels.idx1-ubyte');
+    Yind=[find(Y==3);find(Y==7);find(Y==8)];
+    X = X(:,Yind);
+    Y = Y(Yind);
+
 elseif strcmp(task.name,'CIFAR-10')
     load('~/Research/working/A/LOL/Data/Raw/CIFAR-10/data_batch_1.mat')
     X=double(data);
