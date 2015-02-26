@@ -1,15 +1,19 @@
 % this script generates the simulation and plots the results for Fig 1
 
 %% set path correctly
-clearvars, clc,
+clearvars, clc, 
 fpath = mfilename('fullpath');
 findex=strfind(fpath,'/');
-p = genpath(fpath(1:findex(end-2)));
+rootDir=fpath(1:findex(end-1));
+p = genpath(rootDir);
+gits=strfind(p,'.git');
+colons=strfind(p,':');
+for i=0:length(gits)-1
+    endGit=find(colons>gits(end-i),1);
+    p(colons(endGit-1):colons(endGit)-1)=[];
+end
 addpath(p);
-s=rng;
-% save('~/Research/working/A/LOL/Data/randstate','s')
-% load([fpath(1:findex(end-2)), 'Data/randstate']);
-% rng(s);
+
 
 %% set up tasks
 clear idx
@@ -170,7 +174,7 @@ end
 
 %% save figs
 if task.savestuff
-    F.fname=[fpath(1:findex(end-2)), 'Figs/cigars'];
+    F.fname=[fpath, 'Figs/cigars'];
     F.wh=[2 1.5]*2.5;
     print_fig(h(1),F)
 end
