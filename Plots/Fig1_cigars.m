@@ -174,7 +174,7 @@ end
 
 %% save figs
 if task.savestuff
-    F.fname=[fpath, 'Figs/cigars'];
+    F.fname=[rootDir, 'Figs/cigars'];
     F.wh=[2 1.5]*2.5;
     print_fig(h(1),F)
 end
