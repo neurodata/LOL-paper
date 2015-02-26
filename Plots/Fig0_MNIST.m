@@ -2,14 +2,21 @@
 clearvars, clc,
 fpath = mfilename('fullpath');
 findex=strfind(fpath,'/');
-p = genpath(fpath(1:findex(end-2)));
+rootDir=fpath(1:findex(end-1));
+p = genpath(rootDir);
+gits=strfind(p,'.git');
+colons=strfind(p,':');
+for i=0:length(gits)-1
+    endGit=find(colons>gits(end-i),1);
+    p(colons(endGit-1):colons(endGit)-1)=[];
+end
 addpath(p);
 
 newsim=0;
 if newsim==1
-    [task,T,S,P,Pro,Z]= run_MNIST(fpath(1:findex(end-2)));
+    [task,T,S,P,Pro,Z]= run_MNIST(rootDir);
 else
-    load([fpath(1:findex(end-2)), 'Data/Results/mnist'])
+    load([rootDir, '../Data/Results/mnist'])
 end
 
 
@@ -168,7 +175,7 @@ end
 if task.savestuff==1
     clear F
     F.PaperSize=[6.5 6];ff=findex;
-    F.fname=[fpath(1:ff(end-2)), 'Figs/mnist'];
+    F.fname=[rootDir, '../Figs/mnist'];
     F.PaperPosition=[-0.5 0 F.PaperSize];
     print_fig(h(6),F)
 end
