@@ -1,12 +1,12 @@
-function [task,T,S,P,Pro,Z] = run_MNIST(rootDir)
+function [task,T,S,P,Pro,Z] = run_MNIST(rootDir,task)
 
 %% task properties consistent across all tasks
-clear task
-task.algs={'LOL';'GLM'}; %add svm
+
+if ~isfield(task,'savestuff'), task.savestuff=1; end
+if ~isfield(task,'algs'), task.algs={'LOL';'GLM'};  end
 task.simulation=0;
 task.percent_unlabeled=0;
 task.types={'DENL'};
-task.savestuff=1;
 task.name='MNIST(378)';
 task.ntrain=300;
 task.ntrials=10; %if <2, plotting will barf
@@ -58,5 +58,5 @@ Pro{3}.name='GLM';
 
 %% save stuff
 if task.savestuff
-    save([rootDir, 'Data/Results/mnist.mat'],'task','T','S','P','Pro','Z')
+    save([rootDir, '../Data/Results/mnist.mat'],'task','T','S','P','Pro','Z')
 end

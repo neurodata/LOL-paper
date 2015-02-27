@@ -14,10 +14,10 @@ addpath(p);
 
 %%
 
-newsim=0;
-task.savestuff=1;
-if newsim==1;
-    S = run_realdata(rootDir);
+newRun=1;
+task.savestuff=0;
+if newRun==1;
+    S = run_realdata(rootDir,task);
 else
     load([rootDir, '../Data/Results/realdata'])
 end
@@ -60,13 +60,13 @@ G.xlim=[0,32];
 G.robust=0;
 
 orange=[1 0.6 0];
-height=0.3;
-vspace=0.08;
+height=0.32;
+vspace=0.04;
 bottom=0.13;
 left=0.09;
 width=0.14;
 hspace=0.06;
-b2=0.6;
+b2=0.57;
 
 for s=1:length(S)
     F=G;
@@ -78,12 +78,12 @@ for s=1:length(S)
         F.ytick=[0:0.04:1];
     elseif s==2
         F.ylim=[0.1,0.4];
-        F.xlabel='                                          log_2(# of embedded dimensions / cost for SVM)';
+        F.xlabel='                                        hyperparameter';
     elseif s==3
-        F.ylim=[0.1,0.95];
+        F.ylim=[0.2,0.95];
         F.ytick=[0:0.2:1];
         F.xlim=[0,T{s}.ntrain];
-        F.xtick=[4, 16, 64];
+        F.xtick=2.^[1:6];
         F.colors={'g';'m';[1 0.6 0];'b'};
     elseif s==4
         F.ylim=[0.7, 0.92]; %[min(S{s}.means.Lhats(:)), max(S{s}.means.Lhats(:))];%         F.yticks=[0:0.1:1];
@@ -94,14 +94,14 @@ for s=1:length(S)
     end
     F.xticklabel=log2(F.xtick);
     tit{s}=[T{s}.name]; %
-    F.title=tit{s};
+    F.title=[{tit{s}}; {['D=',num2str(T{s}.D),', n=',num2str(T{s}.ntrain)]}];
     F.plot_chance=1;
     pos=[left+(s-1)*(width+hspace), b2, width, height]; %[left,bottom,width,height]
     plot_Lhat(T{s},S{s},F,pos)
 end
 
 
-% figure(2); clf, hold all
+%% figure(2); clf, hold all
 G.markerstyle = {'o';'+';'d';'v';'^';'.'};
 G.markersize=5;
 G.linewidth=2;
@@ -122,7 +122,7 @@ for s=1:length(S)
     else
         minx=0.01; 
         F.ylim(1)=0.65;
-        F.xtick=logspace(0,4,5);
+%         F.xtick=logspace(-1,4,5);
         F.xlim=[0.1, 100];
         F.ytick=0:0.1:1;
     end
@@ -139,26 +139,25 @@ for s=1:length(S)
     if s==4, F.ylim(2)=mean(S{s}.Lchance); end
     
     
-    rectangle('Position',[minx,miny,mean(S{s}.time(:,1))-minx,minLhat(1)-miny],'FaceColor',0.7*[1 1 1],'EdgeColor','none')
-    rectangle('Position',[mean(S{s}.time(:,1)),minLhat(1),1000,1],'FaceColor',0.8*[1 1 1],'EdgeColor','none')
+    rectangle('Position',[minx,miny,mean(S{s}.time(:,1))-minx,minLhat(1)-miny],'FaceColor',0.6*[1 1 1],'EdgeColor','none')
+    rectangle('Position',[mean(S{s}.time(:,1)),minLhat(1),1000,1],'FaceColor',0.9*[1 1 1],'EdgeColor','none')
     plot([minx,100],mean(S{s}.Lchance)*[1 1],'--k')
     for j=1:T{s}.Nalgs
         plot(mean(S{s}.time(:,j)),minLhat(j),'.','color',F.colors{j},'marker',F.markerstyle{j},'markersize',F.markersize,'LineWidth',F.linewidth)
     end
-    xticklabel=log10(F.xtick);
+    xticklabel=(F.xtick); 
     set(gca,'Xlim',F.xlim,'Ylim',F.ylim,'Xtick',F.xtick,'Ytick',F.ytick,'XTickLabel',xticklabel)
     if s==1, ylabel('min error rate'), end
     set(gca,'Xscale','log','Yscale','linear')
-    title(['D=',num2str(T{s}.D),', n=',num2str(T{s}.ntrain)]);
     if s==2
-        xlabel(['                                log_{10}(# of seconds)']);
+        xlabel(['                                time (sec)']);
     end
 end
-% text(-1,1.5,'# of embedded dimensions')
-% legend
 
-pos=[left+(s)*(width+hspace)-0.02, 0.57, width, height]; %[left,bottom,width,height]
-% hl=subplot(F.Nrows,F.Ncols,F.Ncols);
+%% legend
+
+% generate a hidden plot to have a legend
+pos=[left+(s)*(width+hspace)-0.02, 0.57, width, 0.075]; %[left,bottom,width,height]
 hl=subplot('position',pos);
 hold all, i=1; clear g
 g(i)=plot(0,0,'color','b','linewidth',1,'marker','^'); i=i+1;
@@ -166,6 +165,9 @@ g(i)=plot(0,0,'color','c','linewidth',1,'marker','v'); i=i+1;
 g(i)=plot(0,0,'color','m','linewidth',1,'marker','+'); i=i+1;
 g(i)=plot(0,0,'color','g','linewidth',1,'marker','o'); i=i+1;
 g(i)=plot(0,0,'color',orange,'linewidth',1,'marker','d'); i=i+1;
+set(gca,'xlim',[100,200],'ylim',[100 200],'xtick',[],'ytick',[],'box','off','xcolor','w','ycolor','w') 
+
+
 
 l=legend(g,...
     'SVM',...
@@ -178,7 +180,7 @@ legend1 = legend(hl,'show','FontSize',10);
 set(gca,'XTick',[],'YTick',[],'Box','off','xcolor','w','ycolor','w')
 
 
-% print figure
+%% print figure
 if task.savestuff
     H.wh=[6.5 3.5];
     H.fname=[rootDir, '../Figs/realdata'];

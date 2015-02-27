@@ -905,8 +905,6 @@ if ~isfield(task,'P')
             Sigma=eye(D);
             Sigma(1:D+1:end)=100./sqrt(D:-1:1);
 
-            
-            
         otherwise
             error('no known parameter setting provided')
     end

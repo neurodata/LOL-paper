@@ -66,9 +66,12 @@ elseif strcmp(metatask,'three_trunks')
 
 elseif strcmp(metatask,'both_cigars')
     task_list={'parallel cigars';'angled cigars'};
-
+    
 elseif strcmp(metatask,'cs')
     task_list={'ac';'oc';'roc'};
+
+elseif strcmp(metatask,'cs2')
+    task_list={'MNIST(38)';'ac';'oc';'roc'};
 
 elseif strcmp(metatask,'four_cigars')
     task_list={'parallel cigars';'rotated cigars';'angled cigars'};

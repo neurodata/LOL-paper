@@ -44,7 +44,7 @@ for s=1:length(S)
     ytick=10.^[1:0.5:8];
     if s==1, ss=2; elseif s==2, ss=1; end
     %     subplot(2,length(S),ss),
-    pos=[left+(ss-1)*(width+hspace), b2, width, height]; %[left,bottom,width,height]
+    pos=[left+(ss-1)*(width+hspace), bottom, width, height]; %[left,bottom,width,height]
     subplot('position',pos)
     hold all
     col{1}='g'; col{2}='g';col{3}='m';col{4}='m';col{5}='r';col{6}='r';
@@ -62,11 +62,11 @@ for s=1:length(S)
     if s==1
         title('(B) Sparse Sphere: D=1000, n=100')
         ytick=10.^[1:0.05:8];
-        set(gca,'Ylim',[0.28*10^5,0.4*10^5],'Ytick',ytick,'YTickLabel',log10(ytick))
+        set(gca,'Ylim',[0.28*10^5,0.4*10^5],'Ytick',ytick,'YTickLabel',log10(ytick)/0.5)
     elseif s==2
-        ylabel('regression log_{10}(m.s.e.)')
+        ylabel('regression error')
         title('(A) Sparse Toeplitz: D=1000, n=100')
-        set(gca,'Ylim',[10^4,4*10^5],'YTick',ytick,'YTickLabel',log10(ytick))
+        set(gca,'Ylim',[10^4,4*10^5],'YTick',ytick,'YTickLabel',log10(ytick)/0.5)
     elseif s==3
         title('p=100, n=100, $\Sigma$=T','interpreter','none')
         set(gca,'Yscale','linear')
@@ -101,7 +101,7 @@ left=0.09;
 width=0.4;
 hspace=0.06;
 b2=0.6;
-pos(1)=left; pos(2)=width; pos(3)=hspace; pos(4)=bottom; pos(5)=height; 
+pos(1)=left; pos(2)=width; pos(3)=hspace; pos(4)=b2; pos(5)=height; 
 
 plot_hotelling(T,S,pos)
 
@@ -110,7 +110,7 @@ plot_hotelling(T,S,pos)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 if S{1}.savestuff
-    H.wh=[6 4];
+    H.wh=[4 4]*1.5;
     H.fname=[rootDir, '../Figs/regression_power'];
     print_fig(h,H)
 end

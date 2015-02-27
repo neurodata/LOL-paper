@@ -1,13 +1,13 @@
-function [T,S,P,task] = run_realdata(rootDir)
+function [T,S,P,task] = run_realdata(rootDir,task)
 
 
 %% task properties consistent across all tasks
+if ~isfield(task,'savestuff'), task.savestuff=1; end
 task.algs={'LOL';'GLM';'RF';'ROAD';'SVM'}; %add svm
 task.simulation=0;
 task.percent_unlabeled=0;
 task.types={'DENL'};
 task.ntrials=40;
-task.savestuff=1;
 
 %% prostate
 

@@ -17,7 +17,7 @@ addpath(p);
 
 %% set up tasks
 clear idx
-task_list_name='cs'; 
+task_list_name='cs2'; 
 task.D=1000;
 task.ntrain=100;
 k=20;
@@ -52,13 +52,34 @@ for j=1:Nsims
     
     % generate data and embed it
     task.name=task_list{j};
+    if strfind(task.name,'MNIST'), 
+        task.simulation=0; 
+        task.algs={'LOL';'ROAD'}; %add svm
+        task.simulation=0;
+        task.percent_unlabeled=0;
+        task.types={'DENL';'NENL'};
+        task.ntrials=1;
+        task.savestuff=1;
+        task.ntrain=300;
+        task.ntest=500;
+        task.Nks=100;
+        [TT,SS,PP] = run_task(task);
+    end
     [task1, X, Y, P] = get_task(task);
+    if strfind(task.name,'MNIST')
+        Y(Y==3)=1;
+        Y(Y==8)=2;
+        ids=378:784;
+    else 
+        ids=1:784;
+    end
+
     Z = parse_data(X,Y,task1.ntrain,task1.ntest,0);
         
     % scatter plots
     subplot('Position',[left+(j-1)*(width+hspace) bottom+4*(height+vspace), width, width ]) %[left,bottom,width,height]
     hold on
-    Xtest=Z.Xtest(1:2,:);
+    Xtest=Z.Xtest(ids(1:2),:);
     Xtest=Xtest-repmat(mean(Xtest,2),1,length(Z.Ytest));
     
     Xplot1=Xtest(:,Z.Ytest==1);
@@ -73,9 +94,10 @@ for j=1:Nsims
     set(gca,'TickDir','out')
     
     switch j
-        case 1, tit='(A) Aligned';
-        case 2, tit='(B) Orthogonal';
-        case 3, tit='(C) Rotated Orthogonal';
+        case 1, tit='(A) MNIST: 3 vs. 8';
+        case 2, tit='(b) Aligned';
+        case 3, tit='(C) Orthogonal';
+        case 4, tit='(D) Rotated Orthogonal';
     end
     title(tit,'fontsize',8)
 %     axis('square')
@@ -92,7 +114,14 @@ for j=1:Nsims
             Xtrain=Proj{i}.V(1:k,:)*Z.Xtrain;
             [Yhat, parms, eta] = LDA_train_and_predict(Xtrain, Z.Ytrain, Xtest);
         elseif i==3
-            para.K=20;
+            para.K=100;
+            ys=unique(Z.Ytrain);
+            Z.Ytrain(Z.Ytrain==ys(1))=0;
+            Z.Ytrain(Z.Ytrain==ys(2))=1;
+            
+            Z.Ytest(Z.Ytest==ys(1))=0;
+            Z.Ytest(Z.Ytest==ys(2))=1;
+
             fit = road(Z.Xtrain', Z.Ytrain,0,0,para);
             nl=0; kk=1;
             while nl<=k, nl=nnz(fit.wPath(:,kk)); kk=kk+1; end

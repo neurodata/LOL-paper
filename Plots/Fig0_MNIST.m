@@ -12,9 +12,10 @@ for i=0:length(gits)-1
 end
 addpath(p);
 
-newsim=0;
+newsim=1;
 if newsim==1
-    [task,T,S,P,Pro,Z]= run_MNIST(rootDir);
+    task.savestuff=0;
+    [task,T,S,P,Pro,Z]= run_MNIST(rootDir,task);
 else
     load([rootDir, '../Data/Results/mnist'])
 end
@@ -59,21 +60,24 @@ siz=size(imj);
 for j=1:3
     aind{j}=find(group==un(j));
     for k=1:nex
-        imj((k-1)*29+1:k*29,(j-1)*29+1:j*29)=[reshape(training(:,aind{j}(k)),[28 28]), ones(28,1);ones(1,29)];
+        imj((k-1)*29+1:k*29,(j-1)*29+1:j*29)=[reshape(training(:,aind{j}(k)),[28 28]), zeros(28,1);zeros(1,29)];
     end
 end
 imj=-imj+1;
-imj(:,end)=[];
+imj(end+1,:)=ones(1,87);
 imj=repmat(imj,1,1,3);
 
-imj(:,1:28,1)=0;
-imj(:,1:28,2)=0;
+imj(:,1,1:2)=0;
+imj(:,28,1:2)=0;
+imj([1:29:end],1:28,1:2)=0;
 
-imj(:,30:57,2)=0;
-imj(:,30:57,3)=0;
+imj(:,29,2:3)=0;
+imj(:,57,2:3)=0;
+imj([1:29:end],29:57,2:3)=0;
 
-imj(:,59:end,1)=0;
-imj(:,59:end,3)=0;
+imj(:,58,[1 3])=0;
+imj(:,end,[1 3])=0;
+imj([1:29:end],58:end,[1 3])=0;
 
 imagesc(imj)
 colormap('bone')
