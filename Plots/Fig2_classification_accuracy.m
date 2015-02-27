@@ -1,8 +1,15 @@
 %% set path correctly
-clearvars, clc,
+clearvars, clc, 
 fpath = mfilename('fullpath');
 findex=strfind(fpath,'/');
-p = genpath(fpath(1:findex(end-2)));
+rootDir=fpath(1:findex(end-1));
+p = genpath(rootDir);
+gits=strfind(p,'.git');
+colons=strfind(p,':');
+for i=0:length(gits)-1
+    endGit=find(colons>gits(end-i),1);
+    p(colons(endGit-1):colons(endGit)-1)=[];
+end
 addpath(p);
 
 %% load example data
@@ -10,9 +17,9 @@ newsim=0;
 if newsim==1;
     [T,S,P,task] = run_example_sims;
 else
-    load([fpath(1:findex(end-2)), 'Data/Results/example_sims'])
+    load([rootDir, '../Data/Results/example_sims'])
     PP=P; TT=T; SS=S;
-    load([fpath(1:findex(end-2)), 'Data/Results/generalizations'])
+    load([rootDir, '../Data/Results/generalizations'])
     for t=1:length(P)
         PP{end+1}=P{t};
         SS{end+1}=S{t};
@@ -66,7 +73,7 @@ left=0.09;
 width=0.17;
 hspace=0.06;
 lfw='normal'; % legend fontweight
-% sample
+%% sample
 
 for j=1:4
     task1=T{j};
@@ -297,11 +304,9 @@ for j=1:3
     plot_Lhat(T{j+4},S{j+4},F,pos)
     
 end
-% str = {'# of embedded dimensions'};
-% annotation('textbox', [0.35,bottom-0.06,0.6,0.04],'String', str,'EdgeColor','none','fontweight',lfw); %[x y w h]
 
 
-% legend
+%% legend
 
 pos=[left+(4-1)*(width+hspace)+0.05 0.07 width height]; %[left,bottom,width,height]
 % hl=subplot(F.Nrows,F.Ncols,F.Ncols);
@@ -335,9 +340,9 @@ set(legend1,...
 set(gca,'XTick',[],'YTick',[],'Box','off','xcolor','w','ycolor','w')
 
 
-% print figure
+%% print figure
 if task.savestuff
     H.wh=[7.5 6];
-    H.fname=[fpath(1:findex(end-2)), 'Figs/properties'];
+    H.fname=[rootDir, '../Figs/properties'];
     print_fig(h,H)
 end

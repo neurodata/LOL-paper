@@ -1,10 +1,17 @@
 % this script either loads or runs a new simulation of both regression and
 % power, and then plots the results.
 
-clearvars, clc,
+clearvars, clc, 
 fpath = mfilename('fullpath');
 findex=strfind(fpath,'/');
-p = genpath(fpath(1:findex(end-2)));
+rootDir=fpath(1:findex(end-1));
+p = genpath(rootDir);
+gits=strfind(p,'.git');
+colons=strfind(p,':');
+for i=0:length(gits)-1
+    endGit=find(colons>gits(end-i),1);
+    p(colons(endGit-1):colons(endGit)-1)=[];
+end
 addpath(p);
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -17,7 +24,7 @@ task.lasso=true;
 if newsim==1;
     S = run_regression_sims(task);
 else
-    load([fpath(1:findex(end-2)), 'Data/results/extensions'])
+    load([rootDir, '../Data/results/extensions'])
 end
 S{1}.savestuff=1;
 
@@ -81,7 +88,7 @@ if newsim==1;
     task.save=1;
     [T,S] = run_hotelling_sims(tasknames,task);
 else
-    load([fpath(1:findex(end-2)), 'Data/results/Lopes11a'])
+    load([rootDir, '../Data/results/Lopes11a'])
 end
 S{1}.savestuff=1;
 
@@ -104,6 +111,6 @@ plot_hotelling(T,S,pos)
 
 if S{1}.savestuff
     H.wh=[6 4];
-    H.fname=[fpath(1:findex(end-2)), 'Figs/regression_power'];
+    H.fname=[rootDir, '../Figs/regression_power'];
     print_fig(h,H)
 end

@@ -1,67 +1,28 @@
 % generalizations figure
-clearvars, clc,
+clearvars, clc, 
 fpath = mfilename('fullpath');
 findex=strfind(fpath,'/');
-p = genpath(fpath(1:findex(end-2)));
+rootDir=fpath(1:findex(end-1));
+p = genpath(rootDir);
+gits=strfind(p,'.git');
+colons=strfind(p,':');
+for i=0:length(gits)-1
+    endGit=find(colons>gits(end-i),1);
+    p(colons(endGit-1):colons(endGit)-1)=[];
+end
 addpath(p);
 
-%% task properties consistent across all tasks
-clear task
-task.algs={'LOL';'GLM';'RF';'ROAD';'SVM'}; %add svm
-task.simulation=0;
-task.percent_unlabeled=0;
-task.types={'DENL'};
-task.ntrials=40;
+%%
+
+newsim=0;
 task.savestuff=1;
-
-%% prostate
-
-j=1;
-task1=task;
-task1.name=['Prostate'];
-task1.ks=1:50;
-task1.ks=unique(round(logspace(0,log10(67),50)));
-[T{j},S{j},P{j}] = run_task(task1);
-
-%% prostate
-
-j=2;
-task1=task;
-task1.name=['Colon'];
-task1.ks=unique(round(logspace(0,log10(40),50)));
-[T{j},S{j},P{j}] = run_task(task1);
-
-
-%% mnist
-
-j=3;
-task1=task;
-task1.name=['MNIST'];
-task1.ntrain=100;
-task1.ntest=500;
-task1.algs={'LOL';'GLM';'RF';'SVM'}; 
-task1.ks=unique(round(logspace(0,log10(task1.ntrain-1),50)));
-[T{j},S{j},P{j}] = run_task(task1);
-
-
-%% CIFAR-10
-j=4;
-task1=task;
-task1.name=['CIFAR-10'];
-task1.ntrain=300;
-task1.ntest=500;
-task1.algs={'LOL';'GLM';'RF';'SVM'}; 
-task1.ks=unique(round(logspace(0,log10(task1.ntrain-1),50)));
-[T{j},S{j},P{j}] = run_task(task1);
-
-
-
-%% save stuff
-
-if task.savestuff
-    save([fpath(1:findex(end-2)), 'Data/Results/realdata.mat'],'task','T','S','P')
+if newsim==1;
+    S = run_realdata(rootDir);
+else
+    load([rootDir, '../Data/Results/realdata'])
 end
-% load([fpath(1:findex(end-2)), 'Data/Results/realdata'])
+S{1}.savestuff=1;
+
 
 
 %% make figs
@@ -220,6 +181,6 @@ set(gca,'XTick',[],'YTick',[],'Box','off','xcolor','w','ycolor','w')
 % print figure
 if task.savestuff
     H.wh=[6.5 3.5];
-    H.fname=[fpath(1:findex(end-2)), 'Figs/realdata'];
+    H.fname=[rootDir, '../Figs/realdata'];
     print_fig(h,H)
 end
