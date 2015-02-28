@@ -16,6 +16,7 @@ addpath(p);
 
 newRun=1;
 task.savestuff=0;
+task.ntrials=4;
 if newRun==1;
     S = run_realdata(rootDir,task);
 else

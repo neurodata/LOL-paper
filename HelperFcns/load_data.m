@@ -45,7 +45,7 @@ elseif strncmpi(task.name,'MNIST(',6)
     X = X(:,Yind);
     Y = Y(Yind);
     task.classIDs=label_keepers;
-elseif strcmpi(task.name,'MNIST',5)
+elseif strcmpi(task.name,'MNIST')
     X =     loadMNISTImages('~/Research/working/A/LOL/Data/Raw/MNIST/t10k-images.idx3-ubyte');
     Y =     loadMNISTLabels('~/Research/working/A/LOL/Data/Raw/MNIST/t10k-labels.idx1-ubyte');
 % elseif strcmpi(task.name,'MNIST(378)')

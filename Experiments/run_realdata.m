@@ -2,12 +2,12 @@ function [T,S,P,task] = run_realdata(rootDir,task)
 
 
 %% task properties consistent across all tasks
-if ~isfield(task,'savestuff'), task.savestuff=1; end
-task.algs={'LOL';'GLM';'RF';'ROAD';'SVM'}; %add svm
+if ~isfield(task,'savestuff'),  task.savestuff=1; end
+if ~isfield(task,'ntrials'),    task.ntrials=40; end
+if ~isfield(task,'algs'),       task.algs={'LOL';'GLM';'RF';'ROAD';'SVM'}; end
+if ~isfield(task,'types'),      task.types={'DENL'}; end
+if ~isfield(task,'percent_unlabeled'), task.percent_unlabeled=0; end
 task.simulation=0;
-task.percent_unlabeled=0;
-task.types={'DENL'};
-task.ntrials=40;
 
 %% prostate
 
