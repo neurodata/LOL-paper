@@ -46,9 +46,9 @@ for i=1:Nks
         end
     catch err
         if i>1
-            display(['the ', classifier, ' classifier barfed during embedding dimension ', num2str(ks(i))])
+            display(['WARNING: the ', classifier, ' classifier barfed during embedding dimension ', num2str(ks(i))])
         else
-            display(['the ', classifier, ' classifier barfed '])
+            display(['WARNING: the ', classifier, ' classifier barfed '])
         end
         display(err.message)
         break
