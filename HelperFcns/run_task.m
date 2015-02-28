@@ -31,8 +31,8 @@ if T.savestuff,
     fpath = mfilename('fullpath');
     findex=strfind(fpath,'/');
     rootDir=fpath(1:findex(end-2));
-    save([rootDir, '../Data/Results/', name],'T','S','P'), 
+    save([rootDir, 'Data/Results/', name],'T','S','P'), 
     if nargout==4,
-        save([rootDir, '../Data/Results/', name],'Proj','-append'),
+        save([rootDir, 'Data/Results/', name],'Proj','-append'),
     end        
 end % save results

@@ -1,11 +1,6 @@
 function [out, ROAD_num,Yhat,eta] = run_ROAD(Z,task)
 
 para.K=task.Nks;
-% if min(Z.Ytrain)==1, 
-%     Z.Ytest=Z.Ytest-1;
-%     Z.Ytrain=Z.Ytrain-1;
-% end
-% if max(Z.Ytrain)>1
 ys=unique(Z.Ytrain);
 if length(ys)>2, 
     error('ROAD only works for 2 class problems'), 
@@ -25,6 +20,9 @@ Xtest=bsxfun(@minus,Z.Xtest,Xmean);
 Xstd=std(Z.Xtrain,[],2);
 Xtrain=bsxfun(@rdivide,Xtrain,Xstd);
 Xtest=bsxfun(@rdivide,Xtest,Xstd);
+
+Xtrain(isnan(Xtrain))=0;
+Xtest(isnan(Xtest))=0;
 %%
 
 fit = road(Xtrain', Z.Ytrain,0,0,para);

@@ -1,4 +1,4 @@
-% generalizations figure
+% real data figure
 clearvars, clc, 
 fpath = mfilename('fullpath');
 findex=strfind(fpath,'/');
@@ -14,16 +14,17 @@ addpath(p);
 
 %%
 
+tic
 newRun=1;
 task.savestuff=0;
-task.ntrials=4;
+task.ntrials=40;
 if newRun==1;
-    S = run_realdata(rootDir,task);
+    [T, S, P] = run_realdata(rootDir,task);
 else
     load([rootDir, '../Data/Results/realdata'])
 end
 S{1}.savestuff=1;
-
+toc
 
 
 %% make figs
@@ -36,7 +37,7 @@ G.plot_bayes=false;
 G.plot_risk=false;
 G.plot_time=false;
 G.Nrows=2;
-G.Ncols=length(T); %ceil(length(T)/2);
+G.Ncols=length(S); %ceil(length(T)/2);
 G.location = 'NorthEast';
 G.legend = {'LOL';'PCA'};
 G.linestyle={'-';'-';'-';'-';'-';'-';'-'};
