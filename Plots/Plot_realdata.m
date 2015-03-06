@@ -15,7 +15,7 @@ addpath(p);
 %%
 
 tic
-newRun=1;
+newRun=0;
 task.savestuff=0;
 task.ntrials=40;
 if newRun==1;
@@ -80,7 +80,7 @@ for s=1:length(S)
         F.ytick=[0:0.04:1];
     elseif s==2
         F.ylim=[0.1,0.4];
-        F.xlabel='                                        hyperparameter';
+        F.xlabel='                               log(# of embedded dimensions or svm-cost)';
     elseif s==3
         F.ylim=[0.2,0.95];
         F.ytick=[0:0.2:1];

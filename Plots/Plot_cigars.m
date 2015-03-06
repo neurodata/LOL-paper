@@ -17,7 +17,7 @@ addpath(p);
 
 %% set up tasks
 clear idx
-task_list_name='cs2';
+task_list_name='cs';
 task.D=1000;
 task.ntrain=100;
 k=20;
@@ -36,15 +36,16 @@ Ncols=Nsims;
 Nrows=Nalgs+2;
 gray=0.7*[1 1 1];
 
-width=0.21;
+width=0.28;
 height=0.13;
-left=0.04;
+scatsize=0.21;
+left=0.06;
 y3=0.63;
 hspace=0.03;
 vspace=0.05;
 bottom=0.02;
 dd=1;
-gg=1;
+gg=2;
 marker='.';
 ms=4; % markersize
 
@@ -80,7 +81,7 @@ for j=1:Nsims
     Z = parse_data(X,Y,task1.ntrain,task1.ntest,0);
     
     % scatter plots
-    subplot('Position',[left+(j-1)*(width+hspace) bottom+4*(height+vspace), width, width ]) %[left,bottom,width,height]
+    subplot('Position',[left+(j-1)*(width+hspace)+0.035 bottom+4*(height+vspace), scatsize, scatsize]) %[left,bottom,width,height]
     hold on
     Xtest=Z.Xtest(ids(1:2),:);
     Xtest=Xtest-repmat(mean(Xtest,2),1,length(Z.Ytest));
@@ -92,18 +93,18 @@ for j=1:Nsims
     plot(Xplot1(1,idx),Xplot1(2,idx),'.','color',[0 0 0],'LineWidth',1.0,'markersize',ms),
     plot(Xplot2(1,idx),Xplot2(2,idx),'.','color',gray,'LineWidth',1.0,'markersize',ms)
     axis('equal')
-    if j==1, 
+    if strfind(task.name,'MNIST'),
         axis('tight') %[left bottom width height]
-        set(gca,'Position',[0.04 0.76 0.21 0.175]); %[0.04 0.74 0.21 0.21]), 
+        set(gca,'Position',[0.04 0.76 0.21 0.175]); %[0.04 0.74 0.21 0.21]),
     end
     set(gca,'XTick',[0],'YTick',[0],'XTickLabel',[],'YTickLabel',[])
     set(gca,'TickDir','out')
     
     switch j
-        case 1, tit='(A) MNIST: 3 vs. 8';
-        case 2, tit='(B) Aligned';
-        case 3, tit='(C) Orthogonal';
-        case 4, tit='(D) Rotated Orthogonal';
+        %         case 1, tit='(A) MNIST: 3 vs. 8';
+        case 1, tit='(A) Aligned';
+        case 2, tit='(B) Orthogonal';
+        case 3, tit='(C) Rotated Orthogonal';
     end
     title(tit,'fontsize',8)
     
@@ -224,7 +225,7 @@ for j=1:Nsims
             si=1;
         end
         
-        if ~(i==4 && j==1)
+%         if ~(strfind(task.name,'MNIST') && j==1)
             subplot('Position',[left+(j-1)*(width+hspace) bottom+(si-1)*(height+vspace), width, height]) %[left,bottom,width,height]
             hold on
             plot(t,yy2,'linestyle',ls1,'color',col2,'linewidth',2)
@@ -241,10 +242,10 @@ for j=1:Nsims
             
             axis([min(min2,min1), max(max2,max1), 0, 1.05*maxy])
             if j==1, ylabel(ylab,'fontsize',8,'FontWeight','bold','FontName','FixedWidth'), end
-            if j==2 && i==4, ylabel(ylab,'fontsize',8,'FontWeight','bold','FontName','FixedWidth'), end
+            %         if j==2 && i==4, ylabel(ylab,'fontsize',8,'FontWeight','bold','FontName','FixedWidth'), end
             
             set(gca,'XTickLabel',[],'YTickLabel',[],'XTick',[],'YTick',[])
-        end
+%         end
     end
 end
 

@@ -204,18 +204,18 @@ for j=1:3%length(T)
     plot(Xplot2(1,idx),Xplot2(2,idx),'x','color',G.colors{2},'LineWidth',G.lw,'MarkerSize',G.ms2)    
     
     if j==1
-        title('(E) Nonlinear')
+        title('                  (E) QDA')
         lims=[-2.5, 2.5];
         ticks=-3:1.5:3;
         idx=1:100;
         ylabel('dim 1','fontweight',lfw)
         xlabel('dim 2','fontweight',lfw)
     elseif j==2
-        title('(F) Outliers')
+        title('                  (F) Outliers')
         axis('tight')
         idx=1:100;
     elseif j==3
-        title('(G) XOR')
+        title('                  (G) XOR')
         idx=1:200;
         lims=6*[-1,1];
         ticks=[-1:1];
