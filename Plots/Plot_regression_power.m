@@ -49,7 +49,7 @@ for s=1:length(S)
     hold all
     col{1}='g'; col{2}='g';col{3}='m';col{4}='m';col{5}='r';col{6}='r';
     ls{1}='--'; ls{2}='-'; ls{3}='--';ls{4}='-'; ls{5}='-';
-    for j=1:length(S{s}.transformers)
+    for j=2%:length(S{s}.transformers)
         plot(S{s}.ks,S{s}.mean_lol(j,:),'color',col{j},'linewidth',2,'linestyle',ls{j})
     end
     if isfield(S{s},'mean_lasso')
@@ -60,12 +60,12 @@ for s=1:length(S)
     set(gca,'Yscale','linear')
     xlim([0 90])
     if s==1
-        title('(B) Sparse Sphere: D=1000, n=100')
+        title('(D) Sparse Sphere: D=1000, n=100')
         ytick=10.^[1:0.05:8];
-        set(gca,'Ylim',[0.28*10^5,0.4*10^5],'Ytick',ytick,'YTickLabel',log10(ytick)/0.5)
+        set(gca,'Ylim',[0.29*10^5,0.39*10^5],'Ytick',ytick) %,'YTickLabel',log10(ytick)/0.5)
     elseif s==2
         ylabel('regression error')
-        title('(A) Sparse Toeplitz: D=1000, n=100')
+        title('(C) Sparse Toeplitz: D=1000, n=100')
         set(gca,'Ylim',[10^4,4*10^5],'YTick',ytick,'YTickLabel',log10(ytick)/0.5)
     elseif s==3
         title('p=100, n=100, $\Sigma$=T','interpreter','none')

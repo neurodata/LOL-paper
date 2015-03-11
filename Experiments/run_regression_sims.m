@@ -1,19 +1,25 @@
-function S = run_regression_sims(task)
+function S = run_regression_sims(task,subnames)
 
 % this function generates the simulation for regression results for Fig 3,
 % which will shows LOL vs. Lasso & PLS for regression
 
 fpath = mfilename('fullpath');
 findex=strfind(fpath,'/');
-p = genpath(fpath(1:findex(end-2)));
+rootDir=fpath(1:findex(end-1));
+p = genpath(rootDir);
+gits=strfind(p,'.git');
+colons=strfind(p,':');
+for i=0:length(gits)-1
+    endGit=find(colons>gits(end-i),1);
+    p(colons(endGit-1):colons(endGit)-1)=[];
+end
 addpath(p);
-s=rng;
 
 %% set up tasks
-if nargin==0
+
+if nargin<1
     task=struct;
 end
-
 
 if ~isfield(task,'D'),      task.D=1000; end
 if ~isfield(task,'ntrain'), task.ntrain=100; end
@@ -24,13 +30,15 @@ if ~isfield(task,'rotate'), task.rotate=false; end
 if ~isfield(task,'algs'),   task.algs={'LOL'}; end
 if ~isfield(task,'types'),  task.types={'DENZ';'NENZ';'DEAZ';'NEAZ'}; end
 if ~isfield(task,'lasso'),  task.lasso=false; end
+if ~isfield(task,'ridge'),  task.ridge=false; end
 if ~isfield(task,'ntrials'),task.ntrials=50; end
 if ~isfield(task,'plot'),   task.plot=1; end
 if ~isfield(task,'save'),   task.save=1; end
 task=orderfields(task);
 
+if nargin<2, subnames={'p=2D';'toeplitz'}; end
+
 %% run trials
-subnames={'p=2D';'toeplitz'};
 Ns=length(subnames);
 lol_time=nan(Ns,1); lasso_time=nan(Ns,1); pls_time=nan(Ns,1); chance=nan(Ns,1); err_pls=nan(Ns,1);
 for subname=1:Ns
@@ -48,13 +56,13 @@ for subname=1:Ns
         [Yhats] = LOL_classify(Z.Xtest',Z.Xtrain',Z.Ytrain,task);
         lol_time(t)=toc;
         display(['lol ', num2str(lol_time(t))])
-
+        
         for k=1:length(Yhats)
             for j=1:size(Yhats{1},1)
                 err_LOL(t,k,j)=sum((Yhats{k}(j,:)-Z.Ytest).^2);
             end
         end
-
+        
         % LASSO
         if task.lasso
             tic
@@ -77,9 +85,23 @@ for subname=1:Ns
         Ypls = [ones(1,task.ntest);Z.Xtest]'*BETA;
         pls_time(t)=toc;
         display(['pls ', num2str(pls_time(t))])
-        
         err_pls(t)=sum((Z.Ytest-Ypls').^2);
         
+        % ridge
+        if task.ridge
+            tic
+            ks=linspace(0,5e-3,task1.Nks);
+            D = x2fx(Z.Xtrain','interaction');
+            bhat=ridge(Z.Ytrain',D,ks);
+            for j=size(bhat,2);
+                Yridge(j,:) = [ones(1,task.ntest);Z.Xtest]'*bhat(:,j);
+                err_ridge(j)=sum((Yridge(j,:)-Z.Ytest).^2);
+            end
+            ridge_time(t)=toc;
+            display(['ridge ', num2str(ridge_time(t))])
+        end
+        
+        % chance
         chance(t)=sum((Z.Ytest-mean(Z.Ytrain)).^2);
     end
     
@@ -106,11 +128,11 @@ for subname=1:Ns
         S{subname}.mean_lasso=mean_lasso;
         S{subname}.se_lasso = std(err_lasso)/task.ntrials;
         S{subname}.lasso_time=lasso_time;
-
+        
     end
     
     S{subname}.mean_lol=mean_lol;
-    S{subname}.se_lol = squeeze(std(err_LOL))/task.ntrials;    
+    S{subname}.se_lol = squeeze(std(err_LOL))/task.ntrials;
     S{subname}.lol_time=lol_time;
     
     S{subname}.mean_pls=mean(err_pls);

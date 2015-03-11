@@ -181,9 +181,10 @@ end
 
 %%
 y_begin=[bottom(3), bottom(2)+0.02, bottom(1)]+0.01;
+si=[3 2 1];
 for i=1:3  %[x_begin y_begin length height]
     pos=[0.5, y_begin(i), 0.5, 0.1];
-    annotation('textbox', pos,'String', ylab{i},'EdgeColor','none','FontWeight','bold','FontName','FixedWidth');
+    annotation('textbox', pos,'String', ylab{si(i)},'EdgeColor','none','FontWeight','bold','FontName','FixedWidth');
 end
 
 
@@ -328,22 +329,20 @@ for i=1:3
     
     if ~(i==4 && j==1)
         subplot('Position',[left4 bottom(si), width, height]) %[left,bottom,width,height]
+        cla
         hold on
-        plot(t,yy2,'linestyle',ls1,'color',col2,'linewidth',2)
-        dashline(t,yy1,dd,gg,dd,gg,'color',col1,'linewidth',2)
+        plot(t,yy2,'linestyle',ls1,'color','b','linewidth',2)
+        plot(t,yy1,'linestyle',ls1,'color','g','linewidth',2)
+%         dashline(t,yy1,dd,gg,dd,gg,'color','g','linewidth',2)
         if i~=3
-            fill(t,[y1(1:50),y2(51:end)],col1,'EdgeColor',col1)
+            fill(t,[y1(1:50),y2(51:end)],'k','EdgeColor','k')
         elseif i==3
             yend=find(y2>y1,1)-1;
-            fill(t,[y2(1:yend), y1(yend+1:end)],col1,'EdgeColor',col1)
-            %             elseif i==4
-            %                 fill(t,[y1(1:50),y2(51:end)],col1,'EdgeColor',col1)
+            fill(t,[y2(1:yend), y1(yend+1:end)],'k','EdgeColor','k')
         end
         plot([0,0],[0, maxy],'k')
         
         axis([min(min2,min1), max(max2,max1), 0, 1.05*maxy])
-%         if j==1, ylabel(ylab,'fontsize',8,'FontWeight','bold','FontName','FixedWidth'), end
-%         if j==2 && i==4, ylabel(ylab,'fontsize',8,'FontWeight','bold','FontName','FixedWidth'), end
         
         set(gca,'XTickLabel',[],'YTickLabel',[],'XTick',[],'YTick',[])
     end

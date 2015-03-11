@@ -32,9 +32,9 @@ for t=1:length(S)
     set(gca,'XTick',[0.1, 1, 10, 100])
     if t==1
         ylabel('testing power')
-        title('(C) Trunk: D=200, n=100')
+        title('(A) Trunk: D=200, n=100')
     elseif t==2
-        title('(D) Dense Toeplitz: D=200, n=100')
+        title('(B) Dense Toeplitz: D=200, n=100')
         legend(legendcell,'location','Northwest')
    end
 end
