@@ -16,9 +16,9 @@ addpath(p);
 
 tic
 newRun=0;
-task.savestuff=0;
-task.ntrials=40;
+task.savestuff=1;
 if newRun==1;
+    task.ntrials=40;
     [T, S, P] = run_realdata(rootDir,task);
 else
     load([rootDir, '../Data/Results/realdata'])
@@ -95,7 +95,7 @@ for s=1:length(S)
         F.colors={'g';'m';[1 0.6 0];'b'};
     end
     F.xticklabel=log2(F.xtick);
-    tit{s}=[T{s}.name]; %
+    tit{s}=['(',char(s-1+'A'), ') ', T{s}.name]; %
     F.title=[{tit{s}}; {['D=',num2str(T{s}.D),', n=',num2str(T{s}.ntrain)]}];
     F.plot_chance=1;
     pos=[left+(s-1)*(width+hspace), b2, width, height]; %[left,bottom,width,height]

@@ -18,14 +18,14 @@ if newsim==1;
     [T,S,P,task] = run_example_sims;
 else
     load([rootDir, '../Data/Results/example_sims'])
-    PP=P; TT=T; SS=S;
+    pp=P; TT=T; SS=S;
     load([rootDir, '../Data/Results/generalizations'])
     for t=1:length(P)
-        PP{end+1}=P{t};
+        pp{end+1}=P{t};
         SS{end+1}=S{t};
         TT{end+1}=T{t};
     end
-    P=PP; S=SS; T=TT;
+    P=pp; S=SS; T=TT;
 end
 S{1}.savestuff=0;
 
@@ -82,7 +82,7 @@ for j=1:4
     
     Z = parse_data(X,Y,task1.ntrain,task1.ntest,0);
     
-    pos=[left+(j-1)*(width+hspace) bottom+(height+vspace)*4-0.03 width height];
+    pos=[left+(j-1)*(width+hspace) bottom+(height+vspace)*4-0.03 width height-0.01];
     subplot('position',pos), %[left,bottom,width,height]
     hold on
     
@@ -99,22 +99,23 @@ for j=1:4
     xtick=50:50:xlim(end);
     xticklabel=xtick;
     if j==1
-        title('(A) Rotated Trunk')
+        tit='(A) Rotated Trunk';
         ylabel('means','fontweight',lfw)
         xlabel('ambient dimension index','fontweight',lfw);
         ytick=[-1,0,1];
     elseif j==2,
-        title('(B) Toeplitz')
+        tit='(B) Toeplitz';
         xlim=[1,8];
         xtick=2:2:xlim(end);
         xticklabel=[{'2'};{'4'};{'...'};{'100'}];
         ytick=[];
     elseif j==3,
-        title('(C) Fat Tails')
+        tit='(C) Fat Tails';
         ytick=[];
     elseif j==4,
-        title('(D) 3 Classes')
+        tit='(D) 3 Classes';
     end
+    title([{tit}; {['D=', num2str(T{j}.D), ' n=', num2str(T{j}.ntrain)]}])
     set(gca,'XTick',xtick,'XTickLabel',xticklabel,'Xlim',xlim,'ylim',ylim,'ytick',ytick)
     grid('off')
     
@@ -204,23 +205,24 @@ for j=1:3%length(T)
     plot(Xplot2(1,idx),Xplot2(2,idx),'x','color',G.colors{2},'LineWidth',G.lw,'MarkerSize',G.ms2)    
     
     if j==1
-        title('                  (E) QDA')
+        tit=['                  (E) QDA'];
         lims=[-2.5, 2.5];
         ticks=-3:1.5:3;
         idx=1:100;
         ylabel('dim 1','fontweight',lfw)
         xlabel('dim 2','fontweight',lfw)
     elseif j==2
-        title('                  (F) Outliers')
+        tit=['                  (F) Outliers'];
         axis('tight')
         idx=1:100;
     elseif j==3
-        title('                  (G) XOR')
+        tit=['                  (G) XOR'];
         idx=1:200;
         lims=6*[-1,1];
         ticks=[-1:1];
     end
-    
+    title([{tit}; {['                  D=', num2str(T{j+4}.D), ' n=', num2str(T{j+4}.ntrain)]}])
+
     set(gca,'XTick',ticks,'YTick',ticks,'ZTick',ticks,'XLim',lims, 'YLim',lims, 'ZLim',lims)
     set(gca,'xticklabel',[],'yticklabel',[],'zticklabel',[])
     grid('off')
@@ -232,7 +234,7 @@ for j=1:3%length(T)
     plot(PP.mu(1,1),PP.mu(2,1),'.','color',G.colors{1},'linewidth',4,'MarkerSize',G.ms)
     plot(PP.mu(1,2),PP.mu(2,2),'.','color',G.colors{2},'linewidth',4,'MarkerSize',G.ms)
 
-        % plot contours
+    % plot contours
     for nsig=1:2
         if size(PP.Sigma,3)==1,
             Sig=PP.Sigma(1:2,1:2);
@@ -268,7 +270,7 @@ G.title='';
 
 for j=1:3
     F=G;
-    if j==1
+    if j==1 % QDA
         F.legendOn=0;
         F.colors = {'g';'b'};
         F.ylim=[0.28 0.44];
@@ -279,7 +281,7 @@ for j=1:3
         F.linestyle={'-';'-'};
         F.xlabel='# of embedded dimensions';
 
-    elseif j==2
+    elseif j==2 % OUTLIERS
         F.ylim = [0.25, 0.27];
         F.ytick = [0:0.01:0.5]; %[F.ylim(1): 0.01: F.ylim(2)];
         F.xlim = [1 150];
@@ -288,15 +290,15 @@ for j=1:3
         F.colors = {'g';'r'};
         F.scale=1;
         
-    elseif j==3
+    elseif j==3 % XOR
         F.title = '';
-        F.ylim = [0.2, 0.45];
+        F.ylim = [0.2, 0.5];
         F.ytick = [0:0.1:0.5]; %[F.ylim(1): 0.01: F.ylim(2)];
         F.xlim = [1 15];
         F.xtick=[5:5:max(F.xlim)]; %:F.xlim(end)];
         F.legendOn=0;
-        F.colors = {orange;purple;'y'};
-        F.linestyle={'--';'-';'--'};
+        F.colors = {'g';'b'};
+        F.linestyle={'-';'-';'--'};
         
     end
     
@@ -317,30 +319,30 @@ g(i)=plot(0,0,'color','m','linewidth',2); i=i+1;
 g(i)=plot(0,0,'color','g','linewidth',2); i=i+1;
 g(i)=plot(0,0,'color','b','linewidth',2,'linestyle','-'); i=i+1;
 g(i)=plot(0,0,'color','r','linewidth',2); i=i+1;
-g(i)=plot(0,0,'color',orange,'linewidth',2,'linestyle','--'); i=i+1;
-g(i)=plot(1,1,'color',purple,'linewidth',2,'linestyle','-'); i=i+1;
-g(i)=plot(0,0,'color','y','linewidth',2,'linestyle','--'); i=i+1;
+% g(i)=plot(0,0,'color',orange,'linewidth',2,'linestyle','--'); i=i+1;
+% g(i)=plot(1,1,'color',purple,'linewidth',2,'linestyle','-'); i=i+1;
+% g(i)=plot(0,0,'color','y','linewidth',2,'linestyle','--'); i=i+1;
 % g(i)=plot(0,0,'color','k','linewidth',2); i=i+1;
 
 l=legend(g,...
     'ROAD',...
-    'LDA o LOL(N,E,N)',...LDA o PCA',...
-    'LDA o LOL(D,E,N)',... LDA o \delta+PCA',...
-    'QDA o LOL(D,V,N)',...QDA o \delta+PCA^m',...
-    'LDA o LOL(D,E,R)',...LDA o \delta+rPCA',...
-    'QDA o LOL(D,E,A)',...QDA o \delta+RP',...
-    'QDA o LOL(D,V,F)',...QDA o \delta+fPCA^m',...
-    'QDA o LOL(N,E,A)');...,QDA o RP');
+    'LOL', ...'LDA o LOL(N,E,N)',...LDA o PCA',...
+    'LDA o PCA', ...'LDA o LOL(D,E,N)',... LDA o \delta+PCA',...
+    'QOQ',...'QDA o LOL(D,V,N)',...QDA o \delta+PCA^m',...
+    'RoLOL'); %,...'LDA o LOL(D,E,R)',...LDA o \delta+rPCA',...
+%     'QDA o LOL(D,E,A)',...QDA o \delta+RP',...
+%     'QDA o LOL(D,V,F)',...QDA o \delta+fPCA^m',...
+%     'QDA o LOL(N,E,A)');...,QDA o RP');
 legend1 = legend(hl,'show'); %
 set(legend1,...
-    'Position',[0.73 0.04 0.27 0.32],...
+    'Position',[0.74 0.04 0.25 0.2],... %[left,bottom,width,height]
     'FontName','FixedWidth',...
     'FontSize',9);
 % set(legend1,'YColor',[1 1 1],'XColor',[1 1 1],'FontName','FixedWidth');
 set(gca,'XTick',[],'YTick',[],'Box','off','xcolor','w','ycolor','w')
 
 
-%% print figure
+% print figure
 if task.savestuff
     H.wh=[7.5 6];
     H.fname=[rootDir, '../Figs/properties'];

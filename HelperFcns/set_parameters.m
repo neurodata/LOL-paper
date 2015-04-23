@@ -16,7 +16,51 @@ D=task.D;
 if ~isfield(task,'P')
     switch task.name
         
-        case 'diag_slow' % From Lopes & Wainright, 2011
+        
+        
+        case 'spheres' 
+            
+            if ~isfield(task,'b'), b=0.1; else b=task.b; end
+            mu0 = b*ones(D,1);
+            mu0(2:2:end)=0;
+            mu1=-mu0;
+            Sigma=eye(D);
+            
+        case 'alternating' 
+            
+            if ~isfield(task,'b'), b=0.1; else b=task.b; end
+            mu0 = b*ones(D,1);
+            mu0(2:2:end)=0;
+            mu1=-mu0;
+            Sigma=eye(D)*diag(mu0+1);
+         
+        case 'orthogonal' 
+            
+            if ~isfield(task,'b'), b=0.1; else b=task.b; end
+            mu0 = b*ones(D,1);
+            mu0(2:2:end)=0;
+            mu1=-mu0;
+            Sigma=eye(D)*diag([mu0(2:end); 1]+1);
+            
+        case 'rorthogonal' 
+            
+            if ~isfield(task,'b'), b=1; else b=task.b; end
+            mu0 = b*ones(D,1);
+            mu0(2:2:end)=0;
+            mu1=-mu0;
+            
+            Sigma=eye(D)*diag([mu0(2:end); 1]+1);
+            
+            [Q, ~] = qr(randn(D));
+            if det(Q)<-.99
+                Q(:,1)=-Q(:,1);
+            end
+            mu0=Q*mu0;
+            mu1=Q*mu1;
+            Sigma=Q*Sigma*Q';
+
+            
+        case 'diag_lopes' % From Lopes & Wainright, 2011
             
             if ~isfield(task,'b'), b=5; else b=task.b; end
             mu0=zeros(D,1);
@@ -27,18 +71,7 @@ if ~isfield(task,'P')
             Sigma=diag(fastdiag);
             Sigma=Sigma/norm(Sigma,'fro')*50;
 
-        case 'diag_fast' % From Lopes & Wainright, 2011
-            
-            if ~isfield(task,'b'), b=20; else b=task.b; end
-            mu0=zeros(D,1);
-            mu1=mvnrnd(mu0,eye(D))';
-            mu1=mu1/norm(mu1);
-            
-            fastdiag=linspace(0.01,1,D).^b;
-            Sigma=diag(fastdiag);
-            Sigma=Sigma/norm(Sigma,'fro')*50;
-
-        case 'rand_slow' % From Lopes & Wainright, 2011
+        case 'rand_lopes' % From Lopes & Wainright, 2011
             
             if ~isfield(task,'b'), b=5; else b=task.b; end
             mu0=zeros(D,1);
@@ -55,23 +88,6 @@ if ~isfield(task,'P')
             S=triu(S,0);
             Sigma=S+S';
             
-
-        case 'rand_fast' % From Lopes & Wainright, 2011
-            
-            if ~isfield(task,'b'), b=20; else b=task.b; end
-            mu0=zeros(D,1);
-            mu1=mvnrnd(mu0,eye(D))';
-            mu1=mu1/norm(mu1);
-            
-            L=randn(D);
-            S=L*L';
-            
-            [u,~,v]=svd(S);
-            fastdiag=linspace(0.01,1,D).^b;
-            S=u*diag(fliplr(fastdiag))*v';
-            S=S/norm(S,'fro')*50;
-            S=triu(S,0);
-            Sigma=S+S';
 
         case 'b' % for debuggin purposes
             
@@ -525,6 +541,32 @@ if ~isfield(task,'P')
             Sigma=eye(D);
             Sigma(1:D+1:end)=100./sqrt(D:-1:1);
             
+            
+            
+        case ['rtrunk4, D=', num2str(D)]
+            
+            if ~isfield(task,'b'), b=4; else b=task.b; end
+            mu1=b./sqrt(1:2:2*D)';
+            mu0=-mu1;
+            
+            Sigma=eye(D);
+            Sigma(1:D+1:end)=100./sqrt(D:-1:1);
+            
+            % generate rotation matrix uniformly
+            [Q, ~] = qr(randn(D));
+            if det(Q)<-.99
+                Q(:,1)=-Q(:,1);
+            end
+%             th=pi/4;
+%             Q(1:2,1:2)=[cos(th) -sin(th); sin(th) cos(th)];
+%             Q(1,3:end)=0;
+%             Q(2,3:end)=0;
+%             Q(3:end,1)=0;
+%             Q(3:end,2)=0;
+            mu0=Q*mu0;
+            mu1=Q*mu1;
+            Sigma=Q*Sigma*Q';
+
 
         case ['3trunk4, D=', num2str(D)]
             
@@ -597,6 +639,28 @@ if ~isfield(task,'P')
             
             Sigma=A;
             
+        case ['toeplitz2, D=', num2str(D)]
+            
+            if ~isfield(task,'b'), b=2; else b=task.b; end
+
+            D1=10;
+            rho=0.5;
+            c=rho.^(0:D1-1);
+            A = toeplitz(c);
+            K1=sum(A(:));
+            
+            c=rho.^(0:D-1);
+            A = toeplitz(c);
+            K=sum(A(:));
+            
+            mudelt=(K1*b^2/K)^0.5/2;
+            mu0 = ones(D,1);
+            mu0(2:2:end)=-1;
+            mu0=mudelt*mu0;
+            mu1=-mu0;
+            
+            Sigma=A;
+
         case ['r2toeplitz, D=', num2str(D)]
             
             if ~isfield(task,'b'), b=0.4; else b=task.b; end
@@ -947,6 +1011,11 @@ P.mu=[mu0 mu1];
 if exist('mu2','var'), P.mu=[mu0 mu1 mu2]; end
 P.Sigma=Sigma;
 P.del=diff(P.mu')';
+
+if size(Sigma,3)==1 % if covariances matrices are share
+    P.diag=diag(Sigma);
+    P.theta=P.del'*P.diag;
+end
 
 P.Ngroups=size(P.mu,2);
 P.w=1/P.Ngroups*ones(P.Ngroups,1);

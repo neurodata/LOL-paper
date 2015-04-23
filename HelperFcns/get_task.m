@@ -45,7 +45,8 @@ if task.simulation
             Y=[zeros(n0,1); ones(n1,1); rand(Noutlier,1)>0.5]+1;
             
             task.QDA_model=0;
-            
+            P.del=diff(P.mu')';
+
         case ['fat tails, D=', num2str(task.D)]
             
             s0=10;
@@ -80,6 +81,9 @@ if task.simulation
             X=[X0;X1];
             Y=[Y0;Y1];
             
+            P.del=diff(P.mu')';
+            P.diag=diag(P.Sigma);
+            
         case ['xor, D=', num2str(task.D)]
 
             
@@ -103,6 +107,8 @@ if task.simulation
             Y=[Y0;Y1];
 
             P.mu=[P.mu, mu0,mu1];
+            P.diag=diag(P.Sigma);
+
             
         otherwise % simulation each class is a gaussian
             P = set_parameters(task);

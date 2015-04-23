@@ -73,6 +73,19 @@ elseif strcmp(metatask,'cs')
 elseif strcmp(metatask,'cs2')
     task_list={'MNIST(38)';'ac';'oc';'roc'};
 
+elseif strcmp(metatask,'cs3')
+    task_list={'ac';'oc';'roc';'trunk4, D=100';'toeplitz, D=100'};
+    
+elseif strcmp(metatask,'cs4')
+    task_list={'ac';'trunk4, D=1000';'toeplitz2, D=1000'};
+
+elseif strcmp(metatask,'cigars')
+    task_list={'ac';'trunk4, D=1000';'rtrunk4, D=1000'};
+
+elseif strcmp(metatask,'cs6')
+    task_list={'spheres';'alternating';'orthogonal';'rorthogonal'};
+
+
 elseif strcmp(metatask,'four_cigars')
     task_list={'parallel cigars';'rotated cigars';'angled cigars'};
 

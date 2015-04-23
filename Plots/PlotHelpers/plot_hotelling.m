@@ -15,26 +15,18 @@ for t=1:length(S)
     for d=1:size(S{t}.mean_power,1)
         errorbar(T{t}.bvec,S{t}.mean_power(d,:),S{t}.std_power(d,:)/sqrt(T{t}.Ntrials),'linewidth',2,'color',col{d},'linestyle',ls{d})
     end
-    xlabel('exponent')
+    xlabel('decay rate')
     axis('tight')
     set(gca,'xscale','log')
-    plot(1,1,'c','linewidth',2)
-    plot(1,1,'k','linewidth',2)
-    legendcell={...
-        'A o \delta+RP',...
-        'A o \delta+PCA',...
-        'A o RP',...
-        'A o PCA',...
-        'Lasso',...
-        'PLS'}; %,transformers{3}};
     if T{t}.D < T{t}.n, legendcell{end+1}='Hotelling'; legendcell{end+1}='HotellingB'; end
      
     set(gca,'XTick',[0.1, 1, 10, 100])
     if t==1
         ylabel('testing power')
-        title('(A) Trunk: D=200, n=100')
+        title([{'(A) Diagonal'}; {'D=200, n=100'}])
     elseif t==2
-        title('(B) Dense Toeplitz: D=200, n=100')
-        legend(legendcell,'location','Northwest')
+        title([{'(B) Dense'}; {'D=200, n=100'}])
+        set(gca,'YTickLabel',[])
+%         legend(legendcell,'location','Southeast')
    end
 end

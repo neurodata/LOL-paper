@@ -90,7 +90,7 @@ subplot('Position',[leftside, bottom(3), width, width*3+hspace*2]), %[left,botto
 imagesc(imj),
 set(gca,'XTickLabel',[],'YTickLabel',[]);
 tfs=12;
-title('Examples','FontSize',tfs)
+title([{'(A) Training'};{'Samples'}],'FontSize',tfs)
 
 
 %% plot projections
@@ -110,7 +110,7 @@ for j=1:3
     subplot('Position',[left2, bottom(j), width, height]),
     if j==1
         imagesc(abs(vj{3})<1e-4),
-        title('Projections','FontSize',tfs)
+        title([{'(B) Projections'};{'Matrices'}],'FontSize',tfs)
     elseif j==2
         imagesc(vj{1}),
     elseif j==3
@@ -146,7 +146,7 @@ for i=1:3;
 
     elseif i==3,
         si=1; 
-        tit='Embeddings';
+        tit=[{'(C) Embedded'};{'Test Samples'}];
         ticks=ticks3;
     end
     
@@ -347,7 +347,7 @@ for i=1:3
         set(gca,'XTickLabel',[],'YTickLabel',[],'XTick',[],'YTick',[])
     end
     
-    if si==1, title('Posteriors','FontSize',tfs); end
+    if si==1, title([{'(D) Testing'};{'Posteriors'}],'FontSize',tfs); end
 end
 
 

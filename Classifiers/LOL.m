@@ -140,8 +140,8 @@ end
 Proj=cell(1:ntypes);
 for i=1:ntypes
     if ~strcmp(types{i}(1),'N')     % if we are appending something to "eigenvectors"
-        %          [V, ~] = qr([P.([types{i}(1), 'elta']),Q.(['V', types{i}(2), types{i}(3)])'],0);
-        V = [P.([types{i}(1), 'elta']),Q.(['V', types{i}(2), types{i}(3)])'];
+        [V, ~] = qr([P.([types{i}(1), 'elta']),Q.(['V', types{i}(2), types{i}(3)])'],0);
+        %         V = [P.([types{i}(1), 'elta']),Q.(['V', types{i}(2), types{i}(3)])'];
     elseif strcmp(types{i}(1),'N')  % if not
         V=Q.(['V', types{i}(2), types{i}(3)])';
     end

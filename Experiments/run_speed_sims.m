@@ -4,22 +4,29 @@ fpath = mfilename('fullpath');
 findex=strfind(fpath,'/');
 p = genpath(fpath(1:findex(end-2)));
 addpath(p);
-fname='speed';
+fname='speed_test';
 
 %% task properties consistent across all tasks
 clear task
 task0.algs={'LOL'};
 task0.simulation=1;
 task0.percent_unlabeled=0;
-task0.ntrials=2;
+task0.ntrials=10;
 task0.ntrain=100;
 task0.ntest=100;
 task0.n=task0.ntrain+task0.ntest;
 task0.name='oc';
 
-savestuff=1;
+savestuff=0;
 
-types={'NENL';'DENL';'DVFL';'NEAL';'DEFL';'DVFQ'};
+types={ 'NENL';... PCA
+        'DENL';... LOL
+        'DVFQ';... QOQ
+        'DERL';... RoLOL
+        'DEAL';... RaLOL
+        'DEFL';... fLOL
+        };
+
 Ntypes=length(types);
 
 ks=10:20:90;
@@ -30,6 +37,7 @@ NDs=length(Ds);
 
 %% generate data
 
+%%%%%%%%% DO NOT PARFOR THIS!!! %%%%%%%%%%%%%
 learn_time=nan(Ntypes,task0.ntrials,Nks,NDs);
 classify_time=nan(Ntypes,task0.ntrials,Nks,NDs);
 for j=1:task0.ntrials

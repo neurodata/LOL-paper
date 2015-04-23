@@ -15,16 +15,16 @@ if nargin==0
 end
 
 if ~isfield(task,'algs'),   task.algs={'LOL'}; end
-if ~isfield(task,'simulation'),         task.simulation=1; end
-if ~isfield(task,'percent_unlabeled'),  task.percent_unlabeled=0; end
 if ~isfield(task,'types'),  task.types={'DEAL';'DEFL'}; end
 if ~isfield(task,'ntrials'),task.ntrials=40; end
-if ~isfield(task,'D'), task.D=100; end
+if ~isfield(task,'D'),      task.D=100; end
 if ~isfield(task,'ntrain'), task.ntrain=50; end
-if ~isfield(task,'ntest'), task.ntest=500; end
+if ~isfield(task,'ntest'),  task.ntest=500; end
 if ~isfield(task,'ks'),     task.ks=1:task.ntrain-1; end
-if ~isfield(task,'savestuff'), task.savestuff=1; end
-if ~isfield(task,'plot'), task.plot=1; end
+if ~isfield(task,'plot'),   task.plot=1; end
+if ~isfield(task,'savestuff'),  task.savestuff=1; end
+if ~isfield(task,'simulation'), task.simulation=1; end
+if ~isfield(task,'percent_unlabeled'),  task.percent_unlabeled=0; end
 task=orderfields(task);
 
 
@@ -70,12 +70,12 @@ j=4;
 task1=task;
 task1.name=['xor, D=', num2str(task1.D)];
 task1.ntrain=100;
-task1.types={'DVFQ';'DEAQ';'NEAQ'};
+task1.types={'DVNQ';'DENL'};
 % task1.algs={'LOL';'RF'};
 
 task1.ks=unique(floor(logspace(0,log10(task1.ntrain/2),30)));
 task1.ks=task1.ks(1:13);
-task1.ntrials=4;
+% task1.ntrials=4;
 [T{j},S{j},P{j}] = run_task(task1);
 
 

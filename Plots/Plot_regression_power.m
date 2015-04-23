@@ -14,6 +14,44 @@ for i=0:length(gits)-1
 end
 addpath(p);
 
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%% testing %%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+newsim=2;
+if newsim==1;
+    tasknames={'trunk4, D=100';'toeplitz, D=100'};
+    task.Ntrials=2;
+    task.save=0;
+    [T,S,P,task] = run_hotelling_sims(tasknames,task);
+elseif newsim==2
+    tasknames={'diag_lopes';'rand_lopes'};
+    task.Ntrials=40;
+    task.save=0;
+    task.D=200;
+    task.ntrain=100;
+    task.bvec=[1,5,10,15,20,50,100];
+    [T,S,P,task] = run_hotelling_sims(tasknames,task);
+else
+    load([rootDir, '../Data/results/Lopes11a'])
+end
+S{1}.savestuff=1;
+
+
+%% plot testing fig
+height=0.6;
+vspace=0.08;
+bottom=0.2;
+left=0.09;
+left3=0.58;
+width=0.19;
+hspace=0.03;
+pos(1)=left; pos(2)=width; pos(3)=hspace; pos(4)=bottom; pos(5)=height; 
+figure(1), clf
+plot_hotelling(T,S,pos)
+
+
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%% regresssion %%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -29,22 +67,13 @@ end
 S{1}.savestuff=1;
 
 
-%% plot figs
-h=figure(1); clf,
-height=0.3;
-vspace=0.08;
-bottom=0.13;
-left=0.09;
-width=0.4;
-hspace=0.06;
-b2=0.6;
-pos(1)=left; pos(2)=width; pos(3)=hspace; pos(4)=bottom; pos(5)=height; 
+%% plot regression figs
+h=figure(1); %clf,
 
-for s=1:length(S)
+for s=2%:length(S)
     ytick=10.^[1:0.5:8];
     if s==1, ss=2; elseif s==2, ss=1; end
-    %     subplot(2,length(S),ss),
-    pos=[left+(ss-1)*(width+hspace), bottom, width, height]; %[left,bottom,width,height]
+    pos=[left3, bottom, width, height]; %[left,bottom,width,height]
     subplot('position',pos)
     hold all
     col{1}='g'; col{2}='g';col{3}='m';col{4}='m';col{5}='r';col{6}='r';
@@ -65,7 +94,7 @@ for s=1:length(S)
         set(gca,'Ylim',[0.29*10^5,0.39*10^5],'Ytick',ytick) %,'YTickLabel',log10(ytick)/0.5)
     elseif s==2
         ylabel('regression error')
-        title('(C) Sparse Toeplitz: D=1000, n=100')
+        title([{'(C) Sparse Toeplitz'}; {'D=1000, n=100'}])
         set(gca,'Ylim',[10^4,4*10^5],'YTick',ytick,'YTickLabel',log10(ytick)/0.5)
     elseif s==3
         title('p=100, n=100, $\Sigma$=T','interpreter','none')
@@ -77,40 +106,43 @@ for s=1:length(S)
     xlabel('# of embedded dimensions')
 end
 
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%% testing %%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-newsim=0;
-if newsim==1;
-    tasknames={'trunk4, D=100';'toeplitz, D=100'};
-    task.Ntrials=40;
-    task.save=1;
-    [T,S] = run_hotelling_sims(tasknames,task);
-else
-    load([rootDir, '../Data/results/Lopes11a'])
-end
-S{1}.savestuff=1;
+%% plot legend
 
 
-%% plot fig
-height=0.3;
-vspace=0.08;
-bottom=0.13;
-left=0.09;
-width=0.4;
-hspace=0.06;
-b2=0.6;
-pos(1)=left; pos(2)=width; pos(3)=hspace; pos(4)=b2; pos(5)=height; 
+pos=[left+(4-1)*(width+hspace)+0.04 0.2 width+0.05 height]; %[left,bottom,width,height]
+% hl=subplot(F.Nrows,F.Ncols,F.Ncols);
+hl=subplot('position',pos);
+hold all, i=1; clear g
+g(i)=plot(0,0,'color','g','linewidth',2); i=i+1;
+g(i)=plot(0,0,'color','g','linewidth',2,'linestyle','--'); i=i+1;
+g(i)=plot(0,0,'color','m','linewidth',2,'linestyle','--'); i=i+1;
+g(i)=plot(0,0,'color','m','linewidth',2); i=i+1;
+g(i)=plot(0,0,'color','c','linewidth',2); i=i+1;
+g(i)=plot(0,0,'color','k','linewidth',2); i=i+1;
 
-plot_hotelling(T,S,pos)
+
+l=legend(g,...
+    'A o LOL(D,E,N)',... \delta+PCA',...
+    'A o LOL(D,E,A)',... \delta+RP',...
+    'A o LOL(N,E,A)',...
+    'A o LOL(N,E,N)',...
+    'Lasso',...
+    'PLS'); %,transformers{3}};
+legend1 = legend(hl,'show'); %
+set(legend1,...
+    'Position',[0.74 0.4 0.24 0.2],...
+    'FontName','FixedWidth',...
+    'FontSize',9);
+set(gca,'XTick',[],'YTick',[],'Box','off','xcolor','w','ycolor','w')
+
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%% save fig %%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 if S{1}.savestuff
-    H.wh=[4 4]*1.5;
+    H.wh=[6.5 2];
     H.fname=[rootDir, '../Figs/regression_power'];
     print_fig(h,H)
 end
