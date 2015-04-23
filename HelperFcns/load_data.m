@@ -31,8 +31,8 @@ elseif strfind(task.name,'amen')
     task.ntrain=round(task.n*.9);
     task.ntest=task.n-task.ntrain;
 elseif strncmpi(task.name,'MNIST(',6)
-    X =loadMNISTImages('~/Research/working/A/LOL/Data/Raw/MNIST/t10k-images.idx3-ubyte');
-    Y =loadMNISTLabels('~/Research/working/A/LOL/Data/Raw/MNIST/t10k-labels.idx1-ubyte');
+    X =loadMNISTImages('../../Data/Raw/MNIST/t10k-images.idx3-ubyte');
+    Y =loadMNISTLabels('../../Data/Raw/MNIST/t10k-labels.idx1-ubyte');
     lenName=length(task.name);
     label_keepers=[];
     for j=7:lenName-1
@@ -46,8 +46,8 @@ elseif strncmpi(task.name,'MNIST(',6)
     Y = Y(Yind);
     task.classIDs=label_keepers;
 elseif strcmpi(task.name,'MNIST')
-    X =     loadMNISTImages('~/Research/working/A/LOL/Data/Raw/MNIST/t10k-images.idx3-ubyte');
-    Y =     loadMNISTLabels('~/Research/working/A/LOL/Data/Raw/MNIST/t10k-labels.idx1-ubyte');
+    X =     loadMNISTImages('../../Data/Raw/MNIST/t10k-images.idx3-ubyte');
+    Y =     loadMNISTLabels('../../Data/Raw/MNIST/t10k-labels.idx1-ubyte');
 % elseif strcmpi(task.name,'MNIST(378)')
 %     X =loadMNISTImages('~/Research/working/A/LOL/Data/Raw/MNIST/t10k-images.idx3-ubyte');
 %     Y =loadMNISTLabels('~/Research/working/A/LOL/Data/Raw/MNIST/t10k-labels.idx1-ubyte');
@@ -55,7 +55,7 @@ elseif strcmpi(task.name,'MNIST')
 %     X = X(:,Yind);
 %     Y = Y(Yind);
 elseif strcmp(task.name,'CIFAR-10')
-    load('~/Research/working/A/LOL/Data/Raw/CIFAR-10/data_batch_1.mat')
+    load('../../Data/Raw/CIFAR-10/data_batch_1.mat')
     X=double(data);
     Y=labels;
 end

@@ -125,7 +125,7 @@ end
 ticks=-20:4:20;
 ticks3=-20:0.5:20;
 ylab{3}=' LOL';
-ylab{2}=[{' PCA'};{'  o'}; {' LDA'}];
+ylab{2}=[{' FLD'};{'  o'}; {' PCA'}];
 ylab{1}='Lasso';
 
 for i=1:3;
@@ -184,7 +184,7 @@ y_begin=[bottom(3), bottom(2)+0.02, bottom(1)]+0.01;
 si=[3 2 1];
 for i=1:3  %[x_begin y_begin length height]
     pos=[0.5, y_begin(i), 0.5, 0.1];
-    annotation('textbox', pos,'String', ylab{si(i)},'EdgeColor','none','FontWeight','bold','FontName','FixedWidth');
+    annotation('textbox', pos,'String', ylab{si(i)},'EdgeColor','none','FontWeight','bold','FontName','FixedWidth'); %,'Interpreter','latex');
 end
 
 
