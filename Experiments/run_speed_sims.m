@@ -17,12 +17,12 @@ task0.ntest=100;
 task0.n=task0.ntrain+task0.ntest;
 task0.name='oc';
 
-savestuff=0;
+savestuff=1;
 
 types={ 'NENL';... PCA
         'DENL';... LOL
         'DVFQ';... QOQ
-        'DERL';... RoLOL
+%         'DERL';... RoLOL
         'DEAL';... RaLOL
         'DEFL';... fLOL
         };
@@ -71,12 +71,12 @@ for j=1:task0.ntrials
     end
     
     % get stats
-    mean_learn=squeeze(mean(learn_time,2));
-    mean_class=squeeze(mean(classify_time,2));
+    mean_learn=squeeze(nanmean(learn_time,2));
+    mean_class=squeeze(nanmean(classify_time,2));
     mean_total=mean_learn+mean_class;
     
-    std_learn=squeeze(std(learn_time,[],2));
-    std_class=squeeze(std(classify_time,[],2));
+    std_learn=squeeze(nanstd(learn_time,[],2));
+    std_class=squeeze(nanstd(classify_time,[],2));
     std_total=std_learn+std_class;
     
     % save speed

@@ -180,7 +180,7 @@ for j=1:Nsims
             col1='g'; col2=col1;
             si=2;
         elseif i==1
-            ylab='LDA o PCA';
+            ylab='FLD o PCA';
             col1='m'; col2=col1;
             si=4;
         elseif i==4
