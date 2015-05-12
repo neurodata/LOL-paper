@@ -292,7 +292,7 @@ for j=1:3
         
     elseif j==3 % XOR
         F.title = '';
-        F.ylim = [0.2, 0.5];
+        F.ylim = [0.28, 0.5];
         F.ytick = [0:0.1:0.5]; %[F.ylim(1): 0.01: F.ylim(2)];
         F.xlim = [1 15];
         F.xtick=[5:5:max(F.xlim)]; %:F.xlim(end)];
@@ -314,25 +314,18 @@ pos=[left+(4-1)*(width+hspace)+0.05 0.07 width height]; %[left,bottom,width,heig
 % hl=subplot(F.Nrows,F.Ncols,F.Ncols);
 hl=subplot('position',pos);
 hold all, i=1; clear g
-g(i)=plot(0,0,'color','c','linewidth',2); i=i+1;
 g(i)=plot(0,0,'color','m','linewidth',2); i=i+1;
+g(i)=plot(0,0,'color','c','linewidth',2); i=i+1;
 g(i)=plot(0,0,'color','g','linewidth',2); i=i+1;
-g(i)=plot(0,0,'color','b','linewidth',2,'linestyle','-'); i=i+1;
 g(i)=plot(0,0,'color','r','linewidth',2); i=i+1;
-% g(i)=plot(0,0,'color',orange,'linewidth',2,'linestyle','--'); i=i+1;
-% g(i)=plot(1,1,'color',purple,'linewidth',2,'linestyle','-'); i=i+1;
-% g(i)=plot(0,0,'color','y','linewidth',2,'linestyle','--'); i=i+1;
-% g(i)=plot(0,0,'color','k','linewidth',2); i=i+1;
+g(i)=plot(0,0,'color','b','linewidth',2); i=i+1;
 
 l=legend(g,...
+    'FLD o PCA', ...'LDA o LOL(D,E,N)',... LDA o \delta+PCA',...
     'ROAD',...
     'LOL', ...'LDA o LOL(N,E,N)',...LDA o PCA',...
-    'LDA o PCA', ...'LDA o LOL(D,E,N)',... LDA o \delta+PCA',...
-    'QOQ',...'QDA o LOL(D,V,N)',...QDA o \delta+PCA^m',...
-    'RoLOL'); %,...'LDA o LOL(D,E,R)',...LDA o \delta+rPCA',...
-%     'QDA o LOL(D,E,A)',...QDA o \delta+RP',...
-%     'QDA o LOL(D,V,F)',...QDA o \delta+fPCA^m',...
-%     'QDA o LOL(N,E,A)');...,QDA o RP');
+    'LRL',...'QDA o LOL(D,V,N)',...QDA o \delta+PCA^m',...
+    'QOQ'); %,...'LDA o LOL(D,E,R)',...LDA o \delta+rPCA',...
 legend1 = legend(hl,'show'); %
 set(legend1,...
     'Position',[0.74 0.04 0.25 0.2],... %[left,bottom,width,height]
