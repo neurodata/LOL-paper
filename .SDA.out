@@ -1,0 +1,18 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [1][-]{section.2}{Notation}{}% 2
+\BOOKMARK [1][-]{section.3}{P is Given, k=2}{}% 3
+\BOOKMARK [2][-]{subsection.3.1}{LDA}{section.3}% 4
+\BOOKMARK [3][-]{subsubsection.3.1.1}{QDA}{subsection.3.1}% 5
+\BOOKMARK [1][-]{section.4}{P is not given}{}% 6
+\BOOKMARK [2][-]{subsection.4.1}{don't forget this stuff}{section.4}% 7
+\BOOKMARK [1][-]{section.5}{Numerical Results}{}% 8
+\BOOKMARK [2][-]{subsection.5.1}{Simulations}{section.5}% 9
+\BOOKMARK [2][-]{subsection.5.2}{Cancer}{section.5}% 10
+\BOOKMARK [2][-]{subsection.5.3}{Decision Theoretic Task 1: Classification}{section.5}% 11
+\BOOKMARK [2][-]{subsection.5.4}{A Simple Example with a Big Data Problem}{section.5}% 12
+\BOOKMARK [1][-]{section.6}{Numerical Results}{}% 13
+\BOOKMARK [1][-]{section.7}{Discussion}{}% 14
+\BOOKMARK [2][-]{subsection.7.1}{Summary}{section.7}% 15
+\BOOKMARK [2][-]{subsection.7.2}{Related Work}{section.7}% 16
+\BOOKMARK [2][-]{subsection.7.3}{Future Work}{section.7}% 17
+\BOOKMARK [1][-]{appendix.A}{Code}{}% 18
