@@ -1,0 +1,64 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%      Compiler settings for R2009b 64-bit Mac OS X:      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+-----gfortran:-----
+I used this version http://r.research.att.com/gfortran-4.2.3.dmg instead of the experimental version for Xcode 3.2.
+
+-----Xcode:-----
+http://developer.apple.com/technology/xcode.html
+
+
+-----Matlab Mex options:-----
+Here's the modificatins to the maci64 section from my 'mexopts.sh' file. There  was a problem with it using the wrong libgfortranbegin when building a 64-bit mex until I hard-coded the correct path. BTW, you may want to clear out the '/usr/local/lib/' directories before re-installing gfortran.
+
+# To use the gfortran compiler, which must be installed separately,
+# include the following modifications to the 'maci64' section of the
+# '~/.matlab/R2009b/mexopts.sh' file
+
+# -----Modifications by D.Jones, Sep-2009:--------------------
+            FC='/usr/local/bin/gfortran'            
+            FC_LIBDIR='/usr/local/lib/'
+            FC_LIBDIR2='/usr/local/lib/gcc/i686-apple-darwin8/4.2.3/x86_64/'
+            FOPTIMFLAGS='-O5 -funroll-loops -ftree-vectorize'
+# ------------------------------------------------------------ 
+
+# Note that gfortran installs its libraries in ‘/usr/local/lib/’
+
+
+
+
+-----Setup mex in Matlab:-----
+>> mex -setup
+
+    Options files control which compiler to use, the compiler and link command
+    options, and the runtime libraries to link against.
+
+    Using the 'mex -setup' command selects an options file that is
+    placed in ~/.matlab/R2009b and used by default for 'mex'. An options 
+    file in the current working directory or specified on the command line 
+    overrides the default options file in ~/.matlab/R2009b.
+ 
+    To override the default options file, use the 'mex -f' command
+    (see 'mex -help' for more information).
+
+The options files available for mex are:
+
+  1: /Applications/MATLAB_R2009b.app/bin/gccopts.sh : 
+      Template Options file for building gcc MEX-files
+ 
+  2: /Applications/MATLAB_R2009b.app/bin/mexopts.sh : 
+      Template Options file for building MEX-files via the system ANSI compiler
+ 
+
+  0: Exit with no changes
+
+Enter the number of the compiler (0-2):
+1
+
+
+/Applications/MATLAB_R2009b.app/bin/gccopts.sh is being copied to 
+/Users/yourName/.matlab/R2009b/mexopts.sh
+
+
+
+
