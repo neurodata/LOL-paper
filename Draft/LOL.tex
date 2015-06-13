@@ -92,7 +92,7 @@ This numerical experiment justifies the use of supervised linear manifold learni
 % \clearpage
 \subsection*{Linear Gaussian Intuition}
 
-The above real data example suggests the geometric intuition for when \Lol~outperforms its sparse and unsupervised counterparts.  To further investigate, both theoretically and numerically, we consider the simplest setting that illustrates the relevant geometry.  In particular, we consider a two-class classification problem, where both classes are distributed according to a multivariate normal distribution, the class priors are equal, and the joint distribution is centered, so that the only difference between the classes is their means (we call this the Linear Discriminant Analysis (LDA) model; see Methods for details).  
+The above real data example suggests the geometric intuition for when \Lol~outperforms its sparse and unsupervised counterparts.  To further investigate, both theoretically and numerically, we consider the simplest setting that illustrates the relevant geometry.  In particular, we consider a two-class classification problem, where both classes are distributed according to a multivariate normal distribution, the class priors are equal, and the joint distribution is centered, so that the only difference between the classes is their means (we call this the Linear Discriminant Analysis (\Lda) model; see Methods for details).  
 
 
 
@@ -132,7 +132,7 @@ Note that \Lol~is closest to Bayes optimal in all three settings.
 % \vspace{-30pt}
 
 
-Figure \ref{fig:cigars} shows three different examples of data sampled from the LDA model to geometrically illustration this intuition.
+Figure \ref{fig:cigars} shows three different examples of data sampled from the \Lda~model to geometrically illustration this intuition.
 In each, we sample n=100 training samples in p=1000 dimensional space, so $n \ll p$.  
 Figure \ref{fig:cigars}(A) shows an example we call  ``stacked cigars''. 
 In this example and the next, the covariance matrix is diagonal, so all ambient dimensions are independent of one another.  
@@ -162,7 +162,7 @@ However, \Lol, by virtue of being rotationally invariant, is unperturbed by this
 
 The above numerical experiments provide the intuition to guide our theoretical developments.  
 \begin{thm} \label{thm:LDA}
-Under the LDA model, \Lol~is better than \Pca.
+Under the \Lda~model, \Lol~is better than \Pca.
 \end{thm}
 In words, it is better to incorporate the mean difference vector into the projection matrix.  The degree of improvement is a function of the embedding dimension d, the ambient dimensionality p, and the parameters (see Methods for details and proof).
 
@@ -175,17 +175,17 @@ In the above numerical and theoretical investigations, we fixed d, the number of
 
 Thus, in all the following simulations, the true ambient dimensionality of the data is equal to the dimensionality of the optimal discriminant boundary (given infinite data).  In other words, there does not exist a discriminant space that is lower dimensional than the ambient space, so we cannot find the ``intrinsic dimension'' of the data or the discriminant boundary.  Rather, we face a trade-off: keeping more dimensions reduces bias, but increases variance.  The optimal bias/variance trade-off depends on the distribution of the data, as well as the sample size \cite{Trunk1979}.  We formalize this notion for the LpA model and proof the following:
 \begin{thm} \label{thm:n}
-Under the LDA model, estimated \Lol~is better than \Pca.
+Under the \Lda~ model, estimated \Lol~is better than \Pca.
 \end{thm}
 Note that the degree of improvement is a function of the number of samples n, in addition to the embedding dimension d, the ambient dimensionality p, and the parameters (see Methods for details and proof).
 
 
-Consider again the rotated trunk example as well as a ``Toeplitz'' example, as depicted in Figures \ref{fig:properties}(A) and (B).  In both cases, the data are sampled from the LDA model, and in both cases, the optimal dimensionality depends on the particular approach, but is never the true dimensionality.  Moreover, \Lol~dominates the other approaches, regardless of the number of dimensions used.
+Consider again the rotated trunk example as well as a ``Toeplitz'' example, as depicted in Figures \ref{fig:properties}(A) and (B).  In both cases, the data are sampled from the \Lda~ model, and in both cases, the optimal dimensionality depends on the particular approach, but is never the true dimensionality.  Moreover, \Lol~dominates the other approaches, regardless of the number of dimensions used.
 % 
 Figure \ref{fig:properties}(C) shows a sparse example with ``fat tails'' to mirror real data settings better.  The qualitative results are consistent with those of (A) and (B).  Indeed, we can generalize Theorem \ref{thm:n} to include ``sub-Gaussian'' data, rather than just Gaussian:
 
 \begin{thm} \label{thm:FAT}
-Under a sub-Gaussian generalization of the LDA model, \Lol~is still better than \Pca.
+Under a sub-Gaussian generalization of the \Lda~ model, \Lol~is still better than \Pca.
 \end{thm}
 
 \subsection*{Multiple Classes}
@@ -201,7 +201,7 @@ Seven simulations demonstrating that even when the true discriminant boundary is
 For the first four, the top panels depict the means (top), the shared covariance matrix (middle).  For the next three, the top panels depict a 2D scatter plot (left), mean and level set of one standard deviation of covariance matrix (right).  For all seven simulations, the bottom panel shows misclassification rate as a function of the number of embedded dimensions, for several different classifiers.  The simulations settings are as follows:
 \textbf{(A)} Rotated Trunk: same as Figure \ref{fig:cigars}(C).
 \textbf{(B)} Toeplitz: another setting where mean difference is not well correlated with any eigenvector, and no ambient coordinate is particularly useful on its own.
-\textbf{(C)} Fat Tails: a common phenomenon in real data; we have theory to support this generalization of the LDA model.
+\textbf{(C)} Fat Tails: a common phenomenon in real data; we have theory to support this generalization of the \Lda~ model.
 \textbf{(D)} 3 Classes: \Lol~naturally adapts to multiple classes.
 \textbf{(E)} QDA: QOQ, a variant of \Lol~when each class has a unique covariance, outperforms \Lol, as expected.
 \textbf{(F)} Outliers: adding high-dimensional outliers degrades performance of standard eigensolvers, but those can easily be replaced in \Lol~for a robust variants (called \Lrl).
@@ -226,7 +226,7 @@ The simple geometric intuition which led to the development of \Lol~suggests tha
 
 \para{QDA} Sometimes, it makes more sense to model each class as having a unique covariance matrix, rather than a shared covariance matrix.  Assuming everything is Gaussian, the optimal classifier in this scenario is called  Quadratic Discriminant Analysis (QDA) \cite{TBF01}.  Intuitively then, we can modify \Lol~to compute the eigenvectors separately for each class, and concatenate them (sorting them according to their singular values).  Moreover, rather than classifying the projected data with \Lda, we can then classify the projected data with QDA.  Indeed, simulating data according to such a model (Figure \ref{fig:properties}(E), \Lol~performs slightly above chance, regardless of the number of dimensions we use to project, whereas QOQ (which denotes we estimate eigenvectors separately and then use QDA on the projected data) performs significantly better regardless of how many dimensions it keeps.
 
-\para{Outliers}  Outliers persist in many real data sets.  Finding outliers, especially in high-dimensional data, is both tedious and difficult.  Therefore, it is often advantageous to have estimators that are robust to certain kinds of outliers \cite{Huber1981,Rousseeuw1999,Qin2013a}.  \Pca~and eigenvector computation are particularly sensitive to outliers \cite{Candes2009a}.  Because \Lol~is so simple and modular, we can replace typical eigenvector computation with a robust variant thereof, such as \cite{Zhang2014}.  Figure \ref{fig:properties}(F) shows an example where we generated  $n/2$ training samples according to the simple LDA model, but then added another $n/2$ training samples from a noise model.  \Lrl~(our robust variant of \Lol~that simply replaces the fragile eigenvector computation with a robust version), performs better than \Lol~regardless of the number of dimensions we keep.
+\para{Outliers}  Outliers persist in many real data sets.  Finding outliers, especially in high-dimensional data, is both tedious and difficult.  Therefore, it is often advantageous to have estimators that are robust to certain kinds of outliers \cite{Huber1981,Rousseeuw1999,Qin2013a}.  \Pca~and eigenvector computation are particularly sensitive to outliers \cite{Candes2009a}.  Because \Lol~is so simple and modular, we can replace typical eigenvector computation with a robust variant thereof, such as \cite{Zhang2014}.  Figure \ref{fig:properties}(F) shows an example where we generated  $n/2$ training samples according to the simple \Lda~ model, but then added another $n/2$ training samples from a noise model.  \Lrl~(our robust variant of \Lol~that simply replaces the fragile eigenvector computation with a robust version), performs better than \Lol~regardless of the number of dimensions we keep.
 
 \para{XOR}  XOR is perhaps the simplest nonlinear problem, the problem that led to the demise of the perceptron, prior to its resurgence after the development of multi-layer perceptrons \cite{Bishop2006}.  Thus, in our opinion, it is warranted to check whether any new classification method can perform well in this scenario.  The classical (two-dimensional) XOR problem is quite simple: the output of a classifier is zero if both inputs are the same (00 or 11), and the output is one if the inputs differ (01 or 10).  Figure \ref{fig:properties}(G) shows a high dimensional and stochastic variant of XOR.  This simulation was designed such that standard classifiers, such as support vector machines and random forests, achieve chance levels (not shown).  \Lol, performs moderately better than chance, and QOQ performs significantly better than chance, regardless of the chosen dimensionality.  This demonstrates that our classifiers developed herein, though quite simple and intuition, can perform well even in settings where the data are badly modeled by our underlying assumptions.  This mirrors previous findings where the so-called ``idiots's Bayes'' classifier outperforms more sophisticated classifiers \cite{Bickel2004}.  In fact, we think of our work as finding intermediate points between idiot's Bayes (or nai\"ve Bayes) and \Fld, by enabling degrees of regularization by changing the dimensionality used.
 
@@ -314,7 +314,7 @@ We have introduced a very simple, yet new, device to improve performance on supe
 One of the first publications to compose \Fld~with an unsupervised learning method was the celebrated Fisherfaces paper \cite{Belhumeur1997}.  The authors showed via a sequence of numerical experiments the utility of embedding with \Pca~prior to classifying with \Fld.  We extend this work by adding a supervised component to the initial embedding.  Moreover, we provide the geometric intuition for why and when this is advantageous, as well as show numerous examples demonstrating its superiority.  Finally, we have matrix concentration inequalities proving the advantages of \Lol~over Fisherfaces.  
 
 
-The LOL idea, appending the mean difference vector to convert unsupervised manifold learning to supervised manifold learning, has many potential applications.  We have presented the first few.  Incorporating additional nonlinearities via kernel methods \cite{Mika1999}, ensemble methods such as random forests \cite{Breiman2001}, multiscale methods \cite{Allard12a},  and more scalable implementations \cite{Chang2011}, are all of immediate interest.
+The \Lol~idea, appending the mean difference vector to convert unsupervised manifold learning to supervised manifold learning, has many potential applications.  We have presented the first few.  Incorporating additional nonlinearities via kernel methods \cite{Mika1999}, ensemble methods such as random forests \cite{Breiman2001}, multiscale methods \cite{Allard12a},  and more scalable implementations \cite{Chang2011}, are all of immediate interest.
 
 
 \clearpage
@@ -357,154 +357,64 @@ where $\EE$ is the expectation, which in this case, is with respect to $F_{XY}$.
 For brevity, we often simply write $L_g$, and we define $L_* := L_{g^*}$.  
 
 
-\subsection{Linear Discriminant Analysis (LDA) Model}
+\subsection{Linear Discriminant Analysis (\Lda)}
 
-A statistical model is  a family of distributions indexed by a parameter $\bth \in \bTh$, $\mc{F}_{\bth}=\{F_{\bth} : \bth \in \bTh \}$.  
-Consider the special case of the above where $F_{\bX|Y=y}$ is a multivariate Gaussian distribution, 
-$\mc{N}(\bmu_y,\bSig)$ and $F_Y$ is a categorical distribution $\mc{C}(\bpi)$, where $\bpi=(\pi_1,\ldots,\pi_C)$ and $\PP[Y=y]$ is $\pi_y$. In this scenario, the different classes have different means, but a shared covariance matrix. 
-We refer to this model as the Linear Discriminant Analysis (LDA) model. 
-Let $\bth=(\bpi,\bmu,\bSig)$, and let $\bTh_{LDA}=( \triangle_C, \Real^{p \times C},\Real_{\succ 0}^{p \times p})$, where $\bmu=(\bmu_1,\ldots, \bmu_C)$, $\triangle_C$ is the $C$ dimensional simplex, that is $\triangle_C = \{ \bx : x_i \geq 0 \forall i, \sum_i x_i = 1\}$, and $\Real_{\succ 0}^{p \times p}$ is the set of positive definite  $p \times p$ matrices. Denote
-$\mc{F}_{LDA}=\{F_{\bth} : \bth \in \bTh_{LDA}\}$.
-
-Define
+Linear Discriminant Analysis (\Lda) is an approach to classification that uses a linear function of the first two moments of the distribution of the data.  More specifically, let $\mu_j=\EE[F_{X|Y=j}]$ denote the class conditional mean, and let $\bSig=\EE[F_{X}^2]$ denote the joint covariance matrix, and $\pi_j=\PP[Y=j]$.   Using this notation, we can define the \Lda~classifier:
 \begin{align*}
-g_{LDA}(\bx)&=\argmin_y \frac{1}{2} (\bx-\bmu_0)\T \bSig^{-1}(\bx-\bmu_0) + \II\{Y=y\}  \log \pi_y,
+g_{\Lda}(\bx)&:=\argmin_y \frac{1}{2} (\bx-\bmu_0)\T \bSig^{-1}(\bx-\bmu_0) + \II\{Y=y\}  \log \pi_y,
 \end{align*}  
 where $\II\{ \cdot\}$ is one when its argument is true, and zero otherwise.
-Let $L_{LDA}$ be the misclassification rate of the above classifier.
-
-\begin{lem}
-For any $F \in \mc{F}_{LDA}$, $L_{LDA}=L_*$.
-\end{lem}
-
-\begin{proof}
-Under the LDA model,  the Bayes optimal classifier is available by plugging the explicit distributions into Eq.~\eqref{eq:R}.
-\end{proof}
-
-Under the two-class model, with equal class prior and centered means,  $\pi_0=\pi_1$ and $(\bmu_0+\bmu1)/2=0$, re-arranging a bit, we obtain
+Let $L_{\Lda}^F$ be the misclassification rate of the above classifier for distribution $F$.
+% 
+Assuming equal class prior and centered means,  $\pi_0=\pi_1$ and $(\bmu_0+\bmu1)/2=\mb{0}$, re-arranging a bit, we obtain
+\begin{align*}
+g_{\Lda}(\bx) :=  \argmin_y \bx\T \bSig^{-1} \bmu_y.
+\end{align*}
+In words, the  \Lda~classifier chooses the class for whom the projection of an input vector $\bx$, onto $\bSig^{-1} \bmu_y$, is maximized.
+% 
+When there are only two classes, this further simplies to 
 % Note that  $g^*(\bx):=\argmax_y f_{\bx|y}f_y$ can be written as 
 % $\II\{f_{\bx|0}f_{y=0} < f_{\bx|1}f_{y=1}\}$.  Taking the log of both sides, we have:
 % $\II\{\log f_{\bx|0} \log f_{y=0} < \log f_{\bx|1} \log f_{y=1}\}$.  For simplicity, we let $f_{y=0}=f_{y=1}$.  Rearranging terms, we are left with
 % $\II\{\log f_{\bx|0} - \log f_{\bx|1} < 0 \}$.
-% Plugging in the LDA model assumption, the argument becomes
+% Plugging in the \Lda model assumption, the argument becomes
 % \begin{align*}
 % -\frac{1}{2} (\bx-\bmu_0)\T \bSig^{-1}(\bx-\bmu_0) 
 % \frac{1}{2} (\bx-\bmu_1)\T \bSig^{-1}(\bx-\bmu_1). 
 % \end{align*}
 % Expanding the terms and re-arranging a bit, and assuming that the data are centered---$(\bmu_0+\bmu1)/2=0$---we obtain:
 \begin{align*}
-g_{LDA}(\bx) :=  \argmin_y \bx\T \bSig^{-1} \bmu_y = \II\{ \bx\T \bSig^{-1} \bdel > 0 \},
+g_{2-\Lda}(\bx) :=  \II\{ \bx\T \bSig^{-1} \bdel > 0 \},
 \end{align*}
-where $\bdel=\bmu_0-\bmu_1$. In words, the Bayes optimal classifier, under the LDA model, takes the input vector $\bx$, and projects it onto the real number line with projection matrix $\bSig^{-1} \bdel$.  If the resulting projection is greater than $0$, then $\mh{y}=1$, otherwise, $\mh{y}=0$.  Note that the equal class prior and centered means assumptions merely changes the threshold constant from $0$ to something else.  
+where $\bdel=\bmu_0-\bmu_1$.   Note that the equal class prior and centered means assumptions merely changes the threshold constant from $0$ to something else.  
 
+\subsection{\Lda~Model}
 
-
-
-\subsection{Projection Based Classifiers}
-
-
-Let $\bA \in \Real^{d \times p}$ be an orthonormal matrix, that is, a matrix that projects p dimensional data into a d dimensional subspace, where $\bA\bA\T$ is the $d \times d$ identity matrix, and $\bA\T \bA$ is symmetric $p \times p$ matrix with rank d.   The question that motivated this work is: what is the best projection matrix that we can estimate, to use to ``pre-process'' the data prior to applying LDA.  
-Projecting the data $\bx$ onto a low-dimensional subspace, and the classifying via LDA in that subspace is equivalent to redefining the parameters in the low-dimensional subspace, 
-$\bSig_A=\bA \bSig \bA\T \in \Real^{d \times d}$ and $\bdel_A = \bA \bdel \in \Real^d$, and then performing
-\begin{align} \label{eq:g_A}
-g_A(x) := \II \{ (\bA \bx)\T \bSig^{-1}_A \bdel_A > 0\}.
-\end{align}
-Let $L_A :=\int \PP[g_A(\bx)=y] f_{\bx,y} d\bx dy$.
-Our goal therefore is to be able to choose $A$ for a given parameter setting $\bth=(\bdel,\bSig)$, such that $L_A$ is as small as possible (note that $L_A$ will never be smaller than $L_*$).  
-
-Formally, we seek to solve the following optimization problem:
-% \begin{align} \label{eq:A}
-% \bA_* = \argmin_{\bA \in \Real^{p \times d}} L_A.
-% \end{align}
-\begin{equation} \label{eq:A}
-\begin{aligned}
-& \underset{\bA}{\text{minimize}}
-& & \EE [ \II \{ \bx\T \bA\T \bSig^{-1}_A \bdel_A > 0\} \neq y] \\
-& \text{subject to} & & \bA \in \Real^{p \times d}, \quad \bA \bA\T = \bI_{d \times d},
-\end{aligned}
-\end{equation}
-where $\bI_{u \times v}$ is the $u \times v$ identity matrix identity, that is, $\bI(i,j)=1$ for all $i=j \leq \min(u,v)$, and zero otherwise. In our opinion, Eq.~\eqref{eq:A} is the simplest supervised manifold learning problem there is: a two-class classification problem, where the data are multivariate Gaussians with shared covariances, the manifold is linear, and the classification is done via LDA.
-Nonetheless, solving Eq.~\eqref{eq:A} is difficult, because we do not know how to evaluate the integral analytically, and we do not know any algorithms that are guaranteed to find the global optimum in finite time.  This has led to previous work using a surrogate function \cite{not sure who}.  
-We proceed by studying a few natural choices for $\bA$.
-
-
-
-
-
-\subsubsection{Bayes Optimal Projection}
-
-% Let $\mb{\bA}\T=\bSig^{-1} \bdel$.
+A statistical model is  a family of distributions indexed by a parameter $\bth \in \bTh$, $\mc{F}_{\bth}=\{F_{\bth} : \bth \in \bTh \}$.  
+Consider the special case of the above where $F_{\bX|Y=y}$ is a multivariate Gaussian distribution, 
+$\mc{N}(\bmu_y,\bSig)$, where each class has its own mean, but all classes have the same covariance. 
+We refer to this model as the \Lda~model. 
+Let $\bth=(\bpi,\bmu,\bSig)$, and let $\bTh_{C-\Lda}=( \triangle_C, \Real^{p \times C},\Real_{\succ 0}^{p \times p})$, where $\bmu=(\bmu_1,\ldots, \bmu_C)$, $\triangle_C$ is the $C$ dimensional simplex, that is $\triangle_C = \{ \bx : x_i \geq 0 \forall i, \sum_i x_i = 1\}$, and $\Real_{\succ 0}^{p \times p}$ is the set of positive definite  $p \times p$ matrices. Denote
+$\mc{F}_{\Lda}=\{F_{\bth} : \bth \in \bTh_{\Lda}\}$, dropping the superscript $C$ for brevity where appropriate.
+The following lemma is well known:
 \begin{lem}
-For any $F \in \mc{F}_{LDA}$, $L_{\bdel\T \bSig^{-1}} = L_*$
+$L_{\Lda}^F=L_*^F$ for any $F \in \mc{F}_{\Lda}$.
 \end{lem}
 
 \begin{proof}
-Let $\bB = (\bSig^{-1} \bdel)\T = \bdel\T (\bSig^{-1})\T = \bdel\T \bSig^{-1}$, so that $\bB\T = \bSig^{-1} \bdel$,
-% = \bdel\T \bOm\T
-and plugging this in to Eq.~\eqref{eq:g_A}, we obtain
-\begin{align*}
-g_{B}(x) &= \II \{ \bx \bB\T  \bSig^{-1}_{B} \bdel_{B} > 0\}
-\\&= \II \{ \bx\T \bSig^{-1} \bdel \times (\bSig^{-1}_{B} \bdel_{B}) > 0\}
-\\&= \II \{ \bx\T \bSig^{-1} \bdel k > 0\},
-\end{align*}
-where the third equality follows from the fact that $(\bSig^{-1}_{B} \bdel_{B})$ is just a positive constant $k > 0$. In other words, letting $\bB$ be the Bayes optimal projection recovers the Bayes classifier, as it should.
+Under the \Lda~model, the Bayes optimal classifier is available by plugging the explicit distributions into Eq.~\eqref{eq:R}.
 \end{proof}
 
-\subsubsection{Principle Components Analysis (\Pca) Projection}
-
-Principle Components Analysis (\Pca) finds the directions of maximal variance in a dataset.  \Pca~is closely related to eigendecompositions and singular value decompositions (\Svd).  In particular, the top principle component of a matrix $\bX \in \Real^{p \times n}$, whose columns are centered, is the eigenvector with the largest corresponding eigenvalue of the centered covariance matrix $\bX \bX\T$.  \Svd~enables one to estimate this eigenvector without ever forming the outer product matrix, because \Svd~factorizes a matrix $\bX$ into $\bU \bS \bV\T$, where  $\bU$ and $\bV$ are orthonormal  ${p \times n}$ matrices, and $\bS$ is a diagonal matrix, whose diagonal values are decreasing,  $s_1 \geq s_2 \geq \cdots > s_n$.  Defining $\bU =[\bu_1, \bu_2, \ldots, \bu_n]$, where each $\bu_i \in \Real^p$, then $\bu_i$ is the $i^{th}$ eigenvector, and $s_i$ is the square root of the $i^{th}$ eigenvalue of $\bX \bX\T$.  Let $\bA^{PCA}_d =[\bu_1, \ldots , \bu_d]$ be the truncated \Pca~orthonormal matrix.
-
-The \Pca~matrix is perhaps the most obvious choice of a orthonormal matrix for several reasons.  First, truncated \Pca~minimizes the squared error loss between the original data matrix and all possible rank d representations:
-\begin{align*}
-\argmin_{A \in \Real^{d \times p} : \bA \bA\T = \bI_{d \times d}} \norm{ \bX - \bA^T \bA }_F^2.
-\end{align*}
-Second, the ubiquity of \Pca~has led to a large number of highly optimized numerical libraries for computing \Pca~(for example, LAPACK \cite{Anderson1999}). 
-
-Moreover, let $\bU_d=[\bu_1,\ldots,\bu_d] \in \Real^{p \times d}$, and note that $\bU_d\T \bU_d = \bI_{d \times p}$ and $\bU_d\T \bU_d  = \bI_{p \times d}$.  Similarly, let $\bU \bS \bU\T = \bSig$, and $\bU \bS^{-1} \bU\T = \bSig^{-1}$.  Let $\bS_d$ be the matrix whose diagonal entries are the eigenvalues, up to the $d^{th}$ one, that is $\bS_d(i,j)=s_i$ for $i=j \leq d$ and zero otherwise.  Similarly, $\bSig_d=\bU \bS_d \bU\T=\bU_d \bS_d \bU_d\T$. 
-
-Let $g_{PCA_d}:=g_{A^{PCA}_d}$, and let $L_{PCA_d}:=L_{A^{PCA}_d}$.   
-And let $g_{LDA_d} := \II \{ x \bSig_d^{-1} \bdel > 0\}$ be the regularized \Lda~classifier, that is, the \Lda~classifier, but sets the bottom $p-d$ eigenvalues to zero.
-
-\begin{lem}
-$L_{A^{PCA}_d} = L_{LDA_d}$.
-\end{lem}
-
-\begin{proof}
-Plugging $\bU_d$ into Eq.~\eqref{eq:g_A} for $\bA$, and considering only the left side of the operand, we have
-\begin{align*}
-(\bA \bx)\T \bSig^{-1}_A \bdel_A &= \bx\T \bA\T \bA \bSig^{-1} \bA\T \bA \bdel,
-\\&= \bx\T  \bU_d\bU_d\T \bSig^{-1} \bU_d\bU_d\T \bdel,
-\\&= \bx\T  \bU_d \bU_d\T \bU \bS^{-1} \bU \bU_d\bU_d\T \bdel,
-\\&= \bx\T  \bU_d \bI_{d \times p} \bS^{-1} \bI_{p \times d} \bU_d\T \bdel,
-\\&= \bx\T  \bU_d \bS^{-1}_d  \bU_d\T \bdel ,
-\\&= \bx\T  \bSig^{-1}_d  \bdel.
-\end{align*}
-\end{proof}
-
-The implication of this lemma is that if one desires to implement Fisherfaces, rather than first learning the eigenvectors and then learning \Fld, one can instead directly implement regularized \Fld~by setting the bottom $p-d$ eigenvalues to zero.
 
 
 
 
-\subsubsection{Linear Optimal Low-Rank (\Lol) Projection}
 
-
-The basic idea of \Lol~is to let $\bA^{LOL}_d=[\bdel, \bA^{PCA}_{d-1}]$.  In other words, we simply concatenate the mean difference vector with the top $d-1$ principal components.  
-Technically, to maintain orthonormality, we must orthonormalize, $\bA^{LOL}_d=$ \sct{Orth}$([\bdel, \bA^{PCA}_{d-1}])$.  Below, we show that this orthonormalization does not matter very much.
-
-
-
-% Let $L_A^{p,d}$ be the misclassification error for the algorithm that uses $A$ to project the data from D to d dimensions, followed by classifying with a linear discriminant analysis function. Moreover, let $L_{PCA}^{p,d}$ denote the misclassification error when using the first d population eigenvectors, and let $L_{\Lol}^{p,d}$ denote the misclassification error when concatenating the first d-1 population eigenvectors with the population difference of the means.  Dropping the superscripts for brevity, and letting $\rho$ be the maximum correlation between the mean difference vector and the covariance matrix, we have
-
-
-% We can formalize this notion theoretically, as well as explore its consequences numerically.  Let $\mh{L}_A$ denote the same as $L_A$ except using the sample estimate of $A$ rather than the population value, we have:
-
-
-\subsubsection{\Fld~is rotationally invariant}
+\subsection{\Lda~is rotationally invariant}
 
 For certain classification tasks, the ambient coordinates have intrinsic value, for example, when simple interpretability is desired.  However, in many other contexts, interpretability is less important \cite{Breiman01b}.  When the exploitation task at hand is invariant to rotations, then we have no reason to restrict our search space to be sparse in the ambient coordinates, rather, for example, we can consider sparsity in the eigenvector basis.  Fisherfaces is one example of a rotationally invariant classifier, under certain model assumptions. 
 Let  $\bW$ be a rotation matrix, that is $\bW \in \mc{W}=\{\bW : \bW\T = \bW^{-1}$ and det$(\bW)=1\}$. 
-Moreover, let $\bW \circ F$ denote the distribution $F$ after rotation by $\bW$.  For example, if $F=\mc{N}(\bmu,\bSig)$ then $\bW \circ F=\mc{N}(\bW  \bmu, \bW \bSig \bW\T)$.
+Moreover, let $\bW \circ F$ denote the distribution $F$ after transformation by an operator $\bW$.  For example, if $F=\mc{N}(\bmu,\bSig)$ then $\bW \circ F=\mc{N}(\bW  \bmu, \bW \bSig \bW\T)$.
 
 \begin{defi}
 A rotationally invariant classifier has the following property:
@@ -513,18 +423,18 @@ In words, the Bayes risk of using classifier $g$ on distribution $F$ is unchange
 \end{defi}
 
 
-Now, we can state the main lemma of this subsection:  \Fld~is rotationally invariant.
+Now, we can state the main lemma of this subsection:  \Lda~is rotationally invariant.
 \begin{lem} \label{lem:rot}
-$L_{\Fld}^F = L_{\Fld}^{W \circ F}$, for any $F \in \mc{F}$.
+$L_{\Lda}^F = L_{\Lda}^{W \circ F}$, for any $F \in \mc{F}$.
 \end{lem}
 
 \begin{proof}
-\Fld~simply becomes thresholding $\bx\T \bSig^{-1} \bdel$.  Thus, we can demonstrate rotational invariance by demonstrating that $\bx\T \bSig^{-1} \bdel$ is rotationally invariant. 
+\Lda~simply becomes thresholding $\bx\T \bSig^{-1} \bdel$.  Thus, we can demonstrate rotational invariance by demonstrating that $\bx\T \bSig^{-1} \bdel$ is rotationally invariant. 
 
-% First, note that for any distribution $F \in \mc{F}_{LDA}$, we can reparameterize it such that $\bSig$ is diagonal.  This follows because for any $\bSig$, we can represent it as $\bSig=\bU \bD \bU$, and there exists a $\bW$ such that 
+% First, note that for any distribution $F \in \mc{F}_{\Lda}$, we can reparameterize it such that $\bSig$ is diagonal.  This follows because for any $\bSig$, we can represent it as $\bSig=\bU \bS \bU$, and there exists a $\bW$ such that 
 % from the following:
 % \begin{align}
-% \bSig = \bU \bD \bU = 
+% \bSig = \bU \bS \bU = 
 % \end{align}
 
 \begin{align*}
@@ -539,7 +449,116 @@ $L_{\Fld}^F = L_{\Fld}^{W \circ F}$, for any $F \in \mc{F}$.
 \end{align*}
 \end{proof}
 
-One implication of this lemma is that we can reparameterize without loss of generality.  Specifically, defining $\bW := \bU\T$ yields a change of variables: $\bSig \mapsto \bD$ and $\bdel \mapsto \bU\T \bdel := \mt{\bdel}$, where $\bD$ is a diagonal covariance matrix.  Moreover, let $\bd=(\sigma_1,\ldots, \sigma_D)\T$ be the vector of eignevalues, then $\bD^{-1} \mt{\bdel}=\bd^{-1} \odot \mt{\bdel}$, where $\odot$ is the Hadamard (entrywise) product.  The \Fld~classifier may therefore be encoded by a unit vector, $\mt{\bd}:= \frac{1}{m} \bd^{-1} \odot \mt{\bdel}$, and its magnitude, $m:=\norm{\bd^{-1} \odot \mt{\bdel}}$.
+One implication of this lemma is that we can reparameterize without loss of generality.  Specifically, defining $\bW := \bU\T$ yields a change of variables: $\bSig \mapsto \bS$ and $\bdel \mapsto \bU\T \bdel := \mt{\bdel}$, where $\bS$ is a diagonal covariance matrix.  Moreover, let $\bd=(\sigma_1,\ldots, \sigma_D)\T$ be the vector of eignevalues, then $\bS^{-1} \mt{\bdel}=\bd^{-1} \odot \mt{\bdel}$, where $\odot$ is the Hadamard (entrywise) product.  The \Lda~classifier may therefore be encoded by a unit vector, $\mt{\bd}:= \frac{1}{m} \bd^{-1} \odot \mt{\bdel}$, and its magnitude, $m:=\norm{\bd^{-1} \odot \mt{\bdel}}$.
+
+
+\subsection{Projection Based Classifiers}
+
+
+Let $\bA \in \Real^{d \times p}$ be an orthonormal matrix, that is, a matrix that projects p dimensional data into a d dimensional subspace, where $\bA\bA\T$ is the $d \times d$ identity matrix, and $\bA\T \bA$ is symmetric $p \times p$ matrix with rank d.   The question that motivated this work is: what is the best projection matrix that we can estimate, to use to ``pre-process'' the data prior to applying \Lda.  
+% \begin{lem}
+% $g_{\Lda}^F(\bA \bx)= \II \{ (\bA \bx)\T \bSig^{-1}_A \bdel_A > 0\}$.
+% \end{lem}
+Projecting the data $\bx$ onto a low-dimensional subspace, and the classifying via \Lda~in that subspace is equivalent to redefining the parameters in the low-dimensional subspace, 
+$\bSig_A=\bA \bSig \bA\T \in \Real^{d \times d}$ and $\bdel_A = \bA \bdel \in \Real^d$, and then using $g_{\Lda}$.  When $C=2$, $\pi_0=\pi_1$, and $(\mu_0+\mu_1)/2=\mb{0}$, this amounts to:
+\begin{align} \label{eq:g_A}
+g^d_A(x) := \II \{ (\bA \bx)\T \bSig^{-1}_A \bdel_A > 0\}, \text{ where } \bA \in \Real^{d \times p}.
+\end{align}
+Let $L^d_A :=\int \PP[g_A(\bx)=y] f_{\bx,y} d\bx dy$.
+Our goal therefore is to be able to choose $A$ for a given parameter setting $\bth=(\bpi, \bdel,\bSig)$, such that $L_A$ is as small as possible (note that $L_A$ will never be smaller than $L_*$).  
+
+Formally, we seek to solve the following optimization problem:
+% \begin{align} \label{eq:A}
+% \bA_* = \argmin_{\bA \in \Real^{p \times d}} L_A.
+% \end{align}
+\begin{equation} \label{eq:A}
+\begin{aligned}
+& \underset{\bA}{\text{minimize}}
+& & \EE [ \II \{ \bx\T \bA\T \bSig^{-1}_A \bdel_A > 0\} \neq y] \\
+& \text{subject to} & & \bA \in \Real^{p \times d}, \quad \bA \bA\T = \bI_{d \times d},
+\end{aligned}
+\end{equation}
+where $\bI_{u \times v}$ is the $u \times v$ identity matrix identity, that is, $\bI(i,j)=1$ for all $i=j \leq \min(u,v)$, and zero otherwise. 
+Let $\mc{A}^d=\{\bA : \bA \in \Real^{d \times p}, \bA \bA\T = \bI_{d \times d}\}$, and let $\mc{A}_* \subset \mc{A}$ be the set of $\bA$  that minimize Eq.~\eqref{eq:A}, and let $\bA_* \in \mc{A}_*$ (where we dropped the superscript $d$ for brevity).   Let $L_{\bA}^*=L_{\bA_*}$ be the misclassification rate for any $\bA \in \mc{A}_*$, that is, $L_{\bA}^*$ is the Bayes optimal misclassification rate for the classifier that composes $\bA$ with \Lda.
+
+
+In our opinion, Eq.~\eqref{eq:A} is the simplest supervised manifold learning problem there is: a two-class classification problem, where the data are multivariate Gaussians with shared covariances, the manifold is linear, and the classification is done via \Lda.
+Nonetheless, solving Eq.~\eqref{eq:A} is difficult, because we do not know how to evaluate the integral analytically, and we do not know any algorithms that are guaranteed to find the global optimum in finite time.  This has led to previous work using a surrogate function \cite{not sure who}.  
+We proceed by studying a few natural choices for $\bA$.
+
+
+
+
+
+\subsubsection{Bayes Optimal Projection}
+
+% Let $\mb{\bA}\T=\bSig^{-1} \bdel$.
+\begin{lem}
+$\bdel\T  \bSig^{-1} \in \mc{A}_*$
+\end{lem}
+
+\begin{proof}
+Let $\bB = (\bSig^{-1} \bdel)\T = \bdel\T (\bSig^{-1})\T = \bdel\T \bSig^{-1}$, so that $\bB\T = \bSig^{-1} \bdel$,
+% = \bdel\T \bOm\T
+and plugging this in to Eq.~\eqref{eq:g_A}, we obtain
+\begin{align*}
+g_{B}(x) &= \II \{ \bx \bB\T  \bSig^{-1}_{B} \bdel_{B} > 0\} &
+\\&= \II \{ \bx\T \bSig^{-1} \bdel \times (\bSig^{-1}_{B} \bdel_{B}) > 0\} & \text{plugging in $\bB$}
+\\&= \II \{ \bx\T \bSig^{-1} \bdel k > 0\} & \text{because $\bSig^{-1}_{B} \bdel_{B} > 0$}.
+\end{align*}
+In other words, letting $\bB$ be the Bayes optimal projection recovers the Bayes classifier, as it should.
+Or, more formally, for any $F \in \mc{F}_{\Lda}$, $L_{\bdel\T \bSig^{-1}} = L_*$ 
+\end{proof}
+
+\subsubsection{Principle Components Analysis (\Pca) Projection}
+
+Principle Components Analysis (\Pca) finds the directions of maximal variance in a dataset.  \Pca~is closely related to eigendecompositions and singular value decompositions (\Svd).  In particular, the top principle component of a matrix $\bX \in \Real^{p \times n}$, whose columns are centered, is the eigenvector with the largest corresponding eigenvalue of the centered covariance matrix $\bX \bX\T$.  \Svd~enables one to estimate this eigenvector without ever forming the outer product matrix, because \Svd~factorizes a matrix $\bX$ into $\bU \bS \bV\T$, where  $\bU$ and $\bV$ are orthonormal  ${p \times n}$ matrices, and $\bS$ is a diagonal matrix, whose diagonal values are decreasing,  $s_1 \geq s_2 \geq \cdots > s_n$.  Defining $\bU =[\bu_1, \bu_2, \ldots, \bu_n]$, where each $\bu_i \in \Real^p$, then $\bu_i$ is the $i^{th}$ eigenvector, and $s_i$ is the square root of the $i^{th}$ eigenvalue of $\bX \bX\T$.  Let $\bA^{\Pca}_d =[\bu_1, \ldots , \bu_d]$ be the truncated \Pca~orthonormal matrix.
+
+The \Pca~matrix is perhaps the most obvious choice of a orthonormal matrix for several reasons.  First, truncated \Pca~minimizes the squared error loss between the original data matrix and all possible rank d representations:
+\begin{align*}
+\argmin_{A \in \Real^{d \times p} : \bA \bA\T = \bI_{d \times d}} \norm{ \bX - \bA^T \bA }_F^2.
+\end{align*}
+Second, the ubiquity of \Pca~has led to a large number of highly optimized numerical libraries for computing \Pca~(for example, LAPACK \cite{Anderson1999}). 
+
+Moreover, let $\bU_d=[\bu_1,\ldots,\bu_d] \in \Real^{p \times d}$, and note that $\bU_d\T \bU_d = \bI_{d \times p}$ and $\bU_d\T \bU_d  = \bI_{p \times d}$.  Similarly, let $\bU \bS \bU\T = \bSig$, and $\bU \bS^{-1} \bU\T = \bSig^{-1}$.  Let $\bS_d$ be the matrix whose diagonal entries are the eigenvalues, up to the $d^{th}$ one, that is $\bS_d(i,j)=s_i$ for $i=j \leq d$ and zero otherwise.  Similarly, $\bSig_d=\bU \bS_d \bU\T=\bU_d \bS_d \bU_d\T$. 
+
+Let $g_{\Pca}^d:=g_{A_{\Pca}^d}$, and let $L_{\Pca}^d:=L_{A_{\Pca}^d}$.   
+And let $g_{\Lda}^d := \II \{ x \bSig_d^{-1} \bdel > 0\}$ be the regularized \Lda~classifier, that is, the \Lda~classifier, but sets the bottom $p-d$ eigenvalues to zero.
+
+\begin{lem}
+$L_{A_{\Pca}}^d = L_{\Lda}^d$.
+\end{lem}
+
+\begin{proof}
+Plugging $\bU_d$ into Eq.~\eqref{eq:g_A} for $\bA$, and considering only the left side of the operand, we have
+\begin{align*}
+(\bA \bx)\T \bSig^{-1}_A \bdel_A &= \bx\T \bA\T \bA \bSig^{-1} \bA\T \bA \bdel,
+\\&= \bx\T  \bU_d\bU_d\T \bSig^{-1} \bU_d\bU_d\T \bdel,
+\\&= \bx\T  \bU_d \bU_d\T \bU \bS^{-1} \bU \bU_d\bU_d\T \bdel,
+\\&= \bx\T  \bU_d \bI_{d \times p} \bS^{-1} \bI_{p \times d} \bU_d\T \bdel,
+\\&= \bx\T  \bU_d \bS^{-1}_d  \bU_d\T \bdel ,
+\\&= \bx\T  \bSig^{-1}_d  \bdel.
+\end{align*}
+\end{proof}
+
+The implication of this lemma is that if one desires to implement Fisherfaces, rather than first learning the eigenvectors and then learning \Lda, one can instead directly implement regularized \Lda~by setting the bottom $p-d$ eigenvalues to zero.
+
+
+
+
+\subsubsection{Linear Optimal Low-Rank (\Lol) Projection}
+
+
+The basic idea of \Lol~is to let $\bA_{\Lol}^d=[\bdel, \bA_{\Pca}^{d-1}]$.  In other words, we simply concatenate the mean difference vector with the top $d-1$ principal components.  
+Technically, to maintain orthonormality, we must orthonormalize, $\bA_{\Lol}^d=$ \sct{Orth}$([\bdel, \bA_{\Pca}^{d-1}])$.  Below, we show that this orthonormalization does not matter very much.
+
+
+
+% Let $L_A^{p,d}$ be the misclassification error for the algorithm that uses $A$ to project the data from D to d dimensions, followed by classifying with a linear discriminant analysis function. Moreover, let $L_{\Pca}^{p,d}$ denote the misclassification error when using the first d population eigenvectors, and let $L_{\Lol}^{p,d}$ denote the misclassification error when concatenating the first d-1 population eigenvectors with the population difference of the means.  Dropping the superscripts for brevity, and letting $\rho$ be the maximum correlation between the mean difference vector and the covariance matrix, we have
+
+
+% We can formalize this notion theoretically, as well as explore its consequences numerically.  Let $\mh{L}_A$ denote the same as $L_A$ except using the sample estimate of $A$ rather than the population value, we have:
+
 
 
 \subsubsection{Rotation of Projection Based Linear Classifiers $g_A$}
@@ -547,7 +566,7 @@ One implication of this lemma is that we can reparameterize without loss of gene
 By a similar arguement as above, one can easily show that:
 % 
 % \begin{lem}
-% $L_{A \circ \Fld}^F = L_{\circ \Fld}^{W \circ F}$, for any $F \in \mc{F}$.
+% $L_{A \circ \Lda}^F = L_{\circ \Lda}^{W \circ F}$, for any $F \in \mc{F}$.
 % \end{lem}
 
 % \begin{proof}
@@ -570,7 +589,7 @@ In other words, \Pca~is the only rotationally invariant projection.
 
 
 
-% Two immediate corrolaries of the above that we state without proof are the composing \Fld~with either \Pca~or \Lol~ is rotationally invariant:
+% Two immediate corrolaries of the above that we state without proof are the composing \Lda~with either \Pca~or \Lol~ is rotationally invariant:
 % \begin{cor}
 % $L_{\Pca_d}^F = L_{\Pca_d}^{W \circ F}$, for any $F \in \mc{F}$ and any $d \leq p$.
 % \end{cor}
@@ -580,14 +599,45 @@ In other words, \Pca~is the only rotationally invariant projection.
 
 
 
-\subsubsection{Simplifying the Objective Function}
 
-Recalling Eq.~\eqref{eq:g_A}, a projection based classifier is effectively thresholding the dot product of $\bx$ with the linear projection operator $\bP_A :=\bA\T \bSig_A^{-1} \bdel_A \in \Real^p$.  Unfortunately, the nonlinearity in in Eq.~\eqref{eq:A} makes analysis difficult.
-However, because of the linear nature of the classifier and projection matrix operator, an objective function that is simpler to evaluate is available: 
+
+
+
+
+\subsection{\Pca~versus \Lol}
+
+
+% Based on the above, rather than operating on the non-convex $L_A$, we can instead analyze the properties of different $\bA$ matrices, and their resulting projection matrices, $\bP_A$, and their angles with respect to $\bP_*$. More specifically, we would like to prove something like:
+% \begin{thm} \label{thm:angle_goal}
+% \begin{align} \label{eq:angle_goal}
+% \angle(\bP_{\Pca},\bP_*) \leq \angle(\bP_{\Lol},\bP_*) \forall \, \bth \in \bTh, \text{ where }\bth = (\bpi,\bdel,\bSig,\bA).
+% \end{align}
+%  \end{thm}
+\begin{thm} \label{thm:L>P}
+% \begin{align} \label{eq:\Lol>\Pca}
+$L_{\Lol}^d \leq L_{\Pca}^d  \forall \, \bth \in \bTh_{2-\Lda}$,  and  any $d < p$.
+% \end{align}
+ \end{thm}
+
+This means that for any distribution in the two-class linear discriminant analysis model, \Lol~yields a projection that is better than \Pca~, given that either will be composed with \Lda; and better is defined with respect to classifier performance.  And that this result is true regardless of the dimensionality of the projection.  This is the formal statement of Theorem \ref{thm:LDA}.
+
+IS THE ABOVE TRUE?? PROBABLY NOT, BUT MAYBE SOMETHING LIKE IT.
+
+\subsubsection{Proof of Theorem \ref{thm:L>P}}
+
+
+
+\paragraph{Simplifying the Objective Function}
+
+Recalling Eq.~\eqref{eq:g_A}, a projection based classifier is effectively thresholding the dot product of $\bx$ with the linear projection operator $\bP_A :=\bA\T \bSig_A^{-1} \bdel_A \in \Real^p$, and let $\bP_*:=\bP_{\bA_*}$.  Unfortunately, the nonlinearity in in Eq.~\eqref{eq:A} makes analysis difficult.
+However, because of the linear nature of the classifier and projection matrix operator, an objective function that is simpler to evaluate is available.
+Define 
+$\angle(\bP,\bP') = \frac{ \bP\T \bP'}{||\bP||_2 ||\bP'||_2} \in (0,1)$, and consider
+
 \begin{equation} \label{eq:angle}
 \begin{aligned}
 & \underset{\bA}{\text{minimize}}
-& & -\frac{ \bP_A\T \bP_*}{||\bP_A||_2 ||\bP_*||_2}, 
+& & -\angle(\bP_A,\bP_*), 
 \\ & \text{subject to} & & \bA \in \Real^{p \times d}, \quad \bA \bA\T = \bI_{d \times d}.
 \end{aligned}
 \end{equation}
@@ -600,10 +650,16 @@ The solution to Eq.~\eqref{eq:angle} is also the solution to Eq.~\eqref{eq:A} fo
 The minimum of Eq.~\eqref{eq:angle} is clearly $\bA=\bSig^{-1} \bdel$, which is also the minimum of Eq.~\eqref{eq:A}.
 \end{proof}
 
-Define 
-$\angle(\bP,\bP') = \frac{ \bP\T \bP'}{||\bP||_2 ||\bP'||_2} \in (0,1)$.
-Let $\bP_*=\bP_{A_*}=\bSig^{-1} \bdel$, 
-and $\alpha^*_A=\angle(\bP_*,\bP_A)$. 
+\begin{remark} 
+$\angle$ is merely the angle between two vectors, and is therefore scale invariant.  In other words, $\angle(\bP_A,\bP)=\angle(\bP_{c A},\bP)$, for any $c > 0$.
+\end{remark}
+
+Given the above, we can evaluate various choices of $\bA$ in terms of their induced projection operator $\bP_A$ and the angle between said projection operators and the Bayes optimal projection operator.  
+% Let $\bP_*=\bP_{A_*}=\bSig^{-1} \bdel$, 
+% and $\alpha^*_A=\angle(\bP_*,\bP_A)$.
+
+\para{I DON'T THINK THIS SUBSECTION IS CORRECT}
+
 A corollary to the above is:
 \begin{cor} \label{cor:angle}
 $\angle(\bP_A,\bP_*) \leq \angle(\bP_{A'},\bP_*) \implies L_A \leq L_{A'}$.
@@ -612,9 +668,8 @@ $\angle(\bP_A,\bP_*) \leq \angle(\bP_{A'},\bP_*) \implies L_A \leq L_{A'}$.
 \begin{proof}
 i'm not sure this is true.
 \end{proof}
-
 Note that Corollary \ref{cor:angle} is a stronger statement than Lemma \ref{lem:angle}, and in particular, Corollary \ref{cor:angle} implies Lemma \ref{lem:angle}.
-Given the above, we can evaluate various choices of $\bA$ in terms of their induced projection operator $\bP_A$ and the angle between said projection operators and the Bayes optimal projection operator.  
+
 
 % Before proceeding, note that the angle between projection matrix operators is invariant to rotations.
 % Formally we have:
@@ -627,80 +682,124 @@ Given the above, we can evaluate various choices of $\bA$ in terms of their indu
 % Recall that det$(\bA \bB)$=det$(\bA)$det$(\bB)$.
 % \end{proof}
 
+\paragraph{Diagonal covariance matrix and $d=1$}
 
 
+To build up to being able to prove Theorem \ref{thm:L>P}, we start very simply.
+
+\begin{lem}
+$\bA_{\Lol}^1 \in \mc{A}_*$ when $\bSig=\bI$ and $\pi_0=\pi_1$ and $(\mu_0+\mu_1)/2=\mb{0}$.
+\end{lem}
+\begin{proof}
+When $\bSig=c \bI$, that $\bA_* = \bSig^{-1} \bdel = c \bdel$.
+By definition, the first projection vector of $\bA_{\Lol}$ is $\bdel$.
+And by Lemma \ref{lem:angle}, $\angle(\bP_A,\bP_*)=\angle(\bP_{c A},\bP_*)$, for any $c>0$, and in this scenario, $\bA_{\Lol}^1=c \bA_*$.
+\end{proof}
+
+\begin{lem} \label{lem:lol1}
+$\bA_{\Lol}^1 \in \mc{A}_*$ when $\bSig=\bS$ is diagonal and $\pi_0=\pi_1$ and $(\mu_0+\mu_1)/2=\mb{0}$.
+\end{lem}
+\begin{proof}
+Let $\bs$ be the singular values of $\bSig$.  When $\bSig$ is diagonal, its diagonal elements are $s_1,\ldots,s_p$, and we call that matrix $\bS$. 
+Recalling that $s_i=\lambda_i^2$, where $\lambda_i^2$ are eigenvalues, and when a matrix is diagonal, $\lambda_i=\sigma_i$, we have  $\bA_*=\bS^{-1} \bdel=\bs^{-1} \odot \bdel:=\mt{\bdel}=(\del_1/\sigma_1^2,\ldots,\del_p/\sigma_p^2)$.
+By definition, $\bA_{\Lol}^1=\mt{\bdel}$.
+\end{proof}
+
+Note that when the distribution is mean centered, $\bmu_0=-\bmu_1$, so that $\bdel:=2 \bmu$.  In this case, $\mt{\del}_i=2\mu_i / \sigma_i^2$.
 
 
-\subsubsection{Evaluating Different Projections using Eq.~\eqref{eq:angle}}
+\begin{lem}
+$L_{\Pca}^1 \geq L_{\Lol}^1  = L_{\bA}^*$ when $\bSig=\bS$ and $\pi_0=\pi_1$ and $(\mu_0+\mu_1)/2=\mb{0}$.
+\end{lem}
+\begin{proof}
+Lemma \ref{lem:lol1} proves that $L_{\Lol}^1=L_{A_*}$.
 
 
-
-
-Based on the above, rather than operating on the non-convex $L_A$, we can instead analyze the properties of different $\bA$ matrices, and their resulting projection matrices, $\bP_A$, and their angles with respect to $\bP_*$. More specifically, we would like to prove something like:
-\begin{thm} \label{thm:angle_goal}
-\begin{align} \label{eq:angle_goal}
-\angle(\bP_{\Pca},\bP_*) \leq \angle(\bP_{\Lol},\bP_*) \forall \, \bth \in \bTh, \text{ where }\bth = (\bpi,\bdel,\bSig,\bA).
-\end{align}
- \end{thm}
-
-This would mean that for any $\bth$, \Lol~would yield a projection closer than \Pca~to the optimal projection.
-Recall some basic probability theory which we will use in the sequel.
+To obtain the first principle component, consider the general definition of variance.
 The distribution $\bX$ is actually mixture of Gaussians:
 $\bX \sim \sum_j \pi_j \mc{N}(\bmu_j,\bSig)$.  
-Assume that $\bX$ is mean centered without loss of generality, to simplify notation.
-Further assume that we only have two classes, so the number of mixture components is two, and $\mu_0=-\mu_1$ and $\bdel=2 \bmu_0=2 \bmu$.
+Because  $\mu_0=-\mu_1$, it is the case that $\mu_0^2=\mu_1^2$.
 When $\bSig$ is diagonal, this factorizes: 
 $\bX \sim \prod_{i \in [p]} \sum_j \pi_j \mc{N}(\mu_{ij},\sigma_i^2)$. 
 Consider each $X_i$ separately therefore, we have:
-$X_i \sim \sum_j \pi_j \mc{N}(\mu_{ij},\sigma_i^2)$, where mean($X_i$)$=\mb{0}$ by assumption and
-var($X_i$)$=\sum_j \pi_j \mu_{i,j}^2 \sigma_i^2=\sum_j \pi_j \mu_i^2 \sigma_i^2$,
-where the second equality follows from the centered mean assumption. 
+$X_i \sim \sum_j \pi_j \mc{N}(\mu_{ij},\sigma_i^2)$, where 
+var($X_i$)$=\sum_j \pi_j \mu_{i,j}^2 / \sigma_i^{2}=\sum_j \pi_j \mu_i^2 / \sigma_i^2=\mu_i^2 / \sigma_i^2$,
+where the  equalities follow from the equal class priors and centered mean assumptions. 
+% Recall that $\mt{\bdel}=(2 \mu_1/\sigma_1^2,\ldots, 2 \mu_p/\sigma_p^2)$. 
+Let $i_*=\argmax_i \mu_i^2 / \sigma_i^2$. % and $\mt{\del}_{(i)}=\max_i \mu_i^2 / \sigma_i^2$.
 
+Let $\be_i$ be a unit vector with a one in the $i^{th}$ element and zeros everywhere else.
+The eigenvector with the largest eigenvalue  (the direction of maximal variance) will be 
+$\bu_1=\be_{i_*}$.
 
-To build up to being able to prove Theorem \ref{thm:angle_goal}, we start very simply.
-\begin{lem}
-When $d=1$, so $\bA \in \Real^{p}$ is a $p$-dimensional vector, and $\bSig=\bI$ and $\pi_0=\pi_1$.
-Then (i) $\angle(\bP_{\Lol},\bP_*)=1$ and (ii) $\angle(\bP_{\Pca},\bP_*) \leq 1$.
-\end{lem}
-
-\begin{proof}
-First note that when $\bSig=c \bI$, that $\bA_* = \bSig^{-1} \bdel = \bdel$.
-Moreover, note that by definition, the first projection vector of $\bA_{\Lol}$ is $\bdel$.
-Therefore, (i) the lemma is immediate.
-
-Now, to obtain the first principle component, consider the general definition of variance, 
-and let each $\sigma_i=1$, such that  the variance of the $i^{th}$ dimension is var($X_i$)=$\sum_j \pi_j \mu_i^2=\mu_i^2$.    
-In such a scenario, the eigenvector with the largest eigenvalue  (the direction of maximal variance) will be 
-$\bu_1=(\mu_1^2,\ldots, \mu_p^2)$.
-Let $\mt{\bu}_1=\bu_1/\norm{\bu_1}$ and $\mt{\bdel}=\bdel/\norm{\bdel}$. 
-Then, $\mt{\bu}_1\T \mt{\bdel}=1$ if and only if $\mu_i \in \{\mu,0\}$, for some $\mu \in \Real$.
+Because  to achieve Bayes optimal performance it is sufficient that  $\bA = c \bA_*$ for some $c > 0$, 
+$L_{\Pca}^1=L_{\bA}^*$ whenever $\bu_1 \propto \mt{\bdel}$, and otherwise, it is possible that $L_{\Pca}^1>L_{\bA}^*$.
+Note that $\bu_1 \propto \mt{\bdel}$ if and only if $|\mu_{i_*}|=1$ and $\mu_{i'}=0$ for all $i' \neq i_*$.
+% Let $\mt{\bu}_1=\bu_1/\norm{\bu_1}$ and $\mt{\bdel}=\bdel/\norm{\bdel}$. 
+% Then, $\mt{\bu}_1\T \mt{\bdel}=1$ if and only if $\mu_i \in \{\mu,0\}$, for some $\mu \in \Real$.
 \end{proof}
 
 
+The above theorems are about scenarios where the parameter $\bth$ is given.  Of course, in practice, those parameters are not given.  To make stronger statements about \Lol, we relax this assumption. 
+For now, we keep the constraints as above, that is: $\bSig$ is diagonal, $\pi_0=\pi_1$, and $\bmu_0=-\bmu_1$.  
+We define $\mc{F}_s=\{F_s \from \Omega \to \Real^p\}$ to be the distribution from which $\bs$ is sampled, that is, $\bs \sim F_s$.  By introducing this source of randomness, $L_A$ is no longer a constant, but rather a random variable, induced by $F_d$.  In this scenario, we can state a  more general probabilistic lemma than the above:
 \begin{lem}
-$\bA_{\Pca_1}=\bA_{\Lol_1}=\bA_*=\mt{\bd}$ when $\bSig=\bD$, $\pi_0=\pi_1$, and $\bmu_0-\bmu_1=\mb{0}$.
+$\PP[L_{\Lol}^1 < L_{\Pca}^1]=1$ when $\bs \sim F_s$ and $\bmu_1=\bmu_0$ and $\pi_0=\pi_1$.
 \end{lem}
-\begin{proof}
-Recall that $\mt{\bd}=\bd \odot \bdel$, where $\bd$ is the diagonal of $\bD$, and $\odot$ is the Hadamard (elementwise) product.  By definition, the first dimension of \Lol~is $\mt{\bd}$, which proves the second equality.
-
-
-The variance of the $i^{th}$ dimension is var($X_i$)=var($\pi_0 \mc{N}(\mu_{i,0},\sigma_i^2) + \pi_1 \mc{N}(\mu_{i,1},\sigma_i^2)$)= $\sum_j \pi_j \mu_{i,j}^2 \sigma_i^2$.   
-\end{proof}
-
-Another good thing to prove would be 
-\begin{thm}
-\begin{align*}
-\bP_{\Pca}\T \bP_* /\norm{\bP_{\Pca}} \norm{\bP_*} - \bP_{\Lol}\T \bP_* /\norm{\bP_{\Lol}} \norm{\bP_*} < t  \text{ whenever } \bdel \in \mc{X}, \bSig \in \mc{Y}, \bA \in \mc{Z},
-\end{align*}
-for suitable $\mc{X}, \mc{Y}, \mc{Z}$.
-\end{thm}
-This would mean that \Lol~is better than \Pca~as a projection.
 
 
 
 
+% \begin{lem}
+% $\bA_{\Pca_1}=\bA_{\Lol_1}=\bA_*=\mt{\bd}$ when $\bSig=\bS$, $\pi_0=\pi_1$, and $\bmu_0-\bmu_1=\mb{0}$.
+% \end{lem}
+% \begin{proof}
+% Recall that $\mt{\bd}=\bd \odot \bdel$, where $\bd$ is the diagonal of $\bS$, and $\odot$ is the Hadamard (elementwise) product.  By definition, the first dimension of \Lol~is $\mt{\bd}$, which proves the second equality.
 
-\subsubsection{Probabilistic Extensions of the above}
+
+% The variance of the $i^{th}$ dimension is var($X_i$)=var($\pi_0 \mc{N}(\mu_{i,0},\sigma_i^2) + \pi_1 \mc{N}(\mu_{i,1},\sigma_i^2)$)= $\sum_j \pi_j \mu_{i,j}^2 \sigma_i^2$.   
+% \end{proof}
+
+\paragraph{Diagonal covariance matrix and $d>1$}
+
+
+\begin{lem}
+$\bA_{\Lol}^d \in \mc{A}_*$ when $\bSig=\bI$ and $\pi_0=\pi_1$ and $(\mu_0+\mu_1)/2=\mb{0}$, for any $d < p$.
+\end{lem}
+
+
+
+\begin{lem}
+$L_{\Lol}^d \leq L_{\Pca}^d$ when $\bSig=\bI$ and $\pi_0=\pi_1$ and $(\mu_0+\mu_1)/2=\mb{0}$.
+\end{lem}
+
+
+
+
+
+
+% \begin{cor}
+% $L_{\Lol}^1 \leq L_{\Pca}^1$ when $\bSig=\bI$ and $\pi_0=\pi_1$.
+% \end{cor}
+
+
+
+
+
+% Another good thing to prove would be 
+% \begin{thm}
+% \begin{align*}
+% \bP_{\Pca}\T \bP_* /\norm{\bP_{\Pca}} \norm{\bP_*} - \bP_{\Lol}\T \bP_* /\norm{\bP_{\Lol}} \norm{\bP_*} < t  \text{ whenever } \bdel \in \mc{X}, \bSig \in \mc{Y}, \bA \in \mc{Z},
+% \end{align*}
+% for suitable $\mc{X}, \mc{Y}, \mc{Z}$.
+% \end{thm}
+% This would mean that \Lol~is better than \Pca~as a projection.
+
+
+
+
+
+\section{Finite Sample Theory}
 
 
 
@@ -717,8 +816,8 @@ Assume for the moment that $\bdel,\bu_1,\ldots,\bu_p \iid \mc{N}(\bmu_p, \bSig_p
 The reason the above is probabilistic is because it is under certain assumptiosn on the \emph{distributions} of $bdel$, $\bSig$, and $\bA$.   
 
 
-Perhaps even simpler is to start with specific assumptions about $\bdel$, $\bSig$, and $\bA$. Because \Fld~is rotationally invariant, I believe that we can assert, without loss of generality, that $\bSig=\bD$, where $\bD$ is a diagonal matrix with diagonal entries $\sigma_1,\ldots, \sigma_p$, where all $\sigma_j > 0$.
-Now, the optimal projection $\bSig^{-1} \bdel$ is just a simple dot product,  $\bd\T \bdel$, where $\bd=$diag($\bD$)$\in \Real^p$.
+Perhaps even simpler is to start with specific assumptions about $\bdel$, $\bSig$, and $\bA$. Because \Lda~is rotationally invariant, I believe that we can assert, without loss of generality, that $\bSig=\bS$, where $\bS$ is a diagonal matrix with diagonal entries $\sigma_1,\ldots, \sigma_p$, where all $\sigma_j > 0$.
+Now, the optimal projection $\bSig^{-1} \bdel$ is just a simple dot product,  $\bd\T \bdel$, where $\bd=$diag($\bS$)$\in \Real^p$.
 
 
 For example, letting $\bA=\bU_d$, and letting $\bU_i=e_i$ be the unit vector, with zeros everywhere except a one in the $i^{th}$ position,  we have
@@ -730,15 +829,15 @@ For example, letting $\bA=\bU_d$, and letting $\bU_i=e_i$ be the unit vector, wi
 \end{align*}
 
 
-% Consider $\bP_*:=\bP_{\bA_*}$ and $\bP_{PCA_d} := \bP_{A^{PCA}_d}$.  
-% Now, consider $\alpha_{PCA} := \angle (\bP_*, \bP_{PCA_d})$.
+% Consider $\bP_*:=\bP_{\bA_*}$ and $\bP_{\Pca_d} := \bP_{A^{\Pca}_d}$.  
+% Now, consider $\alpha_{\Pca} := \angle (\bP_*, \bP_{\Pca_d})$.
 % We would like to understand scenarios for which $\angle^*_{\Pca_d}$ is small, and when it is big.
 
 
 
 
 % Note that this angle is a random variable, as it is a function of the sampled data $(\bX_i,Y_i) \iid P$.
-So, we want to understand the probability that $\alpha_{PCA}$ is small under different parameter settings, $\bth \in \bTh$.  
+So, we want to understand the probability that $\alpha_{\Pca}$ is small under different parameter settings, $\bth \in \bTh$.  
 
 % First note that
 
@@ -770,7 +869,7 @@ When the parameters, $\bSig$ and $\bdel$ are unknown, as in real data scenarios,
 \mh{g}^*_n(\bx) := \II\{ \bx\T \mh{\bSig}^{-1} \mh{\bdel} > 0 \}.
 \end{align}
 This Bayes plugin classifier is called Fisher's Linear Discriminant (FLD; in contrast to \Lda, which uses the true---not estimated---parameters).  
-Unfortunately, when $p \gg n$, the estimate of the covariance matrix $\bSig$ will be low-rank, and therefore, not invertible (because an infinite number of solutions all fit equally well).  In such scenarios, we seek alternative methods, even in the LDA model.
+Unfortunately, when $p \gg n$, the estimate of the covariance matrix $\bSig$ will be low-rank, and therefore, not invertible (because an infinite number of solutions all fit equally well).  In such scenarios, we seek alternative methods, even in the \Lda model.
 
 
 
