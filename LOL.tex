@@ -335,7 +335,7 @@ The \Lol~idea, appending the mean difference vector to convert unsupervised mani
 
 \clearpage
 \appendix
-\section{Theory}
+\section{Theoretical Background}
 
 
 \subsection{The Classification Problem}
@@ -373,16 +373,6 @@ g_{\Lda}(\bx) :=  \argmin_y \bx\T \bSig^{-1} \bmu_y.
 In words, the  \Lda~classifier chooses the class for whom the projection of an input vector $\bx$, onto $\bSig^{-1} \bmu_y$, is maximized.
 % 
 When there are only two classes, this further simplies to 
-% Note that  $g^*(\bx):=\argmax_y f_{\bx|y}f_y$ can be written as 
-% $\II\{f_{\bx|0}f_{y=0} < f_{\bx|1}f_{y=1}\}$.  Taking the log of both sides, we have:
-% $\II\{\log f_{\bx|0} \log f_{y=0} < \log f_{\bx|1} \log f_{y=1}\}$.  For simplicity, we let $f_{y=0}=f_{y=1}$.  Rearranging terms, we are left with
-% $\II\{\log f_{\bx|0} - \log f_{\bx|1} < 0 \}$.
-% Plugging in the \Lda model assumption, the argument becomes
-% \begin{align*}
-% -\frac{1}{2} (\bx-\bmu_0)\T \bSig^{-1}(\bx-\bmu_0) 
-% \frac{1}{2} (\bx-\bmu_1)\T \bSig^{-1}(\bx-\bmu_1). 
-% \end{align*}
-% Expanding the terms and re-arranging a bit, and assuming that the data are centered---$(\bmu_0+\bmu1)/2=0$---we obtain:
 \begin{align*}
 g_{2-\Lda}(\bx) :=  \II\{ \bx\T \bSig^{-1} \bdel > 0 \},
 \end{align*}
@@ -408,6 +398,7 @@ Under the \Lda~model, the Bayes optimal classifier is available by plugging the 
 
 
 
+\section{Theory When $\bth$ is Given}
 
 
 \subsection{\Lda~is rotationally invariant}
@@ -614,9 +605,7 @@ In other words, \Pca~is the only rotationally invariant projection.
 % \end{align}
 %  \end{thm}
 \begin{thm} \label{thm:L>P}
-% \begin{align} \label{eq:\Lol>\Pca}
-$L_{\Lol}^d \leq L_{\Pca}^d  \forall \, \bth \in \bTh_{2-\Lda}$,  and  any $d < p$.
-% \end{align}
+$\PP[L_{\Lol}^d \leq L_{\Pca}^d]=1$ for any $\bth \in \bTh_{2-\Lda}$  and   $d < p$.
  \end{thm}
 
 This means that for any distribution in the two-class linear discriminant analysis model, \Lol~yields a projection that is better than \Pca~, given that either will be composed with \Lda; and better is defined with respect to classifier performance.  And that this result is true regardless of the dimensionality of the projection.  This is the formal statement of Theorem \ref{thm:LDA}.
@@ -746,43 +735,29 @@ We define $\mc{F}_s=\{F_s \from \Omega \to \Real^p\}$ to be the distribution fro
 \begin{lem}
 $\PP[L_{\Lol}^1 < L_{\Pca}^1]=1$ when $\bs \sim F_s$ and $\bmu_1=\bmu_0$ and $\pi_0=\pi_1$.
 \end{lem}
+\begin{proof}
+Because $\bs \in \Real^p$, $\sum_{i \in [p]} \PP[|\bs| = \be_i] = 0$ almost surely.
+\end{proof}
 
-
-
-
-% \begin{lem}
-% $\bA_{\Pca_1}=\bA_{\Lol_1}=\bA_*=\mt{\bd}$ when $\bSig=\bS$, $\pi_0=\pi_1$, and $\bmu_0-\bmu_1=\mb{0}$.
-% \end{lem}
-% \begin{proof}
-% Recall that $\mt{\bd}=\bd \odot \bdel$, where $\bd$ is the diagonal of $\bS$, and $\odot$ is the Hadamard (elementwise) product.  By definition, the first dimension of \Lol~is $\mt{\bd}$, which proves the second equality.
-
-
-% The variance of the $i^{th}$ dimension is var($X_i$)=var($\pi_0 \mc{N}(\mu_{i,0},\sigma_i^2) + \pi_1 \mc{N}(\mu_{i,1},\sigma_i^2)$)= $\sum_j \pi_j \mu_{i,j}^2 \sigma_i^2$.   
-% \end{proof}
 
 \paragraph{Diagonal covariance matrix and $d>1$}
 
+Things we would like to prove include
 
 \begin{lem}
 $\bA_{\Lol}^d \in \mc{A}_*$ when $\bSig=\bI$ and $\pi_0=\pi_1$ and $(\mu_0+\mu_1)/2=\mb{0}$, for any $d < p$.
 \end{lem}
 
-
-
 \begin{lem}
-$L_{\Lol}^d \leq L_{\Pca}^d$ when $\bSig=\bI$ and $\pi_0=\pi_1$ and $(\mu_0+\mu_1)/2=\mb{0}$.
+$\PP[L_{\Lol}^d \leq L_{\Pca}^d]=1$ when $\bSig=\bS$, $\pi_0=\pi_1$ and $(\mu_0+\mu_1)/2=\mb{0}$, for any $d < p$.
 \end{lem}
 
 
+\paragraph{Arbitrary covariance matrix and $d=1$}
 
 
 
-
-% \begin{cor}
-% $L_{\Lol}^1 \leq L_{\Pca}^1$ when $\bSig=\bI$ and $\pi_0=\pi_1$.
-% \end{cor}
-
-
+\paragraph{Arbitrary covariance matrix and $d>1$}
 
 
 
@@ -798,9 +773,48 @@ $L_{\Lol}^d \leq L_{\Pca}^d$ when $\bSig=\bI$ and $\pi_0=\pi_1$ and $(\mu_0+\mu_
 
 
 
+\section{Asymptotic Theory}
+
+In real data problems,  the true joint distribution is unknown. Instead, what is provided is a set of training data.  We therefore assume the existence of $n$ training samples, each of which has been sampled identically and independently from the same distribution, $(\bX_i,Y_i) \iid F_{\bX,Y}$, for $i =1,2,\ldots, n$.  We can use these training samples to then estimate $f_{x|y}$ and $f_y$.  Plugging these estimates in to Eq.~\eqref{eq:bayes}, we obtain the Bayes plugin classifier:
+\begin{align} \label{eq:plugin}
+\mh{g}^*_n(\bx) := \argmax_y \mh{f}_{\bx|y}\mh{f}_y.
+\end{align}
+Under suitable conditions, it is easy to show that this Bayes plugin classifiers performance is asymptotically optimal.  
+Formally, we know that:
+% \begin{align} \label{eq:pc}
+$L_{\mh{g}^*_n} \conv L_{g^*}$.
+% \end{align} 
+
+
+When the parameters, and we want to use a linear approach, we can implement a Bayes plug-in \Lda, which we call Fisher's Discriminant Analysis (\Fld) \cite{Fisher1925}.  Under the two-class, equal prior, and centered means assumption, we have 
+% $\bSig$ and $\bdel$ are unknown, as in real data scenarios, we can use the training samples to estimate them, and plug them in, as in Eq.~\eqref{eq:plugin}:
+\begin{align}
+\mh{g}^*_n(\bx) := \II\{ \bx\T \mh{\bSig}^{-1} \mh{\bdel} > 0 \},
+\end{align}
+and $L_{\mh{g}_n}$ is the misclassification rate for an estimated classifier, $\mh{g}_n$.
+% This Bayes plugin classifier is called Fisher's Linear Discriminant (FLD; in contrast to \Lda, which uses the true---not estimated---parameters).  
+Unfortunately, when $p \gg n$, the estimate of the covariance matrix $\bSig$ will be low-rank, and therefore, not invertible (because an infinite number of solutions all fit equally well).  In such scenarios, we seek alternative methods, even in the \Lda~model.
+
+We would like to prove:
+\begin{lem}
+$L_{\mh{\Lol}}^d \conv L_*$ for any $\bth \in \bTh_{2-\Lda}$.
+\end{lem}
+
+
+\begin{lem}
+$\PP[L_{\mh{\Pca}}^d \conv L_*]>0$ for any $\bth \in \bTh_{2-\Lda}$
+\end{lem}
+
 
 \section{Finite Sample Theory}
 
+It would be awesome to prove something like:
+\begin{thm}
+\begin{align*}
+\PP[ \mh{L}_{\Lol}^d - \mh{L}_{\Pca}^2  > 0  ] < f(\bth,d,n),
+\end{align*}
+\end{thm}
+which would state that \Lol~is better than \Pca, again, under suitable assumptions.
 
 
 \begin{thm}
@@ -849,29 +863,6 @@ So, we want to understand the probability that $\alpha_{\Pca}$ is small under di
 % \begin{proof}
 % blah
 % \end{proof}
-
-
-\subsection{Learning Classifiers from Data}
-
-In real data problems, however, the true joint distribution is typically not provided. Instead, what is provided is a set of training data.  We therefore assume the existence of n training samples, each of which has been sampled identically and independently from the same distribution, $(\bX_i,Y_i) \iid P_{\bX,Y}$, for $i =1,2,\ldots, n$.  We can use these training samples to then estimate $f_{x|y}$ and $f_y$.  Plugging these estimates in to Eq.~\eqref{eq:bayes}, we obtain the Bayes plugin classifier:
-\begin{align} \label{eq:plugin}
-\mh{g}^*_n(\bx) := \argmax_y \mh{p}_{\bx|y}\mh{p}_y.
-\end{align}
-Under suitable conditions, it is easy to show that this Bayes plugin classifiers performance is asymptotically optimal.  
-Formally, we know that:
-% \begin{align} \label{eq:pc}
-$L_{\mh{g}^*_n} \conv L_{g^*}$.
-% \end{align} 
-
-
-When the parameters, $\bSig$ and $\bdel$ are unknown, as in real data scenarios, we can use the training samples to estimate them, and plug them in, as in Eq.~\eqref{eq:plugin}:
-\begin{align}
-\mh{g}^*_n(\bx) := \II\{ \bx\T \mh{\bSig}^{-1} \mh{\bdel} > 0 \}.
-\end{align}
-This Bayes plugin classifier is called Fisher's Linear Discriminant (FLD; in contrast to \Lda, which uses the true---not estimated---parameters).  
-Unfortunately, when $p \gg n$, the estimate of the covariance matrix $\bSig$ will be low-rank, and therefore, not invertible (because an infinite number of solutions all fit equally well).  In such scenarios, we seek alternative methods, even in the \Lda model.
-
-
 
 \clearpage
 \bibliography{../../../../other/latex/library}
