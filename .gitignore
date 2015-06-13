@@ -3,3 +3,12 @@
 /old/*
 /ingest_data/*
 *.m~
+*.4tc
+*.aux
+*.blg
+*.brf
+*.fdb*
+*.log
+*.synctex*
+*.tmp
+*.xref

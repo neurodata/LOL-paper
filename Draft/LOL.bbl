@@ -429,6 +429,10 @@ C.-C. Chang and C.-J. Lin, ``{LIBSVM},'' \emph{ACM Transactions on Intelligent
   Available: \url{http://dl.acm.org/citation.cfm?id=1961189.1961199}
 \BIBentrySTDinterwordspacing
 
+\bibitem{Breiman01b}
+L.~Breiman, ``{Statistical Modeling : The Two Cultures},'' \emph{Statistical
+  Science}, vol.~16, no.~3, pp. 199--231, 2001.
+
 \bibitem{Anderson1999}
 \BIBentryALTinterwordspacing
 E.~Anderson, Z.~Bai, C.~Bischof, S.~Blackford, J.~Demmel, J.~Dongarra, J.~D.
@@ -438,8 +442,11 @@ E.~Anderson, Z.~Bai, C.~Bischof, S.~Blackford, J.~Demmel, J.~Dongarra, J.~D.
   \url{https://books.google.com/books?hl=en\&lr=\&id=AZlvEnr9gCgC\&pgis=1}
 \BIBentrySTDinterwordspacing
 
-\bibitem{Breiman01b}
-L.~Breiman, ``{Statistical Modeling : The Two Cultures},'' \emph{Statistical
-  Science}, vol.~16, no.~3, pp. 199--231, 2001.
+\bibitem{Fisher1925}
+\BIBentryALTinterwordspacing
+R.~A. Fisher, \emph{{Statistical Methods for Research Workers}}, 1925.
+  [Online]. Available:
+  \url{http://psychclassics.yorku.ca/Fisher/Methods/chap6.htm}
+\BIBentrySTDinterwordspacing
 
 \end{thebibliography}
