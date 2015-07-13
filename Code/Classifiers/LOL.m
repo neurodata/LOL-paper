@@ -100,6 +100,11 @@ for i=1:ntypes
     if strcmp(types{i}(1),'D')      % default estimate of the different of the means
         if ~isfield(P,'Delta')
             P.Delta = bsxfun(@minus,P.mu(:,2:end),P.mu(:,1));
+            Dnorm=zeros(ngroups-1,1);
+            for j=1:ngroups-1
+                Dnorm(j)=norm(P.Delta(:,j));
+            end
+            P.Delta=bsxfun(@rdivide,P.Delta,Dnorm'); 
         end
     elseif strcmp(types{i}(1),'S') % sparse estimate of difference of means
         if ~isfield(P,'Selta')
@@ -148,8 +153,10 @@ end
 Proj=cell(1:ntypes);
 for i=1:ntypes
     if ~strcmp(types{i}(1),'N')     % if we are appending something to "eigenvectors"
-%         [V, ~] = qr([P.([types{i}(1), 'elta']),Q.(['V', types{i}(2), types{i}(3)])'],0);
-                V = [P.([types{i}(1), 'elta']),Q.(['V', types{i}(2), types{i}(3)])'];
+        % the line below orthonormalizes and concatenates
+        % [V, ~] = qr([P.([types{i}(1), 'elta']),Q.(['V', types{i}(2), types{i}(3)])'],0);  
+        % the line below just concatenates (note that they are all already normal) 
+        V = [P.([types{i}(1), 'elta']),Q.(['V', types{i}(2), types{i}(3)])'];
     elseif strcmp(types{i}(1),'N')  % if not
         V=Q.(['V', types{i}(2), types{i}(3)])';
     end

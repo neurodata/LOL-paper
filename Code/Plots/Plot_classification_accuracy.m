@@ -131,15 +131,15 @@ for j=1:4
         F.doxlabel=false;
         F.title='';
         F.ylabel='error rate';
-        F.ytick=[0.05, 0.2, 0.35]; %[0.06, [0.1:0.1:0.3]];
-        F.ylim=[0.03,0.5];
+        F.ytick=[0.0:0.2:1]; %[0.06, [0.1:0.1:0.3]];
+        F.ylim=[0.0,0.5];
         F.xlabel='# of embedded dimensions';
         ids=1:10:100;
         F.xlim=[0,75];
     elseif j==2
         F=G;
         F.doxlabel=false;
-        F.ylim=[0.30,0.5];
+        F.ylim=[0.30,0.51];
         F.ytick=[0:0.1:0.5];
         F.title='';
         ids=1:10;
@@ -147,16 +147,16 @@ for j=1:4
     elseif j==3
         F=G;
         F.doxlabel=false;
-        F.ylim=[0.15,0.5];
-        F.ytick=[0.2:0.15:0.5]; %:0.1:0.5];
+        F.ylim=[0.13,0.5];
+        F.ytick=[0.0:0.15:1]; %:0.1:0.5];
         F.title='';
         %         F.xticklabel=[];
         ids=1:10:100;
         F.xlim=[0,75];
     elseif j==4
         F.name='3 Classes';
-        F.ylim=[0.15,0.67];
-        F.ytick=[0.2:0.2:1];
+        F.ylim=[0.13,0.67];
+        F.ytick=[0.15:0.2:1];
         F.xlim=[0 49];
         F.xtick=[15:15:F.xlim(2)];
     end
@@ -296,7 +296,7 @@ for j=1:3
         
     elseif j==3 % XOR
         F.title = '';
-        F.ylim = [0.28, 0.51];
+        F.ylim = [0.3, 0.51];
         F.ytick = [0:0.1:0.5]; %[F.ylim(1): 0.01: F.ylim(2)];
         F.xlim = [1 15];
         F.xtick=[5:5:max(F.xlim)]; %:F.xlim(end)];
