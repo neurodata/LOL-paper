@@ -1,6 +1,6 @@
 ---
 bibliography: biblol.bib
-style: nature
+style: nature.csl
 title: Supervised Manifold Learning for Wide Data
 author: "Joshua T.\_Vogelstein, Mauro Maggioni"
 ---
