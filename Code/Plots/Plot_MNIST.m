@@ -15,6 +15,7 @@ addpath(p);
 newsim=1;
 if newsim==1
     task.savestuff=0;
+    task.types={'DENL'};
     [task,T,S,P,Pro,Z]= run_MNIST(rootDir,task);
 else
     load([rootDir, '../Data/Results/mnist'])

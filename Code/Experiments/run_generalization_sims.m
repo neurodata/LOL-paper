@@ -26,7 +26,7 @@ if ~isfield(task,'savestuff'),  task.savestuff=1; end
 if ~isfield(task,'simulation'), task.simulation=1; end
 if ~isfield(task,'percent_unlabeled'),  task.percent_unlabeled=0; end
 task=orderfields(task);
-
+task.algs={'LOL'};
 
 
 %% multiple (3) class trunk
@@ -263,7 +263,7 @@ if task.plot
     l=legend(g,'LOL','LDA o PCA','QOQ','ROL','QDA o \delta+RP','QDA o RP');
     legend(g,'location',[0.82,0.22,0.1,0.1])
     legend1 = legend(hl,'show');
-    set(legend1,'YColor',[1 1 1],'XColor',[1 1 1]);
+%     set(legend1,'YColor',[1 1 1],'XColor',[1 1 1]);
     
     
     set(gca,'XTick',[],'YTick',[],'Box','off','xcolor','w','ycolor','w')

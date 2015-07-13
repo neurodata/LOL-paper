@@ -116,8 +116,11 @@ for i=1:ntypes
         P.Relta = bsxfun(@minus,P.robustmean(:,2:end),P.robustmean(:,1));
     elseif strcmp(types{i}(1),'T')      % default estimate of the different of the means
         if ~isfield(P,'Telta')
-            P.Telta = bsxfun(@minus,P.mu(:,2:end),P.mu(:,1));
-            P.Telta = P.Telta./std(P.mu,[],2);
+            delta = bsxfun(@minus,P.mu(:,2:end),P.mu(:,1));
+            sig = var(P.mu,[],2);
+            P.Telta = bsxfun(@rdivide,delta,sig);
+            z=find(sig<10^-8);
+            P.Telta(z,:)=0;
         end
     end
     

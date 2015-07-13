@@ -4,25 +4,26 @@ function [task,T,S,P,Pro,Z] = run_MNIST(rootDir,task)
 
 if ~isfield(task,'savestuff'), task.savestuff=1; end
 if ~isfield(task,'algs'), task.algs={'LOL';'GLM'};  end
+if ~isfield(task,'types'), task.types={'DENL'}; end
 task.simulation=0;
 task.percent_unlabeled=0;
-task.types={'DENL'};
 task.name='MNIST(378)';
 task.ntrain=300;
 task.ntrials=10; %if <2, plotting will barf
 task.Nks=25;
 task.ks=unique(round(logspace(0,log10(task.ntrain),task.Nks)));
-
+task1=task;
 [T{1},S{1},P{1},Proj{1}] = run_task(task);
 
-task.algs={'LOL'}; %add svm
+task.algs={'LOL'}; 
 task.types={'NENL'};
+task2=task;
 [T{2},S{2},P{2},Proj{2}] = run_task(task);
 
 
 %% fix T and Pro
 
-T{1}.types={'DENL';'NENL'};
+T{1}.types={task1.types{:};task2.types{:}};
 Pro{1}=Proj{1}{1};
 Pro{2}=Proj{2}{1};
 

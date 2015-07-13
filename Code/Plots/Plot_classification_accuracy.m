@@ -1,5 +1,5 @@
 %% set path correctly
-clearvars, clc, 
+clearvars, clc,
 fpath = mfilename('fullpath');
 findex=strfind(fpath,'/');
 rootDir=fpath(1:findex(end-1));
@@ -13,20 +13,24 @@ end
 addpath(p);
 
 %% load example data
-newsim=1;
+newsim=0;
 if newsim==1;
     [T,S,P,task] = run_example_sims;
 else
     load([rootDir, '../Data/Results/example_sims'])
-    pp=P; TT=T; SS=S;
-    load([rootDir, '../Data/Results/generalizations'])
-    for t=1:length(P)
-        pp{end+1}=P{t};
-        SS{end+1}=S{t};
-        TT{end+1}=T{t};
-    end
-    P=pp; S=SS; T=TT;
 end
+pp=P; TT=T; SS=S;
+if newsim==1;
+    [T,S,P,task] = run_generalization_sims(task);
+else
+    load([rootDir, '../Data/Results/generalizations'])
+end
+for t=1:length(P)
+    pp{end+1}=P{t};
+    SS{end+1}=S{t};
+    TT{end+1}=T{t};
+end
+P=pp; S=SS; T=TT;
 S{1}.savestuff=0;
 
 
@@ -82,7 +86,7 @@ for j=1:4
     
     Z = parse_data(X,Y,task1.ntrain,task1.ntest,0);
     
-    pos=[left+(j-1)*(width+hspace) bottom+(height+vspace)*4-0.03 width height-0.01];
+    pos=[left+(j-1)*(width+hspace) bottom+(height+vspace)*4-0.04 width height-0.01];
     subplot('position',pos), %[left,bottom,width,height]
     hold on
     
@@ -146,13 +150,13 @@ for j=1:4
         F.ylim=[0.15,0.5];
         F.ytick=[0.2:0.15:0.5]; %:0.1:0.5];
         F.title='';
-%         F.xticklabel=[];
+        %         F.xticklabel=[];
         ids=1:10:100;
         F.xlim=[0,75];
     elseif j==4
         F.name='3 Classes';
-        F.ylim=[0.25,0.67];
-        F.ytick=[0.25:0.2:1];
+        F.ylim=[0.15,0.67];
+        F.ytick=[0.2:0.2:1];
         F.xlim=[0 49];
         F.xtick=[15:15:F.xlim(2)];
     end
@@ -202,7 +206,7 @@ for j=1:3%length(T)
     
     % plot samples
     plot(Xplot1(1,idx),Xplot1(2,idx),'o','color',G.colors{1},'LineWidth',G.lw,'MarkerSize',G.ms1),
-    plot(Xplot2(1,idx),Xplot2(2,idx),'x','color',G.colors{2},'LineWidth',G.lw,'MarkerSize',G.ms2)    
+    plot(Xplot2(1,idx),Xplot2(2,idx),'x','color',G.colors{2},'LineWidth',G.lw,'MarkerSize',G.ms2)
     
     if j==1
         tit=['                  (E) QDA'];
@@ -222,7 +226,7 @@ for j=1:3%length(T)
         ticks=[-1:1];
     end
     title([{tit}; {['                  D=', num2str(T{j+4}.D), ' n=', num2str(T{j+4}.ntrain)]}])
-
+    
     set(gca,'XTick',ticks,'YTick',ticks,'ZTick',ticks,'XLim',lims, 'YLim',lims, 'ZLim',lims)
     set(gca,'xticklabel',[],'yticklabel',[],'zticklabel',[])
     grid('off')
@@ -233,7 +237,7 @@ for j=1:3%length(T)
     % plot means
     plot(PP.mu(1,1),PP.mu(2,1),'.','color',G.colors{1},'linewidth',4,'MarkerSize',G.ms)
     plot(PP.mu(1,2),PP.mu(2,2),'.','color',G.colors{2},'linewidth',4,'MarkerSize',G.ms)
-
+    
     % plot contours
     for nsig=1:2
         if size(PP.Sigma,3)==1,
@@ -273,14 +277,14 @@ for j=1:3
     if j==1 % QDA
         F.legendOn=0;
         F.colors = {'g';'b'};
-        F.ylim=[0.28 0.44];
+        F.ylim=[0.18 0.44];
         F.xlim=[1 19];
         F.xtick=[5:5:max(F.xlim)];
         F.ytick=[0.2:0.1:0.5];
         F.xlabel='';
         F.linestyle={'-';'-'};
         F.xlabel='# of embedded dimensions';
-
+        
     elseif j==2 % OUTLIERS
         F.ylim = [0.25, 0.27];
         F.ytick = [0:0.01:0.5]; %[F.ylim(1): 0.01: F.ylim(2)];
@@ -292,7 +296,7 @@ for j=1:3
         
     elseif j==3 % XOR
         F.title = '';
-        F.ylim = [0.28, 0.5];
+        F.ylim = [0.28, 0.51];
         F.ytick = [0:0.1:0.5]; %[F.ylim(1): 0.01: F.ylim(2)];
         F.xlim = [1 15];
         F.xtick=[5:5:max(F.xlim)]; %:F.xlim(end)];
@@ -328,7 +332,7 @@ l=legend(g,...
     'QOQ'); %,...'LDA o LOL(D,E,R)',...LDA o \delta+rPCA',...
 legend1 = legend(hl,'show'); %
 set(legend1,...
-    'Position',[0.74 0.04 0.25 0.2],... %[left,bottom,width,height]
+    'Position',[0.8 0.15 0.1 0.2],... %[left,bottom,width,height]
     'FontName','FixedWidth',...
     'FontSize',9);
 % set(legend1,'YColor',[1 1 1],'XColor',[1 1 1],'FontName','FixedWidth');
