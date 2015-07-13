@@ -540,8 +540,16 @@ The implication of this lemma is that if one desires to implement Fisherfaces, r
 \subsubsection{Linear Optimal Low-Rank (\Lol) Projection}
 
 
-The basic idea of \Lol~is to let $\bA_{\Lol}^d=[\bdel, \bA_{\Pca}^{d-1}]$.  In other words, we simply concatenate the mean difference vector with the top $d-1$ principal components.  
-Technically, to maintain orthonormality, we must orthonormalize, $\bA_{\Lol}^d=$ \sct{Orth}$([\bdel, \bA_{\Pca}^{d-1}])$.  Below, we show that this orthonormalization does not matter very much.
+The basic idea of \Lol~is to use both $\bdel$ and the top $d$ eigenvectors.  Most na\"ively, we could simply concatenate the two, $\bA_{\Lol}^d=[\bdel,\bA_{\Pca}^{d-1}]$.  
+Recall that eigenvectors are orthonormal.  To maintain orthonormality, we could easily apply Gram-Schmidt,  $\bA_{\Lol}^d=$ \sct{Orth}$([\bdel, \bA_{\Pca}^{d-1}])$.
+Both in practice and in theory (as will be shown below), this orthogonalization step does not matter much.
+
+to ensure that they are balanced appropriately, we normalize $\bdel$
+
+each vector in $\bdel$ to have norm unity.  Formally, let $\mt{\bdel}_j = \bdel_j / \norm{\bdel_j}$, where $\bdel_j$ is the $j^{th}$ difference of the mean vector (remember, the number of vectors is equal to $C-1$, where $C$ is the total number of classes), and let  $\bA_{\Lol}^d=[\mt{\bdel}, \bA_{\Pca}^{d-(C-1)}]$.  
+The eigenvectors are all normalized and orthogonal to one another; to impose orthogonality between $\mt{\bdel}$ and the eigenvectors, we could use any number of numerically optimized algorithms.  However, in practice, orthogonalizing does not matter very much, so we do not bother. We formally demonstrate this below.
+
+% Technically, to maintain orthonormality, we must orthonormalize, $\bA_{\Lol}^d=$ \sct{Orth}$([\bdel, \bA_{\Pca}^{d-1}])$.  Below, we show that this orthonormalization does not matter very much.
 
 
 
@@ -562,7 +570,7 @@ By a similar arguement as above, one can easily show that:
 
 % \begin{proof}
 % Using a similar arguement as above:
-\begin{align*}
+\begin{align*}	
 (\bA  \bW \bx) \T  (\bA \bW  \bSig  \bW\T \bA\T)^{-1} \bA \bW \bdel 
 &= \bx\T (\bW\T \bA\T) (\bA \bW) \bSig^{-1} (\bW\T \bA\T) (\bA \bW) \bdel \\
 &= \bx\T \bY\T \bY \bSig^{-1} \bY\T \bY \bdel \\
@@ -594,10 +602,11 @@ In other words, \Pca~is the only rotationally invariant projection.
 
 
 
-
+\newpage
 \subsection{\Pca~versus \Lol}
 
 
+We would like to prove that \Lol~is always better than \Pca, when using one or the other to project the data onto a low dimensional space, followed by classifying with \Lda.  Formally, we would like to prove this:
 % Based on the above, rather than operating on the non-convex $L_A$, we can instead analyze the properties of different $\bA$ matrices, and their resulting projection matrices, $\bP_A$, and their angles with respect to $\bP_*$. More specifically, we would like to prove something like:
 % \begin{thm} \label{thm:angle_goal}
 % \begin{align} \label{eq:angle_goal}
@@ -605,18 +614,32 @@ In other words, \Pca~is the only rotationally invariant projection.
 % \end{align}
 %  \end{thm}
 \begin{thm} \label{thm:L>P}
-$\PP[L_{\Lol}^d \leq L_{\Pca}^d]=1$ for any $\bth \in \bTh_{2-\Lda}$  and   $d < p$.
+$\PP[L_{\Lol}^d \leq L_{\Pca}^d]=1$ for any $\bth \in \bTh_{\Lda}$  and   $d < p$.
  \end{thm}
 
 This means that for any distribution in the two-class linear discriminant analysis model, \Lol~yields a projection that is better than \Pca~, given that either will be composed with \Lda; and better is defined with respect to classifier performance.  And that this result is true regardless of the dimensionality of the projection.  This is the formal statement of Theorem \ref{thm:LDA}.
 
-IS THE ABOVE TRUE?? PROBABLY NOT, BUT MAYBE SOMETHING LIKE IT.
 
 \subsubsection{Proof of Theorem \ref{thm:L>P}}
 
 
+To build up to being able to prove Theorem \ref{thm:L>P}, we prove a sequence of increasingly more sophisticated statements under the two-class model, $\bTh_{2-\Lda}$:
+\begin{compactenum}
+\item when $\bSig$ is a scaled identity matrix, and when we set $d=1$, \Lol~is optimal, whereas \Pca~has no such guarantee;
+\item when $\bSig$ is a diagonal matrix, and we set $d=1$, \Lol~is better than \Pca~with high probability;
 
-\paragraph{Simplifying the Objective Function}
+\item when $\bSig$ is a scaled identity matrix, and we set $d<p$ ,\Lol~is better than \Pca~with high probability;
+\item when $\bSig$ is a diagonal matrix, and we set $d<p$ ,\Lol~is better than \Pca~with high probability;
+
+\item when $\bSig$ is an arbitrary  matrix, and we set $d=1$ ,\Lol~is better than \Pca~with high probability;
+\item when $\bSig$ is an arbitrary matrix, and we set $d<p$ ,\Lol~is better than \Pca~with high probability;
+
+\end{compactenum}
+
+Extensions to the multiclass setting might then also be explored.
+
+
+\para{Simplifying the Objective Function}
 
 Recalling Eq.~\eqref{eq:g_A}, a projection based classifier is effectively thresholding the dot product of $\bx$ with the linear projection operator $\bP_A :=\bA\T \bSig_A^{-1} \bdel_A \in \Real^p$, and let $\bP_*:=\bP_{\bA_*}$.  Unfortunately, the nonlinearity in in Eq.~\eqref{eq:A} makes analysis difficult.
 However, because of the linear nature of the classifier and projection matrix operator, an objective function that is simpler to evaluate is available.
@@ -638,6 +661,7 @@ The solution to Eq.~\eqref{eq:angle} is also the solution to Eq.~\eqref{eq:A} fo
 \begin{proof}
 The minimum of Eq.~\eqref{eq:angle} is clearly $\bA=\bSig^{-1} \bdel$, which is also the minimum of Eq.~\eqref{eq:A}.
 \end{proof}
+
 
 \begin{remark} 
 $\angle$ is merely the angle between two vectors, and is therefore scale invariant.  In other words, $\angle(\bP_A,\bP)=\angle(\bP_{c A},\bP)$, for any $c > 0$.
@@ -671,10 +695,10 @@ Note that Corollary \ref{cor:angle} is a stronger statement than Lemma \ref{lem:
 % Recall that det$(\bA \bB)$=det$(\bA)$det$(\bB)$.
 % \end{proof}
 
-\paragraph{Diagonal covariance matrix and $d=1$}
+\newpage
+\paragraph{Scaled Identity Covariance Matrix and $d=1$}
 
 
-To build up to being able to prove Theorem \ref{thm:L>P}, we start very simply.
 
 \begin{lem}
 $\bA_{\Lol}^1 \in \mc{A}_*$ when $\bSig=\bI$ and $\pi_0=\pi_1$ and $(\mu_0+\mu_1)/2=\mb{0}$.
@@ -685,69 +709,55 @@ By definition, the first projection vector of $\bA_{\Lol}$ is $\bdel$.
 And by Lemma \ref{lem:angle}, $\angle(\bP_A,\bP_*)=\angle(\bP_{c A},\bP_*)$, for any $c>0$, and in this scenario, $\bA_{\Lol}^1=c \bA_*$.
 \end{proof}
 
-\begin{lem} \label{lem:lol1}
-$\bA_{\Lol}^1 \in \mc{A}_*$ when $\bSig=\bS$ is diagonal and $\pi_0=\pi_1$ and $(\mu_0+\mu_1)/2=\mb{0}$.
-\end{lem}
-\begin{proof}
+
+% \newpage
+\paragraph{Diagonal covariance matrix and $d=1$}
+
+
+
+Now consider $\bSig=\bS$ is diagonal, $\pi_0=\pi_1$ and $(\mu_0+\mu_1)/2=\mb{0}$, and $\bdel \in \Real^p$.
+We want to know how often is \Lol~better than \Pca.  
+
+
 Let $\bs$ be the singular values of $\bSig$.  When $\bSig$ is diagonal, its diagonal elements are $s_1,\ldots,s_p$, and we call that matrix $\bS$. 
-Recalling that $s_i=\lambda_i^2$, where $\lambda_i^2$ are eigenvalues, and when a matrix is diagonal, $\lambda_i=\sigma_i$, we have  $\bA_*=\bS^{-1} \bdel=\bs^{-1} \odot \bdel:=\mt{\bdel}=(\del_1/\sigma_1^2,\ldots,\del_p/\sigma_p^2)$.
-By definition, $\bA_{\Lol}^1=\mt{\bdel}$.
-\end{proof}
+Recalling that $s_i=\lambda_i^2$, where $\lambda_i^2$ are eigenvalues, and when a matrix is diagonal, $\lambda_i=\sigma_i$, we have  $\bA_*=\bS^{-1} \bdel=\bs^{-1} \odot \bdel:=(\del_1/\sigma_1^2,\ldots,\del_p/\sigma_p^2)$.
+By definition, $\bA_{\Lol}^1=\bdel$, and $\bA_{\Pca}^1=\bu_1$, where $\bu_1$ is the eigenvector associated with the largest eigenvalue of $\bS$.  
 
-Note that when the distribution is mean centered, $\bmu_0=-\bmu_1$, so that $\bdel:=2 \bmu$.  In this case, $\mt{\del}_i=2\mu_i / \sigma_i^2$.
-
+We consider a simple version of our question: how often is the angle between $\bA_{\Lol}^1$ and $\bA_*$ bigger than the angle between $\bA_{\Pca}^1$ and $\bA_*$.  Formally, we would like to prove:
 
 \begin{lem}
-$L_{\Pca}^1 \geq L_{\Lol}^1  = L_{\bA}^*$ when $\bSig=\bS$ and $\pi_0=\pi_1$ and $(\mu_0+\mu_1)/2=\mb{0}$.
+$\PP[ \angle(A_{\Lol}^1,\bA_*)  \geq  \angle(\bA_{\Pca}^1,\bA_*)]=1$ for any $\bth \in \bTh_{2-\Lda}$.
 \end{lem}
+
 \begin{proof}
-Lemma \ref{lem:lol1} proves that $L_{\Lol}^1=L_{A_*}$.
-
-
-To obtain the first principle component, recall that we compute the eigenvectors of the pooled centered covariance matrix.
-Therefore, 
-% consider the general definition of variance.
-% The distribution $\bX$ is actually mixture of Gaussians:
-% $\bX \sim \sum_j \pi_j \mc{N}(\bmu_j,\bSig)$.  
-% Because  $\mu_0=-\mu_1$, it is the case that $\mu_0^2=\mu_1^2$.
-% When $\bSig$ is diagonal, this factorizes: 
-% $\bX \sim \prod_{i \in [p]} \sum_j \pi_j \mc{N}(\mu_{ij},\sigma_i^2)$. 
-% Consider each $X_i$ separately therefore, we have:
-% $X_i \sim \sum_j \pi_j \mc{N}(\mu_{ij},\sigma_i^2)$, where 
-% var($X_i$)$=\sum_j \pi_j \mu_{i,j}^2 / \sigma_i^{2}=\sum_j \pi_j \mu_i^2 / \sigma_i^2=\mu_i^2 / \sigma_i^2$,
-% where the  equalities follow from the equal class priors and centered mean assumptions. 
-% Recall that $\mt{\bdel}=(2 \mu_1/\sigma_1^2,\ldots, 2 \mu_p/\sigma_p^2)$. 
-% Let $i_*=\argmax_i \mu_i^2 / \sigma_i^2$. % and $\mt{\del}_{(i)}=\max_i \mu_i^2 / \sigma_i^2$.
-
-Let $\be_i$ be a unit vector with a one in the $i^{th}$ element and zeros everywhere else.
-The eigenvector with the largest eigenvalue  (the direction of maximal variance) will be 
-$\bu_1=\be_{i_*}$.
-
-Because  to achieve Bayes optimal performance it is sufficient that  $\bA = c \bA_*$ for some $c > 0$, 
-$L_{\Pca}^1=L_{\bA}^*$ whenever $\bu_1 \propto \mt{\bdel}$, and otherwise, it is possible that $L_{\Pca}^1>L_{\bA}^*$.
-Note that $\bu_1 \propto \mt{\bdel}$ if and only if $|\mu_{i_*}|=1$ and $\mu_{i'}=0$ for all $i' \neq i_*$.
-% Let $\mt{\bu}_1=\bu_1/\norm{\bu_1}$ and $\mt{\bdel}=\bdel/\norm{\bdel}$. 
-% Then, $\mt{\bu}_1\T \mt{\bdel}=1$ if and only if $\mu_i \in \{\mu,0\}$, for some $\mu \in \Real$.
+coming soon.  numerical experiments are convincing.
 \end{proof}
 
 
-The above theorems are about scenarios where the parameter $\bth$ is given.  Of course, in practice, those parameters are not given.  To make stronger statements about \Lol, we relax this assumption. 
-For now, we keep the constraints as above, that is: $\bSig$ is diagonal, $\pi_0=\pi_1$, and $\bmu_0=-\bmu_1$.  
-We define $\mc{F}_s=\{F_s \from \Omega \to \Real^p\}$ to be the distribution from which $\bs$ is sampled, that is, $\bs \sim F_s$.  By introducing this source of randomness, $L_A$ is no longer a constant, but rather a random variable, induced by $F_d$.  In this scenario, we can state a  more general probabilistic lemma than the above:
+
+Given that, we seek to prove
 \begin{lem}
-$\PP[L_{\Lol}^1 < L_{\Pca}^1]=1$ when $\bs \sim F_s$ and $\bmu_1=\bmu_0$ and $\pi_0=\pi_1$.
+$\PP[L_{\Lol}^1 < L_{\Pca}^1]=1$ when $\bs \sim F_s$, $\bdel \sim F_{\delta}$ and $\bmu_1=\bmu_0$ and $\pi_0=\pi_1$.
 \end{lem}
 \begin{proof}
-Because $\bs \in \Real^p$, $\sum_{i \in [p]} \PP[|\bs| = \be_i] = 0$ almost surely.
+coming soon, numerical experiments are convincing.
 \end{proof}
 
 
+\newpage
+\paragraph{Scaled Identity covariance matrix and $d>1$}
+
+
+% \newpage
 \paragraph{Diagonal covariance matrix and $d>1$}
 
 Things we would like to prove include
 
+% \begin{lem}
+% $\bA_{\Lol}^d \in \mc{A}_*$ when $\bSig=\bI$ and $\pi_0=\pi_1$ and $(\mu_0+\mu_1)/2=\mb{0}$, for any $d < p$.
+% \end{lem}
 \begin{lem}
-$\bA_{\Lol}^d \in \mc{A}_*$ when $\bSig=\bI$ and $\pi_0=\pi_1$ and $(\mu_0+\mu_1)/2=\mb{0}$, for any $d < p$.
+$\PP[L_{\Lol}^d \leq L_{\Pca}^d]=1$ when $\bSig=c \bI$, $\pi_0=\pi_1$ and $(\mu_0+\mu_1)/2=\mb{0}$, for any $d < p$.
 \end{lem}
 
 \begin{lem}
@@ -758,23 +768,12 @@ $\PP[L_{\Lol}^d \leq L_{\Pca}^d]=1$ when $\bSig=\bS$, $\pi_0=\pi_1$ and $(\mu_0+
 \paragraph{Arbitrary covariance matrix and $d=1$}
 
 
-
 \paragraph{Arbitrary covariance matrix and $d>1$}
 
 
 
-% Another good thing to prove would be 
-% \begin{thm}
-% \begin{align*}
-% \bP_{\Pca}\T \bP_* /\norm{\bP_{\Pca}} \norm{\bP_*} - \bP_{\Lol}\T \bP_* /\norm{\bP_{\Lol}} \norm{\bP_*} < t  \text{ whenever } \bdel \in \mc{X}, \bSig \in \mc{Y}, \bA \in \mc{Z},
-% \end{align*}
-% for suitable $\mc{X}, \mc{Y}, \mc{Z}$.
-% \end{thm}
-% This would mean that \Lol~is better than \Pca~as a projection.
 
-
-
-
+\newpage
 \section{Asymptotic Theory}
 
 In real data problems,  the true joint distribution is unknown. Instead, what is provided is a set of training data.  We therefore assume the existence of $n$ training samples, each of which has been sampled identically and independently from the same distribution, $(\bX_i,Y_i) \iid F_{\bX,Y}$, for $i =1,2,\ldots, n$.  We can use these training samples to then estimate $f_{x|y}$ and $f_y$.  Plugging these estimates in to Eq.~\eqref{eq:bayes}, we obtain the Bayes plugin classifier:
@@ -807,7 +806,7 @@ $L_{\mh{\Lol}}^d \conv L_*$ for any $\bth \in \bTh_{2-\Lda}$.
 $\PP[L_{\mh{\Pca}}^d \conv L_*]>0$ for any $\bth \in \bTh_{2-\Lda}$
 \end{lem}
 
-
+\newpage
 \section{Finite Sample Theory}
 
 It would be awesome to prove something like:
@@ -867,7 +866,7 @@ So, we want to understand the probability that $\alpha_{\Pca}$ is small under di
 % \end{proof}
 
 \clearpage
-\bibliography{../../../../other/latex/library}
+\bibliography{biblol}
 \bibliographystyle{IEEEtran}
 
 
