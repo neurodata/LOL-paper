@@ -12,14 +12,14 @@ for i=0:length(gits)-1
 end
 addpath(p);
 
-newsim=0;
+newsim=1;
 if newsim==1
     task.savestuff=0;
     [task,T,S,P,Pro,Z]= run_MNIST(rootDir,task);
 else
     load([rootDir, '../Data/Results/mnist'])
 end
-
+task.savestuff=0;
 
 %% make figure
 

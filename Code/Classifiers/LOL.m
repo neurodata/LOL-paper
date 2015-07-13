@@ -35,7 +35,7 @@ function [Proj, P, Q] = LOL(X,Y,types,Kmax)
 if n~=length(Y), X=X'; [D,n]=size(X); end
 ntypes=length(types);
 for i=1:ntypes
-    if isempty(strfind('DRNS',types{i}(1))), error('failed to specify a legit estimator of delta'), end
+    if isempty(strfind('TDRNS',types{i}(1))), error('failed to specify a legit estimator of delta'), end
     if isempty(strfind('EV',types{i}(2))), error('failed to specify a legit equal/varied subspace'), end
     if isempty(strfind('NFRA',types{i}(3))), error('failed to specify a legit approx to eigenvectors'), end
 end
@@ -114,6 +114,11 @@ for i=1:ntypes
             P.robustmean(:,k)=trimmean(X(:,idx{k})',10);
         end
         P.Relta = bsxfun(@minus,P.robustmean(:,2:end),P.robustmean(:,1));
+    elseif strcmp(types{i}(1),'T')      % default estimate of the different of the means
+        if ~isfield(P,'Telta')
+            P.Telta = bsxfun(@minus,P.mu(:,2:end),P.mu(:,1));
+            P.Telta = P.Telta./std(P.mu,[],2);
+        end
     end
     
     % get 'eigs'
@@ -140,8 +145,8 @@ end
 Proj=cell(1:ntypes);
 for i=1:ntypes
     if ~strcmp(types{i}(1),'N')     % if we are appending something to "eigenvectors"
-        [V, ~] = qr([P.([types{i}(1), 'elta']),Q.(['V', types{i}(2), types{i}(3)])'],0);
-        %         V = [P.([types{i}(1), 'elta']),Q.(['V', types{i}(2), types{i}(3)])'];
+%         [V, ~] = qr([P.([types{i}(1), 'elta']),Q.(['V', types{i}(2), types{i}(3)])'],0);
+                V = [P.([types{i}(1), 'elta']),Q.(['V', types{i}(2), types{i}(3)])'];
     elseif strcmp(types{i}(1),'N')  % if not
         V=Q.(['V', types{i}(2), types{i}(3)])';
     end

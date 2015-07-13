@@ -63,7 +63,7 @@ angle(4)=PAPs/(norm(PA)*nPs);
 display(angle)
 
 %%
-
+clc
 n=50000;
 m0=rand*10;
 m1=-m0;

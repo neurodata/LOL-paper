@@ -21,11 +21,27 @@
 \providecommand{\BIBdecl}{\relax}
 \BIBdecl
 
-\bibitem{TBF01}
-T.~Hastie, R.~Tibshirani, and J.~Friedman, \emph{{The Elements of Statistical
-  Learning}}.\hskip 1em plus 0.5em minus 0.4em\relax Springer, 2001.
+\bibitem{Hastie2004}
+T.~Hastie, R.~Tibshirani, and J.~H. Friedman, ``{The Elements of Statistical
+  Learning: Data Mining, Inference, and Prediction},'' \emph{BeiJing:
+  Publishing House of Electronics Industry}, 2004.
 
-\bibitem{Eklund2012a}
+\bibitem{diMartino2013a}
+\BIBentryALTinterwordspacing
+A.~{Di Martino}, C.-G. Yan, Q.~Li, E.~Denio, X.~F. Castellanos, K.~Alaerts,
+  J.~S. Anderson, M.~Assaf, S.~Y. Bookheimer, M.~Dapretto, B.~Deen,
+  S.~Delmonte, I.~Dinstein, B.~Ertl-Wagner, D.~A. Fair, L.~Gallagher, D.~P.
+  Kennedy, C.~L. Keown, C.~Keysers, J.~E. Lainhart, C.~Lord, B.~Luna, V.~Menon,
+  N.~J. Minshew, C.~S. Monk, S.~Mueller, R.-A. M\"{u}ller, M.~B. Nebel, J.~T.
+  Nigg, K.~O'Hearn, K.~A. Pelphrey, S.~J. Peltier, J.~D. Rudie, S.~Sunaert,
+  M.~Thioux, J.~M. Tyszka, L.~Q. Uddin, J.~S. Verhoeven, N.~Wenderoth, J.~L.
+  Wiggins, S.~H. Mostofsky, and M.~P. Milham, ``{The autism brain imaging data
+  exchange: towards a large-scale evaluation of the intrinsic brain
+  architecture in autism},'' \emph{Molecular Psychiatry}, Jun. 2013. [Online].
+  Available: \url{http://dx.doi.org/10.1038/mp.2013.78}
+\BIBentrySTDinterwordspacing
+
+\bibitem{Eklund2012}
 \BIBentryALTinterwordspacing
 A.~Eklund, M.~Andersson, C.~Josephson, M.~Johannesson, and H.~Knutsson, ``{Does
   parametric fMRI analysis with SPM yield valid results?-An empirical study of
@@ -33,7 +49,7 @@ A.~Eklund, M.~Andersson, C.~Josephson, M.~Johannesson, and H.~Knutsson, ``{Does
   2012. [Online]. Available: \url{http://www.ncbi.nlm.nih.gov/pubmed/22507229}
 \BIBentrySTDinterwordspacing
 
-\bibitem{Friedman1989}
+\bibitem{Friedman1989a}
 \BIBentryALTinterwordspacing
 J.~H. Friedman, ``{Regularized Discriminant Analysis},'' \emph{Journal of the
   American Statistical Association}, vol.~84, no. 405, pp. 165--175, Mar. 1989.
@@ -41,7 +57,7 @@ J.~H. Friedman, ``{Regularized Discriminant Analysis},'' \emph{Journal of the
   \url{http://www.tandfonline.com/doi/abs/10.1080/01621459.1989.10478752}
 \BIBentrySTDinterwordspacing
 
-\bibitem{Bickel2004}
+\bibitem{Bickel2004a}
 \BIBentryALTinterwordspacing
 P.~J. Bickel and E.~Levina, ``{Some theory for Fisher's linear discriminant
   function, `naive Bayes', and some alternatives when there are many more
@@ -50,7 +66,7 @@ P.~J. Bickel and E.~Levina, ``{Some theory for Fisher's linear discriminant
   \url{http://projecteuclid.org/euclid.bj/1106314847}
 \BIBentrySTDinterwordspacing
 
-\bibitem{Bouveyron07a}
+\bibitem{Bouveyron2007}
 \BIBentryALTinterwordspacing
 C.~Bouveyron, S.~Girard, and C.~Schmid, ``{High-dimensional data clustering},''
   \emph{Computational Statistics \& Data Analysis}, vol.~52, no.~1, pp.
@@ -58,7 +74,7 @@ C.~Bouveyron, S.~Girard, and C.~Schmid, ``{High-dimensional data clustering},''
   \url{http://linkinghub.elsevier.com/retrieve/pii/S0167947307000692}
 \BIBentrySTDinterwordspacing
 
-\bibitem{Witten09a}
+\bibitem{Witten2009a}
 \BIBentryALTinterwordspacing
 D.~M. Witten and R.~Tibshirani, ``{Covariance-regularized regression and
   classification for high-dimensional problems.}'' \emph{Journal of the Royal
@@ -67,7 +83,7 @@ D.~M. Witten and R.~Tibshirani, ``{Covariance-regularized regression and
   \url{http://www.pubmedcentral.nih.gov/articlerender.fcgi?artid=2806603\&tool=pmcentrez\&rendertype=abstract}
 \BIBentrySTDinterwordspacing
 
-\bibitem{Olshausen1997}
+\bibitem{Olshausen1997a}
 \BIBentryALTinterwordspacing
 B.~A. Olshausen and D.~J. Field, ``{Sparse coding with an overcomplete basis
   set: A strategy employed by V1?}'' \emph{Vision Research}, vol.~37, no.~23,
@@ -75,20 +91,35 @@ B.~A. Olshausen and D.~J. Field, ``{Sparse coding with an overcomplete basis
   \url{http://dx.doi.org/10.1016/S0042-6989(97)00169-7}
 \BIBentrySTDinterwordspacing
 
-\bibitem{Tibs96}
+\bibitem{Tibshirani1996}
 R.~Tibshirani, ``{Regression Shrinkage and Selection via the Lasso},''
   \emph{Journal of the Royal Statistical Society. Series B}, vol.~58, pp.
   267--288, 1996.
 
-\bibitem{Buhlmann2011}
+\bibitem{Yuan2006a}
+M.~Yuan and Y.~Lin, ``{Model selection and estimation in regression with},''
+  \emph{Simulation}, pp. 49--67, 2006.
+
+\bibitem{Donoho2008a}
 \BIBentryALTinterwordspacing
-P.~B\"{u}hlmann and S.~van~de Geer, \emph{{Statistics for High-Dimensional Data
-  - Methods, Theory and Applications}}.\hskip 1em plus 0.5em minus 0.4em\relax
-  Springer, 2011. [Online]. Available:
-  \url{http://www.springer.com/statistics/statistical+theory+and+methods/book/978-3-642-20191-2}
+D.~L. Donoho and J.~Jin, ``{Higher criticism thresholding: Optimal feature
+  selection when useful features are rare and weak.}'' \emph{Proceedings of the
+  National Academy of Sciences of the United States of America}, vol. 105,
+  no.~39, pp. 14\,790--5, Sep. 2008. [Online]. Available:
+  \url{http://www.pnas.org/content/105/39/14790
+  http://www.pnas.org/content/105/39/14790.short}
 \BIBentrySTDinterwordspacing
 
-\bibitem{Tibshirani2002}
+\bibitem{Li2012}
+\BIBentryALTinterwordspacing
+R.~Li, W.~Zhong, and L.~Zhu, ``\BIBforeignlanguage{en}{{Feature Screening via
+  Distance Correlation Learning}},'' \emph{\BIBforeignlanguage{en}{Journal of
+  the American Statistical Association}}, vol. 107, no. 499, pp. 1129--1139,
+  Sep. 2012. [Online]. Available:
+  \url{http://www.tandfonline.com/doi/abs/10.1080/01621459.2012.695654}
+\BIBentrySTDinterwordspacing
+
+\bibitem{Tibshirani2002a}
 \BIBentryALTinterwordspacing
 R.~Tibshirani, T.~Hastie, B.~Narasimhan, and G.~Chu, ``{Diagnosis of multiple
   cancer types by shrunken centroids of gene expression.}'' \emph{Proceedings
@@ -97,7 +128,7 @@ R.~Tibshirani, T.~Hastie, B.~Narasimhan, and G.~Chu, ``{Diagnosis of multiple
   \url{http://www.pubmedcentral.nih.gov/articlerender.fcgi?artid=124443\&tool=pmcentrez\&rendertype=abstract}
 \BIBentrySTDinterwordspacing
 
-\bibitem{Fan2008}
+\bibitem{Fan2008a}
 \BIBentryALTinterwordspacing
 J.~Fan and Y.~Fan, ``\BIBforeignlanguage{EN}{{High-dimensional classification
   using features annealed independence rules}},''
@@ -106,7 +137,7 @@ J.~Fan and Y.~Fan, ``\BIBforeignlanguage{EN}{{High-dimensional classification
   \url{http://projecteuclid.org/euclid.aos/1231165181}
 \BIBentrySTDinterwordspacing
 
-\bibitem{Clemmensen2011}
+\bibitem{Clemmensen2011a}
 \BIBentryALTinterwordspacing
 L.~Clemmensen, T.~Hastie, D.~M. Witten, and B.~Ersb\o~ll, ``{Sparse
   Discriminant Analysis},'' \emph{Technometrics}, vol.~53, no.~4, pp. 406--413,
@@ -114,7 +145,7 @@ L.~Clemmensen, T.~Hastie, D.~M. Witten, and B.~Ersb\o~ll, ``{Sparse
   \url{http://pubs.amstat.org/doi/abs/10.1198/TECH.2011.08118}
 \BIBentrySTDinterwordspacing
 
-\bibitem{Mai2013}
+\bibitem{Mai2013a}
 \BIBentryALTinterwordspacing
 Q.~Mai and H.~Zou, ``{A Note On the Connection and Equivalence of Three Sparse
   Linear Discriminant Analysis Methods},'' \emph{Technometrics}, vol.~55, pp.
@@ -122,7 +153,7 @@ Q.~Mai and H.~Zou, ``{A Note On the Connection and Equivalence of Three Sparse
   \url{http://www.tandfonline.com/doi/abs/10.1080/00401706.2012.746208}
 \BIBentrySTDinterwordspacing
 
-\bibitem{Fan2012}
+\bibitem{Fan2012a}
 \BIBentryALTinterwordspacing
 J.~Fan, Y.~Feng, and X.~Tong, ``{A road to classification in high dimensional
   space: the regularized optimal affine discriminant},'' \emph{Journal of the
@@ -131,7 +162,7 @@ J.~Fan, Y.~Feng, and X.~Tong, ``{A road to classification in high dimensional
   \url{http://doi.wiley.com/10.1111/j.1467-9868.2012.01029.x}
 \BIBentrySTDinterwordspacing
 
-\bibitem{Young1938}
+\bibitem{Householder1938}
 \BIBentryALTinterwordspacing
 A.~S. Householder and G.~Young, ``{Discussion of a set of points in terms of
   their mutual distances},'' \emph{Psychometrika}, vol.~3, no.~1, pp. 19--22,
@@ -139,35 +170,36 @@ A.~S. Householder and G.~Young, ``{Discussion of a set of points in terms of
   \url{http://www.springerlink.com/index/10.1007/BF02287916}
 \BIBentrySTDinterwordspacing
 
-\bibitem{Borg2010}
+\bibitem{Borg2005}
 \BIBentryALTinterwordspacing
-I.~Borg and P.~J.~F. Groenen, \emph{{Modern Multidimensional Scaling: Theory
-  and Applications (Springer Series in Statistics)}}.\hskip 1em plus 0.5em
-  minus 0.4em\relax Springer, 2010. [Online]. Available:
-  \url{http://www.amazon.com/Modern-Multidimensional-Scaling-Applications-Statistics/dp/1441920463}
+I.~Borg and P.~J.~F. Groenen, \emph{{Modern Multidimensional Scaling}}, 2005,
+  vol.~94, no. 445. [Online]. Available:
+  \url{http://www.springerlink.com/content/978-0-387-25150-9/contents/}
 \BIBentrySTDinterwordspacing
 
-\bibitem{Pearson1901}
+\bibitem{Pearson1901a}
 \BIBentryALTinterwordspacing
-K.~Pearson, ``\BIBforeignlanguage{en}{{LIII. On lines and planes of closest fit
-  to systems of points in space}},''
-  \emph{\BIBforeignlanguage{en}{Philosophical Magazine Series 6}}, vol.~2,
-  no.~11, pp. 559--572, Nov. 1901. [Online]. Available:
+K.~Pearson, ``\BIBforeignlanguage{en}{{On lines and planes of closest fit to
+  systems of points in space}},'' \emph{\BIBforeignlanguage{en}{Philosophical
+  Magazine Series 6}}, vol.~2, no.~11, pp. 559--572, Nov. 1901. [Online].
+  Available:
   \url{http://www.tandfonline.com/doi/abs/10.1080/14786440109462720\#.VMlOwl7F-oU}
 \BIBentrySTDinterwordspacing
 
-\bibitem{Jolliffe2002}
-I.~T. Jolliffe, \emph{{Principal Component Analysis}}, second edi~ed.\hskip 1em
-  plus 0.5em minus 0.4em\relax New York: Springer, 2002.
+\bibitem{Jolliffe2002a}
+\BIBentryALTinterwordspacing
+I.~T. Jolliffe, \emph{{Principal Component Analysis}}, 2002, vol.~98. [Online].
+  Available: \url{http://link.springer.com/10.1007/b98835}
+\BIBentrySTDinterwordspacing
 
-\bibitem{Kohonen1982}
+\bibitem{Kohonen1982a}
 \BIBentryALTinterwordspacing
 T.~Kohonen, ``{Self-organized formation of topologically correct feature
   maps},'' \emph{Biological Cybernetics}, vol.~43, no.~1, pp. 59--69, 1982.
   [Online]. Available: \url{http://link.springer.com/10.1007/BF00337288}
 \BIBentrySTDinterwordspacing
 
-\bibitem{Bishop1998}
+\bibitem{Bishop1998a}
 \BIBentryALTinterwordspacing
 C.~M. Bishop, M.~Svens\'{e}n, and C.~K.~I. Williams,
   ``\BIBforeignlanguage{en}{{GTM: The Generative Topographic Mapping}},''
@@ -176,7 +208,7 @@ C.~M. Bishop, M.~Svens\'{e}n, and C.~K.~I. Williams,
   \url{http://www.mitpressjournals.org/doi/abs/10.1162/089976698300017953\#.VMlRX17F-oU}
 \BIBentrySTDinterwordspacing
 
-\bibitem{Tenenbaum2000}
+\bibitem{Tenenbaum2000a}
 \BIBentryALTinterwordspacing
 J.~B. Tenenbaum, V.~de~Silva, J.~C. Langford, and V.~D. Silva, ``{A global
   geometric framework for nonlinear dimensionality reduction.}''
@@ -184,7 +216,7 @@ J.~B. Tenenbaum, V.~de~Silva, J.~C. Langford, and V.~D. Silva, ``{A global
   Available: \url{http://www.ncbi.nlm.nih.gov/pubmed/11125149}
 \BIBentrySTDinterwordspacing
 
-\bibitem{Roweis2000}
+\bibitem{Roweis2000a}
 \BIBentryALTinterwordspacing
 S.~T. Roweis and L.~K. Saul, ``{Nonlinear dimensionality reduction by locally
   linear embedding.}'' \emph{Science (New York, N.Y.)}, vol. 290, no. 5500, pp.
@@ -192,11 +224,11 @@ S.~T. Roweis and L.~K. Saul, ``{Nonlinear dimensionality reduction by locally
   \url{http://www.ncbi.nlm.nih.gov/pubmed/11125150}
 \BIBentrySTDinterwordspacing
 
-\bibitem{Belkin2003}
+\bibitem{Belkin2003a}
 M.~Belkin and P.~Niyogi, ``{Laplacian Eigenmaps for Dimensionality Reduction
   and Data},'' \emph{Neural Computation}, vol.~15, pp. 1373--1396, 2003.
 
-\bibitem{Zhang2004b}
+\bibitem{Zhang2004f}
 \BIBentryALTinterwordspacing
 Z.~Zhang and H.~Zha, ``\BIBforeignlanguage{en}{{Principal Manifolds and
   Nonlinear Dimensionality Reduction via Tangent Space Alignment}},''
@@ -205,7 +237,7 @@ Z.~Zhang and H.~Zha, ``\BIBforeignlanguage{en}{{Principal Manifolds and
   \url{http://epubs.siam.org/doi/abs/10.1137/S1064827502419154}
 \BIBentrySTDinterwordspacing
 
-\bibitem{Coifman2006}
+\bibitem{Coifman2006a}
 \BIBentryALTinterwordspacing
 R.~R. Coifman and S.~Lafon, ``{Diffusion maps},'' \emph{Applied and
   Computational Harmonic Analysis}, vol.~21, no.~1, pp. 5--30, Jul. 2006.
@@ -213,7 +245,7 @@ R.~R. Coifman and S.~Lafon, ``{Diffusion maps},'' \emph{Applied and
   \url{http://linkinghub.elsevier.com/retrieve/pii/S1063520306000546}
 \BIBentrySTDinterwordspacing
 
-\bibitem{Allard12a}
+\bibitem{Allard2012}
 \BIBentryALTinterwordspacing
 W.~K. Allard, G.~Chen, and M.~Maggioni, ``{Multi-scale geometric methods for
   data sets II: Geometric Multi-Resolution Analysis},'' \emph{Applied and
@@ -222,13 +254,13 @@ W.~K. Allard, G.~Chen, and M.~Maggioni, ``{Multi-scale geometric methods for
   \url{http://linkinghub.elsevier.com/retrieve/pii/S1063520311000868}
 \BIBentrySTDinterwordspacing
 
-\bibitem{Belhumeur1997}
+\bibitem{Belhumeur1997a}
 P.~N. Belhumeur, J.~P. Hespanha, and D.~J. Kriegman, ``{Eigenfaces vs.
   fisherfaces: Recognition using class specific linear projection},''
   \emph{IEEE Transactions on Pattern Analysis and Machine Intelligence},
   vol.~19, no.~7, pp. 711--720, 1997.
 
-\bibitem{Eckart1936}
+\bibitem{Eckart1936a}
 \BIBentryALTinterwordspacing
 C.~Eckart and G.~Young, ``{The approximation of one matrix by another of lower
   rank},'' \emph{Psychometrika}, vol.~1, no.~3, pp. 211--218, Sep. 1936.
@@ -237,11 +269,11 @@ C.~Eckart and G.~Young, ``{The approximation of one matrix by another of lower
 \BIBentrySTDinterwordspacing
 
 \bibitem{deSilva2003}
-V.~De\~{}Silva and J.~B. Tenenbaum, ``{Global Versus Local Methods in Nonlinear
-  Dimensionality Reduction},'' in \emph{Advances in Neural Information
-  Processing Systems}, 2003, pp. 721--728.
+V.~de~Silva and J.~B. Tenenbaum, ``{Global Versus Local Methods in Nonlinear
+  Dimensionality Reduction},'' in \emph{Neural Information Processing Systems},
+  2003, pp. 721--728.
 
-\bibitem{Li1991}
+\bibitem{Li1991a}
 \BIBentryALTinterwordspacing
 K.-C. Li, ``{Sliced Inverse Regression for Dimension Reduction},''
   \emph{Journal of the American Statistical Association}, vol.~86, no. 414, pp.
@@ -249,19 +281,19 @@ K.-C. Li, ``{Sliced Inverse Regression for Dimension Reduction},''
   \url{http://www.tandfonline.com/doi/abs/10.1080/01621459.1991.10475035}
 \BIBentrySTDinterwordspacing
 
-\bibitem{TB99}
-N.~Tishby, F.~C. Pereira, and W.~Bialek, ``{The information bottleneck
-  method.}'' in \emph{Proceedings 37th Allerton Conference on Communication,
-  Control, and Computing}, 1999.
+\bibitem{Tishby1999a}
+N.~Tishby, F.~C. Pereira, and W.~Bialek, ``{The information bottleneck method
+  arXiv : physics / 0004057v1 [ physics . data-an ] 24 Apr 2000},''
+  \emph{Neural Computation}, pp. 1--16, 1999.
 
-\bibitem{Globerson2003}
+\bibitem{Globerson2003a}
 \BIBentryALTinterwordspacing
 A.~Globerson and N.~Tishby, ``{Sufficient Dimensionality Reduction},''
   \emph{Journal of Machine Learning Research}, vol.~3, no. 7-8, pp. 1307--1331,
   Oct. 2003. [Online]. Available: \url{http://www.crossref.org/jmlr\_DOI.html}
 \BIBentrySTDinterwordspacing
 
-\bibitem{Cook2005}
+\bibitem{Cook2005a}
 \BIBentryALTinterwordspacing
 R.~D. Cook and L.~Ni, ``\BIBforeignlanguage{en}{{Sufficient Dimension Reduction
   via Inverse Regression}},'' \emph{\BIBforeignlanguage{en}{Journal of the
@@ -270,12 +302,12 @@ R.~D. Cook and L.~Ni, ``\BIBforeignlanguage{en}{{Sufficient Dimension Reduction
   \url{http://amstat.tandfonline.com/doi/abs/10.1198/016214504000001501\#.U6tH3Y1dUts}
 \BIBentrySTDinterwordspacing
 
-\bibitem{Fukumizu2004}
+\bibitem{Fukumizu2004a}
 K.~Fukumizu, F.~R. Bach, and M.~I. Jordan, ``{Dimensionality Reduction for
   Supervised Learning with Reproducing Kernel Hilbert Spaces},'' \emph{Journal
   of Machine Learning Research}, vol.~5, pp. 73--99, 2004.
 
-\bibitem{Cook13a}
+\bibitem{Cook2013}
 \BIBentryALTinterwordspacing
 R.~D. Cook, L.~Forzani, and A.~J. Rothman, ``{Prediction in abundant
   high-dimensional linear regression},'' \emph{Electronic Journal of
@@ -283,7 +315,7 @@ R.~D. Cook, L.~Forzani, and A.~J. Rothman, ``{Prediction in abundant
   \url{https://projecteuclid.org/euclid.ejs/1387207935}
 \BIBentrySTDinterwordspacing
 
-\bibitem{Huber1985}
+\bibitem{Huber1985a}
 \BIBentryALTinterwordspacing
 P.~J. Huber, ``\BIBforeignlanguage{EN}{{Projection Pursuit}},''
   \emph{\BIBforeignlanguage{EN}{The Annals of Statistics}}, vol.~13, no.~2, pp.
@@ -291,15 +323,21 @@ P.~J. Huber, ``\BIBforeignlanguage{EN}{{Projection Pursuit}},''
   \url{http://projecteuclid.org/euclid.aos/1176349519}
 \BIBentrySTDinterwordspacing
 
-\bibitem{Belkin2006}
-M.~Belkin and P.~Niyogi, ``{Convergence of Laplacian Eigenmaps},''
-  \emph{Statistics}, pp. 1--31, 2008.
-
-\bibitem{Mairal2008}
+\bibitem{Belkin2006a}
 \BIBentryALTinterwordspacing
-J.~Mairal, F.~Bach, J.~Ponce, G.~Sapiro, and A.~Zisserman, ``{Supervised
-  Dictionary Learning},'' Sep. 2008. [Online]. Available:
-  \url{http://arxiv.org/abs/0809.3083}
+M.~Belkin, P.~Niyogi, and V.~Sindhwani, ``{Manifold Regularization: A Geometric
+  Framework for Learning from Labeled and Unlabeled Examples},'' \emph{The
+  Journal of Machine Learning Research}, vol.~7, pp. 2399--2434, Dec. 2006.
+  [Online]. Available: \url{http://dl.acm.org/citation.cfm?id=1248547.1248632
+  http://dl.acm.org/citation.cfm?id=1248632}
+\BIBentrySTDinterwordspacing
+
+\bibitem{Mairal2009}
+\BIBentryALTinterwordspacing
+J.~Mairal, J.~Ponce, G.~Sapiro, A.~Zisserman, and F.~R. Bach, ``{Supervised
+  Dictionary Learning},'' in \emph{Advances in Neural Information Processing
+  Systems}, 2009, pp. 1033--1040. [Online]. Available:
+  \url{http://papers.nips.cc/paper/3448-supervised}
 \BIBentrySTDinterwordspacing
 
 \bibitem{Zou2006a}
@@ -307,15 +345,17 @@ H.~Zou, ``{The Adaptive Lasso and Its Oracle Properties},'' pp. 1418--1429,
   2006.
 
 \bibitem{mnist}
-Y.~LeCun, C.~Cortes, and C.~J. Burges, ``{THE MNIST DATABASE of handwritten
-  digits}.''
+\BIBentryALTinterwordspacing
+Y.~LeCun, C.~Cortes, and C.~Burges, ``{MNIST handwritten digit database}.''
+  [Online]. Available: \url{http://yann.lecun.com/exdb/mnist/}
+\BIBentrySTDinterwordspacing
 
-\bibitem{Baik2006}
+\bibitem{Baik2006a}
 J.~Baik and J.~W. Silverstein, ``{Eigenvalues of large sample covariance
   matrices of spiked population models},'' \emph{Journal of Multivariate
   Analysis}, vol.~97, no.~6, pp. 1382--1408, 2006.
 
-\bibitem{Paul2007}
+\bibitem{Paul2007a}
 \BIBentryALTinterwordspacing
 D.~Paul, ``{Asymptotics of sample eigenstructure for a large dimensional spiked
   covariance model},'' \emph{Statistica Sinica}, vol.~17, no.~4, p. 1617, 2007.
@@ -323,7 +363,7 @@ D.~Paul, ``{Asymptotics of sample eigenstructure for a large dimensional spiked
   \url{http://www3.stat.sinica.edu.tw/statistica/oldpdf/A17n418.pdf}
 \BIBentrySTDinterwordspacing
 
-\bibitem{Trunk1979}
+\bibitem{Trunk1979a}
 \BIBentryALTinterwordspacing
 G.~V. Trunk, ``{A problem of dimensionality: a simple example.}'' \emph{IEEE
   Transactions on Pattern Analysis and Machine Intelligence}, vol.~1, no.~3,
@@ -331,14 +371,14 @@ G.~V. Trunk, ``{A problem of dimensionality: a simple example.}'' \emph{IEEE
   \url{http://ieeexplore.ieee.org/lpdocs/epic03/wrapper.htm?arnumber=4766926}
 \BIBentrySTDinterwordspacing
 
-\bibitem{Huber1981}
+\bibitem{Huber1981a}
 \BIBentryALTinterwordspacing
 P.~J. Huber, \emph{{Robust Statistics}}, ser. Wiley Series in Probability and
   Statistics.\hskip 1em plus 0.5em minus 0.4em\relax Wiley, 1981, vol.~82,
   no.~3. [Online]. Available: \url{http://doi.wiley.com/10.1002/9780470434697}
 \BIBentrySTDinterwordspacing
 
-\bibitem{Rousseeuw1999}
+\bibitem{Rousseeuw1999a}
 \BIBentryALTinterwordspacing
 P.~J. Rousseeuw and K.~V. Driessen, ``\BIBforeignlanguage{en}{{A Fast Algorithm
   for the Minimum Covariance Determinant Estimator}},''
@@ -347,17 +387,14 @@ P.~J. Rousseeuw and K.~V. Driessen, ``\BIBforeignlanguage{en}{{A Fast Algorithm
   \url{http://amstat.tandfonline.com/doi/abs/10.1080/00401706.1999.10485670\#.VTejtq1Viko}
 \BIBentrySTDinterwordspacing
 
-\bibitem{Qin2013a}
+\bibitem{Ferrari2010a}
 \BIBentryALTinterwordspacing
-Y.~Qin and C.~E. Priebe, ``\BIBforeignlanguage{en}{{Maximum L q -Likelihood
-  Estimation via the Expectation-Maximization Algorithm: A Robust Estimation of
-  Mixture Models}},'' \emph{\BIBforeignlanguage{en}{Journal of the American
-  Statistical Association}}, vol. 108, no. 503, pp. 914--928, Sep. 2013.
-  [Online]. Available:
-  \url{http://www.tandfonline.com.proxy3.library.jhu.edu/doi/abs/10.1080/01621459.2013.787933\#.UuJtQmQo7og}
+D.~Ferrari and Y.~Yang, ``{Maximum Lq-likelihood estimation},'' \emph{IEEE
+  Transactions on Nuclear Science}, vol.~57, no.~3, pp. 1077--1084, 2010.
+  [Online]. Available: \url{http://arxiv.org/abs/1002.4533}
 \BIBentrySTDinterwordspacing
 
-\bibitem{Candes2009a}
+\bibitem{Candes2009b}
 \BIBentryALTinterwordspacing
 E.~J. Cand\`{e}s, X.~Li, Y.~Ma, and J.~Wright, ``{Robust Principal Component
   Analysis?}'' \emph{Journal of the ACM}, vol.~58, no.~3, pp. 1--37, Dec. 2009.
@@ -365,14 +402,14 @@ E.~J. Cand\`{e}s, X.~Li, Y.~Ma, and J.~Wright, ``{Robust Principal Component
   http://arxiv.org/abs/0912.3599}
 \BIBentrySTDinterwordspacing
 
-\bibitem{Zhang2014}
+\bibitem{Zhang2014a}
 \BIBentryALTinterwordspacing
 T.~Zhang and G.~Lerman, ``{A Novel M-Estimator for Robust PCA},'' \emph{Journal
   of Machine Learning Research}, vol.~15, pp. 749--808, 2014. [Online].
   Available: \url{http://jmlr.org/papers/v15/zhang14a.html}
 \BIBentrySTDinterwordspacing
 
-\bibitem{Bishop2006}
+\bibitem{Bishop2006a}
 \BIBentryALTinterwordspacing
 C.~M. Bishop, \emph{{Pattern Recognition and Machine Learning}}, ser.
   Information science and statistics.\hskip 1em plus 0.5em minus 0.4em\relax
@@ -380,7 +417,7 @@ C.~M. Bishop, \emph{{Pattern Recognition and Machine Learning}}, ser.
   \url{http://www.library.wisc.edu/selectedtocs/bg0137.pdf}
 \BIBentrySTDinterwordspacing
 
-\bibitem{Halko2011}
+\bibitem{Halko2011a}
 \BIBentryALTinterwordspacing
 N.~Halko, P.~G. Martinsson, and J.~A. Tropp, ``\BIBforeignlanguage{en}{{Finding
   Structure with Randomness: Probabilistic Algorithms for Constructing
@@ -389,24 +426,20 @@ N.~Halko, P.~G. Martinsson, and J.~A. Tropp, ``\BIBforeignlanguage{en}{{Finding
   \url{http://epubs.siam.org/doi/abs/10.1137/090771806}
 \BIBentrySTDinterwordspacing
 
-\bibitem{Candes06a}
-\BIBentryALTinterwordspacing
-E.~J. Cand\`{e}s and T.~Tao, ``{Near-Optimal Signal Recovery From Random
-  Projections: Universal Encoding Strategies?}'' \emph{IEEE Transactions on
-  Information Theory}, vol.~52, no.~12, pp. 5406--5425, Dec. 2006. [Online].
-  Available:
-  \url{http://ieeexplore.ieee.org/lpdocs/epic03/wrapper.htm?arnumber=4016283}
-\BIBentrySTDinterwordspacing
+\bibitem{Candes2006a}
+E.~J. Cand\`{e}s, ``{Compressive sampling},'' \emph{Proceedings of the
+  International Congress of Mathematicians, Madrid, Spain}, vol.~3, pp.
+  1433--1452, 2006.
 
-\bibitem{Lopes2011}
+\bibitem{Lopes2011a}
 \BIBentryALTinterwordspacing
 M.~Lopes, L.~Jacob, and M.~J. Wainwright, ``{A More Powerful Two-Sample Test in
-  High Dimensions using Random Projection},'' in \emph{Advances in Neural
-  Information Processing Systems}, 2011, pp. 1206--1214. [Online]. Available:
+  High Dimensions using Random Projection},'' in \emph{Neural Information
+  Processing Systems}, 2011, pp. 1206--1214. [Online]. Available:
   \url{http://papers.nips.cc/paper/4260-a-more-powerful-two-sample-test-in-high-dimensions-using-random-projection}
 \BIBentrySTDinterwordspacing
 
-\bibitem{Mika1999}
+\bibitem{Mika1999a}
 \BIBentryALTinterwordspacing
 S.~Mika, G.~Ratsch, J.~Weston, B.~Scholkopf, and K.~Mullers, ``{Fisher
   discriminant analysis with kernels},'' in \emph{Neural Networks for Signal
@@ -416,24 +449,22 @@ S.~Mika, G.~Ratsch, J.~Weston, B.~Scholkopf, and K.~Mullers, ``{Fisher
   \url{http://ieeexplore.ieee.org/lpdocs/epic03/wrapper.htm?arnumber=788121}
 \BIBentrySTDinterwordspacing
 
-\bibitem{Breiman2001}
-\BIBentryALTinterwordspacing
-L.~Breiman, ``{Random Forests},'' Tech. Rep., 2001. [Online]. Available:
-  \url{http://oz.berkeley.edu/users/breiman/RandomForests/cc\_papers.htm}
-\BIBentrySTDinterwordspacing
+\bibitem{Breiman2001a}
+L.~Breiman, ``{Random forests},'' \emph{Machine learning}, vol.~45, no.~1, pp.
+  5--32, 2001.
 
-\bibitem{Chang2011}
+\bibitem{Chang2011a}
 \BIBentryALTinterwordspacing
 C.-C. Chang and C.-J. Lin, ``{LIBSVM},'' \emph{ACM Transactions on Intelligent
   Systems and Technology}, vol.~2, no.~3, pp. 1--27, Apr. 2011. [Online].
   Available: \url{http://dl.acm.org/citation.cfm?id=1961189.1961199}
 \BIBentrySTDinterwordspacing
 
-\bibitem{Breiman01b}
+\bibitem{Breiman2001b}
 L.~Breiman, ``{Statistical Modeling : The Two Cultures},'' \emph{Statistical
   Science}, vol.~16, no.~3, pp. 199--231, 2001.
 
-\bibitem{Anderson1999}
+\bibitem{Anderson1999a}
 \BIBentryALTinterwordspacing
 E.~Anderson, Z.~Bai, C.~Bischof, S.~Blackford, J.~Demmel, J.~Dongarra, J.~D.
   Croz, A.~Greenbaum, S.~Hammerling, A.~McKenney, and D.~Sorensen,
@@ -442,11 +473,13 @@ E.~Anderson, Z.~Bai, C.~Bischof, S.~Blackford, J.~Demmel, J.~Dongarra, J.~D.
   \url{https://books.google.com/books?hl=en\&lr=\&id=AZlvEnr9gCgC\&pgis=1}
 \BIBentrySTDinterwordspacing
 
-\bibitem{Fisher1925}
+\bibitem{Fisher1925a}
 \BIBentryALTinterwordspacing
-R.~A. Fisher, \emph{{Statistical Methods for Research Workers}}, 1925.
-  [Online]. Available:
-  \url{http://psychclassics.yorku.ca/Fisher/Methods/chap6.htm}
+R.~A. Fisher, ``\BIBforeignlanguage{English}{{Theory of Statistical
+  Estimation}},'' \emph{\BIBforeignlanguage{English}{Mathematical Proceedings
+  of the Cambridge Philosophical Society}}, vol.~22, no.~05, pp. 700--725, Oct.
+  1925. [Online]. Available:
+  \url{http://journals.cambridge.org/abstract\_S0305004100009580}
 \BIBentrySTDinterwordspacing
 
 \end{thebibliography}

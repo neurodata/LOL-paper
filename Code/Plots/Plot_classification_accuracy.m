@@ -13,7 +13,7 @@ end
 addpath(p);
 
 %% load example data
-newsim=0;
+newsim=1;
 if newsim==1;
     [T,S,P,task] = run_example_sims;
 else
