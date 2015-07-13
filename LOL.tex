@@ -54,8 +54,7 @@ For reproducibility and extensibility, MATLAB code to run all numerical experime
 % \begin{wrapfigure}{R}{0.7\textwidth}%[h!]
 \begin{figure}
 \centering % l b r t
-% \includegraphics[width=1\linewidth,trim=0cm 0cm 1cm 4.4cm,clip=true]{../Figs/mnist.pdf}
-\includegraphics[width=0.5\linewidth,trim=0cm 0cm 1cm 4.4cm,clip=true]{../Figs/mnist.pdf}
+\includegraphics[width=0.5\linewidth,trim=1cm 0cm 0cm 4.4cm,clip=true]{../Figs/mnist}
 \caption{
 Illustrating three different classifiers---\sct{Lasso}~(top), \sct{Fld$\circ$Pca}~(middle), and \Lol~(bottom)---for embedding images of the digits 3, 7, and 8 (from MNIST), each of which is 28 $\times$ 28 = 784 dimensional.  
 \textbf{(A)}: Exemplars, boundary colors are only for visualization purposes.
@@ -111,7 +110,7 @@ In this sense, \Lol~can be thought of as a very simply  ``supervised \Pca''.
 \begin{figure}%{R}{0.7\textwidth}%[h!]
 % \begin{SCfigure}
 \centering
-\includegraphics[width=0.6\linewidth,trim=0in 0in 1.5in 0in,clip=true]{../Figs/cigars_est.pdf}%l b r t
+\includegraphics[width=0.6\linewidth,trim=0in 0in 1.5in 0in,clip=true]{../Figs/cigars_est}%l b r t
 \caption{
 \Lol~achieves near optimal performance for a wide variety of distributions. 
 Each point is sampled from a multivariate Gaussian; 
@@ -195,7 +194,7 @@ Under a sub-Gaussian generalization of the \Lda~ model, \Lol~is still better tha
 
 \begin{figure}[h!]
 \centering
-\includegraphics[width=1\linewidth]{../Figs/properties.pdf}
+\includegraphics[width=1\linewidth]{../Figs/properties}
 \caption{
 Seven simulations demonstrating that even when the true discriminant boundary is high-dimensional, \Lol~can find a low-dimensional projection that wins the bias-variance trade-off against competing methods.  
 For the first four, the top panels depict the means (top), the shared covariance matrix (middle).  For the next three, the top panels depict a 2D scatter plot (left), mean and level set of one standard deviation of covariance matrix (right).  For all seven simulations, the bottom panel shows misclassification rate as a function of the number of embedded dimensions, for several different classifiers.  The simulations settings are as follows:
@@ -237,7 +236,7 @@ In many applications, the main quantifiable consideration in whether to use a pa
 
 \begin{figure}[h!]
 \centering
-\includegraphics[width=1\linewidth]{../Figs/speed_test.pdf}
+\includegraphics[width=1\linewidth]{../Figs/speed_test}
 \caption{
 Computational efficiency of various low-dimensional projection methods. In all cases, n=100, and we used the ``stacked cigars'' simulation parameters.   We compare \Pca~with the projection steps from \Lol, QOQ, \Lrl, \Lfl, and \Lal, for different values of (p,d).  The addition of the mean difference vector is essentially negligible.  Moreover, for small d, the \Lfl~is advantageous.  \Lal~is always fastest, and its performance is often comparable to other methods (not shown).
 }
@@ -259,7 +258,7 @@ To more comprehensively understand the relative advantages and disadvantages of 
 
 \begin{figure}
 \centering
-\includegraphics[width=1\linewidth]{../Figs/realdata.pdf}
+\includegraphics[width=1\linewidth]{../Figs/realdata}
 \caption{
 For four standard datasets, we benchmark \Lol~(green circles) versus standard classification methods, including support vector machines (blue up triangles), \sct{Road} (cyan down triangles), \sct{Lasso}~(magenta pluses), and random forest (orange diamonds). 
 Top panels show error rate as a function of log$_2$ number of embedded dimensions (for \Lol, \sct{Road}, and \sct{Lasso}) or cost (for SVM).
@@ -291,7 +290,7 @@ High-dimensional linear regression is another supervised learning method that ca
 \begin{figure}
 % \begin{wrapfigure}{R}{0.7\textwidth} %[h!]
 \centering
-\includegraphics[width=1\linewidth]{../Figs/regression_power.pdf}
+\includegraphics[width=1\linewidth]{../Figs/regression_power}
 \caption{
 The intuition of including the mean difference vector is equally useful for other supervised manifold learning problems, including testing and regression.
 (A) and (B) show two different high-dimensional testing settings, as described in Methods.  Power is plotted against the decay rate of the spectrum, which approximates the effective number of dimensions.  \Lol~composed with Hotelling's test outperforms the random projections variants described in \cite{Lopes2011a}, as well as several other variants.
@@ -321,7 +320,7 @@ The \Lol~idea, appending the mean difference vector to convert unsupervised mani
 
 \begin{figure}
 \centering
-\includegraphics[width=1\linewidth,trim=0.5in 4.5in 0.5in 0.5in,clip=true]{../Figs/table.pdf} %l b r t
+\includegraphics[width=1\linewidth,trim=0.5in 4.5in 0.5in 0.5in,clip=true]{../Figs/table} %l b r t
 \caption{Table of algorithms and their properties for high-dimensional data. Gray elements indicate that results are demonstrated in the Figure labeled in the bottom row. 'X' denotes relatively good performance for a given setting, or has the particular property.
 }
 \label{fig:table}
