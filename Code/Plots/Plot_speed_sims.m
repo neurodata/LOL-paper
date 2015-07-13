@@ -32,10 +32,10 @@ set(gcf,'DefaultAxesColorOrder',[...
     0 1 1;... FLOL
     ])
 
-width=0.18;
+width=0.2;
 height=0.3;
 vspace=0.17;
-hspace=0.08;
+hspace=0.04;
 bottom(1)=0.12;
 bottom(2)=bottom(1)+height+vspace; %1-(height+space);
 left(1)=0.1;
@@ -61,7 +61,11 @@ for i=1:3
         xlabel('d = # of embedded dimensions'),
         ylabel('time (sec)')
     end
+    if i==1
     set(gca,'Ytick',[0.01, 0.1, 1.0],'YLim',[0.005, 1.2]) %:0.02:0.09)
+    else
+    set(gca,'YtickLabel',[],'YLim',[0.005, 1.2]) %:0.02:0.09)        
+    end
     set(gca,'Xtick',[10,30,50,90],'XtickLabel',[10,30,50,90])
 end
 
@@ -83,7 +87,11 @@ for i=1:3
         xlabel('p = # of ambient dimensions'),
         ylabel('time (sec)')
     end
-    set(gca,'Ytick',[0.01, 0.1, 1.0],'YLim',[0.005, 1]) %:0.02:0.09)
+    if i==1
+        set(gca,'Ytick',[0.01, 0.1, 1.0],'YLim',[0.005, 1]) %:0.02:0.09)
+    else
+        set(gca,'YtickLabel',[],'YLim',[0.005, 1]) %:0.02:0.09)
+    end
     set(gca,'Xtick',[1000,2000,5000],'XtickLabel',[1000,2000,5000])
 %     if i==3
 %        legend('FLD o PCA','LOL','QOQ','LAL','LFL','Location','EastOutside') %'RoLOL', 
@@ -122,7 +130,7 @@ l=legend(g,...
 
 legend1 = legend(hl,'show'); %
 set(legend1,...
-    'Position',[0.8 0.4 0.24 0.2],... [left, bottom, width, height]
+    'Position',[0.86  0.5 0.04 0.1],... [left, bottom, width, height]
     'FontName','FixedWidth',...
     'FontSize',9);
 set(gca,'XTick',[],'YTick',[],'Box','off','xcolor','w','ycolor','w')

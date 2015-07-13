@@ -332,11 +332,12 @@ l=legend(g,...
     'QOQ'); %,...'LDA o LOL(D,E,R)',...LDA o \delta+rPCA',...
 legend1 = legend(hl,'show'); %
 set(legend1,...
-    'Position',[0.8 0.15 0.1 0.2],... %[left,bottom,width,height]
+    'Position',[0.8 0.15 0.1 0.1],... %[left,bottom,width,height]
     'FontName','FixedWidth',...
     'FontSize',9);
 % set(legend1,'YColor',[1 1 1],'XColor',[1 1 1],'FontName','FixedWidth');
 set(gca,'XTick',[],'YTick',[],'Box','off','xcolor','w','ycolor','w')
+legend('boxoff')
 
 
 % print figure

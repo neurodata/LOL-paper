@@ -180,7 +180,7 @@ l=legend(g,...
 legend1 = legend(hl,'show','FontSize',10);
 % set(legend1,'YColor',[1 1 1],'XColor',[1 1 1],'FontName','FixedWidth');
 set(gca,'XTick',[],'YTick',[],'Box','off','xcolor','w','ycolor','w')
-
+legend('boxoff')
 
 %% print figure
 if task.savestuff

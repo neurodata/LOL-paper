@@ -40,9 +40,9 @@ S{1}.savestuff=1;
 
 
 %% plot testing fig
-height=0.6;
+height=0.58;
 vspace=0.08;
-bottom=0.2;
+bottom=0.22;
 left=0.09;
 left3=0.58;
 width=0.19;
@@ -131,10 +131,11 @@ l=legend(g,...
     'PLS'); %,transformers{3}};
 legend1 = legend(hl,'show'); %
 set(legend1,...
-    'Position',[0.78 0.4 0.2 0.2],...
+    'Position',[0.85 0.5 0.05 0.1],... [left, bottom, width, height]
     'FontName','FixedWidth',...
     'FontSize',9);
 set(gca,'XTick',[],'YTick',[],'Box','off','xcolor','w','ycolor','w')
+legend('boxoff')
 
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
