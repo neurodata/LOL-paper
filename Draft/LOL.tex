@@ -10,7 +10,8 @@
 \maketitle
 
 \begin{abstract}
-% To perform statistical inference on high-dimensional data, one can often improve finite sample performance on particular exploitation tasks via embedding the data into a lower-dimensional space.  Rather than first choosing a manifold learning algorithm and then composing it with a classification algorithm, we derive the form of the optimal affine subspace projection for the simplest case of interest: a  two-class classification problem in which both classes are sampled from multivariate Gaussian distributions.  Simulations demonstrate improvements over the previous state-of-the-art in performance in a variety of settings, at trivial additional cost.  The same intuition leads to a novel two-sample test in high-dimensions with higher power than the previous state-of-the-art.  Extensions to multiple classes and non-parametric extensions are straightforward.
+Supervised learning is a fundamental problem in statistics and pattern recognition.  In the modern era, it is routine to collect high-dimensional data, without obtaining a large number of samples.  In such situations, some form of regularization is required to achieve high-quality performance.  Current approaches either do not perform competitively, or are unfortunately computationally intensive.  Using simple geometric arguments, we discover that combining the means and covariances in an intuitive fashion yields a low-dimensional projection that is nearly optimal in a wide variety of simulated and real data scenarios. By utilizing off-the-shelf numerical libraries, our method, called ``Linear Optimal Low-rank'' (LOL) is extremely computationally efficient as well. Theoretical analyses confirm our intuition.  
+We therefore position LOL as a potential new and principled ``default'' algorithm for any supervised learning problem with wide data.  To enable reproducability and extendability, we provide open-source code in Matlab, R, and Python.  
 \end{abstract}
 
 
