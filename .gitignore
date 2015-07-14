@@ -2,4 +2,13 @@
 /OptionalDependencies/*
 /old/*
 /ingest_data/*
+*.aux
+*.blg
+*.brf
+*.fdb*
+*.log
+*.synctex*
+*.fls
+*.tmp
+*.out
 *.m~
