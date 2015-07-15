@@ -67,12 +67,13 @@ angle(4)=PAPs/(norm(PA)*nPs);
 display(angle)
 
 %%
+clear, clc
 p=10;
 % del=sqrt(p)/p*ones(p,1);
 del=orth(randn(p,1));
-n=1000;
+n=1;
 for i=1:n
-    s=rand(p,1);
+    s=sort(rand(p,1),'descend');
     S=diag(s);
     
     [U,D,V]=svd(S);
@@ -104,6 +105,7 @@ end
 figure(1), clf, hold all
 plot(centers1,counts1)
 plot(centers2,counts2)
+legend('error','angle')
 
 %%
 % clc
