@@ -35,13 +35,13 @@ One of the earliest approaches for discovering low-dimensional representations i
 
 
 
-However, for a wide class of problems, such as image classification, sparisty in the ambient space is an overly restrictive, and therefore, bias-inducing assumption (see Figure \ref{fig:mnist} for an example on the classic MNIST dataset). A generalization of sparsity is ``low-rank'', in which a  small number of linear combinations of the ambient dimensions characterize the data.  Unsupervised low-rank methods date back over a century, including multidimensional scaling \cite{Householder1938,Borg2005} and principal components analysis \cite{Pearson1901a,Jolliffe2002a}. More recent nonlinear versions of unsupervised dimensionality reduction, or manifold learning, include developments from neural network theory such as self-organizing maps \cite{Kohonen1982a}, generative topographic mapping \cite{Bishop1998a}. In this century, manifold learning became more popular, including isomap \cite{Tenenbaum2000a}, local linear embedding \cite{Roweis2000a}, Laplacian eigenmaps \cite{Belkin2003a}, local tangent space alignment \cite{Zhang2004f}, diffusion maps \cite{Coifman2006a},  and geometric multi-resolution analysis \cite{Allard2012}.  All these approaches can be used as pre-processing steps, to reduce the dimensionality of the data prior to solving the supervised learning problem \cite{Belhumeur1997a}.
+However, for a wide class of problems, such as image classification, sparisty in the ambient space is an overly restrictive, and therefore, bias-inducing assumption (see Figure \ref{f:mnist} for an example on the classic MNIST dataset). A generalization of sparsity is ``low-rank'', in which a  small number of linear combinations of the ambient dimensions characterize the data.  Unsupervised low-rank methods date back over a century, including multidimensional scaling \cite{Householder1938,Borg2005} and principal components analysis \cite{Pearson1901a,Jolliffe2002a}. More recent nonlinear versions of unsupervised dimensionality reduction, or manifold learning, include developments from neural network theory such as self-organizing maps \cite{Kohonen1982a}, generative topographic mapping \cite{Bishop1998a}. In this century, manifold learning became more popular, including isomap \cite{Tenenbaum2000a}, local linear embedding \cite{Roweis2000a}, Laplacian eigenmaps \cite{Belkin2003a}, local tangent space alignment \cite{Zhang2004f}, diffusion maps \cite{Coifman2006a},  and geometric multi-resolution analysis \cite{Allard2012}.  All these approaches can be used as pre-processing steps, to reduce the dimensionality of the data prior to solving the supervised learning problem \cite{Belhumeur1997a}.
 
-However, such manifold learning methods, while exhibiting both strong theoretical \cite{Eckart1936a,deSilva2003, Allard2012} and empirical performance, are fully unsupervised.  Thus, in classification problems, they discover a low-dimensional representation of the data, ignoring the labels.  This can be highly problematic when the discriminant dimensions and the directions of maximal variance are not aligned (see Figure \ref{fig:mnist} for an example).  Supervised dimensionality reduction techniques, therefore, combine the best of both worlds, search for low-dimensional discriminant boundaries.  A set of methods from the statistics community is collectively referred to as   ``sufficient dimensionality reduction'' (SIR) or ``first two moments'' (F2M) methods  \cite{Li1991a, Tishby1999a, Globerson2003a, Cook2005a,Fukumizu2004a}.  These methods are theoretically elegant, but typically require the sample size to be larger than the number of observed dimensions (although see \cite{Cook2013} for some promising work).  Other approaches formulate an optimization problem, such as projection pursuit \cite{Huber1985a}, empirical risk minimization \cite{Belkin2006a}, or supervised dictionary learning \cite{Mairal2009}.  These methods are limited because they are prone to fall into local minima, they require costly iterative algorithms, and lack any theoretical guarantees \cite{Belkin2006a}.   Thus, there remains a gap in the literature: a supervised learning method with theoretical convergence guarantees appropriate when the dimensionality is orders of magnitude larger than the sample size.
+However, such manifold learning methods, while exhibiting both strong theoretical \cite{Eckart1936a,deSilva2003, Allard2012} and empirical performance, are fully unsupervised.  Thus, in classification problems, they discover a low-dimensional representation of the data, ignoring the labels.  This can be highly problematic when the discriminant dimensions and the directions of maximal variance are not aligned (see Figure \ref{f:mnist} for an example).  Supervised dimensionality reduction techniques, therefore, combine the best of both worlds, search for low-dimensional discriminant boundaries.  A set of methods from the statistics community is collectively referred to as   ``sufficient dimensionality reduction'' (SIR) or ``first two moments'' (F2M) methods  \cite{Li1991a, Tishby1999a, Globerson2003a, Cook2005a,Fukumizu2004a}.  These methods are theoretically elegant, but typically require the sample size to be larger than the number of observed dimensions (although see \cite{Cook2013} for some promising work).  Other approaches formulate an optimization problem, such as projection pursuit \cite{Huber1985a}, empirical risk minimization \cite{Belkin2006a}, or supervised dictionary learning \cite{Mairal2009}.  These methods are limited because they are prone to fall into local minima, they require costly iterative algorithms, and lack any theoretical guarantees \cite{Belkin2006a}.   Thus, there remains a gap in the literature: a supervised learning method with theoretical convergence guarantees appropriate when the dimensionality is orders of magnitude larger than the sample size.
 
 
-The challenge lies is posing the problem in such a way that efficient numerical algorithms can be brought to bear, without costly iterations or tuning parameters.  Our approach, which we call ``Linear Optimal Low-rank'' (\Lol) embedding (see Figure \ref{fig:mnist}), utilizes the first two moments, as do SIR, spectral decompositions, and high-dimensional discriminant analysis methods \cite{Bouveyron2007}, but does not require iterative algorithms and therefore is vastly more computationally efficient.  The motivation for \Lol~comes from a simple geometric intuition (Figure \ref{fig:cigars}).  Indeed, we provide  theoretical insight explaining why our method is more general than previous approaches.  A variety of simulations provide further evidence that \Lol~efficiently finds a better low-dimensional representation than competing methods, not just under the provable model assumptions, but also under much more general contexts (Figure \ref{fig:properties}).  Moreover, we demonstrate that \Lol~achieves better performance, in less time, as compared to several reference high-dimensional classifiers, on several benchmark datasets, including genomics, connectomics, and image processing problems (Figure \ref{fig:realdata}). 
-Finally, \Lol~can also be used to improve high-dimensional regression and testing (Figure \ref{fig:generalizations}).  
+The challenge lies is posing the problem in such a way that efficient numerical algorithms can be brought to bear, without costly iterations or tuning parameters.  Our approach, which we call ``Linear Optimal Low-rank'' (\Lol) embedding (see Figure \ref{f:mnist}), utilizes the first two moments, as do SIR, spectral decompositions, and high-dimensional discriminant analysis methods \cite{Bouveyron2007}, but does not require iterative algorithms and therefore is vastly more computationally efficient.  The motivation for \Lol~comes from a simple geometric intuition (Figure \ref{f:cigars}).  Indeed, we provide  theoretical insight explaining why our method is more general than previous approaches.  A variety of simulations provide further evidence that \Lol~efficiently finds a better low-dimensional representation than competing methods, not just under the provable model assumptions, but also under much more general contexts (Figure \ref{f:properties}).  Moreover, we demonstrate that \Lol~achieves better performance, in less time, as compared to several reference high-dimensional classifiers, on several benchmark datasets, including genomics, connectomics, and image processing problems (Figure \ref{f:realdata}). 
+Finally, \Lol~can also be used to improve high-dimensional regression and testing (Figure \ref{f:generalizations}).  
 Based on the above, we suggest that \Lol~ be considered as one of the reference method for supervised manifold learning for wide data. 
 For reproducibility and extensibility, MATLAB code to run all numerical experiments and reproduce all figures is available from our github repository available here: \url{http://github.com/jovo/lol}. 
 
@@ -68,11 +68,11 @@ The vertical line shows the classification threshold.
 The filled area is the estimated error rate: the goal of any classification algorithm is to minimize that area. 
 Clearly, \Lol~exhibits the best separation after embedding, which results in the best classification performance.
 }
-\label{fig:mnist}
+\label{f:mnist}
 % \end{wrapfigure}
 \end{figure}
 
-Pseudocode of any method that embeds high-dimensional data as part of classification proceeds as schematized in Figure \ref{fig:mnist}: 
+Pseudocode of any method that embeds high-dimensional data as part of classification proceeds as schematized in Figure \ref{f:mnist}: 
 (A) obtain/select n training samples of the data, 
 (B) learn a low dimensional projection, 
 (C) project n' testing samples onto the lower dimensional space, 
@@ -81,11 +81,11 @@ We consider  three different linear dimensionality reduction methods---\sct{Lass
 
 To demonstrate the utility of \Lol, we  first consider one of the most popular benchmark datasets ever, the MNIST dataset \cite{mnist}.  This dataset consists of many thousands of examples of images of the digits 0 through 9.  Each such image is represented by a 28$\times$28 matrix, which means that the observed (or ambient) dimensionality of the data is $p=$784.  Because we are motivated by the $n \ll p$ scenario, we subsample the data to select n=300 examples of the numbers 3, 7, and 8. We then apply all three approaches to this subsample of the MNIST dataset, learning a projection, and embedding n'=500 testing samples, and classifying the resulting embedded data.
 
-% Figure \ref{fig:mnist}(A) shows several examples of digit, the border of each digit is colored for visualization purposes only.  
-% Figure \ref{fig:mnist}(B) shows the estimated projection matrices for each approach (see Methods for details). 
+% Figure \ref{f:mnist}(A) shows several examples of digit, the border of each digit is colored for visualization purposes only.  
+% Figure \ref{f:mnist}(B) shows the estimated projection matrices for each approach (see Methods for details). 
 % These are the matrices that transform the data into a low-dimensional representation.  
-% Figure \ref{fig:mnist}(C) shows n'=500 randomly selected training samples from the digits 3, 7, and 8, embedded into the first two dimensions using each of the three approaches. The colors of the embedded points correspond to those in the leftcolumn, that is, 3 is blue, 7 is red, and 8 is green.
-% FIgure \ref{fig:mnist}(D) shows a smoothed histogram of the posterior probabilities of each test samples after classifying.
+% Figure \ref{f:mnist}(C) shows n'=500 randomly selected training samples from the digits 3, 7, and 8, embedded into the first two dimensions using each of the three approaches. The colors of the embedded points correspond to those in the leftcolumn, that is, 3 is blue, 7 is red, and 8 is green.
+% FIgure \ref{f:mnist}(D) shows a smoothed histogram of the posterior probabilities of each test samples after classifying.
 \sct{Lasso}, by virtue of being a sparse method, finds the pixels that most discriminate the 3 classes.  The resulting embeddings mostly live along the boundaries, because these images are close to binary, and therefore, images either have or do not have a particular pixel. Indeed, although the images themselves are nearly sparse (over 80\% of the pixels in the dataset have intensity $\leq 0.05$),  a low-dimensional discriminant boundary does not seem to be so.  \Pca, on the other hand, finds the linear combinations of training samples that maximize the variance.  This unsupervised linear manifold learning method results in projection matrices that indeed look like linear combinations of the three different digits.  The goal here, however, is separating classes, not maximizing variability.  The resulting embeddings are not particularly well separated, suggesting the the directions of discriminability are not the same as the directions of maximum variance.  \Lol~is our newly proposed supervised linear manifold learning method (see below for details).  The projection matrices it learns look qualitatively much like those of \Pca. This is not surprising, as both are linear combinations of the training examples.  The resulting embeddings however, look quite different.  The three different classes are very clearly separated by even the first two dimensions.  The result of these embeddings yields classifiers whose performance is obvious from looking at the embeddings: \Lol~achieves significantly smaller error than the other two approaches.  
 This numerical experiment justifies the use of supervised linear manifold learning, we next investigate the performance of these methods in simpler simulated examples, to better illustrate when we can expect \Lol~to outperform other methods, and perhaps more importantly, when we expect this ``vanilla'' variant of \Lol~to fail.
 
@@ -127,14 +127,14 @@ In each of 3 simulations, we sample n=100 points in p=1000 dimensions.  And for 
 \textbf{Row 5}: the Bayes optimal classifier, which is what all classifiers strive to achieve.
 Note that \Lol~is closest to Bayes optimal in all three settings.
 }
-\label{fig:cigars}
+\label{f:cigars}
 \end{figure}
 % \vspace{-30pt}
 
 
-Figure \ref{fig:cigars} shows three different examples of data sampled from the \Lda~model to geometrically illustration this intuition.
+Figure \ref{f:cigars} shows three different examples of data sampled from the \Lda~model to geometrically illustration this intuition.
 In each, we sample n=100 training samples in p=1000 dimensional space, so $n \ll p$.  
-Figure \ref{fig:cigars}(A) shows an example we call  ``stacked cigars''. 
+Figure \ref{f:cigars}(A) shows an example we call  ``stacked cigars''. 
 In this example and the next, the covariance matrix is diagonal, so all ambient dimensions are independent of one another.  
 Moreover,  the difference between the means and diagonal are both large along the same dimensions (they are highly correlated with one another). 
 This is an idealized setting for \Pca, because \Pca~finds the direction of maximal variance, which happens to correspond to the direction of maximal separation.  
@@ -144,14 +144,14 @@ Indeed,  \sct{Road}, a sparse classifier designed for precisely this scenario,  
 \Lol~does the best of all three approaches, by using both the difference of the means and the covariance.
 
 
-Figure \ref{fig:cigars}(B) shows an example which is a worst case scenario for using \Pca~to find the optimal projection for classification.  
+Figure \ref{f:cigars}(B) shows an example which is a worst case scenario for using \Pca~to find the optimal projection for classification.  
 In particular, the variance is getting larger for subsequent dimensions, $\sigma_1 < \sigma_2 < \cdots < \sigma_p$, while the magnitudes of the difference between the means are decreasing with dimension, $\delta_1 > \delta_2 < \cdots > \delta_p$. 
 Thus, for any truncation level,  \Pca~finds exactly the \emph{wrong} directions.  
 \sct{Road} is not hampered by this problem, it is also able to find the directions of maximal discrimination, rather than those of maximal variance.
 Again, \Lol, by using both parameters, does extremely well.
 
 
-Figure \ref{fig:cigars}(C) is exactly the same as (B), except the data have been randomly rotated in all 1000 dimensions.  This means that none of the original coordinates have much information, rather, linear combinations of them do.  
+Figure \ref{f:cigars}(C) is exactly the same as (B), except the data have been randomly rotated in all 1000 dimensions.  This means that none of the original coordinates have much information, rather, linear combinations of them do.  
 This is evidenced by observing the scatter plot, which shows that two dimensions clearly fail to disambiguate the two classes.
 \Pca, being rotationally invariant, fails in this scenario as it did in (B).
 Now, there is no small number of ambient dimensions that separate the data well, so \sct{Road} also fails.
@@ -161,7 +161,7 @@ However, \Lol, by virtue of being rotationally invariant, is unperturbed by this
 \subsection*{Theoretical Confirmation}
 
 The above numerical experiments provide the intuition to guide our theoretical developments.  
-\begin{thm} \label{thm:LDA}
+\begin{thm} \label{t:LDA}
 Under the \Lda~model, \Lol~is better than \Pca.
 \end{thm}
 In words, it is better to incorporate the mean difference vector into the projection matrix.  The degree of improvement is a function of the embedding dimension d, the ambient dimensionality p, and the parameters (see Methods for details and proof).
@@ -174,23 +174,23 @@ In the above numerical and theoretical investigations, we fixed d, the number of
 % , rather, the more data we obtain, the higher-dimensional discriminant boundary we can estimate, and the close to Bayes optimal we can perform.  
 
 Thus, in all the following simulations, the true ambient dimensionality of the data is equal to the dimensionality of the optimal discriminant boundary (given infinite data).  In other words, there does not exist a discriminant space that is lower dimensional than the ambient space, so we cannot find the ``intrinsic dimension'' of the data or the discriminant boundary.  Rather, we face a trade-off: keeping more dimensions reduces bias, but increases variance.  The optimal bias/variance trade-off depends on the distribution of the data, as well as the sample size \cite{Trunk1979a}.  We formalize this notion for the LpA model and proof the following:
-\begin{thm} \label{thm:n}
+\begin{thm} \label{t:n}
 Under the \Lda~ model, estimated \Lol~is better than \Pca.
 \end{thm}
 Note that the degree of improvement is a function of the number of samples n, in addition to the embedding dimension d, the ambient dimensionality p, and the parameters (see Methods for details and proof).
 
 
-Consider again the rotated trunk example as well as a ``Toeplitz'' example, as depicted in Figures \ref{fig:properties}(A) and (B).  In both cases, the data are sampled from the \Lda~ model, and in both cases, the optimal dimensionality depends on the particular approach, but is never the true dimensionality.  Moreover, \Lol~dominates the other approaches, regardless of the number of dimensions used.
+Consider again the rotated trunk example as well as a ``Toeplitz'' example, as depicted in Figures \ref{f:properties}(A) and (B).  In both cases, the data are sampled from the \Lda~ model, and in both cases, the optimal dimensionality depends on the particular approach, but is never the true dimensionality.  Moreover, \Lol~dominates the other approaches, regardless of the number of dimensions used.
 % 
-Figure \ref{fig:properties}(C) shows a sparse example with ``fat tails'' to mirror real data settings better.  The qualitative results are consistent with those of (A) and (B).  Indeed, we can generalize Theorem \ref{thm:n} to include ``sub-Gaussian'' data, rather than just Gaussian:
+Figure \ref{f:properties}(C) shows a sparse example with ``fat tails'' to mirror real data settings better.  The qualitative results are consistent with those of (A) and (B).  Indeed, we can generalize Theorem \ref{t:n} to include ``sub-Gaussian'' data, rather than just Gaussian:
 
-\begin{thm} \label{thm:FAT}
+\begin{thm} \label{t:FAT}
 Under a sub-Gaussian generalization of the \Lda~ model, \Lol~is still better than \Pca.
 \end{thm}
 
 \subsection*{Multiple Classes}
 
-\Lol~can trivially be extended to $>2$ class situations.  Nai\"vely it may seem like we would need to keep all pairwise differences between means.  However, given $k$ classes, the set of all $k^2$ differences is only rank $k-1$.  In other words, we can equivalently find the class which has the maximum number of samples (breaking ties randomly), and subtract its mean from all other class means.  Figure \ref{fig:properties}(D) shows a 3-class generalization of (A).  While \Lol~uses the additional class naturally,  many previously proposed high-dimensional \Fld~variants, such as \sct{Road}, natively only work for 2-classes.
+\Lol~can trivially be extended to $>2$ class situations.  Nai\"vely it may seem like we would need to keep all pairwise differences between means.  However, given $k$ classes, the set of all $k^2$ differences is only rank $k-1$.  In other words, we can equivalently find the class which has the maximum number of samples (breaking ties randomly), and subtract its mean from all other class means.  Figure \ref{f:properties}(D) shows a 3-class generalization of (A).  While \Lol~uses the additional class naturally,  many previously proposed high-dimensional \Fld~variants, such as \sct{Road}, natively only work for 2-classes.
 
 
 \begin{figure}[h!]
@@ -199,7 +199,7 @@ Under a sub-Gaussian generalization of the \Lda~ model, \Lol~is still better tha
 \caption{
 Seven simulations demonstrating that even when the true discriminant boundary is high-dimensional, \Lol~can find a low-dimensional projection that wins the bias-variance trade-off against competing methods.  
 For the first four, the top panels depict the means (top), the shared covariance matrix (middle).  For the next three, the top panels depict a 2D scatter plot (left), mean and level set of one standard deviation of covariance matrix (right).  For all seven simulations, the bottom panel shows misclassification rate as a function of the number of embedded dimensions, for several different classifiers.  The simulations settings are as follows:
-\textbf{(A)} Rotated Trunk: same as Figure \ref{fig:cigars}(C).
+\textbf{(A)} Rotated Trunk: same as Figure \ref{f:cigars}(C).
 \textbf{(B)} Toeplitz: another setting where mean difference is not well correlated with any eigenvector, and no ambient coordinate is particularly useful on its own.
 \textbf{(C)} Fat Tails: a common phenomenon in real data; we have theory to support this generalization of the \Lda~ model.
 \textbf{(D)} 3 Classes: \Lol~naturally adapts to multiple classes.
@@ -215,7 +215,7 @@ For the first four, the top panels depict the means (top), the shared covariance
 % A version of \Lol~designed for each setting is shown to improve over the vanilla \Lol, as expected. 
 In all 7 cases, \Lol, or the appropriate generalization thereof, outperforms unsupervised, sparse, or other methods.  Moreover, the optimal embedding dimension is never the true discriminant dimension, but rather, a smaller number jointly determined by parameter settings and sample size.
 }
-\label{fig:properties}
+\label{f:properties}
 \end{figure}
 
 
@@ -224,16 +224,16 @@ In all 7 cases, \Lol, or the appropriate generalization thereof, outperforms uns
 
 The simple geometric intuition which led to the development of \Lol~suggests that we can easily generalize \Lol~to be more appropriate for more complicated settings. We consider three additional scenarios:
 
-\para{QDA} Sometimes, it makes more sense to model each class as having a unique covariance matrix, rather than a shared covariance matrix.  Assuming everything is Gaussian, the optimal classifier in this scenario is called  Quadratic Discriminant Analysis (QDA) \cite{Hastie2004}.  Intuitively then, we can modify \Lol~to compute the eigenvectors separately for each class, and concatenate them (sorting them according to their singular values).  Moreover, rather than classifying the projected data with \Lda, we can then classify the projected data with QDA.  Indeed, simulating data according to such a model (Figure \ref{fig:properties}(E), \Lol~performs slightly above chance, regardless of the number of dimensions we use to project, whereas QOQ (which denotes we estimate eigenvectors separately and then use QDA on the projected data) performs significantly better regardless of how many dimensions it keeps.
+\para{QDA} Sometimes, it makes more sense to model each class as having a unique covariance matrix, rather than a shared covariance matrix.  Assuming everything is Gaussian, the optimal classifier in this scenario is called  Quadratic Discriminant Analysis (QDA) \cite{Hastie2004}.  Intuitively then, we can modify \Lol~to compute the eigenvectors separately for each class, and concatenate them (sorting them according to their singular values).  Moreover, rather than classifying the projected data with \Lda, we can then classify the projected data with QDA.  Indeed, simulating data according to such a model (Figure \ref{f:properties}(E), \Lol~performs slightly above chance, regardless of the number of dimensions we use to project, whereas QOQ (which denotes we estimate eigenvectors separately and then use QDA on the projected data) performs significantly better regardless of how many dimensions it keeps.
 
-\para{Outliers}  Outliers persist in many real data sets.  Finding outliers, especially in high-dimensional data, is both tedious and difficult.  Therefore, it is often advantageous to have estimators that are robust to certain kinds of outliers \cite{Huber1981a,Rousseeuw1999a,Ferrari2010a}.  \Pca~and eigenvector computation are particularly sensitive to outliers \cite{Candes2009b}.  Because \Lol~is so simple and modular, we can replace typical eigenvector computation with a robust variant thereof, such as \cite{Zhang2014a}.  Figure \ref{fig:properties}(F) shows an example where we generated  $n/2$ training samples according to the simple \Lda~ model, but then added another $n/2$ training samples from a noise model.  \Lrl~(our robust variant of \Lol~that simply replaces the fragile eigenvector computation with a robust version), performs better than \Lol~regardless of the number of dimensions we keep.
+\para{Outliers}  Outliers persist in many real data sets.  Finding outliers, especially in high-dimensional data, is both tedious and difficult.  Therefore, it is often advantageous to have estimators that are robust to certain kinds of outliers \cite{Huber1981a,Rousseeuw1999a,Ferrari2010a}.  \Pca~and eigenvector computation are particularly sensitive to outliers \cite{Candes2009b}.  Because \Lol~is so simple and modular, we can replace typical eigenvector computation with a robust variant thereof, such as \cite{Zhang2014a}.  Figure \ref{f:properties}(F) shows an example where we generated  $n/2$ training samples according to the simple \Lda~ model, but then added another $n/2$ training samples from a noise model.  \Lrl~(our robust variant of \Lol~that simply replaces the fragile eigenvector computation with a robust version), performs better than \Lol~regardless of the number of dimensions we keep.
 
-\para{XOR}  XOR is perhaps the simplest nonlinear problem, the problem that led to the demise of the perceptron, prior to its resurgence after the development of multi-layer perceptrons \cite{Bishop2006a}.  Thus, in our opinion, it is warranted to check whether any new classification method can perform well in this scenario.  The classical (two-dimensional) XOR problem is quite simple: the output of a classifier is zero if both inputs are the same (00 or 11), and the output is one if the inputs differ (01 or 10).  Figure \ref{fig:properties}(G) shows a high dimensional and stochastic variant of XOR.  This simulation was designed such that standard classifiers, such as support vector machines and random forests, achieve chance levels (not shown).  \Lol, performs moderately better than chance, and QOQ performs significantly better than chance, regardless of the chosen dimensionality.  This demonstrates that our classifiers developed herein, though quite simple and intuition, can perform well even in settings where the data are badly modeled by our underlying assumptions.  This mirrors previous findings where the so-called ``idiots's Bayes'' classifier outperforms more sophisticated classifiers \cite{Bickel2004a}.  In fact, we think of our work as finding intermediate points between idiot's Bayes (or nai\"ve Bayes) and \Fld, by enabling degrees of regularization by changing the dimensionality used.
+\para{XOR}  XOR is perhaps the simplest nonlinear problem, the problem that led to the demise of the perceptron, prior to its resurgence after the development of multi-layer perceptrons \cite{Bishop2006a}.  Thus, in our opinion, it is warranted to check whether any new classification method can perform well in this scenario.  The classical (two-dimensional) XOR problem is quite simple: the output of a classifier is zero if both inputs are the same (00 or 11), and the output is one if the inputs differ (01 or 10).  Figure \ref{f:properties}(G) shows a high dimensional and stochastic variant of XOR.  This simulation was designed such that standard classifiers, such as support vector machines and random forests, achieve chance levels (not shown).  \Lol, performs moderately better than chance, and QOQ performs significantly better than chance, regardless of the chosen dimensionality.  This demonstrates that our classifiers developed herein, though quite simple and intuition, can perform well even in settings where the data are badly modeled by our underlying assumptions.  This mirrors previous findings where the so-called ``idiots's Bayes'' classifier outperforms more sophisticated classifiers \cite{Bickel2004a}.  In fact, we think of our work as finding intermediate points between idiot's Bayes (or nai\"ve Bayes) and \Fld, by enabling degrees of regularization by changing the dimensionality used.
 
 
 \subsection*{Computational Efficiency}
 
-In many applications, the main quantifiable consideration in whether to use a particular method, other than accuracy, is numerical efficiency.  Because implementing \Lol~requires only highly optimized linear algebraic routines---including computing moments and singular value decomposition---rather than the costly iterative programming techniques currently required for sparse or dictionary learning type problems.  To quantify the computational efficiency of \Lol~and its variants, Figure \ref{fig:speed} shows the wall time it takes to run each method on the stacked cigars problem, varying the ambient dimensionality, embedded dimensionality, and sample size.  Note that for completeness, we include two additional variants of \Lol: \Lal~and \Lfl.  \Lfl~(short for fast \Lol) replaces the standard \Svd~algorithm with a randomized variant, which can be much faster in certain situations \cite{Halko2011a}.  \Lal~goes even one step further, replacing \Svd~with random projections \cite{Candes2006a}.  This variant of \Lol~is the fastest, its runtime is  least sensitive to (p,d,n), and its accuracy is often commensurate (or better) than other variants of \Lol.  We will explore Ra\Lol~in future work.  Note that the runtime of all the variants of \Lol~are quite similar to \sct{Fld $\circ$ Pca}.  Given, given \Lol's improved accuracy, and nearly identical simplicity, it seems there is very little reason to not use \Lol~instead of \sct{Fld $\circ$ Pca}.
+In many applications, the main quantifiable consideration in whether to use a particular method, other than accuracy, is numerical efficiency.  Because implementing \Lol~requires only highly optimized linear algebraic routines---including computing moments and singular value decomposition---rather than the costly iterative programming techniques currently required for sparse or dictionary learning type problems.  To quantify the computational efficiency of \Lol~and its variants, Figure \ref{f:speed} shows the wall time it takes to run each method on the stacked cigars problem, varying the ambient dimensionality, embedded dimensionality, and sample size.  Note that for completeness, we include two additional variants of \Lol: \Lal~and \Lfl.  \Lfl~(short for fast \Lol) replaces the standard \Svd~algorithm with a randomized variant, which can be much faster in certain situations \cite{Halko2011a}.  \Lal~goes even one step further, replacing \Svd~with random projections \cite{Candes2006a}.  This variant of \Lol~is the fastest, its runtime is  least sensitive to (p,d,n), and its accuracy is often commensurate (or better) than other variants of \Lol.  We will explore Ra\Lol~in future work.  Note that the runtime of all the variants of \Lol~are quite similar to \sct{Fld $\circ$ Pca}.  Given, given \Lol's improved accuracy, and nearly identical simplicity, it seems there is very little reason to not use \Lol~instead of \sct{Fld $\circ$ Pca}.
 
 \begin{figure}[h!]
 \centering
@@ -241,7 +241,7 @@ In many applications, the main quantifiable consideration in whether to use a pa
 \caption{
 Computational efficiency of various low-dimensional projection methods. In all cases, n=100, and we used the ``stacked cigars'' simulation parameters.   We compare \Pca~with the projection steps from \Lol, QOQ, \Lrl, \Lfl, and \Lal, for different values of (p,d).  The addition of the mean difference vector is essentially negligible.  Moreover, for small d, the \Lfl~is advantageous.  \Lal~is always fastest, and its performance is often comparable to other methods (not shown).
 }
-\label{fig:speed}
+\label{f:speed}
 \end{figure}
 
 
@@ -251,9 +251,9 @@ Computational efficiency of various low-dimensional projection methods. In all c
 
 
 To more comprehensively understand the relative advantages and disadvantages of \Lol~with respect to other high-dimensional classification approaches, in addition to evaluating its performance in theory, and in a variety of numerical simulations, 
- it is important to evaluate it also on benchmark datasets.  For these purposes, we have selected four commonly used high-dimensional datasets (see Methods for details).  For each, we compare \Lol~to (i) support vector machines, (ii) \sct{Road}, (iii) lasso, (iv) and random forest (RF).  Because in practice all these approaches have ``hyperparameters'' to tune, we consider several possible values for  SVM, lasso, and \Lol~(but not RF, as its runtime was too high).  Figure \ref{fig:realdata} shows the results for all four datasets.  
+ it is important to evaluate it also on benchmark datasets.  For these purposes, we have selected four commonly used high-dimensional datasets (see Methods for details).  For each, we compare \Lol~to (i) support vector machines, (ii) \sct{Road}, (iii) lasso, (iv) and random forest (RF).  Because in practice all these approaches have ``hyperparameters'' to tune, we consider several possible values for  SVM, lasso, and \Lol~(but not RF, as its runtime was too high).  Figure \ref{f:realdata} shows the results for all four datasets.  
 
- Qualitatively, the results are similar across datasets: \Lol~achieves high accuracy and computational efficiency as compared to the other methodologies.  Considering Figure \ref{fig:realdata}(A) and (B), two popular sparse settings, we find that \Lol~can find very low dimensional projections with very good accuracy. For the prostate data, with a sufficiently non-sparse solution for \sct{Road}, it slightly outperforms \Lol, but at substantial computational cost, in particular, \sct{Road} takes about 100 times longer to run on this dataset.   Figure \ref{fig:realdata}(C) and (D) are 10-class problems, so \sct{Road} is no longer possible.  Here, SVM can again slightly outperform \Lol, but again, requiring 100 fold additional computational time.  In all cases, the beloved random forest classifier performs subpar.
+ Qualitatively, the results are similar across datasets: \Lol~achieves high accuracy and computational efficiency as compared to the other methodologies.  Considering Figure \ref{f:realdata}(A) and (B), two popular sparse settings, we find that \Lol~can find very low dimensional projections with very good accuracy. For the prostate data, with a sufficiently non-sparse solution for \sct{Road}, it slightly outperforms \Lol, but at substantial computational cost, in particular, \sct{Road} takes about 100 times longer to run on this dataset.   Figure \ref{f:realdata}(C) and (D) are 10-class problems, so \sct{Road} is no longer possible.  Here, SVM can again slightly outperform \Lol, but again, requiring 100 fold additional computational time.  In all cases, the beloved random forest classifier performs subpar.
 
 
 
@@ -275,15 +275,15 @@ Note that, for none of the problems is there an algorithm ever performing better
 This suggests that regardless of how one subjectively weights computational efficiency versus accuracy, \Lol~is the best default algorithm in a variety of real data settings.
 % In many real data applications, the difference of the means contains much of the discriminant manifold.  We subsampled 100 points from the MNIST dataset, consisting of the numbers 3, 7, and 8, and applied both \Lol~and \Pca~to embed the data into a small dimension.  Clearly, the first two dimensions of \Lol~(left panel) separate these data far better than the first few dimensions of \Pca~(middle panel).  This translates into vastly superior performance in subsequent classification (right panel).
 }
-\label{fig:realdata}
+\label{f:realdata}
 \end{figure}
 
 
 \subsection*{Extensions to Other Supervised Learning Problems}
 
-The utility of incorporating the mean difference vector into supervised machine learning for wide data extends beyond merely classification.  In particular, hypothesis testing can be considered as a special case of classification, with a particular loss function.  Therefore we apply the same idea to a hypothesis testing scenario.  The multivariate generalization of the t-test, called Hotelling's Test, suffers from the same problem as does the classification problem; namely, it requires inverting an estimate of the covariance matrix. To mitigate this issue in the hypothesis testing scenario, authors have applied similar tricks as they have done in the classification setting. One particularly nice and related example is that of  Lopes et al. \cite{Lopes2011a}, who addresses this dilemma by using random projections to obtain a low-dimensional representation, following by applying Hotelling's Test in the lower dimensional subspace.  Figure \ref{fig:generalizations}(A) and (B) shows the power of their test alongside the power of the same approach, but using the \Lol~projection rather than random projections.  The two different simulations include the simulated settings considered in their manuscript (see Methods for details).  The results make it clear that the \Lol~test has higher power for essentially all scenarios.  Moreover, it is not merely the replacing random projections with \Pca, nor simply incorporating the mean difference vector, but rather, it appears that \Lol~for testing uses both modifications to improve performance.
+The utility of incorporating the mean difference vector into supervised machine learning for wide data extends beyond merely classification.  In particular, hypothesis testing can be considered as a special case of classification, with a particular loss function.  Therefore we apply the same idea to a hypothesis testing scenario.  The multivariate generalization of the t-test, called Hotelling's Test, suffers from the same problem as does the classification problem; namely, it requires inverting an estimate of the covariance matrix. To mitigate this issue in the hypothesis testing scenario, authors have applied similar tricks as they have done in the classification setting. One particularly nice and related example is that of  Lopes et al. \cite{Lopes2011a}, who addresses this dilemma by using random projections to obtain a low-dimensional representation, following by applying Hotelling's Test in the lower dimensional subspace.  Figure \ref{f:generalizations}(A) and (B) shows the power of their test alongside the power of the same approach, but using the \Lol~projection rather than random projections.  The two different simulations include the simulated settings considered in their manuscript (see Methods for details).  The results make it clear that the \Lol~test has higher power for essentially all scenarios.  Moreover, it is not merely the replacing random projections with \Pca, nor simply incorporating the mean difference vector, but rather, it appears that \Lol~for testing uses both modifications to improve performance.
 
-High-dimensional linear regression is another supervised learning method that can utilize this idea. Linear regression, like classification and Hotelling's Test, requires inverting a singular matrix as well.  By projecting the data only a lower dimensional subspace first, followed by linear regression on the low-dimensional data, we can mitigate the curse of high-dimensions.  To choose the projection matrix, we partition the data into K partitions, based on the percentile of the target variable, we obtain a K class classification problem.  Then, we can apply \Lol~to learn the embedding.  Figure \ref{fig:generalizations}(C) shows an example of this approach, contrasted with lasso and partial least squares, in a sparse simulation setting (see Methods for details). \Lol~is able to find a better low-dimensional projection than lasso, and performs significantly better than PLS, for essentially all choices of number of dimensions to embed into.
+High-dimensional linear regression is another supervised learning method that can utilize this idea. Linear regression, like classification and Hotelling's Test, requires inverting a singular matrix as well.  By projecting the data only a lower dimensional subspace first, followed by linear regression on the low-dimensional data, we can mitigate the curse of high-dimensions.  To choose the projection matrix, we partition the data into K partitions, based on the percentile of the target variable, we obtain a K class classification problem.  Then, we can apply \Lol~to learn the embedding.  Figure \ref{f:generalizations}(C) shows an example of this approach, contrasted with lasso and partial least squares, in a sparse simulation setting (see Methods for details). \Lol~is able to find a better low-dimensional projection than lasso, and performs significantly better than PLS, for essentially all choices of number of dimensions to embed into.
 
 
 
@@ -300,7 +300,7 @@ Regression \Lol~composed with linear regression outperforms \sct{Lasso}~(cyan), 
 In the legend, 'A' denote either 'linear regression' (in (C)), or 'Hotelling' (in (A) and (B)).
 These three simulation settings therefore demonstrate the generality of this technique.
 }
-\label{fig:generalizations}
+\label{f:generalizations}
 % \end{wrapfigure}
 \end{figure}
 % \clearpage
@@ -324,7 +324,7 @@ The \Lol~idea, appending the mean difference vector to convert unsupervised mani
 \includegraphics[width=1\linewidth,trim=0.5in 4.5in 0.5in 0.5in,clip=true]{../Figs/table} %l b r t
 \caption{Table of algorithms and their properties for high-dimensional data. Gray elements indicate that results are demonstrated in the Figure labeled in the bottom row. 'X' denotes relatively good performance for a given setting, or has the particular property.
 }
-\label{fig:table}
+\label{f:table}
 \end{figure}
 
 
@@ -398,52 +398,7 @@ Under the \Lda~model, the Bayes optimal classifier is available by plugging the 
 
 
 
-\section{Theory When $\bth$ is Given}
-
-
-\subsection{\Lda~is rotationally invariant}
-
-For certain classification tasks, the ambient coordinates have intrinsic value, for example, when simple interpretability is desired.  However, in many other contexts, interpretability is less important \cite{Breiman2001b}.  When the exploitation task at hand is invariant to rotations, then we have no reason to restrict our search space to be sparse in the ambient coordinates, rather, for example, we can consider sparsity in the eigenvector basis.  Fisherfaces is one example of a rotationally invariant classifier, under certain model assumptions. 
-Let  $\bW$ be a rotation matrix, that is $\bW \in \mc{W}=\{\bW : \bW\T = \bW^{-1}$ and det$(\bW)=1\}$. 
-Moreover, let $\bW \circ F$ denote the distribution $F$ after transformation by an operator $\bW$.  For example, if $F=\mc{N}(\bmu,\bSig)$ then $\bW \circ F=\mc{N}(\bW  \bmu, \bW \bSig \bW\T)$.
-
-\begin{defi}
-A rotationally invariant classifier has the following property:
-$$L_g^F = L_g^{W \circ F}, \qquad F \in \mc{F}.$$
-In words, the Bayes risk of using classifier $g$ on distribution $F$ is unchanged if $F$ is first rotated, for any $F \in \mc{F}$.
-\end{defi}
-
-
-Now, we can state the main lemma of this subsection:  \Lda~is rotationally invariant.
-\begin{lem} \label{lem:rot}
-$L_{\Lda}^F = L_{\Lda}^{W \circ F}$, for any $F \in \mc{F}$.
-\end{lem}
-
-\begin{proof}
-\Lda~simply becomes thresholding $\bx\T \bSig^{-1} \bdel$.  Thus, we can demonstrate rotational invariance by demonstrating that $\bx\T \bSig^{-1} \bdel$ is rotationally invariant. 
-
-% First, note that for any distribution $F \in \mc{F}_{\Lda}$, we can reparameterize it such that $\bSig$ is diagonal.  This follows because for any $\bSig$, we can represent it as $\bSig=\bU \bS \bU$, and there exists a $\bW$ such that 
-% from the following:
-% \begin{align}
-% \bSig = \bU \bS \bU = 
-% \end{align}
-
-\begin{align*}
-% \bx\T \bSig^{-1} \bdel &= 
-(\bW \bx) \T  (\bW \bSig \bW\T )^{-1} \bW \bdel  %& \text{from Lemma \ref{lem:rot}}\\
-&= \bx\T \bW\T  (\bW \bU \bS \bU\T \bW\T)^{-1} \bW \bdel & \text{by substituting $\bU \bS \bU\T$ for $\bSig$} \\
-&= \bx\T \bW\T  (\mt{\bU} \bS \mt{\bU}\T)^{-1} \bW \bdel & \text{by letting $\mt{\bU}=\bW \bU$} \\
-&= \bx\T \bW\T  (\mt{\bU} \bS^{-1} \mt{\bU}\T) \bW \bdel & \text{by the laws of matrix inverse} \\
-&= \bx\T \bW\T  \bW \bU \bS^{-1}  \bU\T \bW\T \bW \bdel & \text{by un-substituting $\bW \bU=\mt{\bU}$} \\
-&= \bx\T  \bU \bS^{-1}  \bU\T  \bdel  & \text{because $\bW\T \bW = \bI$} \\
-&= \bx\T   \bSig^{-1} \bdel & \text{by un-substituting $\bU \bS^{-1} \bU\T = \bSig$}
-\end{align*}
-\end{proof}
-
-One implication of this lemma is that we can reparameterize without loss of generality.  Specifically, defining $\bW := \bU\T$ yields a change of variables: $\bSig \mapsto \bS$ and $\bdel \mapsto \bU\T \bdel := \mt{\bdel}$, where $\bS$ is a diagonal covariance matrix.  Moreover, let $\bd=(\sigma_1,\ldots, \sigma_D)\T$ be the vector of eignevalues, then $\bS^{-1} \mt{\bdel}=\bd^{-1} \odot \mt{\bdel}$, where $\odot$ is the Hadamard (entrywise) product.  The \Lda~classifier may therefore be encoded by a unit vector, $\mt{\bd}:= \frac{1}{m} \bd^{-1} \odot \mt{\bdel}$, and its magnitude, $m:=\norm{\bd^{-1} \odot \mt{\bdel}}$.
-
-
-\subsection{Projection Based Classifiers}
+\section{Projection Based Classifiers}
 
 
 Let $\bA \in \Real^{d \times p}$ be an orthonormal matrix, that is, a matrix that projects p dimensional data into a d dimensional subspace, where $\bA\bA\T$ is the $d \times d$ identity matrix, and $\bA\T \bA$ is symmetric $p \times p$ matrix with rank d.   The question that motivated this work is: what is the best projection matrix that we can estimate, to use to ``pre-process'' the data prior to applying \Lda.  
@@ -481,7 +436,7 @@ We proceed by studying a few natural choices for $\bA$.
 
 
 
-\subsubsection{Bayes Optimal Projection}
+\subsection{Bayes Optimal Projection}
 
 % Let $\mb{\bA}\T=\bSig^{-1} \bdel$.
 \begin{lem}
@@ -501,7 +456,7 @@ In other words, letting $\bB$ be the Bayes optimal projection recovers the Bayes
 Or, more formally, for any $F \in \mc{F}_{\Lda}$, $L_{\bdel\T \bSig^{-1}} = L_*$ 
 \end{proof}
 
-\subsubsection{Principle Components Analysis (\Pca) Projection}
+\subsection[PCA]{Principle Components Analysis (\Pca) Projection}
 
 Principle Components Analysis (\Pca) finds the directions of maximal variance in a dataset.  \Pca~is closely related to eigendecompositions and singular value decompositions (\Svd).  In particular, the top principle component of a matrix $\bX \in \Real^{p \times n}$, whose columns are centered, is the eigenvector with the largest corresponding eigenvalue of the centered covariance matrix $\bX \bX\T$.  \Svd~enables one to estimate this eigenvector without ever forming the outer product matrix, because \Svd~factorizes a matrix $\bX$ into $\bU \bS \bV\T$, where  $\bU$ and $\bV$ are orthonormal  ${p \times n}$ matrices, and $\bS$ is a diagonal matrix, whose diagonal values are decreasing,  $s_1 \geq s_2 \geq \cdots > s_n$.  Defining $\bU =[\bu_1, \bu_2, \ldots, \bu_n]$, where each $\bu_i \in \Real^p$, then $\bu_i$ is the $i^{th}$ eigenvector, and $s_i$ is the square root of the $i^{th}$ eigenvalue of $\bX \bX\T$.  Let $\bA^{\Pca}_d =[\bu_1, \ldots , \bu_d]$ be the truncated \Pca~orthonormal matrix.
 
@@ -537,7 +492,7 @@ The implication of this lemma is that if one desires to implement Fisherfaces, r
 
 
 
-\subsubsection{Linear Optimal Low-Rank (\Lol) Projection}
+\subsection[LOL]{Linear Optimal Low-Rank (\Lol) Projection}
 
 
 The basic idea of \Lol~is to use both $\bdel$ and the top $d$ eigenvectors.  Most na\"ively, we could simply concatenate the two, $\bA_{\Lol}^d=[\bdel,\bA_{\Pca}^{d-1}]$.  
@@ -560,7 +515,55 @@ The eigenvectors are all normalized and orthogonal to one another; to impose ort
 
 
 
-\subsubsection{Rotation of Projection Based Linear Classifiers $g_A$}
+\section{Rotational Invariance of LDA based Classifiers}
+
+
+\subsection{\Lda~is rotationally invariant}
+
+For certain classification tasks, the ambient coordinates have intrinsic value, for example, when simple interpretability is desired.  However, in many other contexts, interpretability is less important \cite{Breiman2001b}.  When the exploitation task at hand is invariant to rotations, then we have no reason to restrict our search space to be sparse in the ambient coordinates, rather, for example, we can consider sparsity in the eigenvector basis.  Fisherfaces is one example of a rotationally invariant classifier, under certain model assumptions. 
+Let  $\bW$ be a rotation matrix, that is $\bW \in \mc{W}=\{\bW : \bW\T = \bW^{-1}$ and det$(\bW)=1\}$. 
+Moreover, let $\bW \circ F$ denote the distribution $F$ after transformation by an operator $\bW$.  For example, if $F=\mc{N}(\bmu,\bSig)$ then $\bW \circ F=\mc{N}(\bW  \bmu, \bW \bSig \bW\T)$.
+
+\begin{defi}
+A rotationally invariant classifier has the following property:
+$$L_g^F = L_g^{W \circ F}, \qquad F \in \mc{F}.$$
+In words, the Bayes risk of using classifier $g$ on distribution $F$ is unchanged if $F$ is first rotated, for any $F \in \mc{F}$.
+\end{defi}
+
+
+Now, we can state the main lemma of this subsection:  \Lda~is rotationally invariant.
+\begin{lem} \label{l:rot}
+$L_{\Lda}^F = L_{\Lda}^{W \circ F}$, for any $F \in \mc{F}$.
+\end{lem}
+
+\begin{proof}
+\Lda~simply becomes thresholding $\bx\T \bSig^{-1} \bdel$.  Thus, we can demonstrate rotational invariance by demonstrating that $\bx\T \bSig^{-1} \bdel$ is rotationally invariant. 
+
+% First, note that for any distribution $F \in \mc{F}_{\Lda}$, we can reparameterize it such that $\bSig$ is diagonal.  This follows because for any $\bSig$, we can represent it as $\bSig=\bU \bS \bU$, and there exists a $\bW$ such that 
+% from the following:
+% \begin{align}
+% \bSig = \bU \bS \bU = 
+% \end{align}
+
+\begin{align*}
+% \bx\T \bSig^{-1} \bdel &= 
+(\bW \bx) \T  (\bW \bSig \bW\T )^{-1} \bW \bdel  %& \text{from Lemma \ref{l:rot}}\\
+&= \bx\T \bW\T  (\bW \bU \bS \bU\T \bW\T)^{-1} \bW \bdel & \text{by substituting $\bU \bS \bU\T$ for $\bSig$} \\
+&= \bx\T \bW\T  (\mt{\bU} \bS \mt{\bU}\T)^{-1} \bW \bdel & \text{by letting $\mt{\bU}=\bW \bU$} \\
+&= \bx\T \bW\T  (\mt{\bU} \bS^{-1} \mt{\bU}\T) \bW \bdel & \text{by the laws of matrix inverse} \\
+&= \bx\T \bW\T  \bW \bU \bS^{-1}  \bU\T \bW\T \bW \bdel & \text{by un-substituting $\bW \bU=\mt{\bU}$} \\
+&= \bx\T  \bU \bS^{-1}  \bU\T  \bdel  & \text{because $\bW\T \bW = \bI$} \\
+&= \bx\T   \bSig^{-1} \bdel & \text{by un-substituting $\bU \bS^{-1} \bU\T = \bSig$}
+\end{align*}
+\end{proof}
+
+One implication of this lemma is that we can reparameterize without loss of generality.  Specifically, defining $\bW := \bU\T$ yields a change of variables: $\bSig \mapsto \bS$ and $\bdel \mapsto \bU\T \bdel := \bdel''$, where $\bS$ is a diagonal covariance matrix.  Moreover, let $\bd=(\sigma_1,\ldots, \sigma_D)\T$ be the vector of eignevalues, then $\bS^{-1} {\bdel'}=\bd^{-1} \odot \mt{\bdel}$, where $\odot$ is the Hadamard (entrywise) product.  The \Lda~classifier may therefore be encoded by a unit vector, $\mt{\bd}:= \frac{1}{m} \bd^{-1} \odot \mt{\bdel'}$, and its magnitude, $m:=\norm{\bd^{-1} \odot \mt{\bdel}}$. 
+This will be useful later.
+
+
+
+
+\subsection[]{Rotation of Projection Based Linear Classifiers $g_A$}
 
 By a similar arguement as above, one can easily show that:
 % 
@@ -606,37 +609,47 @@ In other words, \Pca~is the only rotationally invariant projection.
 \subsection{\Pca~versus \Lol}
 
 
-We would like to prove that \Lol~is always better than \Pca, when using one or the other to project the data onto a low dimensional space, followed by classifying with \Lda.  Formally, we would like to prove this:
-% Based on the above, rather than operating on the non-convex $L_A$, we can instead analyze the properties of different $\bA$ matrices, and their resulting projection matrices, $\bP_A$, and their angles with respect to $\bP_*$. More specifically, we would like to prove something like:
-% \begin{thm} \label{thm:angle_goal}
-% \begin{align} \label{eq:angle_goal}
-% \angle(\bP_{\Pca},\bP_*) \leq \angle(\bP_{\Lol},\bP_*) \forall \, \bth \in \bTh, \text{ where }\bth = (\bpi,\bdel,\bSig,\bA).
-% \end{align}
-%  \end{thm}
-\begin{thm} \label{thm:L>P}
-$\PP[L_{\Lol}^d \leq L_{\Pca}^d]=1$ for any $\bth \in \bTh_{\Lda}$  and   $d < p$.
- \end{thm}
-
-This means that for any distribution in the two-class linear discriminant analysis model, \Lol~yields a projection that is better than \Pca~, given that either will be composed with \Lda; and better is defined with respect to classifier performance.  And that this result is true regardless of the dimensionality of the projection.  This is the formal statement of Theorem \ref{thm:LDA}.
-
-
-\subsubsection{Proof of Theorem \ref{thm:L>P}}
-
-
-To build up to being able to prove Theorem \ref{thm:L>P}, we prove a sequence of increasingly more sophisticated statements under the two-class model, $\bTh_{2-\Lda}$:
+We would like to prove that \Lol~is always better than \Pca, when using one or the other to project the data onto a low dimensional space, followed by classifying with \Lda, under a wide variety of of settings.  Formally, we would like to prove $\PP[L_{\Lol}^d \leq L_{\Pca}^d]$ is big.  To do so, we ask a sequence of increasingly sophisticated questions that have the following form:
 \begin{compactenum}
-\item when $\bSig$ is a scaled identity matrix, and when we set $d=1$, \Lol~is optimal, whereas \Pca~has no such guarantee;
-\item when $\bSig$ is a diagonal matrix, and we set $d=1$, \Lol~is better than \Pca~with high probability;
-
-\item when $\bSig$ is a scaled identity matrix, and we set $d<p$ ,\Lol~is better than \Pca~with high probability;
-\item when $\bSig$ is a diagonal matrix, and we set $d<p$ ,\Lol~is better than \Pca~with high probability;
-
-\item when $\bSig$ is an arbitrary  matrix, and we set $d=1$ ,\Lol~is better than \Pca~with high probability;
-\item when $\bSig$ is an arbitrary matrix, and we set $d<p$ ,\Lol~is better than \Pca~with high probability;
-
+\item Under which parameter settings is \Lol~better than \Pca?
+\item How often do those parameter settings arise, under various statistical models of the parameters?
 \end{compactenum}
 
-Extensions to the multiclass setting might then also be explored.
+
+Recall that for the $C$-class classification problem, the parameter from which we sample the data is $\bth_c=(\pi_c,\bmu_c,\bSig_c)$, where 
+
+\begin{compactitem}
+\item the class probabilities are non-negative and sum to unity: $\bpi=(\pi_1,\ldots,\pi_C) \in \triangle_C := \sum_{c \in \mc{C}} \pi_c = 1$ and $\pi_c \geq 0 \forall c \in \mc{C}$,    
+\item the class means are $p$-dimensional vectors: $\bmu_c \in \Real^{p}$ is the class $c$ mean vector, and 
+\item the class covariances are positive definite $p \times p$ real matrices: $\bSig_c  \in \Real^{p \times p}_+$ is the class conditional covariance matrix (and $\Real^{p \times p}_+$ is the set of positive definite real $p\times p$ matrices).  
+\end{compactitem}
+
+The fully unconstrained parameter space is therefore $\bTh=\{ \triangle_C \times (\Real^p, \Real^{p \times p}_+)^C \}$.
+
+When using a projection based classifier, we also have the hyperparameter $d$ which specifies the the dimensionality of the low-dimensional projection.  
+
+We thus try to answer the above two questions for increasingly relaxed constraints on the parameter space and $d$. To start, we assume that:
+\begin{compactenum}
+\item we have only two classes, $C=2$;
+\item each class has the same covariance matrix, $\bSig_0=\bSig_1$.
+\end{compactenum}
+
+For simplicity (but without loss of generality), we will also assume that the two classes
+
+Given the above, we consider the following sequence of relaxations, first when $d=1$, and then when $d < p$:
+\begin{compactenum}
+\item the covariance is a scaled identity matrix, that is, $\bSig=k \mb{I}$,
+\item the covariance is a diagonal matrix, that is, $\bSig=\bS$, where $\bS_{ij}=\sigma_i$ when $i=j$ and is zero otherwise; 
+\item when $\bSig$ is an arbitrary positive definite matrix
+\end{compactenum}
+
+After those, extensions to the multiclass and/or different covariance matrix setting might then also be explored.
+
+
+% \subsubsection{Proof of Theorem \ref{t:L>P}}
+
+
+
 
 
 \para{Simplifying the Objective Function}
@@ -654,7 +667,7 @@ $\angle(\bP,\bP') = \frac{ \bP\T \bP'}{||\bP||_2 ||\bP'||_2} \in (0,1)$, and con
 \end{aligned}
 \end{equation}
 
-\begin{lem} \label{lem:angle}
+\begin{lem} \label{l:angle}
 The solution to Eq.~\eqref{eq:angle} is also the solution to Eq.~\eqref{eq:A} for any given $d$.
 \end{lem}
 
@@ -671,34 +684,43 @@ Given the above, we can evaluate various choices of $\bA$ in terms of their indu
 % Let $\bP_*=\bP_{A_*}=\bSig^{-1} \bdel$, 
 % and $\alpha^*_A=\angle(\bP_*,\bP_A)$.
 
-\para{I DON'T THINK THE BELOW SUBSECTION IS CORRECT}
+\begin{question} \label{q:angle}
+Is it true that:
+\begin{lem} \label{l:angle}
+$$\angle(\bA,\bA_*) \leq \angle(\bA',\bA_*) \implies \angle(\bP_A,\bP_*) \leq \angle(\bP_{A'},\bP_*).$$
+\end{lem}
 
-A corollary to the above is:
-\begin{cor} \label{cor:angle}
-$\angle(\bP_A,\bP_*) \leq \angle(\bP_{A'},\bP_*) \implies L_A \leq L_{A'}$.
-\end{cor}
+I believe this is
 
-\begin{proof}
+
+
+\begin{lem} \label{l:angle}
+$$\angle(\bP_A,\bP_*) \leq \angle(\bP_{A'},\bP_*) \implies L_A \leq L_{A'}.$$
+\end{lem}
+\end{question}
+
+
+\begin{answer}
 i'm not sure this is true.
-\end{proof}
-Note that Corollary \ref{cor:angle} is a stronger statement than Lemma \ref{lem:angle}, and in particular, Corollary \ref{cor:angle} implies Lemma \ref{lem:angle}.
+
+Note that Corollary \ref{l:angle} is a stronger statement than Lemma \ref{l:angle}, and in particular, Corollary \ref{l:angle} implies Lemma \ref{l:angle}.
+\end{answer}
 
 
-% Before proceeding, note that the angle between projection matrix operators is invariant to rotations.
-% Formally we have:
-% \begin{lem}
-% $\angle(\bP_A,\bP') = \angle(\bP_{WA},\bP')$ where $\bW \in \mc{W}$.
-% \end{lem}
 
-% \begin{proof}
-% Without loss of generality, assume that $\norm{\bP_A}_2=\norm{\bP_*}_2=1$.  
-% Recall that det$(\bA \bB)$=det$(\bA)$det$(\bB)$.
-% \end{proof}
 
 \newpage
-\paragraph{Scaled Identity Covariance Matrix and $d=1$}
+\subsection{$d=1$}
+\subsubsection{Scaled Identity Covariance Matrix}
 
 
+\begin{question}
+When $\bSig=k \mb{I}$, under what conditions is \Lol~better than \Pca?
+\end{question}
+
+\begin{answer}
+Almost always.  In particular, \Lol~is the optimal projection vector when $d=1$. $\bA_{\Lol}^1 = \bA_*$
+\end{answer}
 
 \begin{lem}
 $\bA_{\Lol}^1 \in \mc{A}_*$ when $\bSig=\bI$ and $\pi_0=\pi_1$ and $(\mu_0+\mu_1)/2=\mb{0}$.
@@ -706,7 +728,7 @@ $\bA_{\Lol}^1 \in \mc{A}_*$ when $\bSig=\bI$ and $\pi_0=\pi_1$ and $(\mu_0+\mu_1
 \begin{proof}
 When $\bSig=c \bI$, that $\bA_* = \bSig^{-1} \bdel = c \bdel$.
 By definition, the first projection vector of $\bA_{\Lol}$ is $\bdel$.
-And by Lemma \ref{lem:angle}, $\angle(\bP_A,\bP_*)=\angle(\bP_{c A},\bP_*)$, for any $c>0$, and in this scenario, $\bA_{\Lol}^1=c \bA_*$.
+And by Lemma \ref{l:angle}, $\angle(\bP_A,\bP_*)=\angle(\bP_{c A},\bP_*)$, for any $c>0$, and in this scenario, $\bA_{\Lol}^1=c \bA_*$.
 \end{proof}
 
 
