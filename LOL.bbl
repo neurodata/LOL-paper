@@ -96,6 +96,13 @@ R.~Tibshirani, ``{Regression Shrinkage and Selection via the Lasso},''
   \emph{Journal of the Royal Statistical Society. Series B}, vol.~58, pp.
   267--288, 1996.
 
+\bibitem{Efron2004}
+\BIBentryALTinterwordspacing
+B.~Efron, T.~Hastie, I.~Johnstone, and R.~Tibshirani, ``{Least Angle
+  Regression},'' \emph{Annals of Statistics}, vol.~32, no.~2, pp. 407--499,
+  2004. [Online]. Available: \url{http://arxiv.org/abs/math/0406456}
+\BIBentrySTDinterwordspacing
+
 \bibitem{Donoho2008a}
 \BIBentryALTinterwordspacing
 D.~L. Donoho and J.~Jin, ``{Higher criticism thresholding: Optimal feature
@@ -104,6 +111,20 @@ D.~L. Donoho and J.~Jin, ``{Higher criticism thresholding: Optimal feature
   no.~39, pp. 14\,790--5, Sep. 2008. [Online]. Available:
   \url{http://www.pnas.org/content/105/39/14790
   http://www.pnas.org/content/105/39/14790.short}
+\BIBentrySTDinterwordspacing
+
+\bibitem{Fan2008}
+J.~Fan and J.~Lv, ``{Sure independence screening for ultrahigh dimensional
+  feature space},'' \emph{Journal of the Royal Statistical Society. Series B:
+  Statistical Methodology}, vol.~70, no.~5, pp. 849--911, 2008.
+
+\bibitem{Li2012}
+\BIBentryALTinterwordspacing
+R.~Li, W.~Zhong, and L.~Zhu, ``\BIBforeignlanguage{en}{{Feature Screening via
+  Distance Correlation Learning}},'' \emph{\BIBforeignlanguage{en}{Journal of
+  the American Statistical Association}}, vol. 107, no. 499, pp. 1129--1139,
+  Sep. 2012. [Online]. Available:
+  \url{http://www.tandfonline.com/doi/abs/10.1080/01621459.2012.695654}
 \BIBentrySTDinterwordspacing
 
 \bibitem{Tibshirani2002a}
@@ -157,6 +178,14 @@ A.~S. Householder and G.~Young, ``{Discussion of a set of points in terms of
   \url{http://www.springerlink.com/index/10.1007/BF02287916}
 \BIBentrySTDinterwordspacing
 
+\bibitem{Borg2005}
+\BIBentryALTinterwordspacing
+I.~Borg and P.~J.~F. Groenen, \emph{{Modern Multidimensional Scaling}}.\hskip
+  1em plus 0.5em minus 0.4em\relax Springer New York, 2005, vol.~94, no. 445.
+  [Online]. Available:
+  \url{http://www.springerlink.com/content/978-0-387-25150-9/contents/}
+\BIBentrySTDinterwordspacing
+
 \bibitem{Pearson1901a}
 \BIBentryALTinterwordspacing
 K.~Pearson, ``\BIBforeignlanguage{en}{{On lines and planes of closest fit to
@@ -168,8 +197,9 @@ K.~Pearson, ``\BIBforeignlanguage{en}{{On lines and planes of closest fit to
 
 \bibitem{Jolliffe2002a}
 \BIBentryALTinterwordspacing
-I.~T. Jolliffe, \emph{{Principal Component Analysis}}, 2002, vol.~98. [Online].
-  Available: \url{http://link.springer.com/10.1007/b98835}
+I.~T. Jolliffe, \emph{{Principal Component Analysis}}.\hskip 1em plus 0.5em
+  minus 0.4em\relax Springer New York, 2002, vol.~98. [Online]. Available:
+  \url{http://link.springer.com/10.1007/b98835}
 \BIBentrySTDinterwordspacing
 
 \bibitem{Kohonen1982a}
@@ -367,6 +397,13 @@ P.~J. Rousseeuw and K.~V. Driessen, ``\BIBforeignlanguage{en}{{A Fast Algorithm
   \url{http://amstat.tandfonline.com/doi/abs/10.1080/00401706.1999.10485670\#.VTejtq1Viko}
 \BIBentrySTDinterwordspacing
 
+\bibitem{Ferrari2010a}
+\BIBentryALTinterwordspacing
+D.~Ferrari and Y.~Yang, ``{Maximum Lq-likelihood estimation},'' \emph{IEEE
+  Transactions on Nuclear Science}, vol.~57, no.~3, pp. 1077--1084, 2010.
+  [Online]. Available: \url{http://arxiv.org/abs/1002.4533}
+\BIBentrySTDinterwordspacing
+
 \bibitem{Candes2009b}
 \BIBentryALTinterwordspacing
 E.~J. Cand\`{e}s, X.~Li, Y.~Ma, and J.~Wright, ``{Robust Principal Component
@@ -441,6 +478,10 @@ E.~Anderson, Z.~Bai, C.~Bischof, S.~Blackford, J.~Demmel, J.~Dongarra, J.~D.
   0.4em\relax SIAM, 1999. [Online]. Available:
   \url{https://books.google.com/books?hl=en\&lr=\&id=AZlvEnr9gCgC\&pgis=1}
 \BIBentrySTDinterwordspacing
+
+\bibitem{Breiman2001b}
+L.~Breiman, ``{Statistical Modeling : The Two Cultures},'' \emph{Statistical
+  Science}, vol.~16, no.~3, pp. 199--231, 2001.
 
 \bibitem{Fisher1925a}
 \BIBentryALTinterwordspacing

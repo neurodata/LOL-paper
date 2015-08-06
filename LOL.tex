@@ -1,5 +1,5 @@
 \documentclass[10pt]{article}
-\input{preamble.tex}
+\input{../../../../Other/latex/preamble.tex}
 
 
 \title{\vspace{-50pt}\db{Supervised Manifold Learning for Wide Data}}
@@ -11,7 +11,8 @@
 
 \begin{abstract}
 Supervised learning is a fundamental problem in statistics and pattern recognition.  In the modern era, it is routine to collect high-dimensional data, without obtaining a large number of samples.  In such situations, some form of regularization is required to achieve high-quality performance.  Current approaches either do not perform competitively, or are unfortunately computationally intensive.  Using simple geometric arguments, we discover that combining the means and covariances in an intuitive fashion yields a low-dimensional projection that is nearly optimal in a wide variety of simulated and real data scenarios. By utilizing off-the-shelf numerical libraries, our method, called ``Linear Optimal Low-rank'' (LOL) is extremely computationally efficient as well. Theoretical analyses confirm our intuition.  
-We therefore position LOL as a potential new and principled ``default'' algorithm for any supervised learning problem with wide data.  To enable reproducability and extendability, we provide open-source code in Matlab, R, and Python.  
+% We therefore position LOL as a potential new and principled ``default'' algorithm for any supervised learning problem with wide data.  
+To enable reproducability and extendability, we provide open-source code in Matlab, R, and Python.  
 \end{abstract}
 
 
@@ -30,7 +31,7 @@ To combat these issues, the fields of statistics and machine learning have devel
 
 
 
-One of the earliest approaches for discovering low-dimensional representations in supervised learning problems is regularization or shrinkage \cite{Friedman1989a,Bickel2004a,Bouveyron2007}.  Many shrinkage methods  mitigate the dimensionality problem by smoothing \cite{Witten2009a}, for example, by regressing parameters to the mean.  More recently, a special case of regularization has risen to prominence, called \emph{sparsity} \cite{Olshausen1997a}, in which it is assumed that a small number of dimensions can encode the discriminant boundary \cite{Tibshirani1996}.  This assumption, when accurate, can lead to substantial improvements in accuracy with relatively moderate increase in computational cost \cite{Yuan2006a}.  This framework includes methods such as \sct{Lasso}~\cite{Tibshirani1996}, higher criticism thresholding \cite{Donoho2008a}, sure independence screening \cite{}, distance correlation SIS \cite{Li2012},  and sparse variants of linear discriminant analysis \cite{Tibshirani2002a,Fan2008a,Witten2009a,Clemmensen2011a,Mai2013a,Fan2012a}.  
+One of the earliest approaches for discovering low-dimensional representations in supervised learning problems is regularization or shrinkage \cite{Friedman1989a,Bickel2004a,Bouveyron2007}.  Many shrinkage methods  mitigate the dimensionality problem by smoothing \cite{Witten2009a}, for example, by regressing parameters to the mean.  More recently, a special case of regularization has risen to prominence, called \emph{sparsity} \cite{Olshausen1997a}, in which it is assumed that a small number of dimensions can encode the discriminant boundary \cite{Tibshirani1996}.  This assumption, when accurate, can lead to substantial improvements in accuracy with relatively moderate increase in computational cost \cite{Efron2004}.  This framework includes methods such as \sct{Lasso}~\cite{Tibshirani1996}, higher criticism thresholding \cite{Donoho2008a}, sure independence screening \cite{Fan2008}, distance correlation SIS \cite{Li2012},  and sparse variants of linear discriminant analysis \cite{Tibshirani2002a,Fan2008a,Witten2009a,Clemmensen2011a,Mai2013a,Fan2012a}.  
 
 
 
@@ -401,7 +402,7 @@ Under the \Lda~model, the Bayes optimal classifier is available by plugging the 
 \section{Projection Based Classifiers}
 
 
-Let $\bA \in \Real^{d \times p}$ be an orthonormal matrix, that is, a matrix that projects p dimensional data into a d dimensional subspace, where $\bA\bA\T$ is the $d \times d$ identity matrix, and $\bA\T \bA$ is symmetric $p \times p$ matrix with rank d.   The question that motivated this work is: what is the best projection matrix that we can estimate, to use to ``pre-process'' the data prior to applying \Lda.  
+Let $\bA \in \Real^{d \times p}$ be an orthonormal matrix, that is, a matrix that projects p dimensional data into a d dimensional subspace, where $\bA\bA\T$ is the $d \times d$ identity matrix, and $\bA\T \bA$ skis symmetric $p \times p$ matrix with rank d.   The question that motivated this work is: what is the best projection matrix that we can estimate, to use to ``pre-process'' the data prior to applying \Lda.  
 % \begin{lem}
 % $g_{\Lda}^F(\bA \bx)= \II \{ (\bA \bx)\T \bSig^{-1}_A \bdel_A > 0\}$.
 % \end{lem}
@@ -472,7 +473,7 @@ Let $g_{\Pca}^d:=g_{A_{\Pca}^d}$, and let $L_{\Pca}^d:=L_{A_{\Pca}^d}$.
 And let $g_{\Lda}^d := \II \{ x \bSig_d^{-1} \bdel > 0\}$ be the regularized \Lda~classifier, that is, the \Lda~classifier, but sets the bottom $p-d$ eigenvalues to zero.
 
 \begin{lem}
-$L_{A_{\Pca}}^d = L_{\Lda}^d$.
+$L_{\Pca}^d = L_{\Lda}^d$.
 \end{lem}
 
 \begin{proof}
@@ -504,18 +505,10 @@ to ensure that they are balanced appropriately, we normalize $\bdel$
 each vector in $\bdel$ to have norm unity.  Formally, let $\mt{\bdel}_j = \bdel_j / \norm{\bdel_j}$, where $\bdel_j$ is the $j^{th}$ difference of the mean vector (remember, the number of vectors is equal to $C-1$, where $C$ is the total number of classes), and let  $\bA_{\Lol}^d=[\mt{\bdel}, \bA_{\Pca}^{d-(C-1)}]$.  
 The eigenvectors are all normalized and orthogonal to one another; to impose orthogonality between $\mt{\bdel}$ and the eigenvectors, we could use any number of numerically optimized algorithms.  However, in practice, orthogonalizing does not matter very much, so we do not bother. We formally demonstrate this below.
 
-% Technically, to maintain orthonormality, we must orthonormalize, $\bA_{\Lol}^d=$ \sct{Orth}$([\bdel, \bA_{\Pca}^{d-1}])$.  Below, we show that this orthonormalization does not matter very much.
 
 
 
-% Let $L_A^{p,d}$ be the misclassification error for the algorithm that uses $A$ to project the data from D to d dimensions, followed by classifying with a linear discriminant analysis function. Moreover, let $L_{\Pca}^{p,d}$ denote the misclassification error when using the first d population eigenvectors, and let $L_{\Lol}^{p,d}$ denote the misclassification error when concatenating the first d-1 population eigenvectors with the population difference of the means.  Dropping the superscripts for brevity, and letting $\rho$ be the maximum correlation between the mean difference vector and the covariance matrix, we have
-
-
-% We can formalize this notion theoretically, as well as explore its consequences numerically.  Let $\mh{L}_A$ denote the same as $L_A$ except using the sample estimate of $A$ rather than the population value, we have:
-
-
-
-\section{Rotational Invariance of LDA based Classifiers}
+\section{Theoretical Properties of LDA based Classifiers}
 
 
 \subsection{\Lda~is rotationally invariant}
@@ -566,13 +559,7 @@ This will be useful later.
 \subsection[]{Rotation of Projection Based Linear Classifiers $g_A$}
 
 By a similar arguement as above, one can easily show that:
-% 
-% \begin{lem}
-% $L_{A \circ \Lda}^F = L_{\circ \Lda}^{W \circ F}$, for any $F \in \mc{F}$.
-% \end{lem}
 
-% \begin{proof}
-% Using a similar arguement as above:
 \begin{align*}	
 (\bA  \bW \bx) \T  (\bA \bW  \bSig  \bW\T \bA\T)^{-1} \bA \bW \bdel 
 &= \bx\T (\bW\T \bA\T) (\bA \bW) \bSig^{-1} (\bW\T \bA\T) (\bA \bW) \bdel \\
@@ -591,68 +578,9 @@ In other words, \Pca~is the only rotationally invariant projection.
 
 
 
-% Two immediate corrolaries of the above that we state without proof are the composing \Lda~with either \Pca~or \Lol~ is rotationally invariant:
-% \begin{cor}
-% $L_{\Pca_d}^F = L_{\Pca_d}^{W \circ F}$, for any $F \in \mc{F}$ and any $d \leq p$.
-% \end{cor}
-% \begin{lem}
-% $L_{\Lol}^F = L_{\Lol}^{W \circ F}$, for any $F \in \mc{F}$.
-% \end{lem}
 
 
-
-
-
-
-
-\newpage
-\subsection{\Pca~versus \Lol}
-
-
-We would like to prove that \Lol~is always better than \Pca, when using one or the other to project the data onto a low dimensional space, followed by classifying with \Lda, under a wide variety of of settings.  Formally, we would like to prove $\PP[L_{\Lol}^d \leq L_{\Pca}^d]$ is big.  To do so, we ask a sequence of increasingly sophisticated questions that have the following form:
-\begin{compactenum}
-\item Under which parameter settings is \Lol~better than \Pca?
-\item How often do those parameter settings arise, under various statistical models of the parameters?
-\end{compactenum}
-
-
-Recall that for the $C$-class classification problem, the parameter from which we sample the data is $\bth_c=(\pi_c,\bmu_c,\bSig_c)$, where 
-
-\begin{compactitem}
-\item the class probabilities are non-negative and sum to unity: $\bpi=(\pi_1,\ldots,\pi_C) \in \triangle_C := \sum_{c \in \mc{C}} \pi_c = 1$ and $\pi_c \geq 0 \forall c \in \mc{C}$,    
-\item the class means are $p$-dimensional vectors: $\bmu_c \in \Real^{p}$ is the class $c$ mean vector, and 
-\item the class covariances are positive definite $p \times p$ real matrices: $\bSig_c  \in \Real^{p \times p}_+$ is the class conditional covariance matrix (and $\Real^{p \times p}_+$ is the set of positive definite real $p\times p$ matrices).  
-\end{compactitem}
-
-The fully unconstrained parameter space is therefore $\bTh=\{ \triangle_C \times (\Real^p, \Real^{p \times p}_+)^C \}$.
-
-When using a projection based classifier, we also have the hyperparameter $d$ which specifies the the dimensionality of the low-dimensional projection.  
-
-We thus try to answer the above two questions for increasingly relaxed constraints on the parameter space and $d$. To start, we assume that:
-\begin{compactenum}
-\item we have only two classes, $C=2$;
-\item each class has the same covariance matrix, $\bSig_0=\bSig_1$.
-\end{compactenum}
-
-For simplicity (but without loss of generality), we will also assume that the two classes
-
-Given the above, we consider the following sequence of relaxations, first when $d=1$, and then when $d < p$:
-\begin{compactenum}
-\item the covariance is a scaled identity matrix, that is, $\bSig=k \mb{I}$,
-\item the covariance is a diagonal matrix, that is, $\bSig=\bS$, where $\bS_{ij}=\sigma_i$ when $i=j$ and is zero otherwise; 
-\item when $\bSig$ is an arbitrary positive definite matrix
-\end{compactenum}
-
-After those, extensions to the multiclass and/or different covariance matrix setting might then also be explored.
-
-
-% \subsubsection{Proof of Theorem \ref{t:L>P}}
-
-
-
-
-
-\para{Simplifying the Objective Function}
+\subsection{Simplifying the Objective Function}
 
 Recalling Eq.~\eqref{eq:g_A}, a projection based classifier is effectively thresholding the dot product of $\bx$ with the linear projection operator $\bP_A :=\bA\T \bSig_A^{-1} \bdel_A \in \Real^p$, and let $\bP_*:=\bP_{\bA_*}$.  Unfortunately, the nonlinearity in in Eq.~\eqref{eq:A} makes analysis difficult.
 However, because of the linear nature of the classifier and projection matrix operator, an objective function that is simpler to evaluate is available.
@@ -684,113 +612,234 @@ Given the above, we can evaluate various choices of $\bA$ in terms of their indu
 % Let $\bP_*=\bP_{A_*}=\bSig^{-1} \bdel$, 
 % and $\alpha^*_A=\angle(\bP_*,\bP_A)$.
 
-\begin{question} \label{q:angle}
-Is it true that:
-\begin{lem} \label{l:angle}
-$$\angle(\bA,\bA_*) \leq \angle(\bA',\bA_*) \implies \angle(\bP_A,\bP_*) \leq \angle(\bP_{A'},\bP_*).$$
+
+\begin{lem}
+$\angle(\bP_A, \bP_*) <1  \implies L_A > L_*$
 \end{lem}
 
-I believe this is
+
+\begin{proof}
+If $\angle(\bP_A, \bP_*) <1$, then there exists an $\bx$ such that $\II\{ \bx\T \bP_A >0 \} \neq \II\{ \bx\T \bP_* >0 \}$, and therefore, $L_A > L_*$.
+\end{proof}
 
 
 
-\begin{lem} \label{l:angle}
-$$\angle(\bP_A,\bP_*) \leq \angle(\bP_{A'},\bP_*) \implies L_A \leq L_{A'}.$$
-\end{lem}
-\end{question}
+\begin{conj}
+% \begin{lem} 
+\label{q:a2}
+$$\angle(\bP_A,\bP_*) \leq \angle(\bP_B,\bP_*) \implies L_A \leq L_B.$$
+% \end{lem}
+\end{conj}
 
 
-\begin{answer}
-i'm not sure this is true.
 
-Note that Corollary \ref{l:angle} is a stronger statement than Lemma \ref{l:angle}, and in particular, Corollary \ref{l:angle} implies Lemma \ref{l:angle}.
-\end{answer}
+% Note that Conjecture \ref{q:a2} is a stronger statement than Conjecture \ref{q:a1}, and in particular, if Conjecture \ref{q:a2} is true, then so is Conjecture \ref{q:a1}.
 
+
+
+
+\subsubsection{When $d=1$}
+
+\begin{remark}
+If $\bA \in \mc{A}_*$ and $\bB \notin \mc{A}_*$, then $\angle(\bA\T,\bA_*\T)=1$ and $\angle(\bB\T,\bP_*\T)<1$, and therefore $\angle(\bA\T,\bA_*\T) > \angle(\bB\T,\bA_*\T)$.
+\end{remark}
+
+
+
+\begin{conj} \label{q:angle}
+When $d=1$:
+% \begin{lem} 
+\label{q:a1}
+$$\angle(\bA\T,\bA_*\T) \leq \angle(\bB\T,\bA_*\T) \implies \angle(\bP_A,\bP_*) \leq \angle(\bP_B,\bP_*).$$
+% \end{lem}
+\end{conj}
+
+\begin{proof}
+I believe so, but i don't see how to prove it. A little arithmetic shows that the left hand side means that:
+$$\bA \bSig^{-1} \bdel > \bB \bSig^{-1} \bdel.$$
+
+Similarly, the right hand side means that:
+$$\bdel \bA\T \bA \bSig^{-1} \bA\T a > \bdel \bB\T \bB \bSig^{-1} \bB\T b,$$
+where we substituted $a:=\bA\bSig^{-1} \bdel$ and $b:=\bB \bSig^{-1} \bdel$.
+
+But I do not see how to go any further.
+\end{proof}
 
 
 
 \newpage
-\subsection{$d=1$}
-\subsubsection{Scaled Identity Covariance Matrix}
+\subsection{\Pca~versus \Lol} \label{sec:pvl}
 
 
-\begin{question}
-When $\bSig=k \mb{I}$, under what conditions is \Lol~better than \Pca?
-\end{question}
+We would like to prove that \Lol~is always better than \Pca, when using one or the other to project the data onto a low dimensional space, followed by classifying with \Lda, under a wide variety of of settings.  Formally, we would like to prove $\PP[L_{\Lol}^d \leq L_{\Pca}^d]$ is big.  To do so, we ask a sequence of increasingly sophisticated questions that have the following form:
+\begin{compactenum}
+\item Under which parameter settings is \Lol~better than \Pca?
+\item How often do those parameter settings arise, under various statistical models of the parameters?
+\end{compactenum}
 
-\begin{answer}
-Almost always.  In particular, \Lol~is the optimal projection vector when $d=1$. $\bA_{\Lol}^1 = \bA_*$
-\end{answer}
+
+Recall that for the $C$-class classification problem, the parameter from which we sample the data is $\bth_c=(\pi_c,\bmu_c,\bSig_c)$, where 
+
+\begin{compactitem}
+\item the class probabilities are non-negative and sum to unity: $\bpi=(\pi_1,\ldots,\pi_C) \in \triangle_C := \sum_{c \in \mc{C}} \pi_c = 1$ and $\pi_c \geq 0 \forall c \in \mc{C}$,    
+\item the class means are $p$-dimensional vectors: $\bmu_c \in \Real^{p}$ is the class $c$ mean vector, and 
+\item the class covariances are positive definite $p \times p$ real matrices: $\bSig_c  \in \Real^{p \times p}_+$ is the class conditional covariance matrix (and $\Real^{p \times p}_+$ is the set of positive definite real $p\times p$ matrices).  
+\end{compactitem}
+
+The fully unconstrained parameter space is therefore $\bTh=\{ \triangle_C \times (\Real^p, \Real^{p \times p}_+)^C \}$.
+
+When using a projection based classifier, we also have the hyperparameter $d$ which specifies the the dimensionality of the low-dimensional projection.  
+
+We thus try to answer the above two questions for increasingly relaxed constraints on the parameter space and $d$. To start, we assume that:
+\begin{compactenum}
+\item we have only two classes, $C=2$;
+\item each class has the same covariance matrix, $\bSig_0=\bSig_1$.
+\end{compactenum}
+
+For simplicity (but without loss of generality), we will also assume that the two classes have centered means and equal priors, that is, $(\bmu_0+\bmu_1)/2=0$ and $\pi_0=\pi_1=1/2$ (relaxing this assumption merely changes the threshold of the classifier).  Let the parameter space defined by these constraints be denoted $\bTh' = \{\Real^{2p}, \Real_+^{p \times p} \}$. In Section \ref{sec:pvl}, we will always assume $\bth \in \bTh'$, unless otherwise specified.
+
+Given the above, we consider the following sequence of relaxations, first when $d=1$, and then when $d < p$:
+\begin{compactenum}
+\item the covariance is a scaled identity matrix, that is, $\bSig=k \mb{I}$;
+\item the covariance is a diagonal matrix, that is, $\bSig=\bS$, where $\bS_{ij}=\sigma_i$ when $i=j$ and is zero otherwise; 
+\item the covariance is an arbitrary positive definite matrix, that is  $\bSig \in \Real^{p \times p}_\succ$.
+\end{compactenum}
+
+After those, extensions to the multiclass and/or different covariance matrix setting might then also be explored.
+
+
+
+
+
+
+
+
+\subsubsection{$d=1$}
+
+In this section, we will only consider $d=1$, meaning that
+\begin{compactitem}
+\item \Lol~is simply $\bdel$,
+\item \Pca~is simply $\bu_1$, the eigenvector corresponding to the largest eigenvalue of $\bSig$.
+\end{compactitem}
+
+
+
+\paragraph{Scaled Identity Covariance Matrix}
+
 
 \begin{lem}
-$\bA_{\Lol}^1 \in \mc{A}_*$ when $\bSig=\bI$ and $\pi_0=\pi_1$ and $(\mu_0+\mu_1)/2=\mb{0}$.
+\Lol~better than \Pca~almost always when $\bSig=k \mb{I}$.
 \end{lem}
+
 \begin{proof}
-When $\bSig=c \bI$, that $\bA_* = \bSig^{-1} \bdel = c \bdel$.
-By definition, the first projection vector of $\bA_{\Lol}$ is $\bdel$.
-And by Lemma \ref{l:angle}, $\angle(\bP_A,\bP_*)=\angle(\bP_{c A},\bP_*)$, for any $c>0$, and in this scenario, $\bA_{\Lol}^1=c \bA_*$.
+To prove this statement, we first show how to define $\bA_{\Lol}^1$ and $\bA_{\Pca}^1$ is this setting.
+
+\begin{compactitem}
+\item $\bA_{\Lol}^1$ is simply $\bdel$, regardless of the covariance matrices and priors.
+\item When $\bSig=k \bI$, $\bA_{\Pca}^1$ is a random vector, because the first principal component of a scaled identity matrix can equally be defined as any basis vector.
+\end{compactitem}
+
+Thus, only when the first eigenvector of the covariance matrix is randomly assigned to $\bdel$ will \Pca~work as well as \Lol.
+\end{proof}
+
+
+Given the conditions under which \Lol~is better than \Pca, we next ask how often that happens, under a reasonable model assumption.
+
+\begin{lem}
+$\PP[L_{\Lol}^1 \leq L_{\Pca}^1]=1$ when $\bSig=k \bI$ and $\bdel \sim \mc{N}(\bmu_{\delta},\bSig_{\delta})$.
+\end{lem}
+
+\begin{proof}
+When $\bdel \sim \mc{N}(\bmu_\delta,\bSig_\delta)$, the probability that it exactly equals any vector $\bx \in \Real^d$ is real, this includes, of course,  $\bu_1$, the first eigenvector of $k \mb{I}$.  Thus, $\PP[\bdel \propto \bu_1]=0$, no matter how $\bu_1$ is chosen (as long as it is not chosen using the knowledge of the value of $\bdel$). 
+This implies that $\PP[\angle(\bu_1\T,\bA_*\T) =1 ] = 0$, and therefore, $\PP[L_{\bu_1} \geq L_*] =1$.
 \end{proof}
 
 
 % \newpage
-\paragraph{Diagonal covariance matrix and $d=1$}
+\paragraph{Diagonal covariance matrix}
 
 
 
-Now consider $\bSig=\bS$ is diagonal, $\pi_0=\pi_1$ and $(\mu_0+\mu_1)/2=\mb{0}$, and $\bdel \in \Real^p$.
-We want to know how often is \Lol~better than \Pca.  
+Now consider a simple generalization of the above scenario, namely, $\bSig=\bS$ is diagonal.
+We want to know under what conditions is \Lol~better than \Pca, and how often that happens under a reasonable model. 
 
 
 Let $\bs$ be the singular values of $\bSig$.  When $\bSig$ is diagonal, its diagonal elements are $s_1,\ldots,s_p$, and we call that matrix $\bS$. 
-Recalling that $s_i=\lambda_i^2$, where $\lambda_i^2$ are eigenvalues, and when a matrix is diagonal, $\lambda_i=\sigma_i$, we have  $\bA_*=\bS^{-1} \bdel=\bs^{-1} \odot \bdel:=(\del_1/\sigma_1^2,\ldots,\del_p/\sigma_p^2)$.
-By definition, $\bA_{\Lol}^1=\bdel$, and $\bA_{\Pca}^1=\bu_1$, where $\bu_1$ is the eigenvector associated with the largest eigenvalue of $\bS$.  
+Recalling that $s_i=\lambda_i^2$, where $\lambda_i$'s are eigenvalues, and when a matrix is diagonal, $s_i=\lambda_i^2$, we have  $\bA_*=\bS^{-1} \bdel=\bs^{-1} \odot \bdel := \mt{\bdel} =(\del_1/\lambda_1^2,\ldots,\del_p/\lambda_p^2)$.
 
-We consider a simple version of our question: how often is the angle between $\bA_{\Lol}^1$ and $\bA_*$ bigger than the angle between $\bA_{\Pca}^1$ and $\bA_*$.  Formally, we would like to prove:
+
 
 \begin{lem}
-$\PP[ \angle(A_{\Lol}^1,\bA_*)  \geq  \angle(\bA_{\Pca}^1,\bA_*)]=1$ for any $\bth \in \bTh_{2-\Lda}$.
+\Lol~is better than \Pca~whenever $1-\delta_1 < {s_1}/{\delta_1} \sum_{i=2}^p {\delta_i^2}/{s_i}$.
+A consequence of this is that \Lol~is always better than \Pca~whenever $\delta_1>1$.
+This means that when the variables are independent
 \end{lem}
 
+% \begin{question}
+% When is $\angle(\bdel,\mt{\bdel}) > \angle(\bu_1, \mt{\bdel})$?
+% \end{question}
+
+
 \begin{proof}
-coming soon.  numerical experiments are convincing.
+Recalling that $\bu_i=\be_i$, where $\be_i$ is a vector of all zeros except a one in the $i^{th}$ element, and let $\bu^i=\bu_i$ for simplicity here, we can show that:
+$$
+\angle(\bdel,\mt{\bdel}) =
+\sum_i \delta_i \mt{\delta}_i =
+\sum_i \delta_i s^{-1}_i \delta_i =
+\sum_i \delta_i^2 / s_i 
+$$
+and
+$$
+\angle(\bu^1, \mt{\bdel})  = \sum_i u^1_i \mt{\delta_i} =  \sum_i u^1_i s^{-1}_i {\delta_i}= \sum_i u^1_i {\delta_i} /s_i =  u^1_1 {\delta_1} /s_1=  {\delta_1} /s_1.
+$$
+
+Thus, $\angle(\bdel,\mt{\bdel}) > \angle(\bu_1, \mt{\bdel})$ any time that
+$\sum_i \delta_i^2 / s_i > \delta_1 / s_1$. 
+Note that at a minimum, it must be that $\delta_1 < 1$.
+
+Conjectures 1 and 2 demonstrate that if the angle is better, than Bayes error is also better, and this completes the proof.
+\end{proof}
+
+% By definition, $\bA_{\Lol}^1=\bdel$, and $\bA_{\Pca}^1=\bu_1$, where $\bu_1$ is the eigenvector associated with the largest eigenvalue of $\bS$.  
+
+% We consider a simple version of our question: how often is the angle between $\bA_{\Lol}^1$ and $\bA_*$ bigger than the angle between $\bA_{\Pca}^1$ and $\bA_*$.  Formally, we would like to prove:
+
+
+
+If Conjecture 1 and 2 are true, then the above also implies that \Lol's Bayes error is also better than \Pca's, in this setting.
+Numerical experiments suggest this is true, and moreover, that when randomly sampling $\bdel$ and $\bS$, \Lol~always does better than \Pca.
+
+% It would be nice to be able to show, immediately, that because $\bdel$ is closer to $\mt{\delta}$ than $\bu_1$ is, that their corresponding $\bP$ matrices and classification performance are also closer to the Bayes optimal.  Numerical results suggest this is true, but I do not know how to prove it yet.
+
+% \begin{conj}
+% $\PP[ \angle(A_{\Lol}^1,\bA_*)  \geq  \angle(\bA_{\Pca}^1,\bA_*)]=1$ for any $\bth \in \bTh_{2-\Lda}$.
+% \end{conj}
+
+% \begin{proof}
+% coming soon.  numerical experiments are convincing.
+% \end{proof}
+
+
+\begin{conj}
+\Lol~is almost always better than \Pca~whenever $s_i \iid \mc{U}(0,1)$ and $\delta_i \iid \mc{N}(0,1)$ for all $i \in [p]$.
+% When $\bdel \sim \mc{N}(\bmu_\delta, \bSig_\delta)$ and $\bs \sim \log \mc{N}(\bmu_s,\bSig_s)$, $\PP[\sum_i \delta_i^2 / s_i > \delta_1 / s_1]=1$.
+\end{conj}
+
+\begin{proof}
+Coming soon.  ``almost always'' and ``better'' mean with probability 1 and better in the sense of the angle between $\bA_{\Lol}^1$ and the Bayes vector is larger than that of $\bA_{\Pca}^1$ and the Bayes vector.
+I believe this also implies Bayes error is better, but we have not yet shown that.
 \end{proof}
 
 
 
-Given that, we seek to prove
-\begin{lem}
-$\PP[L_{\Lol}^1 < L_{\Pca}^1]=1$ when $\bs \sim F_s$, $\bdel \sim F_{\delta}$ and $\bmu_1=\bmu_0$ and $\pi_0=\pi_1$.
-\end{lem}
-\begin{proof}
-coming soon, numerical experiments are convincing.
-\end{proof}
+
+\paragraph{Arbitrary Covariance Matrix}
 
 
-\newpage
-\paragraph{Scaled Identity covariance matrix and $d>1$}
-
-
-% \newpage
-\paragraph{Diagonal covariance matrix and $d>1$}
-
-Things we would like to prove include
-
-% \begin{lem}
-% $\bA_{\Lol}^d \in \mc{A}_*$ when $\bSig=\bI$ and $\pi_0=\pi_1$ and $(\mu_0+\mu_1)/2=\mb{0}$, for any $d < p$.
-% \end{lem}
-\begin{lem}
-$\PP[L_{\Lol}^d \leq L_{\Pca}^d]=1$ when $\bSig=c \bI$, $\pi_0=\pi_1$ and $(\mu_0+\mu_1)/2=\mb{0}$, for any $d < p$.
-\end{lem}
-
-\begin{lem}
-$\PP[L_{\Lol}^d \leq L_{\Pca}^d]=1$ when $\bSig=\bS$, $\pi_0=\pi_1$ and $(\mu_0+\mu_1)/2=\mb{0}$, for any $d < p$.
-\end{lem}
-
-
-\paragraph{Arbitrary covariance matrix and $d=1$}
-
-
-\paragraph{Arbitrary covariance matrix and $d>1$}
+\subsubsection{$d \geq 1$}
+\subsubsection{Scaled Identity Covariance Matrix}
+\subsubsection{Diagonal Covariance Matrix}
+\subsubsection{Arbitrary Covariance Matrix}
 
 
 
@@ -820,12 +869,12 @@ Unfortunately, when $p \gg n$, the estimate of the covariance matrix $\bSig$ wil
 
 We would like to prove:
 \begin{lem}
-$L_{\mh{\Lol}}^d \conv L_*$ for any $\bth \in \bTh_{2-\Lda}$.
+$L_{\mh{\Lol}}^d \conv L_*$ for any $\bth \in \bTh'$.
 \end{lem}
 
 
 \begin{lem}
-$\PP[L_{\mh{\Pca}}^d \conv L_*]>0$ for any $\bth \in \bTh_{2-\Lda}$
+$\PP[L_{\mh{\Pca}}^d \conv L_*]>0$ for any $\bth \in \bTh'$
 \end{lem}
 
 \newpage
@@ -888,7 +937,8 @@ So, we want to understand the probability that $\alpha_{\Pca}$ is small under di
 % \end{proof}
 
 \clearpage
-\bibliography{biblol}
+% \bibliography{biblol}
+\bibliography{../../../../Other/latex/library.bib}
 \bibliographystyle{IEEEtran}
 
 
