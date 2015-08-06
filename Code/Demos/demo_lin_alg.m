@@ -1,7 +1,7 @@
 clear, clc
 p=10;
 d=5;
-k=7
+k=4
 switch k
     case 1
         S=eye(p);
