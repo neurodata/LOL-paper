@@ -824,8 +824,43 @@ Numerical experiments suggest this is true, and moreover, that when randomly sam
 \Lol~is almost always better than \Pca~whenever $s_i \iid \mc{U}(0,1)$ and $\delta_i \iid \mc{N}(0,1)$ for all $i \in [p]$.
 % When $\bdel \sim \mc{N}(\bmu_\delta, \bSig_\delta)$ and $\bs \sim \log \mc{N}(\bmu_s,\bSig_s)$, $\PP[\sum_i \delta_i^2 / s_i > \delta_1 / s_1]=1$.
 \end{conj}
-
 \begin{proof}
+We start with the very simple scenario of $p=1$ and condition on $s$ to build intuition.
+In this setting we have:
+\begin{align}
+\PP[ \delta^2 / s > \delta/s ] = \PP[ \delta^2 / s - \delta/s  > 0].  
+\end{align}
+Let $z= x+y$, where $x= \frac{\delta^2}{s}$  and $y=\frac{\delta}{-s}$.  
+So, $x$ has a generalized chi-squared distribution and $y$ has a normal distribution.
+A bit of algebra reveals the explicit form of this distribution, however, it includes an integral that we do not know how to evaluate.  Thus, instead of solving exactly for the above, we provide a bound.
+
+Bennett's inequality states given $X_1,\ldots, X_n$, assume:
+\begin{compactitem}
+\item each $X_i$ is independent of all others
+\item (without loss of generality) $\EE[X_i]=0 \forall i$
+\item $|X_i|<a$ almost surely for all $i$
+\item $\sigma^2 = \frac{1}{n} \sum_i \VV(X_i)$.
+\end{compactitem}
+Then, for any $t \geq 0$
+
+% $$ \PP[ \sum_i X_i > t] \leq \exp \left{ -\frac{n\sigma^2}{a^2} h \left( \frac{at}{n\sigma^2}\right) \right}, $$
+where $h(u)=(1+u) \log (1+u) - u$.
+
+Recalling that $\VV(\sum_i X_i) = \sum_i \VV(X_i)$ for independent random variables, and that
+\begin{compactenum}
+\item  $\VV(\delta/s) = s^{-2}$
+\item $\VV(\delta^2/s) = h(s)$ 
+\end{compactenum}
+
+
+
+
+
+where $\Phi$ is the cumulative distribution function for a standard normal random variable.  
+
+Note that re-introducing randomness into $s$
+
+
 Coming soon.  ``almost always'' and ``better'' mean with probability 1 and better in the sense of the angle between $\bA_{\Lol}^1$ and the Bayes vector is larger than that of $\bA_{\Pca}^1$ and the Bayes vector.
 I believe this also implies Bayes error is better, but we have not yet shown that.
 \end{proof}
