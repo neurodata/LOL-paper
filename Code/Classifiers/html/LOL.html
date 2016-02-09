@@ -1,0 +1,442 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>LOL</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-11-24"><meta name="DC.source" content="LOL.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#3">check and make sure inputs are all correct</a></li><li><a href="#4">check if regression, if so, convert to classification</a></li><li><a href="#5">get means</a></li><li><a href="#6">get delta matrices &amp; eigenvectors (or approximations thereof)</a></li><li><a href="#7">generate projection matrices</a></li></ul></div><pre class="codeinput"><span class="keyword">function</span> [Proj, P, Q] = LOL(X,Y,types,Kmax)
+</pre><pre class="codeinput"><span class="comment">% learn linear-optimal-low-rank discriminant subspace under a variety of</span>
+<span class="comment">% differnt models</span>
+<span class="comment">%</span>
+<span class="comment">% INPUT:</span>
+<span class="comment">%   X in R^{D x ntrain}: ntrain columns, each a D-dimensional example</span>
+<span class="comment">%   Y in [K]^ntrain: a categorical vector assigning each training sample a class</span>
+<span class="comment">%   types in cell: each element lists a different embedding type (see below for details)</span>
+<span class="comment">%   Kmax in Z: max dimension to project into</span>
+<span class="comment">%</span>
+<span class="comment">% OUTPUT:</span>
+<span class="comment">%   Proj (struct): one per types, with fields</span>
+<span class="comment">%       name (char): name of projection</span>
+<span class="comment">%       V (R^{Kmax x D}: projection matrix</span>
+<span class="comment">%   P (struct): of parameters, including</span>
+<span class="comment">%       Ngroups (int): # of groups</span>
+<span class="comment">%       groups (vec): name of groups (can be all ints or possibly chars, tho i've never tested that</span>
+<span class="comment">%       nvec (int^Ngroups): # of points per class</span>
+<span class="comment">%       idx (cell(Ngroups,1)): list of indices for each group</span>
+<span class="comment">%       mu in R^{D x Ngroups}: means</span>
+<span class="comment">%       Delta in R^{D x (Ngroups-1)}: means minus first mean</span>
+<span class="comment">%       Selta in R^{D x (Ngroups-1)}: sparse version</span>
+<span class="comment">%       DEN/DVN: eigenvalues for equal/varied subspace assumptions</span>
+<span class="comment">%       Ytiles in R^10: 0.1:0.1:1 percentiles of Y</span>
+<span class="comment">%   Q (struct): containing eigenvectors</span>
+
+<span class="comment">% CODE FOR TYPES: each type is a 3 letter code: ABC</span>
+<span class="comment">%   A: kind of difference matrix (D=delta, N=none, R=robust, S=sparse)</span>
+<span class="comment">%   B: whether to share covariance matrices (E=equal, V=varied)</span>
+<span class="comment">%   C: how to compute/approximate eigenvectors (N=normal, F=fast, R=robust, A=random)</span>
+</pre><h2>check and make sure inputs are all correct<a name="3"></a></h2><pre class="codeinput">[D,n]=size(X);
+<span class="keyword">if</span> n~=length(Y), X=X'; [D,n]=size(X); <span class="keyword">end</span>
+ntypes=length(types);
+<span class="keyword">for</span> i=1:ntypes
+    <span class="keyword">if</span> isempty(strfind(<span class="string">'TDRNS'</span>,types{i}(1))), error(<span class="string">'failed to specify a legit estimator of delta'</span>), <span class="keyword">end</span>
+    <span class="keyword">if</span> isempty(strfind(<span class="string">'EV'</span>,types{i}(2))), error(<span class="string">'failed to specify a legit equal/varied subspace'</span>), <span class="keyword">end</span>
+    <span class="keyword">if</span> isempty(strfind(<span class="string">'NFRA'</span>,types{i}(3))), error(<span class="string">'failed to specify a legit approx to eigenvectors'</span>), <span class="keyword">end</span>
+<span class="keyword">end</span>
+Kmax=round(Kmax);
+</pre><pre class="codeoutput error">Error using LOL (line 34)
+Not enough input arguments.
+</pre><h2>check if regression, if so, convert to classification<a name="4"></a></h2><pre class="codeinput">ngroups=length(unique(Y));
+df=0.1;
+<span class="keyword">if</span> ngroups &gt; length(Y)/2
+    P.Ytiles=quantile(Y,linspace(df,1,1/df));
+    YY=0*Y;
+    yind=Y&lt;P.Ytiles(1);
+    YY(yind)=1;
+    <span class="keyword">for</span> j=2:length(P.Ytiles)
+        yind=Y&lt;P.Ytiles(j) &amp; Y&gt;P.Ytiles(j-1);
+        YY(yind)=j;
+    <span class="keyword">end</span>
+    Y=YY;
+<span class="keyword">end</span>
+</pre><h2>get means<a name="5"></a></h2><pre class="codeinput">Q=struct;
+<span class="keyword">if</span> iscell(Y)
+    Yu=unique(Y);
+    <span class="keyword">for</span> i=1:length(Yu)
+        <span class="keyword">for</span> j=1:length(Y)
+            <span class="keyword">if</span> strcmp(Y(j),Yu(i))
+                groups(j)=i;
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+    Y=groups;
+<span class="keyword">end</span>
+P.groups=unique(Y);
+
+<span class="keyword">if</span> any(isnan(P.groups)), P.groups(isnan(P.groups))=[]; P.groups=[P.groups; NaN]; <span class="keyword">end</span> <span class="comment">% remove nan groups from mean (NB: NaN~=NaN)</span>
+P.Ngroups=length(P.groups);
+P.nvec=nan(P.Ngroups,1);
+P.mu=nan(D,P.Ngroups);
+idx=cell(P.Ngroups,1);
+<span class="keyword">for</span> k=1:P.Ngroups
+    idx{k}=find(Y==P.groups(k));
+    <span class="keyword">if</span> isempty(idx{k}), idx{k}=find(isnan(Y)); <span class="keyword">end</span> <span class="comment">% for the NaN's</span>
+    P.nvec(k)=length(idx{k});
+    P.mu(:,k)=mean(X(:,idx{k}),2);
+    X(:,idx{k})=bsxfun(@minus,X(:,idx{k}),P.mu(:,k));
+<span class="keyword">end</span>
+<span class="comment">% sort classes in order of # of samples per class</span>
+[~, IX] = sort(P.nvec);
+P.nvec=P.nvec(IX);
+min_Ny=min(P.nvec);
+P.groups=P.groups(IX);
+P.mu=P.mu(:,IX);
+<span class="keyword">for</span> k=1:P.Ngroups, P.idx{k}=idx{IX(k)}; <span class="keyword">end</span>
+<span class="keyword">if</span> nargin&lt;4, Kmax=min(n,D); <span class="keyword">end</span>
+</pre><h2>get delta matrices &amp; eigenvectors (or approximations thereof)<a name="6"></a></h2><pre class="codeinput"><span class="keyword">for</span> i=1:ntypes
+
+    <span class="comment">% get diff bases</span>
+    <span class="keyword">if</span> strcmp(types{i}(1),<span class="string">'D'</span>)      <span class="comment">% default estimate of the different of the means</span>
+        <span class="keyword">if</span> ~isfield(P,<span class="string">'Delta'</span>)
+            P.Delta = bsxfun(@minus,P.mu(:,2:end),P.mu(:,1));
+            Dnorm=zeros(ngroups-1,1);
+            <span class="keyword">for</span> j=1:ngroups-1
+                Dnorm(j)=norm(P.Delta(:,j));
+            <span class="keyword">end</span>
+            P.Delta=bsxfun(@rdivide,P.Delta,Dnorm');
+        <span class="keyword">end</span>
+    <span class="keyword">elseif</span> strcmp(types{i}(1),<span class="string">'S'</span>) <span class="comment">% sparse estimate of difference of means</span>
+        <span class="keyword">if</span> ~isfield(P,<span class="string">'Selta'</span>)
+            [~,idx] = sort(abs(P.delta),<span class="string">'descend'</span>);
+            P.Selta=P.delta;
+            P.Selta(idx(10:end))=0;
+        <span class="keyword">end</span>
+    <span class="keyword">elseif</span> strcmp(types{i}(1),<span class="string">'R'</span>) <span class="comment">% robust estimate of difference of means</span>
+        P.robustmean=nan(D,P.Ngroups);
+        <span class="keyword">for</span> k=1:P.Ngroups
+            <span class="comment">%             P.robustmean(:,k)=median(X(:,idx{k})',1);</span>
+            P.robustmean(:,k)=trimmean(X(:,idx{k})',10);
+        <span class="keyword">end</span>
+        P.Relta = bsxfun(@minus,P.robustmean(:,2:end),P.robustmean(:,1));
+    <span class="keyword">elseif</span> strcmp(types{i}(1),<span class="string">'T'</span>)      <span class="comment">% default estimate of the different of the means</span>
+        <span class="keyword">if</span> ~isfield(P,<span class="string">'Telta'</span>)
+            delta = bsxfun(@minus,P.mu(:,2:end),P.mu(:,1));
+            sig = var(P.mu,[],2);
+            P.Telta = bsxfun(@rdivide,delta,sig);
+            z=find(sig&lt;10^-8);
+            P.Telta(z,:)=0;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">% get 'eigs'</span>
+    <span class="keyword">if</span> strcmp(types{i}(2),<span class="string">'E'</span>)      <span class="comment">% equal covariances</span>
+        <span class="keyword">if</span> ~isfield(X,[<span class="string">'VE'</span>,types{i}(3)])
+            [P.([<span class="string">'DE'</span>, types{i}(3)]),Q.([<span class="string">'VE'</span>, types{i}(3)])] = get_svd(X,n,D,types{i}(3),Kmax);
+        <span class="keyword">end</span>
+    <span class="keyword">elseif</span> strcmp(types{i}(2),<span class="string">'V'</span>)  <span class="comment">% varied covariances</span>
+        <span class="keyword">if</span> ~isfield(X,[<span class="string">'VV'</span>,types{i}(3)])
+            dv=[]; Vv=[];
+            <span class="keyword">for</span> k=1:P.Ngroups
+                [d,V] = get_svd(X(:,P.idx{k}),min_Ny,D,types{i}(3),ceil(Kmax/P.Ngroups));
+                dv = [dv; d];
+                Vv = [Vv, V'];
+            <span class="keyword">end</span>
+            [P.([<span class="string">'DV'</span>, types{i}(3)]), idx]=sort(dv,<span class="string">'descend'</span>);
+            Q.([<span class="string">'VV'</span>, types{i}(3)])=Vv(:,idx)';
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre><h2>generate projection matrices<a name="7"></a></h2><pre class="codeinput">Proj=cell(1:ntypes);
+<span class="keyword">for</span> i=1:ntypes
+    <span class="keyword">if</span> ~strcmp(types{i}(1),<span class="string">'N'</span>)     <span class="comment">% if we are appending something to "eigenvectors"</span>
+        <span class="comment">% the line below orthonormalizes and concatenates</span>
+        <span class="comment">% [V, ~] = qr([P.([types{i}(1), 'elta']),Q.(['V', types{i}(2), types{i}(3)])'],0);</span>
+        <span class="comment">% the line below just concatenates (note that they are all already normal)</span>
+        V = [P.([types{i}(1), <span class="string">'elta'</span>]),Q.([<span class="string">'V'</span>, types{i}(2), types{i}(3)])'];
+    <span class="keyword">elseif</span> strcmp(types{i}(1),<span class="string">'N'</span>)  <span class="comment">% if not</span>
+        V=Q.([<span class="string">'V'</span>, types{i}(2), types{i}(3)])';
+    <span class="keyword">end</span>
+
+    siz=size(V,2); <span class="keyword">if</span> Kmax&gt;siz, Kmax=siz; <span class="keyword">end</span>
+    Proj{i}.V = V(:,1:Kmax)';
+    Proj{i}.name=types{i};
+<span class="keyword">end</span>
+</pre><pre class="codeinput"><span class="keyword">function</span> [d,V] = get_svd(X,n,D,type,Kmax)
+
+<span class="keyword">if</span> strcmp(type,<span class="string">'N'</span>)             <span class="comment">% normal svd, compute all eigenvectors</span>
+    <span class="keyword">if</span> n&gt;D, [~,d,V] = svd(X',0);
+    <span class="keyword">else</span> [V,d,~] = svd(X,0);
+    <span class="keyword">end</span>
+    d=diag(d);
+<span class="keyword">elseif</span> strcmp(type,<span class="string">'F'</span>)         <span class="comment">% fast svd, comput top min([n,D,Kmax]) eigvectors</span>
+    <span class="keyword">if</span> n&gt;D, [~,d,V] = fsvd(X',min([n,D,Kmax]));
+    <span class="keyword">else</span> [V,d,~] = fsvd(X,min([n,D,Kmax]));
+    <span class="keyword">end</span>
+<span class="keyword">elseif</span> strcmp(type,<span class="string">'R'</span>)         <span class="comment">% compute all robust eigenvectors</span>
+    <span class="comment">%     if n&gt;D, cov = m_estimator_gms(X');</span>
+    <span class="comment">%     else cov = m_estimator_gms(X);</span>
+    <span class="comment">%     end</span>
+    cov = m_estimator_gms(X');
+    [V,d]= eig(cov);
+    d=diag(d);
+<span class="keyword">elseif</span> strcmp(type,<span class="string">'A'</span>)         <span class="comment">% random projections</span>
+    V = rand(D,Kmax); d=[];
+<span class="keyword">end</span>
+V=V';
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+function [Proj, P, Q] = LOL(X,Y,types,Kmax)
+% learn linear-optimal-low-rank discriminant subspace under a variety of
+% differnt models
+%
+% INPUT:
+%   X in R^{D x ntrain}: ntrain columns, each a D-dimensional example
+%   Y in [K]^ntrain: a categorical vector assigning each training sample a class
+%   types in cell: each element lists a different embedding type (see below for details)
+%   Kmax in Z: max dimension to project into
+%
+% OUTPUT:
+%   Proj (struct): one per types, with fields
+%       name (char): name of projection
+%       V (R^{Kmax x D}: projection matrix
+%   P (struct): of parameters, including
+%       Ngroups (int): # of groups
+%       groups (vec): name of groups (can be all ints or possibly chars, tho i've never tested that
+%       nvec (int^Ngroups): # of points per class
+%       idx (cell(Ngroups,1)): list of indices for each group
+%       mu in R^{D x Ngroups}: means
+%       Delta in R^{D x (Ngroups-1)}: means minus first mean
+%       Selta in R^{D x (Ngroups-1)}: sparse version
+%       DEN/DVN: eigenvalues for equal/varied subspace assumptions
+%       Ytiles in R^10: 0.1:0.1:1 percentiles of Y
+%   Q (struct): containing eigenvectors
+
+% CODE FOR TYPES: each type is a 3 letter code: ABC
+%   A: kind of difference matrix (D=delta, N=none, R=robust, S=sparse)
+%   B: whether to share covariance matrices (E=equal, V=varied)
+%   C: how to compute/approximate eigenvectors (N=normal, F=fast, R=robust, A=random)
+
+%% check and make sure inputs are all correct
+
+[D,n]=size(X);
+if n~=length(Y), X=X'; [D,n]=size(X); end
+ntypes=length(types);
+for i=1:ntypes
+    if isempty(strfind('TDRNS',types{i}(1))), error('failed to specify a legit estimator of delta'), end
+    if isempty(strfind('EV',types{i}(2))), error('failed to specify a legit equal/varied subspace'), end
+    if isempty(strfind('NFRA',types{i}(3))), error('failed to specify a legit approx to eigenvectors'), end
+end
+Kmax=round(Kmax);
+
+%% check if regression, if so, convert to classification
+ngroups=length(unique(Y));
+df=0.1;
+if ngroups > length(Y)/2
+    P.Ytiles=quantile(Y,linspace(df,1,1/df));
+    YY=0*Y;
+    yind=Y<P.Ytiles(1);
+    YY(yind)=1;
+    for j=2:length(P.Ytiles)
+        yind=Y<P.Ytiles(j) & Y>P.Ytiles(j-1);
+        YY(yind)=j;
+    end
+    Y=YY;
+end
+
+%% get means
+Q=struct;
+if iscell(Y)
+    Yu=unique(Y);
+    for i=1:length(Yu)
+        for j=1:length(Y)
+            if strcmp(Y(j),Yu(i))
+                groups(j)=i;
+            end
+        end
+    end
+    Y=groups;
+end
+P.groups=unique(Y);
+
+if any(isnan(P.groups)), P.groups(isnan(P.groups))=[]; P.groups=[P.groups; NaN]; end % remove nan groups from mean (NB: NaN~=NaN)
+P.Ngroups=length(P.groups);
+P.nvec=nan(P.Ngroups,1);
+P.mu=nan(D,P.Ngroups);
+idx=cell(P.Ngroups,1);
+for k=1:P.Ngroups
+    idx{k}=find(Y==P.groups(k));
+    if isempty(idx{k}), idx{k}=find(isnan(Y)); end % for the NaN's
+    P.nvec(k)=length(idx{k});
+    P.mu(:,k)=mean(X(:,idx{k}),2);
+    X(:,idx{k})=bsxfun(@minus,X(:,idx{k}),P.mu(:,k));
+end
+% sort classes in order of # of samples per class
+[~, IX] = sort(P.nvec);
+P.nvec=P.nvec(IX);
+min_Ny=min(P.nvec);
+P.groups=P.groups(IX);
+P.mu=P.mu(:,IX);
+for k=1:P.Ngroups, P.idx{k}=idx{IX(k)}; end
+if nargin<4, Kmax=min(n,D); end
+
+%% get delta matrices & eigenvectors (or approximations thereof)
+
+for i=1:ntypes
+    
+    % get diff bases
+    if strcmp(types{i}(1),'D')      % default estimate of the different of the means
+        if ~isfield(P,'Delta')
+            P.Delta = bsxfun(@minus,P.mu(:,2:end),P.mu(:,1));
+            Dnorm=zeros(ngroups-1,1);
+            for j=1:ngroups-1
+                Dnorm(j)=norm(P.Delta(:,j));
+            end
+            P.Delta=bsxfun(@rdivide,P.Delta,Dnorm'); 
+        end
+    elseif strcmp(types{i}(1),'S') % sparse estimate of difference of means
+        if ~isfield(P,'Selta')
+            [~,idx] = sort(abs(P.delta),'descend');
+            P.Selta=P.delta;
+            P.Selta(idx(10:end))=0;
+        end
+    elseif strcmp(types{i}(1),'R') % robust estimate of difference of means
+        P.robustmean=nan(D,P.Ngroups);
+        for k=1:P.Ngroups
+            %             P.robustmean(:,k)=median(X(:,idx{k})',1);
+            P.robustmean(:,k)=trimmean(X(:,idx{k})',10);
+        end
+        P.Relta = bsxfun(@minus,P.robustmean(:,2:end),P.robustmean(:,1));
+    elseif strcmp(types{i}(1),'T')      % default estimate of the different of the means
+        if ~isfield(P,'Telta')
+            delta = bsxfun(@minus,P.mu(:,2:end),P.mu(:,1));
+            sig = var(P.mu,[],2);
+            P.Telta = bsxfun(@rdivide,delta,sig);
+            z=find(sig<10^-8);
+            P.Telta(z,:)=0;
+        end
+    end
+    
+    % get 'eigs'
+    if strcmp(types{i}(2),'E')      % equal covariances
+        if ~isfield(X,['VE',types{i}(3)])
+            [P.(['DE', types{i}(3)]),Q.(['VE', types{i}(3)])] = get_svd(X,n,D,types{i}(3),Kmax);
+        end
+    elseif strcmp(types{i}(2),'V')  % varied covariances
+        if ~isfield(X,['VV',types{i}(3)])
+            dv=[]; Vv=[];
+            for k=1:P.Ngroups
+                [d,V] = get_svd(X(:,P.idx{k}),min_Ny,D,types{i}(3),ceil(Kmax/P.Ngroups));
+                dv = [dv; d];
+                Vv = [Vv, V'];
+            end
+            [P.(['DV', types{i}(3)]), idx]=sort(dv,'descend');
+            Q.(['VV', types{i}(3)])=Vv(:,idx)';
+        end
+    end
+end
+
+
+%% generate projection matrices
+Proj=cell(1:ntypes);
+for i=1:ntypes
+    if ~strcmp(types{i}(1),'N')     % if we are appending something to "eigenvectors"
+        % the line below orthonormalizes and concatenates
+        % [V, ~] = qr([P.([types{i}(1), 'elta']),Q.(['V', types{i}(2), types{i}(3)])'],0);  
+        % the line below just concatenates (note that they are all already normal) 
+        V = [P.([types{i}(1), 'elta']),Q.(['V', types{i}(2), types{i}(3)])'];
+    elseif strcmp(types{i}(1),'N')  % if not
+        V=Q.(['V', types{i}(2), types{i}(3)])';
+    end
+    
+    siz=size(V,2); if Kmax>siz, Kmax=siz; end
+    Proj{i}.V = V(:,1:Kmax)';
+    Proj{i}.name=types{i};
+end
+
+
+function [d,V] = get_svd(X,n,D,type,Kmax)
+
+if strcmp(type,'N')             % normal svd, compute all eigenvectors
+    if n>D, [~,d,V] = svd(X',0);
+    else [V,d,~] = svd(X,0);
+    end
+    d=diag(d);
+elseif strcmp(type,'F')         % fast svd, comput top min([n,D,Kmax]) eigvectors
+    if n>D, [~,d,V] = fsvd(X',min([n,D,Kmax]));
+    else [V,d,~] = fsvd(X,min([n,D,Kmax]));
+    end
+elseif strcmp(type,'R')         % compute all robust eigenvectors
+    %     if n>D, cov = m_estimator_gms(X');
+    %     else cov = m_estimator_gms(X);
+    %     end
+    cov = m_estimator_gms(X');
+    [V,d]= eig(cov);
+    d=diag(d);
+elseif strcmp(type,'A')         % random projections
+    V = rand(D,Kmax); d=[];
+end
+V=V';
+
+##### SOURCE END #####
+--></body></html>
