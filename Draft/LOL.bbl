@@ -21,11 +21,6 @@
 \providecommand{\BIBdecl}{\relax}
 \BIBdecl
 
-\bibitem{Hastie2004}
-T.~Hastie, R.~Tibshirani, and J.~H. Friedman, ``{The Elements of Statistical
-  Learning: Data Mining, Inference, and Prediction},'' \emph{BeiJing:
-  Publishing House of Electronics Industry}, 2004.
-
 \bibitem{diMartino2013a}
 \BIBentryALTinterwordspacing
 A.~{Di Martino}, C.-G. Yan, Q.~Li, E.~Denio, X.~F. Castellanos, K.~Alaerts,
@@ -380,6 +375,11 @@ G.~V. Trunk, ``{A problem of dimensionality: a simple example.}'' \emph{IEEE
   pp. 306--307, 1979. [Online]. Available:
   \url{http://ieeexplore.ieee.org/lpdocs/epic03/wrapper.htm?arnumber=4766926}
 \BIBentrySTDinterwordspacing
+
+\bibitem{Hastie2004}
+T.~Hastie, R.~Tibshirani, and J.~H. Friedman, ``{The Elements of Statistical
+  Learning: Data Mining, Inference, and Prediction},'' \emph{BeiJing:
+  Publishing House of Electronics Industry}, 2004.
 
 \bibitem{Huber1981a}
 \BIBentryALTinterwordspacing
