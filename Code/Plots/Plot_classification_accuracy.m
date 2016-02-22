@@ -79,7 +79,7 @@ hspace=0.06;
 lfw='normal'; % legend fontweight
 %% sample
 
-for j=1:4
+for j=[1,2,4]
     task1=T{j};
     task1.rotate=false;
     [task1, X, Y, PP] = get_task(task1);
@@ -340,9 +340,9 @@ set(gca,'XTick',[],'YTick',[],'Box','off','xcolor','w','ycolor','w')
 legend('boxoff')
 
 
-% print figure
-if task.savestuff
-    H.wh=[7.5 6];
-    H.fname=[rootDir, '../Figs/properties'];
-    print_fig(h,H)
-end
+%% print figure
+% if task.savestuff
+%     H.wh=[7.5 6];
+%     H.fname=[rootDir, '../Figs/properties'];
+%     print_fig(h,H)
+% end
