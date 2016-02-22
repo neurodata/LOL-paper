@@ -86,7 +86,8 @@ for j=[1,2,4]
     
     Z = parse_data(X,Y,task1.ntrain,task1.ntest,0);
     
-    pos=[left+(j-1)*(width+hspace) bottom+(height+vspace)*4-0.04 width height-0.01];
+    jj=j; if j==4, jj=3; end
+    pos=[left+(jj-1)*(width+hspace) bottom+(height+vspace)*4-0.04 width height-0.01];
     subplot('position',pos), %[left,bottom,width,height]
     hold on
     
@@ -114,10 +115,10 @@ for j=[1,2,4]
         xticklabel=[{'2'};{'4'};{'...'};{'100'}];
         ytick=[];
     elseif j==3,
-        tit='(C) Fat Tails';
+        tit='(D) Fat Tails';
         ytick=[];
     elseif j==4,
-        tit='(D) 3 Classes';
+        tit='(C) 3 Classes';
     end
     title([{tit}; {['D=', num2str(T{j}.D), ' n=', num2str(T{j}.ntrain)]}])
     set(gca,'XTick',xtick,'XTickLabel',xticklabel,'Xlim',xlim,'ylim',ylim,'ytick',ytick)
@@ -125,7 +126,7 @@ for j=[1,2,4]
     
     
     % plot Lhat vs d
-    pos=[left+(j-1)*(width+hspace) bottom+(height+vspace)*2 width height]; %[left,bottom,width,height]
+    pos=[left+(jj-1)*(width+hspace) bottom+(height+vspace)*2 width height]; %[left,bottom,width,height]
     if j==1
         F=G;
         F.doxlabel=false;
@@ -163,7 +164,7 @@ for j=[1,2,4]
     plot_Lhat(T{j},S{j},F,pos)
     
     % plot covariances
-    pos=[left+(j-1)*(width+hspace) bottom+(height+vspace)*3-0.06 0.15 0.15]; %[left,bottom,width,height]
+    pos=[left+(jj-1)*(width+hspace) bottom+(height+vspace)*3-0.06 0.15 0.15]; %[left,bottom,width,height]
     subplot('position',pos)
     imagesc(PP.Sigma(ids,ids))
     set(gca,'xticklabel',[],'yticklabel',[])
@@ -188,8 +189,12 @@ G.ms2=2;
 hspace=0.06;
 left=0.07;
 
-for j=1:3%length(T)
-    task1=T{j+4};
+for j=[0,1,2,3]%length(T)
+    if j==0,
+        task1=T{3};
+    else
+        task1=T{j+4};
+    end
     task1.rotate=false;
     task1.ntest=5000;
     [task1, X, Y, PP] = get_task(task1);
@@ -197,7 +202,7 @@ for j=1:3%length(T)
     Z = parse_data(X,Y,task1.ntrain,task1.ntest,0);
     
     siz=0.11;
-    pos=[left+(j-1)*(width+hspace)-0.02 bottom+(height+vspace)*1-0.04 siz siz]; %[left,bottom,width,height]
+    pos=[left+(j)*(width+hspace)-0.02 bottom+(height+vspace)*1-0.04 siz siz]; %[left,bottom,width,height]
     subplot('position',pos)
     cla, hold on
     Xplot1=Z.Xtest(:,Z.Ytest==1);
@@ -208,7 +213,11 @@ for j=1:3%length(T)
     plot(Xplot1(1,idx),Xplot1(2,idx),'o','color',G.colors{1},'LineWidth',G.lw,'MarkerSize',G.ms1),
     plot(Xplot2(1,idx),Xplot2(2,idx),'x','color',G.colors{2},'LineWidth',G.lw,'MarkerSize',G.ms2)
     
-    if j==1
+    if j==0
+        tit='(D) Fat Tails';
+        ticks=[-10:10];
+        lims=[-5,5];
+    elseif j==1
         tit=['                  (E) QDA'];
         lims=[-2.5, 2.5];
         ticks=-3:1.5:3;
@@ -232,7 +241,7 @@ for j=1:3%length(T)
     grid('off')
     
     % plot level sets
-    pos=[left+(j-1)*(width+hspace)-0.02+0.11 bottom+(height+vspace)*1-0.04 siz siz]; %[left,bottom,width,height]
+    pos=[left+(j)*(width+hspace)-0.02+0.11 bottom+(height+vspace)*1-0.04 siz siz]; %[left,bottom,width,height]
     subplot('position',pos), hold on
     % plot means
     plot(PP.mu(1,1),PP.mu(2,1),'.','color',G.colors{1},'linewidth',4,'MarkerSize',G.ms)
@@ -272,9 +281,20 @@ end
 G.title='';
 % G=rmfield(G,'tick_ids');
 
-for j=1:3
+for j=[0,1:3]
     F=G;
-    if j==1 % QDA
+    
+    if j==0
+        F.colors = {'g';'m';'c'};
+        F.doxlabel=false;
+        F.ylim=[0.13,0.5];
+        F.ytick=[0.0:0.15:1]; %:0.1:0.5];
+        F.title='';
+        %         F.xticklabel=[];
+        ids=1:10:100;
+        F.xlim=[0,75];
+
+    elseif j==1 % QDA
         F.legendOn=0;
         F.colors = {'g';'b'};
         F.ylim=[0.18 0.44];
@@ -306,15 +326,18 @@ for j=1:3
         
     end
     
-    pos=[left+(j-1)*(width+hspace) bottom+(height+vspace)*0+0.01 width height]; %[left,bottom,width,height]
-    plot_Lhat(T{j+4},S{j+4},F,pos)
-    
+    pos=[left+(j)*(width+hspace) bottom+(height+vspace)*0+0.01 width height]; %[left,bottom,width,height]
+    if j==0;
+        plot_Lhat(T{3},S{3},F,pos)
+    else
+        plot_Lhat(T{j+4},S{j+4},F,pos)
+    end
 end
 
 
 %% legend
 
-pos=[left+(4-1)*(width+hspace)+0.05 0.07 width height]; %[left,bottom,width,height]
+pos=[left+(4-1)*(width+hspace)+0.05 0.7 width height]; %[left,bottom,width,height]
 % hl=subplot(F.Nrows,F.Ncols,F.Ncols);
 hl=subplot('position',pos);
 hold all, i=1; clear g
@@ -332,7 +355,7 @@ l=legend(g,...
     'QOQ'); %,...'LDA o LOL(D,E,R)',...LDA o \delta+rPCA',...
 legend1 = legend(hl,'show'); %
 set(legend1,...
-    'Position',[0.8 0.15 0.1 0.1],... %[left,bottom,width,height]
+    'Position',[0.8 0.475 0.1 0.1],... %[left,bottom,width,height]
     'FontName','FixedWidth',...
     'FontSize',9);
 % set(legend1,'YColor',[1 1 1],'XColor',[1 1 1],'FontName','FixedWidth');
@@ -341,8 +364,8 @@ legend('boxoff')
 
 
 %% print figure
-% if task.savestuff
-%     H.wh=[7.5 6];
-%     H.fname=[rootDir, '../Figs/properties'];
-%     print_fig(h,H)
-% end
+if task.savestuff
+    H.wh=[7.5 6];
+    H.fname=[rootDir, '../Figs/properties'];
+    print_fig(h,H)
+end

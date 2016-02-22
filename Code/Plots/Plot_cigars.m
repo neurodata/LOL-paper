@@ -19,7 +19,7 @@ addpath(p);
 task_list_name='cigars';
 truth=0; % whether to estimate PCA & LOL or use the truth
 k=20;
-task.savestuff=1;
+task.savestuff=0;
 task.D=1000;
 task.ntrain=100;
 task_list = set_task_list(task_list_name);

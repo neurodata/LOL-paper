@@ -1,0 +1,10 @@
+load("/Users/jovo/Research/projects/A/SDA/data/raw/prostate/prostate.rda")
+whos
+which
+size()
+names()
+names
+ls()
+write.csv(prostate.x)
+write.csv(prostate.x,"prostate_x")
+write.csv(prostate.y,"prostate_y")
