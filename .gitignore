@@ -2,8 +2,8 @@
 /OptionalDependencies/*
 /old/*
 /ingest_data/*
+/Data/Raw/CIFAR-100/cifar-100-matlab.tar.gz 
 *.aux
-/Users/jovo/Research/Projects/Jovo/LOL/Data/Raw/CIFAR-100/cifar-100-matlab.tar.gz 
 *.blg
 *.brf
 *.fls
