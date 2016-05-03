@@ -39,10 +39,6 @@ T.~Hastie, R.~Tibshirani, and J.~H. Friedman, ``{The Elements of Statistical
   Learning: Data Mining, Inference, and Prediction},'' \emph{BeiJing:
   Publishing House of Electronics Industry}, 2004.
 
-\bibitem{Breiman2001b}
-L.~Breiman, ``{Statistical Modeling : The Two Cultures},'' \emph{Statistical
-  Science}, vol.~16, no.~3, pp. 199--231, 2001.
-
 \bibitem{Tenenbaum2000a}
 \BIBentryALTinterwordspacing
 J.~B. Tenenbaum, V.~de~Silva, J.~C. Langford, and V.~D. Silva, ``{A global
@@ -74,6 +70,30 @@ R.~R. Coifman and S.~Lafon, ``{Diffusion maps},'' \emph{Applied and
 \bibitem{Belkin2004a}
 M.~Belkin, I.~Matveeva, and P.~Niyogi, ``{Regularization and semi-supervised
   learning on large graphs},'' in \emph{COLT}, 2004.
+
+\bibitem{Guha12a}
+\BIBentryALTinterwordspacing
+S.~Guha, R.~Hafen, J.~Rounds, J.~Xia, J.~Li, B.~Xi, and W.~S. Cleveland,
+  ``{Large complex data: divide and recombine (D{\&}R) with RHIPE},''
+  \emph{Stat}, vol.~1, no.~1, pp. 53--67, oct 2012. [Online]. Available:
+  \url{http://doi.wiley.com/10.1002/sta4.7}
+\BIBentrySTDinterwordspacing
+
+\bibitem{Agarwal2014a}
+\BIBentryALTinterwordspacing
+A.~Agarwal, O.~Chapelle, M.~Dud{\'{i}}k, and J.~Langford, ``{A Reliable
+  Effective Terascale Linear Learning System},'' \emph{Journal of Machine
+  Learning Research}, vol.~15, pp. 1111--1133, 2014. [Online]. Available:
+  \url{http://jmlr.org/papers/v15/agarwal14a.html}
+\BIBentrySTDinterwordspacing
+
+\bibitem{Meng15a}
+\BIBentryALTinterwordspacing
+X.~Meng, J.~Bradley, B.~Yavuz, E.~Sparks, S.~Venkataraman, D.~Liu, J.~Freeman,
+  D.~Tsai, M.~Amde, S.~Owen, D.~Xin, R.~Xin, M.~J. Franklin, R.~Zadeh,
+  M.~Zaharia, and A.~Talwalkar, ``{MLlib: Machine Learning in Apache Spark},''
+  may 2015. [Online]. Available: \url{http://arxiv.org/abs/1505.06807}
+\BIBentrySTDinterwordspacing
 
 \bibitem{Zou2006a}
 H.~Zou, ``{The Adaptive Lasso and Its Oracle Properties},'' pp. 1418--1429,
@@ -316,6 +336,10 @@ E.~Anderson, Z.~Bai, C.~Bischof, S.~Blackford, J.~Demmel, J.~Dongarra, J.~D.
   0.4em\relax SIAM, 1999. [Online]. Available:
   \url{https://books.google.com/books?hl=en{\&}lr={\&}id=AZlvEnr9gCgC{\&}pgis=1}
 \BIBentrySTDinterwordspacing
+
+\bibitem{Breiman2001b}
+L.~Breiman, ``{Statistical Modeling : The Two Cultures},'' \emph{Statistical
+  Science}, vol.~16, no.~3, pp. 199--231, 2001.
 
 \bibitem{Fisher1925a}
 \BIBentryALTinterwordspacing
