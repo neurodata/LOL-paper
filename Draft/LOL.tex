@@ -1019,6 +1019,32 @@ For example, letting $\bA=\bU_d$, and letting $\bU_i=e_i$ be the unit vector, wi
 % Note that this angle is a random variable, as it is a function of the sampled data $(\bX_i,Y_i) \iid P$.
 So, we want to understand the probability that $\alpha_{\Pca}$ is small under different parameter settings, $\bth \in \bTh$.
 
+\section{The R implementation of LOL}
+
+Figure \ref{Rimpl} shows the R implementation of LOL for binary classification
+using FlashMatrix \cite{flashmatrix}. The implementation takes a $D \times I$
+matrix, where each column is a training instance and each instance has D
+features, and outputs a $D \times k$ projection matrix.
+
+\begin{figure}[t]
+\begin{lstlisting}
+LOL <- function(m, labels, k) {
+	counts <- fm.table(labels)
+	num.labels <- length(counts$val)
+	num.features <- dim(m)[1]
+	nv <- k - (num.labels - 1)
+	gr.sum <- fm.groupby(m, 1, fm.as.factor(labels, 2), fm.bo.add)
+	gr.mean <- fm.mapply.row(gr.sum, counts$Freq, fm.bo.div, FALSE)
+	diff <- fm.get.cols(gr.mean, 1) - fm.get.cols(gr.mean, 2)
+	svd <- fm.svd(m, nv=0, nu=nv)
+	fm.cbind(diff, svd$u)
+}
+\end{lstlisting}
+\caption{The R implementation of LOL.}
+\label{Rimpl}
+\end{figure}
+
+
 % First note that
 
 % \begin{lem}
