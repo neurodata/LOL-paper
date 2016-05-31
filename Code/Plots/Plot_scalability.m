@@ -43,7 +43,7 @@ pvec=FMEM(1,2:end);
 hem=errorbar(pvec,nanmean(da1),nanstd(da1),'--','color',[0 0.7 0],'linewidth',2);
 hin=errorbar(pvec2,nanmean(da2),nanstd(da2),'g','linewidth',4);
 
-xticks=pvec(1,[1,5,7:end]);
+xticks=pvec(1,[1,5:end]);
 set(gca,'XTick',xticks,'XTickLabel',xticks/1e6,'XScale','linear')
 xlim([min(pvec), max(pvec)])
 axis('tight')
@@ -60,18 +60,20 @@ pos(1)=pos(1)+width+hspace+0.05;
 subplot('position',pos), cla
 
 hold all
-filename = [rootDir, '../Data/Results/FM.n-1000.p-16000000.csv'];
-FMEM = import_da(filename);
+filename = [rootDir, '../Data/Results/FM.n-1000.p-16000000-more.csv'];
+FMEM = import_da2(filename);
 
 title('p=16,000,000')
-LOL=FMEM(3:end-1,2:2:end);
-PCA=FMEM(3:end-1,3:2:end);
-pvec=[10,50,100,500];
-hlol=errorbar(pvec,nanmean(LOL),nanstd(LOL),'g','linewidth',2);
+LOL=FMEM(:,[1,3:3:end]);
+LFL=FMEM(:,[1,4:3:end]);
+PCA=FMEM(:,2:3:end);
+pvec=[1,10,50,100,500];
 hpca=errorbar(pvec,nanmean(PCA),nanstd(PCA),'m','linewidth',2);
-xtick=pvec([1,3:end]);
+hlfl=errorbar(pvec,nanmean(LFL),nanstd(LFL),'C','linewidth',2);
+hlol=errorbar(pvec,nanmean(LOL),nanstd(LOL),'g','linewidth',2);
+xtick=pvec([1,2,3:end]);
 ytick=[0.1:0.1:1];
-set(gca,'XTick',xtick,'YTick',ytick,'XScale','linear')
+set(gca,'XTick',xtick,'YTick',ytick,'XScale','log')
 xlim([min(pvec), max(pvec)])
 axis('tight')
 xlabel('# embedded dimensions')
