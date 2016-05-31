@@ -40,8 +40,8 @@ da1=FMEM(2:end,2:end);
 pvec=FMEM(1,2:end);
 
 
-hem=errorbar(pvec,nanmean(da1),nanstd(da1),'g--','linewidth',2);
-hin=errorbar(pvec2,nanmean(da2),nanstd(da2),'color',[0 0.7 0],'linewidth',2);
+hem=errorbar(pvec,nanmean(da1),nanstd(da1),'--','color',[0 0.7 0],'linewidth',2);
+hin=errorbar(pvec2,nanmean(da2),nanstd(da2),'g','linewidth',4);
 
 xticks=pvec(1,[1,5,7:end]);
 set(gca,'XTick',xticks,'XTickLabel',xticks/1e6,'XScale','linear')
@@ -63,7 +63,7 @@ hold all
 filename = [rootDir, '../Data/Results/FM.n-1000.p-16000000.csv'];
 FMEM = import_da(filename);
 
-title('p=16M')
+title('p=16,000,000')
 LOL=FMEM(3:end-1,2:2:end);
 PCA=FMEM(3:end-1,3:2:end);
 pvec=[10,50,100,500];
