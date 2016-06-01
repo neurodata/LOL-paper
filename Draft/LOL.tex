@@ -311,7 +311,10 @@ Computational efficiency of various low-dimensional projection methods. In all c
 
 \para{Computational Theory}
 
-We reify the above computational experiments with theoretical statements.  Computing the mean for each class requires $\mc{O}(n_j p)$ floating point operations (flops), where $n_j$ is the number of samples per class. Subtracting the means requires $\mc{O}((J-1) p)$ flops, where $J$ is the total number of classes.  Computing the first $d$ singular triples (left and right singular vectors, and singular value) requires $\mc{O}(n p d)$ flops.  The randomized version of \Svd~however only requires $\mc{O}(d^2 (n + p))+ (q+1) 2 d M$, where $M$ is the flop count required for matrix vector multiply.  Since, $d \ll n,p$, this can substantially reduce computational complexity.  Regardless, \Lol~computation is clearly bottlenecked by the \Pca~computation, random or otherwise, for single threaded operations.
+We reify the above computational experiments with theoretical statements.  Computing the mean for each class requires $\mc{O}(n_j p)$ floating point operations (flops), where $n_j$ is the number of samples per class. Subtracting the means requires $\mc{O}((J-1) p)$ flops, where $J$ is the total number of classes.  Computing the first $d$ singular triples (left and right singular vectors, and singular value) requires $\mc{O}(n p d)$ flops.
+The sparse random projection however only requires $\mc{O}(n p d c)$, where $c$ is the density of the sparse random projection matrix.
+%The randomized version of \Svd~however only requires $\mc{O}(d^2 (n + p))+ (q+1) 2 d M$, where $M$ is the flop count required for matrix vector multiply.
+Since, $d \ll n,p$, this can substantially reduce computational complexity.  Regardless, \Lol~computation is clearly bottlenecked by the \Pca~computation or random projection for single threaded operations.
 
 Our parallel in memory implementation scales-up optimally (linearly) with the number of threads, requiring $\mc{O}(n p d / T)$ flops for \Lol, where $T$ is the number of threads.  Our parallel semi-external memory implementation scales-out optimally (linearly) as well.  This is in agreement with the linear fit of the lines in Figure \ref{f:speed}(A).
 
