@@ -391,8 +391,8 @@ We have introduced a very simple, yet new, methodology to improve performance on
 
 % Finally, in addition to the above mentioned quantitative criteria, there are also many qualitative criteria that merit consideration at each level of analysis.  For the problem specification level,  the model choices also determine the  \textbf{appropriateness}.  Indeed, real decision criteria are often quite difficult to specify precisely, and so our problem specification is almost always related to but not exactly the problem we hope to achieve.  For example, while we might want to parse a scene, we often tackle a simpler problem of checking whether an object of a particular kind is present because it is easier.  For the algorithm level, the \textbf{interpretability} of the resulting estimator is often an important consideration.  For example, when developing biomarkers, it is important that the doctors and insurance companies can understand the decision making process of the algorithm, otherwise they might not believe the results. For the implementation level,  how \textbf{accessible} is the implementation is crucial.  In particular as more people outside the ivory academic tower---such as citizen scientists and even academics in the developing world---are contributing to data science and scientific discovery in general, access to the implementation is increasingly important.  Finally, at the platform level, the \textbf{ease of use} of the platform is increasingly important.  For example, requiring tedious installations of many different software libraries, or specialized hardware, can make the platform difficult to employ.  
 
-\subsection*{Related Work}
-
+\para{Related Work} 
+% 
 One of the first publications to compose \Fld~with an unsupervised learning method was the celebrated Fisherfaces paper \cite{Belhumeur1997a}.  The authors showed via a sequence of numerical experiments the utility of embedding with \Pca~prior to classifying with \Fld.  We extend this work by adding a supervised component to the initial embedding.  Moreover, we provide the geometric intuition for why and when this is advantageous, as well as show numerous examples demonstrating its superiority.  %Finally, we have matrix concentration inequalities proving the advantages of \Lol~over Fisherfaces.
 We also prove that Fisherfaces can be implemented very efficiently (see Methods), while shedding light on why it is performing relatively well in general. 
 
@@ -402,8 +402,8 @@ We also prove that Fisherfaces can be implemented very efficiently (see Methods)
 
 
 
-\subsection*{Next Steps}
-
+\para{Next Steps}
+% 
 The \Lol~idea, appending the mean difference vector to convert unsupervised manifold learning to supervised manifold learning, has many potential applications.  We have presented the first few.  Incorporating additional nonlinearities via kernel methods \cite{Mika1999a}, ensemble methods such as random forests \cite{Breiman2001a}, multiscale methods \cite{Allard2012},  and more scalable implementations \cite{Chang2011a}, are all of immediate interest. All code for the experiments performed in this manuscript is available from \url{http://docs.neurodata.io/LOL/}.
 
 
