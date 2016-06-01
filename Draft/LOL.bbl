@@ -21,19 +21,6 @@
 \providecommand{\BIBdecl}{\relax}
 \BIBdecl
 
-\bibitem{Vogelstein2014a}
-J.~T. Vogelstein, Y.~Park, M.~Zlatic, and C.~E. Priebe, ``{Discovery of
-  Brainwide Neural-Behavioral Maps via Multiscale Unsupervised Structure
-  Learning},'' \emph{Science}, vol. 344, pp. 386 ---- 392, 2014.
-
-\bibitem{Krizhevsky2012}
-\BIBentryALTinterwordspacing
-A.~Krizhevsky, I.~Sutskever, and G.~E. Hinton, ``{ImageNet Classification with
-  Deep Convolutional Neural Networks},'' in \emph{Advances in Neural
-  Information Processing Systems}, 2012, pp. 1097--1105. [Online]. Available:
-  \url{http://papers.nips.cc/paper/4824-imagenet-classification-w}
-\BIBentrySTDinterwordspacing
-
 \bibitem{Hastie2004}
 T.~Hastie, R.~Tibshirani, and J.~H. Friedman, ``{The Elements of Statistical
   Learning: Data Mining, Inference, and Prediction},'' \emph{BeiJing:
@@ -46,18 +33,6 @@ J.~Mairal, J.~Ponce, G.~Sapiro, A.~Zisserman, and F.~R. Bach, ``{Supervised
   Systems}, 2009, pp. 1033--1040. [Online]. Available:
   \url{http://papers.nips.cc/paper/3448-supervised}
 \BIBentrySTDinterwordspacing
-
-\bibitem{Meinshausen2010c}
-\BIBentryALTinterwordspacing
-N.~Meinshausen and P.~B{\"{u}}hlmann, ``{Stability selection},'' \emph{Journal
-  of the Royal Statistical Society: Series B (Statistical Methodology)},
-  vol.~72, no.~4, pp. 417--473, jul 2010. [Online]. Available:
-  \url{http://doi.wiley.com/10.1111/j.1467-9868.2010.00740.x}
-\BIBentrySTDinterwordspacing
-
-\bibitem{Belkin2004a}
-M.~Belkin, I.~Matveeva, and P.~Niyogi, ``{Regularization and semi-supervised
-  learning on large graphs},'' in \emph{COLT}, 2004.
 
 \bibitem{Zou2006a}
 H.~Zou, ``{The Adaptive Lasso and Its Oracle Properties},'' pp. 1418--1429,
@@ -74,7 +49,7 @@ Y.~LeCun, C.~Cortes, and C.~Burges, ``{MNIST handwritten digit database}.''
 P.~J. Bickel and E.~Levina, ``{Some theory for Fisher's linear discriminant
   function, `naive Bayes', and some alternatives when there are many more
   variables than observations},'' \emph{Bernoulli}, vol.~10, no.~6, pp.
-  989--1010, dec 2004. [Online]. Available:
+  989--1010, Dec. 2004. [Online]. Available:
   \url{http://projecteuclid.org/euclid.bj/1106314847}
 \BIBentrySTDinterwordspacing
 
@@ -83,7 +58,7 @@ P.~J. Bickel and E.~Levina, ``{Some theory for Fisher's linear discriminant
 J.~Fan, Y.~Feng, and X.~Tong, ``{A road to classification in high dimensional
   space: the regularized optimal affine discriminant},'' \emph{Journal of the
   Royal Statistical Society: Series B (Statistical Methodology)}, vol.~74,
-  no.~4, pp. 745--771, sep 2012. [Online]. Available:
+  no.~4, pp. 745--771, Sep. 2012. [Online]. Available:
   \url{http://doi.wiley.com/10.1111/j.1467-9868.2012.01029.x}
 \BIBentrySTDinterwordspacing
 
@@ -112,21 +87,14 @@ P.~J. Huber, \emph{{Robust Statistics}}, ser. Wiley Series in Probability and
 P.~J. Rousseeuw and K.~V. Driessen, ``\BIBforeignlanguage{en}{{A Fast Algorithm
   for the Minimum Covariance Determinant Estimator}},''
   \emph{\BIBforeignlanguage{en}{Technometrics}}, vol.~41, no.~3, pp. 212--223,
-  mar 1999. [Online]. Available:
-  \url{http://amstat.tandfonline.com/doi/abs/10.1080/00401706.1999.10485670{\#}.VTejtq1Viko}
-\BIBentrySTDinterwordspacing
-
-\bibitem{Ferrari2010a}
-\BIBentryALTinterwordspacing
-D.~Ferrari and Y.~Yang, ``{Maximum Lq-likelihood estimation},'' \emph{IEEE
-  Transactions on Nuclear Science}, vol.~57, no.~3, pp. 1077--1084, 2010.
-  [Online]. Available: \url{http://arxiv.org/abs/1002.4533}
+  Mar. 1999. [Online]. Available:
+  \url{http://amstat.tandfonline.com/doi/abs/10.1080/00401706.1999.10485670\#.VTejtq1Viko}
 \BIBentrySTDinterwordspacing
 
 \bibitem{Candes2009b}
 \BIBentryALTinterwordspacing
-E.~J. Cand{\`{e}}s, X.~Li, Y.~Ma, and J.~Wright, ``{Robust Principal Component
-  Analysis?}'' \emph{Journal of the ACM}, vol.~58, no.~3, pp. 1--37, dec 2009.
+E.~J. Cand\`{e}s, X.~Li, Y.~Ma, and J.~Wright, ``{Robust Principal Component
+  Analysis?}'' \emph{Journal of the ACM}, vol.~58, no.~3, pp. 1--37, Dec. 2009.
   [Online]. Available: \url{http://dl.acm.org/citation.cfm?id=1970392.1970395
   http://arxiv.org/abs/0912.3599}
 \BIBentrySTDinterwordspacing
@@ -178,7 +146,7 @@ L.~Breiman, ``{Random forests},'' \emph{Machine learning}, vol.~45, no.~1, pp.
 \BIBentryALTinterwordspacing
 W.~K. Allard, G.~Chen, and M.~Maggioni, ``{Multi-scale geometric methods for
   data sets II: Geometric Multi-Resolution Analysis},'' \emph{Applied and
-  Computational Harmonic Analysis}, vol.~32, no.~3, pp. 435--462, may 2012.
+  Computational Harmonic Analysis}, vol.~32, no.~3, pp. 435--462, May 2012.
   [Online]. Available:
   \url{http://linkinghub.elsevier.com/retrieve/pii/S1063520311000868}
 \BIBentrySTDinterwordspacing
@@ -186,7 +154,7 @@ W.~K. Allard, G.~Chen, and M.~Maggioni, ``{Multi-scale geometric methods for
 \bibitem{Chang2011a}
 \BIBentryALTinterwordspacing
 C.-C. Chang and C.-J. Lin, ``{LIBSVM},'' \emph{ACM Transactions on Intelligent
-  Systems and Technology}, vol.~2, no.~3, pp. 1--27, apr 2011. [Online].
+  Systems and Technology}, vol.~2, no.~3, pp. 1--27, Apr. 2011. [Online].
   Available: \url{http://dl.acm.org/citation.cfm?id=1961189.1961199}
 \BIBentrySTDinterwordspacing
 
@@ -196,20 +164,16 @@ E.~Anderson, Z.~Bai, C.~Bischof, S.~Blackford, J.~Demmel, J.~Dongarra, J.~D.
   Croz, A.~Greenbaum, S.~Hammerling, A.~McKenney, and D.~Sorensen,
   \emph{{LAPACK Users' Guide: Third Edition}}.\hskip 1em plus 0.5em minus
   0.4em\relax SIAM, 1999. [Online]. Available:
-  \url{https://books.google.com/books?hl=en{\&}lr={\&}id=AZlvEnr9gCgC{\&}pgis=1}
+  \url{https://books.google.com/books?hl=en\&lr=\&id=AZlvEnr9gCgC\&pgis=1}
 \BIBentrySTDinterwordspacing
-
-\bibitem{Breiman2001b}
-L.~Breiman, ``{Statistical Modeling : The Two Cultures},'' \emph{Statistical
-  Science}, vol.~16, no.~3, pp. 199--231, 2001.
 
 \bibitem{Fisher1925a}
 \BIBentryALTinterwordspacing
 R.~A. Fisher, ``\BIBforeignlanguage{English}{{Theory of Statistical
   Estimation}},'' \emph{\BIBforeignlanguage{English}{Mathematical Proceedings
-  of the Cambridge Philosophical Society}}, vol.~22, no.~05, pp. 700--725, oct
+  of the Cambridge Philosophical Society}}, vol.~22, no.~05, pp. 700--725, Oct.
   1925. [Online]. Available:
-  \url{http://journals.cambridge.org/abstract{\_}S0305004100009580}
+  \url{http://journals.cambridge.org/abstract\_S0305004100009580}
 \BIBentrySTDinterwordspacing
 
 \end{thebibliography}
