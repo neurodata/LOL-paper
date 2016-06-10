@@ -24,6 +24,8 @@ width=0.4;
 hspace=0.05;
 pos(1)=left; pos(2)=bottom; pos(3)=width; pos(4)=height; 
 
+dark_green = [0 0.7 0];
+orange = [1 0.5 0];
 
 %% time
 % subplot(131), 
@@ -40,23 +42,39 @@ da1=FMEM(2:end,2:end);
 pvec=FMEM(1,2:end);
 
 
-hem=errorbar(pvec,nanmean(da1),nanstd(da1),'--','color',[0 0.7 0],'linewidth',2);
-hin=errorbar(pvec2,nanmean(da2),nanstd(da2),'g','linewidth',4);
+filename = [rootDir, '../Data/Results/sparse-EM.n-1000.d-100.csv'];
+FMEM = import_da(filename);
+da3=FMEM(2:end,2:end);
+pvec3=FMEM(1,2:end);
 
-xticks=pvec(1,[1,5:end]);
-set(gca,'XTick',xticks,'XTickLabel',xticks/1e6,'XScale','linear')
+filename = [rootDir, '../Data/Results/sparse-IM.n-1000.d-100.csv'];
+FMEM = import_da(filename);
+da4=FMEM(2:end,2:end);
+pvec4=FMEM(1,2:end);
+
+
+hem=errorbar(pvec,nanmean(da1),nanstd(da1),'--','color','g','linewidth',2);
+hin=errorbar(pvec2,nanmean(da2),nanstd(da2),'g','linewidth',4);
+hrpe=errorbar(pvec3,nanmean(da3),nanstd(da3),'--','color',orange,'linewidth',2);
+hrpi=errorbar(pvec4,nanmean(da4),nanstd(da4),'color',orange,'linewidth',4);
+
+xticks=pvec(1,[2:2:end]);
+yticks=[1,10,100,1000];
+set(gca,'XTick',xticks,'XTickLabel',xticks/1e6,'XScale','log')
+set(gca,'YTick',yticks,'Yscale','log')
 xlim([min(pvec), max(pvec)])
+
 axis('tight')
 xlabel('p=dimensionality (in millions)')
 ylabel('time (sec)')
 title('d=100')
-legend([hin, hem],'IM','EM','location','NorthWest')
+legend([hin, hem, hrpi, hrpe],'LOL-IM','LOL-EM','LAL-IM','LAL-EM','location','SouthEast')
 legend('boxoff')
-
+xscale('log')
 
 %% error
 % subplot(132), 
-pos(1)=pos(1)+width+hspace+0.05;
+pos(1)=pos(1)+width+hspace+0.04;
 subplot('position',pos), cla
 
 hold all
@@ -68,9 +86,10 @@ LOL=FMEM(:,[1,3:3:end]);
 LFL=FMEM(:,[1,4:3:end]);
 PCA=FMEM(:,2:3:end);
 pvec=[1,10,50,100,500];
-hpca=errorbar(pvec,nanmean(PCA),nanstd(PCA),'m','linewidth',2);
-hlfl=errorbar(pvec,nanmean(LFL),nanstd(LFL),'C','linewidth',2);
-hlol=errorbar(pvec,nanmean(LOL),nanstd(LOL),'g','linewidth',2);
+z=sqrt(size(PCA,2));
+hpca=errorbar(pvec,nanmean(PCA),nanstd(PCA)/z,'m','linewidth',2);
+hlfl=errorbar(pvec,nanmean(LFL),nanstd(LFL)/z,'color',orange,'linewidth',2);
+hlol=errorbar(pvec,nanmean(LOL),nanstd(LOL)/z,'g','linewidth',2);
 xtick=pvec([1,2,3:end]);
 ytick=[0.1:0.1:1];
 set(gca,'XTick',xtick,'YTick',ytick,'XScale','log')
