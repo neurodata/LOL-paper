@@ -34,6 +34,40 @@ J.~Mairal, J.~Ponce, G.~Sapiro, A.~Zisserman, and F.~R. Bach, ``{Supervised
   \url{http://papers.nips.cc/paper/3448-supervised}
 \BIBentrySTDinterwordspacing
 
+\bibitem{Li1991a}
+\BIBentryALTinterwordspacing
+K.-C. Li, ``{Sliced Inverse Regression for Dimension Reduction},''
+  \emph{Journal of the American Statistical Association}, vol.~86, no. 414, pp.
+  316--327, Jun. 1991. [Online]. Available:
+  \url{http://www.tandfonline.com/doi/abs/10.1080/01621459.1991.10475035}
+\BIBentrySTDinterwordspacing
+
+\bibitem{Tishby1999a}
+N.~Tishby, F.~C. Pereira, and W.~Bialek, ``{The information bottleneck method
+  arXiv : physics / 0004057v1 [ physics . data-an ] 24 Apr 2000},''
+  \emph{Neural Computation}, pp. 1--16, 1999.
+
+\bibitem{Globerson2003a}
+\BIBentryALTinterwordspacing
+A.~Globerson and N.~Tishby, ``{Sufficient Dimensionality Reduction},''
+  \emph{Journal of Machine Learning Research}, vol.~3, no. 7-8, pp. 1307--1331,
+  Oct. 2003. [Online]. Available: \url{http://www.crossref.org/jmlr\_DOI.html}
+\BIBentrySTDinterwordspacing
+
+\bibitem{Cook2005a}
+\BIBentryALTinterwordspacing
+R.~D. Cook and L.~Ni, ``\BIBforeignlanguage{en}{{Sufficient Dimension Reduction
+  via Inverse Regression}},'' \emph{\BIBforeignlanguage{en}{Journal of the
+  American Statistical Association}}, vol. 100, no. 470, pp. 410--428, Jun.
+  2005. [Online]. Available:
+  \url{http://amstat.tandfonline.com/doi/abs/10.1198/016214504000001501\#.U6tH3Y1dUts}
+\BIBentrySTDinterwordspacing
+
+\bibitem{Fukumizu2004a}
+K.~Fukumizu, F.~R. Bach, and M.~I. Jordan, ``{Dimensionality Reduction for
+  Supervised Learning with Reproducing Kernel Hilbert Spaces},'' \emph{Journal
+  of Machine Learning Research}, vol.~5, pp. 73--99, 2004.
+
 \bibitem{Zou2006a}
 H.~Zou, ``{The Adaptive Lasso and Its Oracle Properties},'' pp. 1418--1429,
   2006.
@@ -91,6 +125,13 @@ P.~J. Rousseeuw and K.~V. Driessen, ``\BIBforeignlanguage{en}{{A Fast Algorithm
   \url{http://amstat.tandfonline.com/doi/abs/10.1080/00401706.1999.10485670\#.VTejtq1Viko}
 \BIBentrySTDinterwordspacing
 
+\bibitem{Ferrari2010a}
+\BIBentryALTinterwordspacing
+D.~Ferrari and Y.~Yang, ``{Maximum L q -likelihood estimation},'' \emph{The
+  Annals of Statistics}, vol.~38, no.~2, pp. 753--783, apr 2010. [Online].
+  Available: \url{http://projecteuclid.org/euclid.aos/1266586613}
+\BIBentrySTDinterwordspacing
+
 \bibitem{Candes2009b}
 \BIBentryALTinterwordspacing
 E.~J. Cand\`{e}s, X.~Li, Y.~Ma, and J.~Wright, ``{Robust Principal Component
@@ -112,6 +153,50 @@ C.~M. Bishop, \emph{{Pattern Recognition and Machine Learning}}, ser.
   Information science and statistics.\hskip 1em plus 0.5em minus 0.4em\relax
   Springer, 2006. [Online]. Available:
   \url{http://www.library.wisc.edu/selectedtocs/bg0137.pdf}
+\BIBentrySTDinterwordspacing
+
+\bibitem{FlashMatrix}
+D.~Zheng, D.~Mhembere, J.~T. Vogelstein, C.~E. Priebe, and R.~Burns,
+  ``Flashmatrix: Parallel, scalable data analysis with generalized matrix
+  operations using commodity ssds,'' \emph{arXiv preprint arXiv:1604.06414},
+  2016.
+
+\bibitem{SEM_SpMM}
+D.~Zheng, D.~Mhembere, V.~Lyzinski, J.~Vogelstein, C.~E. Priebe, and R.~Burns,
+  ``Semi-external memory sparse matrix multiplication on billion-node graphs in
+  a multicore architecture,'' \emph{CoRR}, vol. abs/1602.02864, 2016.
+
+\bibitem{Amdahl1967}
+\BIBentryALTinterwordspacing
+G.~M. Amdahl, ``{Validity of the Single Processor Approach to Achieving Large
+  Scale Computing Capabilities},'' in \emph{AFIPS Spring Joint Computer
+  Conference, 1967. AFIPS '67 (Spring). Proceedings of the}, vol.~30, 1967, pp.
+  483--485. [Online]. Available:
+  \url{http://delivery.acm.org/10.1145/1470000/1465560/p483-amdahl.pdf?ip=202.189.127.238{\&}id=1465560{\&}acc=ACTIVE
+  SERVICE{\&}key=CDD1E79C27AC4E65.DE0A32330AE3471B.4D4702B0C3E38B35.4D4702B0C3E38B35{\&}CFID=646862329{\&}CFTOKEN=33418015{\&}{\_}{\_}acm{\_}{\_}=1426882996{\_}a666a43ab4250317fe0}
+\BIBentrySTDinterwordspacing
+
+\bibitem{abello1998functional}
+J.~Abello, A.~L. Buchsbaum, and J.~R. Westbrook, ``A functional approach to
+  external graph algorithms,'' in \emph{Algorithms—ESA’98}.\hskip 1em plus
+  0.5em minus 0.4em\relax Springer, 1998, pp. 332--343.
+
+\bibitem{Candes2006b}
+\BIBentryALTinterwordspacing
+E.~J. Cand{\`{e}}s and T.~Tao, ``{Near-Optimal Signal Recovery From Random
+  Projections: Universal Encoding Strategies?}'' \emph{IEEE Transactions on
+  Information Theory}, vol.~52, no.~12, pp. 5406--5425, dec 2006. [Online].
+  Available:
+  \url{http://ieeexplore.ieee.org/lpdocs/epic03/wrapper.htm?arnumber=4016283}
+\BIBentrySTDinterwordspacing
+
+\bibitem{Hastie2006}
+\BIBentryALTinterwordspacing
+T.~Hastie, K.~W. Church, P.~Li, and K.~C. Kdd, ``{Very sparse random
+  projections},'' \emph{Proceedings of the 12th ACM SIGKDD international
+  conference on Knowledge discovery and data mining - KDD '06}, p. 287, 2006.
+  [Online]. Available:
+  \url{http://portal.acm.org/citation.cfm?doid=1150402.1150436}
 \BIBentrySTDinterwordspacing
 
 \bibitem{Lopes2011a}

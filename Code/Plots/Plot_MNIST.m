@@ -111,7 +111,7 @@ for j=1:3
     subplot('Position',[left2, bottom(j), width, height]),
     if j==1
         imagesc(abs(vj{3})<1e-4),
-        title([{'(B) Projections'};{'Matrices'}],'FontSize',tfs)
+        title([{'(B) Projection'};{'Matrices'}],'FontSize',tfs)
     elseif j==2
         imagesc(vj{1}),
     elseif j==3
