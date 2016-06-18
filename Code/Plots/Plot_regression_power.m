@@ -109,14 +109,15 @@ end
 
 %% plot legend
 
+orange = [1 0.5 0];
 
 pos=[left+(4-1)*(width+hspace)+0.04 0.2 width+0.05 height]; %[left,bottom,width,height]
 % hl=subplot(F.Nrows,F.Ncols,F.Ncols);
 hl=subplot('position',pos);
 hold all, i=1; clear g
 g(i)=plot(0,0,'color','g','linewidth',2); i=i+1;
-g(i)=plot(0,0,'color','g','linewidth',2,'linestyle','--'); i=i+1;
-g(i)=plot(0,0,'color','m','linewidth',2,'linestyle','--'); i=i+1;
+g(i)=plot(0,0,'color',orange,'linewidth',2,'linestyle','-'); i=i+1;
+g(i)=plot(0,0,'color',orange,'linewidth',2,'linestyle','--'); i=i+1;
 g(i)=plot(0,0,'color','m','linewidth',2); i=i+1;
 g(i)=plot(0,0,'color','c','linewidth',2); i=i+1;
 g(i)=plot(0,0,'color','k','linewidth',2); i=i+1;
@@ -125,8 +126,8 @@ g(i)=plot(0,0,'color','k','linewidth',2); i=i+1;
 l=legend(g,...
     'LOL',... \delta+PCA',...
     'LAL',... \delta+RP',...
-    'LR o RP',...
-    'LR o PCA',...
+    'H o RP',...
+    'H o PCA',...
     'Lasso',...
     'PLS'); %,transformers{3}};
 legend1 = legend(hl,'show'); %
