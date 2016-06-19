@@ -107,14 +107,14 @@ In addition to the above quantitative properties, LOL is intuitive, only has a s
 \includegraphics[width=0.7\linewidth,trim=1cm 0cm 0cm 4.0cm,clip=true]{../Figs/mnist}
 \caption{
 Illustrating three different classifiers---\sct{Lasso}~(top), \sct{Fld$\circ$Pca}~(middle), and \Lol~(bottom)---for embedding images of the digits 3, 7, and 8 (from MNIST), each of which is 28 $\times$ 28 = 784 dimensional.
-\textbf{(A)} Exemplars, boundary colors are only for visualization purposes.
+\textbf{(A)} A subset of training samples  (boundary colors are only for visualization purposes).
 \textbf{(B)} The first four projection matrices learned by the three different approaches on 300 training samples. Note that \sct{Lasso}~is sparse and supervised, \Pca~is dense and unsupervised, and \Lol~is dense and supervised.
 \textbf{(C)} Embedding 500 test samples into the top 2 dimensions using each approach.  Digits color coded as in A.
 \textbf{(D)}  The estimated posterior distribution of test samples after
-5-dimensional projection learned via each method.
+projecting data into 5-dimensions via each method.
 We show only 3 vs.~8 for simplicity.
 The vertical line shows the classification threshold.
-The filled area is the estimated error rate: the goal of any classification algorithm is to minimize that area.
+The filled area is the estimated error rate; the goal of any classification algorithm is to minimize that area.
 Clearly, \Lol~exhibits the best separation after embedding, which results in the best classification performance.
 }
 \label{f:mnist}
@@ -169,15 +169,15 @@ In this sense, \Lol~can be thought of as a very simple  ``supervised \Pca''.
 \Lol~achieves near optimal performance for a wide variety of distributions.
 Each point is sampled from a multivariate Gaussian;
 the three columns correspond to different simulation parameters (see Methods for details).
-In each of 3 simulations, we sample $n=100$ points in $p=1000$ dimensions.  And for each approach, we embed into the top 20 dimensions. Note that we use the sample estimates, rather than the true population values of the parameters.  In this setting, the results are  similar.
-\textbf{(A)} The mean difference vector is aligned with the direction of maximal variance, maxing it ideal for both \Pca~to discover the discriminant direction and a sparse solution.
-\textbf{(B)} The mean difference vector is orthogonal to the direction of maximal variance, making \Pca~fail, but sparse methods can still recover the correct dimensions.
-\textbf{(C)} Same as B, but the data are rotated.
+In each of 3 simulations, we sample $n=100$ points in $p=1000$ dimensions.  And for each approach, we embed into the top 20 dimensions. Note that we use the sample estimates, rather than the true population values of the parameters.  The five columns show (in decreasing order): 
 \textbf{Row 1}: A scatter plot of the first two dimensions of the sampled points, with class 0 and 1 as black and gray dots, respectively.
 \textbf{Row 2} \sct{Fld $\circ$ Pca}.
 \textbf{Row 3} \Road, a sparse method designed specifically for this model \cite{Fan2012a}.
 \textbf{Row 4} \Lol, our newly proposed method.
 \textbf{Row 5} the Bayes optimal classifier, which is what all classifiers strive to achieve.
+\textbf{(A)} The mean difference vector is aligned with the direction of maximal variance, maxing it ideal for both \Pca~to discover the discriminant direction and a sparse solution. In this setting, the results are  similar for all methods, and essentially optimal.
+\textbf{(B)} The mean difference vector is orthogonal to the direction of maximal variance, making \Pca~fail, but sparse methods and \Lol~can still recover the correct dimensions, achieving nearly optimal performance. 
+\textbf{(C)} Same as B, but the data are rotated, in this case, only \Lol~performs well.
 Note that \Lol~is closest to Bayes optimal in all three settings.
 }
 \label{f:cigars}
@@ -260,16 +260,17 @@ In the previous section, we proved that \Lol~is often better than \Pca, and neve
 \centering
 \includegraphics[width=1\linewidth]{../Figs/properties}
 \caption{
-Seven simulations demonstrating that even when the true discriminant boundary is high-dimensional, \Lol~can find a low-dimensional projection that wins the bias-variance trade-off against competing methods.
-For the first four, the top panels depict the means (top), the shared covariance matrix (middle).  For the next three, the top panels depict a 2D scatter plot (left), mean and level set of one standard deviation of covariance matrix (right).  For all seven simulations, the bottom panel shows misclassification rate as a function of the number of embedded dimensions, for several different classifiers.  The simulations settings are as follows:
+Seven simulations demonstrating \Lol~achieves superior finite sample performance over competitors both in settings for which we have asymptotic theoretical guarantees, and those for which we do not. 
+% that even when the true discriminant boundary is high-dimensional, \Lol~can find a low-dimensional projection that wins the bias-variance trade-off against competing methods.
+For the first three, the top panels depict the means (top), the shared covariance matrix (middle).  For the next three, the top panels depict a 2D scatter plot (left), mean and level set of one standard deviation of covariance matrix (right).  For all seven simulations, the bottom panel shows misclassification rate as a function of the number of embedded dimensions, for several different classifiers.  The simulations settings are as follows:
 \textbf{(A)} Rotated Trunk: same as Figure \ref{f:cigars}C.
 \textbf{(B)} Toeplitz: another setting where mean difference is not well correlated with any eigenvector, and no ambient coordinate is particularly useful on its own.
-\textbf{(C)} 3 Classes: \Lol~naturally adapts to multiple classes.
+\textbf{(C)} 3 Class variant of the rotated Trunk example to demonstrate that \Lol~naturally adapts, and excels in, multi-class problems.
 \textbf{(D)} Fat Tails: a common phenomenon in real data that is more general than our theory supports.
-\textbf{(E)} QDA: QOQ, a variant of \Lol~when each class has a unique covariance, outperforms \Lol, as expected.
+\textbf{(E)} QDA: \Qoq, a variant of \Lol~when each class has a unique covariance, outperforms \Lol, as expected, when the true discriminant boundary is a quadratic, rather than linear, function.
 \textbf{(F)} Outliers: adding high-dimensional outliers degrades performance of standard eigensolvers, but those can easily be replaced in \Lol~for a robust variants (called \Lrl).
-\textbf{(G)} XOR: a high-dimensional stochastic generalization of XOR, demonstrating the \Lol~and QOQ work even in scenarios that are quite distinct from the original motivating problems.
-In all 7 cases, \Lol, or the appropriate generalization thereof, outperforms unsupervised, sparse, or other methods.  Moreover, the optimal embedding dimension is never the true discriminant dimension, but rather, a smaller number jointly determined by parameter settings and sample size.
+\textbf{(G)} XOR: a high-dimensional stochastic generalization of XOR, demonstrating that \Qoq~works even in scenarios that are quite distinct from the original motivating problems.
+In all 7 cases, \Lol, or the appropriate generalization thereof, outperforms unsupervised or sparse methods.  Moreover, the optimal embedding dimension is never the true discriminant dimension, but rather, a smaller number jointly determined by parameter settings and sample size.
 }
 \label{f:properties}
 \end{figure}
@@ -315,7 +316,7 @@ Figure \ref{f:speed}B shows the error for \Lol~and \PoF~in this scenario, simply
 % \includegraphics[width=1\linewidth]{../Figs/speed_test}
 \includegraphics[width=1\linewidth]{../Figs/scalability}
 \caption{
-Computational efficiency of various low-dimensional projection methods. In all cases, $n=2000$, and we used spherically symmetric  simulation parameters (see Methods for details).   We compare \Pca~with the projection steps with \Lol~(light green solid line for in memory implementation, and dark green dashed line for semi-external memory implementation) and \Lfl~(solid cyan line) for different observed dimensions ($p$). \textbf{(A)} \Lol~exhibits optimal (linear) scale up and scale out, as far as we tried, requiring 23 minutes to find the embedding on a 250 GB dataset.  \textbf{(B)} Error for \Lfl~is the same as \Lol~in this setting, and both are significantly better than \PoF~for all choices of embedding dimension.  
+Computational efficiency of various low-dimensional projection methods. In all cases, $n=2000$, and we used spherically symmetric  simulation parameters (see Methods for details).   We compare \Pca~with the projection step of \Lol~(light green for in memory, dark green for semi-external memory ) and \Lfl~(light orange for in-memory, dark orange for semi-external memory) for different observed dimensions ($p$). \textbf{(A)} \Lol~exhibits optimal (linear) scale up and scale out, requiring only 23 minutes to find the embedding on a 250 GB dataset, and only 3 minutes using \Lal.  \textbf{(B)} Error for \Lal~is the same as \Lol~in this setting, and both are significantly better than \PoF~for all choices of embedding dimension.  
 % from \Lol, \Qoq, \Lrl, \Lfl, and \Lal, for different values of $(p,d)$.  The addition of the mean difference vector is essentially negligible.  Moreover, for small $d$, the \Lfl~is advantageous.  \Lal~is always fastest, and its performance is often comparable to other methods (not shown).
 }
 \label{f:speed}
@@ -351,12 +352,12 @@ Top panels show error rate as a function of log$_2$ number of embedded dimension
 Bottom panels show the minimum error rate achieved by each of the five algorithms versus time.
 The lower left dark gray (upper right light gray) rectangle is the area in which any algorithm is \emph{better}  (worse) than \Lol~in terms of both accuracy and efficiency.
 \textbf{(A)} Prostate: a standard sparse dataset.  1-dimensional \Lol~does very well, although keeping $2^5$ ambient coordinates slightly improves performance, at a significant cost of compute time (two orders of magnitude), with minimal additional interpretability.
-\textbf{(B)} Colon: another standard sparse dataset.  Here, 2-4 dimensions of \Lol~outperforms all other approaches considered.
-\textbf{(C)} MNIST: 10 image categories here, so \Road~is not possible.  \Lol~does very well regardless of the number of dimensions kept.  SVN marginally improves on \Lol~accuracy, at a significant cost in computation (two orders of magnitude).
+\textbf{(B)} Colon: another standard sparse dataset.  Here, 2-4 dimensions of \Lol~outperforms all other approaches considered regardless of how many dimensions they keep.
+\textbf{(C)} MNIST: 10 image categories, so \Road~is not possible.  \Lol~does very well regardless of the number of dimensions kept.  SVN marginally improves on \Lol~accuracy, at a significant cost in computation (two orders of magnitude).
 \textbf{(D)} CIFAR-10: a higher dimensional and newer 10 category image classification problem.  Results are qualitatively similar to C.
 %
-Note that, for none of the problems is there an algorithm ever performing better and faster than \Lol; rather, most algorithms typically perform worse and slower (though some are more accurate and much more computationally expensive.
-This suggests that regardless of how one subjectively weights computational efficiency versus accuracy, \Lol~is the best default algorithm in a variety of real data settings.
+Note that, for all four of the problems, there is no algorithmperforming better and faster than \Lol; rather, most algorithms typically perform worse and slower (though some are more accurate and much more computationally expensive).
+% This suggests that regardless of how one subjectively weights computational efficiency versus accuracy, \Lol~is the best default algorithm in a variety of real data settings.
 }
 \label{f:realdata}
 \end{figure}
@@ -389,7 +390,7 @@ High-dimensional  regression is another supervised learning method that can util
 \caption{
 The intuition of including the mean difference vector is equally useful for other supervised manifold learning problems, including testing and regression.
 \textbf{(A)} and \textbf{(B)} show two different high-dimensional testing settings, as described in Methods.  Power is plotted against the decay rate of the spectrum, which approximates the effective number of dimensions.  \Lol~composed with Hotelling's test outperforms the random projections variants described in \cite{Lopes2011a}, as well as several other variants.
-\textbf{(C)} shows a sparse high-dimensional regression settings, as described in Methods, designed for sparse methods to perform well.  Log$_{10}$ mean squared error is plotted against the number of embedded dimensions.
+\textbf{(C)} A sparse high-dimensional regression setting, as described in Methods, designed for sparse methods to perform well.  Log$_{10}$ mean squared error is plotted against the number of embedded dimensions.
 \Lol~composed with linear regression outperforms \sct{Lasso}~(cyan), the classic sparse regression method, as well as partial least squares (PLS; black).
 % In the legend, 'A' denote either 'linear regression' (in C), or 'Hotelling' (in A and B).
 These three simulation settings therefore demonstrate the generality of this technique.
@@ -403,7 +404,7 @@ These three simulation settings therefore demonstrate the generality of this tec
 \section*{Discussion}
 % get 64 lines, only using 20.
 
-We have introduced a very simple, yet new, methodology to improve performance on supervised learning problems with big and wide data.  In particular, we have proposed a supervised manifold learning procedure that utilizes both the difference of the means, and the covariance matrices, and proved that it performs better than first apply \Pca~to the data.  This is in stark contrast to most previous approaches, which only utilize the covariance matrices (or kernel variants thereof), or solve a difficult optimization theoretic problem.  In addition to demonstrating the statistical accuracy and computational efficiency of \Lol~on simulated and real classification problems, we also demonstrate how the same idea can also be used for other kinds of supervised learning problems, including regression and hypothesis testing. Theoretical guarantees suggest that this line of research is promising and can be extended to other more general settings and tasks.
+We have introduced a very simple, yet new, methodology to improve performance on supervised learning problems with big and wide data.  In particular, we have proposed a supervised manifold learning procedure that utilizes both the difference of the means, and the covariance matrices, and proved that it performs better than first applying \Pca~to the data under reasonable assumptions.  This is in stark contrast to most previous approaches, which only utilize the covariance matrices (or kernel variants thereof), or try to solve a difficult optimization theoretic problem.  In addition to demonstrating the statistical accuracy and computational efficiency of \Lol~on simulated and real classification problems, we also demonstrate how the same idea can also be used for other kinds of supervised learning problems, including regression and hypothesis testing. Theoretical guarantees suggest that this line of research is promising and can be extended to other more general settings and tasks.
 
 
 % \subsection*{Qualitative Design Considerations}
@@ -423,7 +424,9 @@ We also prove that Fisherfaces can be implemented very efficiently (see Methods)
 
 \para{Next Steps}
 % 
-The \Lol~idea, appending the mean difference vector to convert unsupervised manifold learning to supervised manifold learning, has many potential applications.  We have presented the first few.  Incorporating additional nonlinearities via kernel methods \cite{Mika1999a}, ensemble methods such as random forests \cite{Breiman2001a}, multiscale methods \cite{Allard2012},  and more scalable implementations \cite{Chang2011a}, are all of immediate interest. All code for the experiments performed in this manuscript is available from \url{http://docs.neurodata.io/LOL/}.
+The \Lol~idea, appending the mean difference vector to convert unsupervised manifold learning to supervised manifold learning, has many potential applications.  We have presented the first few.  Incorporating additional nonlinearities via kernel methods \cite{Mika1999a}, ensemble methods such as random forests \cite{Breiman2001a}, and multiscale methods \cite{Allard2012}
+% ,  and more scalable implementations \cite{Chang2011a}, 
+are all of immediate interest. MATLAB, R, and FlashR code for the experiments performed in this manuscript is available from \url{http://docs.neurodata.io/LOL/}.
 
 
 \clearpage
