@@ -295,7 +295,7 @@ The above simulations were all under the \Lda~model, for which we have theoretic
 
 \subsection*{Computational Efficiency}
 
-In many applications, the main quantifiable consideration in whether to use a particular method, other than accuracy, is computational efficiency.  Because implementing \Lol~requires only highly optimized linear algebraic routines---including computing moments and singular value decomposition---rather than the costly iterative programming techniques currently required for sparse or dictionary learning type problems.  Moreover, because \Lol~only requires computing means and covariances, we can leverage recent advances in parallel matrix operations \cite{FlashMatrix}. We implement LOL with the R interface of FlashX.
+In many applications, the main quantifiable consideration in whether to use a particular method, other than accuracy, is computational efficiency.  Because implementing \Lol~requires only highly optimized linear algebraic routines---including computing moments and singular value decomposition---rather than the costly iterative programming techniques currently required for sparse or dictionary learning type problems.  Moreover, because \Lol~only requires computing means and covariances, we can leverage recent advances in parallel matrix operations \cite{FlashMatrix} on fast solid-state drives (SSDs) \cite{SAFS}. We implement LOL with the R interface of FlashX \cite{FlashGraph, FlashMatrix, FlashEigen}.
 %More specifically, we modified FlashX to be able to perform all the computational primitives required for \Lol~on matrices that are short and fat, rather than tall and skinny.
 Given the FlashX programming framework, we can run \Lol~on essentially arbitrarily large data.  For these examples, we simulated data satisfying the \Lda~model; specifically, we used a spherically symmetric covariance matrix, with means just $\pm$ the one vector (see Methods for simulation details).
 
@@ -1152,7 +1152,7 @@ So, we want to understand the probability that $\alpha_{\Pca}$ is small under di
 \section{The R implementation of LOL}
 
 Figure \ref{Rimpl} shows the R implementation of LOL for binary classification
-using FlashMatrix \cite{flashmatrix}. The implementation takes a $D \times I$
+using FlashMatrix \cite{FlashMatrix}. The implementation takes a $D \times I$
 matrix, where each column is a training instance and each instance has D
 features, and outputs a $D \times k$ projection matrix.
 
