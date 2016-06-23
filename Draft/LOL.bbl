@@ -161,6 +161,23 @@ D.~Zheng, D.~Mhembere, J.~T. Vogelstein, C.~E. Priebe, and R.~Burns,
   operations using commodity ssds,'' \emph{arXiv preprint arXiv:1604.06414},
   2016.
 
+\bibitem{SAFS}
+D.~Zheng, R.~Burns, and A.~S. Szalay, ``Toward millions of file system iops on
+  low-cost, commodity hardware,'' in \emph{Proceedings of the International
+  Conference on High Performance Computing, Networking, Storage and Analysis},
+  2013.
+
+\bibitem{FlashGraph}
+D.~Zheng, D.~Mhembere, R.~Burns, J.~Vogelstein, C.~E. Priebe, and A.~S. Szalay,
+  ``{FlashGraph}: Processing billion-node graphs on an array of commodity
+  {SSDs},'' in \emph{13th USENIX Conference on File and Storage Technologies
+  (FAST 15)}, Santa Clara, CA, 2015.
+
+\bibitem{FlashEigen}
+D.~Zheng, R.~Burns, J.~Vogelstein, C.~E. Priebe, and A.~S. Szalay, ``An
+  ssd-based eigensolver for spectral analysis on billion-node graphs,''
+  \emph{CoRR}, vol. abs/1602.01421, 2016.
+
 \bibitem{SEM_SpMM}
 D.~Zheng, D.~Mhembere, V.~Lyzinski, J.~Vogelstein, C.~E. Priebe, and R.~Burns,
   ``Semi-external memory sparse matrix multiplication on billion-node graphs in

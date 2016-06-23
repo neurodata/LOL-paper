@@ -150,7 +150,7 @@ The above real data example suggests the geometric intuition for when \Lol~outpe
 
 
 % To motivate \Lol, and the following simulations, lets c
-Consider what the optimal projection would be in this scenario. The optimal low-dimensional projection is analytically available as the dot product of the difference of means and the inverse covariance matrix, $\mb{A}_*=\mb{\delta}\T \bSig^{-1}$ \cite{Bickel2004a} (see Methods for derivation).
+Consider what the optimal projection would be in this scenario. The optimal low-dimensional projection is analytically available as the dot product of the difference of means and the inverse covariance matrix, $\mb{A}_*=\bdel\T \bSig^{-1}$ \cite{Bickel2004a} (see Methods for derivation).
 \Pca, the dominant unsupervised manifold learning method, utilizes only the covariance structure of the data, and ignores the difference between the means (because \Pca~for classification operates on the class-conditionally centered data, see Methods for details).
 In particular, \Pca~would project the data on the top d eigenvectors of the  covariance matrix.
 \textbf{The key insight of our work is the following: we can combine the difference of the means and the covariance matrix in a simple fashion, rather than just the covariance matrix, to find a low dimensional projection.}
@@ -428,6 +428,166 @@ The \Lol~idea, appending the mean difference vector to convert unsupervised mani
 % ,  and more scalable implementations \cite{Chang2011a}, 
 are all of immediate interest. MATLAB, R, and FlashR code for the experiments performed in this manuscript is available from \url{http://docs.neurodata.io/LOL/}.
 
+\clearpage
+\appendix
+
+\section{Simulations}
+
+% \subsection{Simulations}
+
+For most simulation settings, each class is Guassian:
+$f_{x|y} = \mc{N}(\bmu_y,\mb{\Sigma_y})$,
+$f_y = \mc{B}(\pi)$.  
+We typically assume that both classes are equally like, $\pi=0.5$, and the covariance matrices are the same, $\bSig_0=\bSig_1=\bSig$. Under such assumptions, we merely specify $\bth=\{\bmu_0,\bmu_1, \bSig\}$.
+
+
+\paragraph*{Stacked Cigars} 
+\begin{compactitem}
+\item $\bmu_0=\mb{0}$, 
+\item $\bmu_1=(a, b, a, \ldots, a)$, 
+\item $\bSig$ is a diagonal matrix, with diagonal vector, $\bd=(1,b,1\ldots,1)$,
+\end{compactitem}
+where $a=0.15$ and $b=4$.
+
+
+\paragraph*{Trunk} 
+\begin{compactitem}
+\item $\bmu_0=b/\sqrt{(1, 3, 5, \ldots, 2p)}$, 
+\item $\bmu_1=-\bmu_0$, 
+\item $\bSig$ is a diagonal matrix, with diagonal vector, $\bd=100/\sqrt{(p, p-1, p-2, \ldots, 1)}$,
+\end{compactitem}
+where $b=4$.
+
+% if ~isfield(task,'b'), b=4; else b=task.b; end
+% mu1=b./sqrt(1:2:2*D)';
+% mu0=-mu1;
+
+% Sigma=eye(D);
+% Sigma(1:D+1:end)=100./sqrt(D:-1:1);
+
+\paragraph*{Rotated Trunk} Same as Trunk, but the data are randomly rotated, that is, we sample $\mb{Q}$ uniformly from the set of p-dimensional rotation matrices, and then set:
+\begin{compactitem}
+\item $\bmu_0 \leftarrow \mb{Q} \bmu_0$, 
+\item $\bmu_1 \leftarrow \mb{Q} \bmu_1$, 
+\item $\bSig \leftarrow \mb{Q} \bSig \mb{Q}\T$.
+\end{compactitem}
+
+
+\paragraph*{Toeplitz} 
+\begin{compactitem}
+\item $\bmu_0=b \times (1,-1,1,-1,\ldots,1)$, 
+\item $\bmu_1= - \bmu_0$, 
+\item $\bSig$ is a Toeplitz matrix, where the top row is $\rho^{(0,1,2,\ldots,p-1)}$,
+\end{compactitem}
+where $b$ is a function of the Toeplitz matrix such that the noise stays constant as dimensionality increases, and $\rho=0.5$.
+
+% D1=10;
+% rho=0.5;
+% c=rho.^(0:D1-1);
+% A = toeplitz(c);
+% K1=sum(A(:));
+
+% c=rho.^(0:D-1);
+% A = toeplitz(c);
+% K=sum(A(:));
+
+% mudelt=(K1*b^2/K)^0.5/2;
+% mu0 = ones(D,1);
+% mu0(2:2:end)=-1;
+% mu0=mudelt*mu0;
+% mu1=-mu0;
+
+% Sigma=A;
+
+
+\paragraph*{3 Classes} Same as Trunk, but with a third mean equal to the zero vector, $\mu_2=\mb{0}$.
+
+
+\paragraph*{Fat Tails} For this setting, each class is actually a mixture of two Gaussians with the same mean (the two classes have the same covariances): 
+\begin{compactitem}
+\item $\bmu_0=\mb{0}$, 
+\item $\bmu_1=(0,\ldots,0,1,\ldots,1)$, where the first $s=10$ elements are zero, 
+\item $\bSig_0$ is a matrix with one's on the diagonal, and $0.2$ on the off diagonal,
+\item $\bSig_1 = 15 \times \bSig_0$,
+\end{compactitem}
+and then we randomly rotated as in the rotated Trunk example.
+
+
+
+
+\paragraph*{QDA} A generalization of the Toeplitz setting, where the two classes have two different covariance matrices, meaning that the optimal discriminant boundary is quadratic.
+\begin{compactitem}
+\item $\bmu_0=b \times (1,-1,1,-1,\ldots,1)$, 
+\item $\bmu_1=-\mb{Q} \times (\bmu_0+0.1)$, 
+\item $\bSig_0$ is the same Toeplitz matrix as described above, and 
+\item $\bSig_1 = \mb{Q} \bSig_0 \mb{Q}\T$.
+\end{compactitem}
+
+
+
+% if ~isfield(task,'b'), b=0.4; else b=task.b; end
+% D1=10;
+
+% rho=0.5;
+% c=rho.^(0:D1-1);
+% A = toeplitz(c);
+% K1=sum(A(:));
+
+% c=rho.^(0:D-1);
+% A = toeplitz(c);
+% K=sum(A(:));
+% Sigma=A;
+
+% mudelt=(K1*b^2/K)^0.5/2;
+% mu0 = ones(D,1);
+% mu0(2:2:end)=-1;
+% mu0=mudelt*mu0;
+
+
+% [Q, ~] = qr(randn(D));
+% if det(Q)<-.99
+%     Q(:,1)=-Q(:,1);
+% end
+
+% th=pi/4;
+% Q(1:2,1:2)=[cos(th) -sin(th); sin(th) cos(th)];
+% Q(1,3:end)=0;
+% Q(2,3:end)=0;
+% Q(3:end,1)=0;
+% Q(3:end,2)=0;
+
+% Sigma(:,:,2)=Q*Sigma*Q';
+% mu1=-Q*(mu0+0.1);
+
+
+
+\paragraph*{Outliers} In this dataset, we generate $n/2$ samples from an inlier model, and the remaining $n/2$ samples from an outlier model.  For the inlier model, we first generate a random $d \times p$ dimensional orthonormal matrix, $V$, where $d=p/10$.  Then, the first half of the inlier points are generated by $f_{x|0}$, the next half by $f_{x|1}$, and the remaining points generated by $f_{x | \emptyset}$. For the outliers, we sampled their class randomly from a fair Bernoulli distribution:   
+\begin{compactitem}
+\item $f_{x|0} = \mc{N}_d(0,\sigma^2) \times V\T$,
+\item $f_{x|1} = \mc{N}_d(0,\sigma^2) \times V\T + b$,
+\item $f_{x|\emptyset} = \mc{N}_p(\mb{0},\sigma^2\mb{I})$,
+\item $f_{\emptyset} = \mc{B}(0.5)$.
+\end{compactitem}
+where we set $\sigma=0.1$ and $b=0.5$.  
+
+% Ninlier=task.n/2; 
+% n0=Ninlier/2;
+% n1=n0;
+% Noutlier=task.n-Ninlier;
+% task.D=200;
+% d=round(task.D/10);
+% noise=0.1;
+% offset=0.5;
+% V=orth(rand(task.D,d));
+% X0=randn(n0,d)*V';
+% X1=randn(n1,d)*V'+offset;
+% X=[X0;X1; randn(Noutlier,task.D)];
+% X=X+randn(size(X))*noise;
+
+% Y=[zeros(n0,1); ones(n1,1); rand(Noutlier,1)>0.5]+1;
+
+
+
 
 \clearpage
 
@@ -441,12 +601,11 @@ are all of immediate interest. MATLAB, R, and FlashR code for the experiments pe
 
 
 
-
-
-
-
 \clearpage
-\appendix
+
+
+
+
 
 \section[theory]{Theoretical Background}
 
@@ -741,74 +900,74 @@ If $\angle(\bP_A, \bP_*) <1$, then there exists an $\bx$ such that $\II\{ \bx\T 
 $$\angle(\bP_A,\bP_*) \leq \angle(\bP_B,\bP_*) \implies L_A \leq L_B.$$
 \end{lem}
 \begin{proof}
-We recall from the definitions that $\bP_{\bA} = \bA\T (\bA \mb{\Sigma} \bA\T)^{-1} \bA \mb{\delta}$ and $\bP_{\mathbf{B}} = \mathbf{B}\T (\mathbf{B} \mb{\Sigma} \mathbf{B}\T)^{-1} \mathbf{B} \mb{\delta}$. In addition, $\bP_{*} = \mb{\Sigma}^{-1} \mb{\delta}$. For ease of notation, let $\mb{a} = \bP_{\bA}$ and $\mb{b} = \bP_{\mathbf{B}}$. 
+We recall from the definitions that $\bP_{\bA} = \bA\T (\bA \bSig \bA\T)^{-1} \bA \bdel$ and $\bP_{\bB} = \bB\T (\bB \bSig \bB\T)^{-1} \bB \bdel$. In addition, $\bP_{*} = \bSig^{-1} \bdel$. For ease of notation, let $\ba = \bP_{\bA}$ and $\mb{b} = \bP_{\bB}$. 
 Therefore,
 $$ 
-\frac{\bP_{\bA}\T \bP_{*}}{\|\bP_{\bA}\|_{F} \|\bP_{*}\|_{F}} = \frac{\mb{a}\T \mb{\Sigma}^{-1} \mb{\delta}}{\|\mb{a}\| \|\bP_{*}\|_{F}} \geq  \frac{\mb{b}\T \mb{\Sigma}^{-1} \mb{\delta}}{\|\mb{b}\| \|\bP_{*}\|_{F}} = \frac{\bP_{\mathbf{B}}\T \bP_{*}}{\|\bP_{\mathbf{B}}\|_{F} \|\bP_{*}\|_{F}}
+\frac{\bP_{\bA}\T \bP_{*}}{\|\bP_{\bA}\|_{F} \|\bP_{*}\|_{F}} = \frac{\ba\T \bSig^{-1} \bdel}{\|\ba\| \|\bP_{*}\|_{F}} \geq  \frac{\mb{b}\T \bSig^{-1} \bdel}{\|\mb{b}\| \|\bP_{*}\|_{F}} = \frac{\bP_{\bB}\T \bP_{*}}{\|\bP_{\bB}\|_{F} \|\bP_{*}\|_{F}}
 $$
-Without loss of generality, assume that $\mb{a}\T \mb{a} = 1$ and  $\mb{b}\T \mb{b} = 1$. Then the above condition reduced to
-$$ \mb{a}\T \mb{\Sigma}^{-1} \mb{\delta} \geq \mb{b}\T \mb{\Sigma}^{-1} \mb{\delta}.$$
+Without loss of generality, assume that $\ba\T \ba = 1$ and  $\mb{b}\T \mb{b} = 1$. Then the above condition reduced to
+$$ \ba\T \bSig^{-1} \bdel \geq \mb{b}\T \bSig^{-1} \bdel.$$
 
-We now analyze $L_{A}$. Let $C = \tfrac{1}{2}(2 \pi \mathrm{\det}(\mb{\Sigma}))^{-1/2}$. We have
+We now analyze $L_{A}$. Let $C = \tfrac{1}{2}(2 \pi \mathrm{\det}(\bSig))^{-1/2}$. We have
 \begin{equation*}
 \begin{split}
-L_{A} &= \mathbb{E}[\mathbb{I}\{\mb{x}\T \mb{a} > 0\} \not = y] \\ &=
-\int_{\mb{x}\T \mb{a} \leq 0} C \exp\Bigl(-\tfrac{1}{2}(\mb{x} - \mb{\mu})\T \mb{\Sigma}^{-1} (\mb{x} - \mb{\mu})\Bigr) \mathrm{d} \mb{x} + \int_{\mb{x}\T \mb{a} > 0} C \exp\Bigl(-\tfrac{1}{2}(\mb{x} + \mb{\mu})\T \mb{\Sigma}^{-1} (\mb{x} + \mb{\mu})\Bigr) \mathrm{d} \mb{x}
+L_{A} &= \mathbb{E}[\mathbb{I}\{\mb{x}\T \ba > 0\} \not = y] \\ &=
+\int_{\mb{x}\T \ba \leq 0} C \exp\Bigl(-\tfrac{1}{2}(\mb{x} - \bmu)\T \bSig^{-1} (\mb{x} - \bmu)\Bigr) \mathrm{d} \mb{x} + \int_{\mb{x}\T \ba > 0} C \exp\Bigl(-\tfrac{1}{2}(\mb{x} + \bmu)\T \bSig^{-1} (\mb{x} + \bmu)\Bigr) \mathrm{d} \mb{x}
 \\ &= 0.5 - 
-\int_{\mb{x}\T \mb{a} > 0} C \exp\Bigl(-\tfrac{1}{2}(\mb{x} - \mb{\mu})\T \mb{\Sigma}^{-1} (\mb{x} - \mb{\mu})\Bigr) \mathrm{d} \mb{x}
-+ \int_{\mb{x}\T \mb{a} > 0} C \exp\Bigl(-\tfrac{1}{2}(\mb{x} + \mb{\mu})\T \mb{\Sigma}^{-1} (\mb{x} + \mb{\mu})\Bigr) \mathrm{d} \mb{x}
-\\ &= 0.5 - C \int_{\mb{x}\T \mb{a} > 0} \Bigl(\exp(-\tfrac{1}{2}(\mb{x} - \mb{\mu})\T \mb{\Sigma}^{-1} (\mb{x} - \mb{\mu})) - \exp(-\tfrac{1}{2}(\mb{x} + \mb{\mu})\T \mb{\Sigma}^{-1} (\mb{x} + \mb{\mu})) \Bigr) \mathrm{d} \mb{x}
-\\ &= 0.5 - C \int_{\mb{x}\T \mb{a} > 0} h(\mb{x}) \mathrm{d} \mb{x}
+\int_{\mb{x}\T \ba > 0} C \exp\Bigl(-\tfrac{1}{2}(\mb{x} - \bmu)\T \bSig^{-1} (\mb{x} - \bmu)\Bigr) \mathrm{d} \mb{x}
++ \int_{\mb{x}\T \ba > 0} C \exp\Bigl(-\tfrac{1}{2}(\mb{x} + \bmu)\T \bSig^{-1} (\mb{x} + \bmu)\Bigr) \mathrm{d} \mb{x}
+\\ &= 0.5 - C \int_{\mb{x}\T \ba > 0} \Bigl(\exp(-\tfrac{1}{2}(\mb{x} - \bmu)\T \bSig^{-1} (\mb{x} - \bmu)) - \exp(-\tfrac{1}{2}(\mb{x} + \bmu)\T \bSig^{-1} (\mb{x} + \bmu)) \Bigr) \mathrm{d} \mb{x}
+\\ &= 0.5 - C \int_{\mb{x}\T \ba > 0} h(\mb{x}) \mathrm{d} \mb{x}
 \end{split}
 \end{equation*}
-where $h(\mb{x}) = \exp(-\tfrac{1}{2}(\mb{x} - \mb{\mu})\T \mb{\Sigma}^{-1} (\mb{x} - \mb{\mu})) - \exp(-\tfrac{1}{2}(\mb{x} + \mb{\mu})\T \mb{\Sigma}^{-1} (\mb{x} + \mb{\mu}))$.
+where $h(\mb{x}) = \exp(-\tfrac{1}{2}(\mb{x} - \bmu)\T \bSig^{-1} (\mb{x} - \bmu)) - \exp(-\tfrac{1}{2}(\mb{x} + \bmu)\T \bSig^{-1} (\mb{x} + \bmu))$.
 In particular, $L_*$ is given by
-$$L_* = 0.5 - C \int_{\mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} > 0} h(\mb{x}) \mathrm{d} \mb{x}, $$
-where $h(\mb{x}) = \exp(-\tfrac{1}{2}(\mb{x} - \mb{\mu})\T \mb{\Sigma}^{-1} (\mb{x} - \mb{\mu})) - \exp(-\tfrac{1}{2}(\mb{x} + \mb{\mu})\T \mb{\Sigma}^{-1} (\mb{x} + \mb{\mu})$. 
-And since  $h(\mb{x}) \geq 0$ if and only if $\mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} \geq 0$, $L_*$ is indeed the Bayes risk. 
+$$L_* = 0.5 - C \int_{\mb{x}\T \bSig^{-1} \bdel > 0} h(\mb{x}) \mathrm{d} \mb{x}, $$
+where $h(\mb{x}) = \exp(-\tfrac{1}{2}(\mb{x} - \bmu)\T \bSig^{-1} (\mb{x} - \bmu)) - \exp(-\tfrac{1}{2}(\mb{x} + \bmu)\T \bSig^{-1} (\mb{x} + \bmu)$. 
+And since  $h(\mb{x}) \geq 0$ if and only if $\mb{x}\T \bSig^{-1} \bdel \geq 0$, $L_*$ is indeed the Bayes risk. 
 
 Thus, $L_A \leq L_B$ is equivalent to 
 \begin{equation*}
-\int_{\mb{x}\T \mb{a} > 0} h(x) \mathrm{d} \mb{x} \geq \int_{\mb{x}\T \mb{b} > 0} h(x) \mathrm{d} \mb{x}.
+\int_{\mb{x}\T \ba > 0} h(x) \mathrm{d} \mb{x} \geq \int_{\mb{x}\T \mb{b} > 0} h(x) \mathrm{d} \mb{x}.
 \end{equation*}
 
-We now analyze the set $\{\mb{x} \colon \mb{x}\T \mb{a} > 0\}$. We write 
-$\mb{x}\T \mb{a} = \mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} + \mb{x}\T (\mb{a} - \mb{\Sigma}^{-1} \mb{\delta})$. 
-Without loss of generality, we can further assume that $\|(\mb{\Sigma}^{-1} \mb{\delta})\T \| = 1$. Then, because $\mb{a}\T \mb{a} = 1$, we have that
-$\|\mb{a} - \mb{\Sigma}^{-1} \mb{\delta} \|^{2} = 2 - 2 \mb{a}\T \mb{\Sigma}^{-1} \mb{\delta}$. 
-Let $c_a = 2 - 2 \mb{a}\T \mb{\Sigma}^{-1} \mb{\delta}$; we shall assume for the moment that $c_a$ is ``small''. Then for any $\eta > 0$, we have
+We now analyze the set $\{\mb{x} \colon \mb{x}\T \ba > 0\}$. We write 
+$\mb{x}\T \ba = \mb{x}\T \bSig^{-1} \bdel + \mb{x}\T (\ba - \bSig^{-1} \bdel)$. 
+Without loss of generality, we can further assume that $\|(\bSig^{-1} \bdel)\T \| = 1$. Then, because $\ba\T \ba = 1$, we have that
+$\|\ba - \bSig^{-1} \bdel \|^{2} = 2 - 2 \ba\T \bSig^{-1} \bdel$. 
+Let $c_a = 2 - 2 \ba\T \bSig^{-1} \bdel$; we shall assume for the moment that $c_a$ is ``small''. Then for any $\eta > 0$, we have
 \begin{equation*}
-\{\mb{x} \colon \mb{x}\T \mb{a} > 0 \} = \{ \mb{x} \colon \mb{x}\T \mb{a} > 0 \} \cap \Bigl(\{\mb{x} \colon \mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} > \eta \} \cup \{\mb{x} \colon \mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} \in [-\eta, \eta] \} \cup \{ \mb{x} \colon \mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} < -\eta \}\Bigr)
+\{\mb{x} \colon \mb{x}\T \ba > 0 \} = \{ \mb{x} \colon \mb{x}\T \ba > 0 \} \cap \Bigl(\{\mb{x} \colon \mb{x}\T \bSig^{-1} \bdel > \eta \} \cup \{\mb{x} \colon \mb{x}\T \bSig^{-1} \bdel \in [-\eta, \eta] \} \cup \{ \mb{x} \colon \mb{x}\T \bSig^{-1} \bdel < -\eta \}\Bigr)
 \end{equation*}
 Now provided that $c_a$ is ``small'' we can choose $\eta = Kc_a$ for some constant $K$ such that 
 \begin{gather}
-\int_{\mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} \in [-\eta, \eta]} h(\mb{x}) \mathrm{d} \mb{x} \approx 0
+\int_{\mb{x}\T \bSig^{-1} \bdel \in [-\eta, \eta]} h(\mb{x}) \mathrm{d} \mb{x} \approx 0
 \label{part:a}
 \\
-\int_{\substack{\mb{x} \colon \mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} < -\eta \\ \mb{x}\T \mb{a} > 0 }} h(\mb{x}) \mathrm{d}\mb{x} \approx 0 
+\int_{\substack{\mb{x} \colon \mb{x}\T \bSig^{-1} \bdel < -\eta \\ \mb{x}\T \ba > 0 }} h(\mb{x}) \mathrm{d}\mb{x} \approx 0 
 \label{part:b}
 \\
- \int_{\substack{\mb{x} \colon \mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} > \eta \\ \mb{x}\T \mb{a} > 0 }} h(\mb{x}) \mathrm{d}\mb{x} \approx 
-\int_{\mb{x} \colon \mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} > \eta } h(\mb{x}) \mathrm{d} \mb{x}
+ \int_{\substack{\mb{x} \colon \mb{x}\T \bSig^{-1} \bdel > \eta \\ \mb{x}\T \ba > 0 }} h(\mb{x}) \mathrm{d}\mb{x} \approx 
+\int_{\mb{x} \colon \mb{x}\T \bSig^{-1} \bdel > \eta } h(\mb{x}) \mathrm{d} \mb{x}
 \label{part:c}
 \end{gather}
 
 Therefore,
 \begin{equation*}
-\int_{\mb{x}\T \mb{a} > 0} h(\mb{x}) \mathrm{d} \mb{x} \approx \int_{\mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} > K c_a} h(\mb{x}) \mathrm{d} \mb{x}
+\int_{\mb{x}\T \ba > 0} h(\mb{x}) \mathrm{d} \mb{x} \approx \int_{\mb{x}\T \bSig^{-1} \bdel > K c_a} h(\mb{x}) \mathrm{d} \mb{x}
 \end{equation*}
 
-We note that in general, the integrals in Eq.~\eqref{part:a} and Eq.~\eqref{part:b} are non-positive. Therefore, letting $\eta' = K c_b$ where $c_b = 2 - 2 \mb{a}\T \mb{\Sigma}^{-1} \mb{\delta}$, we have
+We note that in general, the integrals in Eq.~\eqref{part:a} and Eq.~\eqref{part:b} are non-positive. Therefore, letting $\eta' = K c_b$ where $c_b = 2 - 2 \ba\T \bSig^{-1} \bdel$, we have
 \begin{equation*}
-\int_{\mb{x}\T \mb{b} > 0} h(\mb{x}) \mathrm{d} \mb{x} \leq \int_{\substack{\mb{x} \colon \mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} > K c_b \\ \mb{x}\T \mb{b} > 0 }} h(\mb{x}) \mathrm{d} \mb{x} \leq
-\int_{\mb{x} \colon \mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} > K c_b } h(\mb{x}) \mathrm{d} \mb{x}.
+\int_{\mb{x}\T \mb{b} > 0} h(\mb{x}) \mathrm{d} \mb{x} \leq \int_{\substack{\mb{x} \colon \mb{x}\T \bSig^{-1} \bdel > K c_b \\ \mb{x}\T \mb{b} > 0 }} h(\mb{x}) \mathrm{d} \mb{x} \leq
+\int_{\mb{x} \colon \mb{x}\T \bSig^{-1} \bdel > K c_b } h(\mb{x}) \mathrm{d} \mb{x}.
 \end{equation*}
 for any $\mb{b}$. 
-Therefore, because $h(\mb{x})$ is positive on the set $\mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} > 0$, we can thus conclude that there exists some $\epsilon_2 > \epsilon_1 > 0$ such that
+Therefore, because $h(\mb{x})$ is positive on the set $\mb{x}\T \bSig^{-1} \bdel > 0$, we can thus conclude that there exists some $\epsilon_2 > \epsilon_1 > 0$ such that
 \begin{equation*}
-\int_{\mb{x}\T \mb{a} > 0} h(\mb{x}) \geq \int_{\mb{x}\T \mb{b} > 0} h(\mb{x}).
+\int_{\mb{x}\T \ba > 0} h(\mb{x}) \geq \int_{\mb{x}\T \mb{b} > 0} h(\mb{x}).
 \end{equation*}
-for any $\mb{a}$ and $\mb{b}$ with $c_a < \epsilon_1$ and $c_b > \epsilon_2$. 
+for any $\ba$ and $\mb{b}$ with $c_a < \epsilon_1$ and $c_b > \epsilon_2$. 
 
 \end{proof}
 
@@ -843,7 +1002,7 @@ Similarly, the right hand side means that:
 $$\frac{\bdel\T \bA\T (\bA \bSig \bA\T)^{-1} \bA \bSig^{-1} \bdel}{\|\bdel\T \bA\T (\bA \bSig \bA\T)^{-1} \bA\| \|\bSig^{-1} \bdel\|} > \frac{\bdel\T \bB\T (\bB \bSig \bB\T)^{-1} \bB \bSig^{-1} \bdel}{\|\bdel\T \bB\T (\bB \bSig \bB\T)^{-1} \bB\| \|\bSig^{-1} \bdel \|}$$.
 
 Furthermore, $\bA \bSig \bA\T \in \mathbb{R}$ and $\bB \bSig \bB\T \in \mathbb{R}$ as $\mb{A}$ and $\mb{B}$ are, in this case, both $1 \times p$ matrices. 
-Similary, $\mb{\delta}\T \bA\T \in \mathbb{R}$ and $\mb{\delta}\T \bB\T \in \mathbb{R}$. Thus, the above display equation is equivalent to
+Similary, $\bdel\T \bA\T \in \mathbb{R}$ and $\bdel\T \bB\T \in \mathbb{R}$. Thus, the above display equation is equivalent to
 $$\frac{\bA \bSig^{-1} \bdel}{\|\bA\|} \geq \frac{\bB \bSig^{-1} \bdel}{\|\bB\|}$$
 which holds if and only if left hand side holds.
 \end{proof}
