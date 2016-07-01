@@ -670,7 +670,7 @@ This will be useful later.
 
 \subsection[]{Rotation of Projection Based Linear Classifiers $g_A$}
 
-By a similar arguement as above, one can easily show that:
+By a similar argument as above, one can easily show that:
 
 \begin{align*}
 (\bA  \bW \bx) \T  (\bA \bW  \bSig  \bW\T \bA\T)^{-1} \bA \bW \bdel
@@ -688,9 +688,80 @@ $g_A$ is rotationally invariant if and only if span($\bA$)=span($\bSig_d$).
 In other words, \Pca~is the only rotationally invariant projection.
 \end{lem}
 
+\subsection{Chernoff information}
+We now introduce the notion of the Chernoff information, which serves as our surrogate measure for the Bayes error of any classification procedure given the {\em projected} data -- in the context of this paper the projection is via LOL or PCA. Our discussion of the Chernoff information is under the context of decision rules for hypothesis testing, nevertheless, as evidenced by the fact that the Maximum A Posterior decision rule -- equivalently the Bayes classifier -- achieves the Chernoff information rate, this distinction between hypothesis testing and classification is mainly for ease of exposition.
 
+Let $F_0$ and $F_1$ be two absolutely continuous multivariate distribution in $\Omega \subset \mathbb{R}^{d}$ with density function $f_0$ and $f_1$, respectively. Suppose that $Y_1, Y_2, \dots, Y_m$ are independent and identically distributed random variables, with $Y_i$ distributed either $F_0$ or $F_1$. We are interested in testing the simple null hypothesis $\mathbb{H}_0 \colon F = F_0$ against the simple alternative hypothesis $\mathbb{H}_1 \colon F = F_1$. A test $T$ is a sequence of mapping $T_m \colon \Omega^{m} \mapsto \{0,1\}$ such that given $Y_1 = y_1, Y_2 = y_2, \dots, Y_m = y_m$, the test rejects $\mathbb{H}_0$ in favor of $\mathbb{H}_1$ if $T_m(y_1, y_2, \dots, y_m) = 1$; similarly, the test rejects $\mathbb{H}_1$ in favor of $\mathbb{H}_0$ if $T_m(y_1, y_2, \dots, y_m) = 0$. 
+The Neyman-Pearson lemma states that, given $Y_1 = y_1, Y_2 = y_2, \dots, Y_m = y_m$ and a threshold $\eta_m \in \mathbb{R}$, the likelihood ratio test which rejects $\mathbb{H}_0$ in favor of $\mathbb{H}_1$ whenever
+$$ \Bigl(\sum_{i=1}^{m} \log{f_0(y_i)} - \sum_{i=1}^{m} \log{f_1(y_i)} \Bigr) \leq \eta_m $$
+is the most powerful test at significance level $\alpha_m = \alpha(\eta_m)$, i.e., the likelihood ratio test minimizes the type-II error $\beta_m$ subject to the contrainst that the type-I error is at most $\alpha_m$. 
 
+Assuming that $\pi \in (0,1)$ is a prior probability that $\mathbb{H}_0$ is true. Then, for a given $\alpha_m^{*} \in (0,1)$, let $\beta_m^{*} = \beta_m^{*}(\alpha_m^{*})$ be the type-II error associated with the likelihood ratio test when the type-I error is at most $\alpha_m^{*}$. The quantity $\inf_{\alpha_m^{*} \in (0,1)} \pi \alpha_m^{*} + (1 - \pi) \beta_m^{*}$ is then the Bayes risk in deciding between $\mathbb{H}_0$ and $\mathbb{H}_1$ given the $m$ independent random variables $Y_1, Y_2, \dots, Y_m$. A classical result of Chernoff \cite{chernoff_1952} states that the Bayes risk is intrinsically linked to a quantity known as the {\em Chernoff information}. More specifically, let $C(F_0, F_1)$ be the quantity
+\begin{equation}
+\label{eq:chernoff-defn}
+\begin{split} C(F_0, F_1) & = - \log \, \Bigl[\, \inf_{t \in (0,1)} \int_{\mathbb{R}^{d}} f_0^{t}(\bm{x}) f_1^{1-t}(\bm{x}) \mathrm{d}\bm{x} \Bigr] \\
+&= \sup_{t \in (0,1)} \Bigl[ - \log \int_{\mathbb{R}^{d}} f_0^{t}(\bm{x}) f_1^{1-t}(\bm{x}) \mathrm{d}\bm{x} \Bigr]
+\end{split}
+\end{equation}
+Then we have
+\begin{equation}
+\label{eq:chernoff-binary}
+\begin{split}
+\lim_{m \rightarrow \infty} \frac{1}{m} \inf_{\alpha_m^{*} \in (0,1)} \log( \pi \alpha_m^{*} + (1 - \pi) \beta_m^{*}) & = - \, C(F_0, F_1).
+\end{split}
+\end{equation}
+Thus $C(F_0, F_1)$ is the {\em exponential} rate at which the Bayes error $\inf_{\alpha_m^{*} \in (0,1)} \pi \alpha_m^{*} + (1 - \pi) \beta_m^{*}$ decreases as $m \rightarrow \infty$; we also note that the $C(F_0, F_1)$ is independent of $\pi$. We also define, for a given $t \in (0,1)$ the Chernoff divergence $C_t(F_0, F_1) $ between $F_0$ and $F_1$ by
+$$ C_{t}(F_0,F_1) = - \log \int_{\mathbb{R}^{d}} f_0^{t}(\bm{x}) f_1^{1-t}(\bm{x}) \mathrm{d}\bm{x}. $$
+The Chernoff divergence is an example of a $f$-divergence as defined in \cite{Csizar}. When $t = 1/2$, $C_t(F_0,F_1)$ is the Bhattacharyya distance between $F_0$ and $F_1$. 
 
+The result of Eq.~\eqref{eq:chernoff-binary} can be extended to $K + 1 \geq 2$ hypothesis, with the exponential rate being the minimum of the Chernoff information between any pair of hypothesis. More specifically, let $F_0, F_1, \dots, F_{K}$ be distributions on $\mathbb{R}^{d}$ and let $Y_1, Y_2, \dots, Y_m$ be independent and identically distributed random variables with distribution $F \in \{F_0, F_1, \dots, F_K\}$. Our inference task is in determining the distribution of the $Y_i$ among the $K+1$ hypothesis $\mathbb{H}_0 \colon F = F_0, \dots, \mathbb{H}_{K} \colon F = F_K$. Suppose also that hypothesis $\mathbb{H}_k$ has {\em a priori} probabibility $\pi_k$. For any decision rule $\delta$, the risk of $\delta$ is $r(\delta) = \sum_{k} \pi_k \sum_{l \not = k} \alpha_{lk}(\delta) $ where $\alpha_{lk}(\delta)$ is the probability of accepting hypothesis $\mathbb{H}_l$ when hypothesis $\mathbb{H}_k$ is true. Then we have \cite{leang-johnson}
+\begin{equation}
+\label{eq:chernoff-multiple}
+\inf_{\delta} \lim_{m \rightarrow \infty}  \frac{r(\delta)}{m} = - \min_{k \not = l} C(F_k, F_l).
+\end{equation}
+where the infimum is over all decision rule $\delta$, i.e., for any $\delta$, $r(\delta)$ decreases to $0$ as $m \rightarrow \infty$ at a rate no faster than $\exp(- m \min_{k \not = l} C(F_k, F_l))$. 
+%It was also shown in \cite{leang-johnson} that the {\em Maximum A Posterior} decision rule achieves this rate. 
+
+When the distributions $F_0$ and $F_1$ are multivariate normal, that is, $F_0 =  \mathcal{N}(\mu_0, \Sigma_0)$ and $F_1 = \mathcal{N}(\mu_1, \Sigma_1)$; then, denoting by $\Sigma_t = t \Sigma_0 + (1 - t) \Sigma_1$, we have 
+\begin{equation*}
+C(F_0, F_1) = \sup_{t \in (0,1)} \Bigl(\frac{t(1 - t)}{2} (\mu_1 - \mu_2)^{\top}\Sigma_t^{-1}(\mu_1 - \mu_2) + \frac{1}{2} \log \frac{|\Sigma_t|}{|\Sigma_0|^{t} |\Sigma_1|^{1 - t}}  \Bigr).
+\end{equation*}
+
+\subsection{Projecting data and Chernoff information}
+We now discuss how the Chernoff information characterizes the effect a linear transformation $A$ of the data has on classification accuracy.
+We start with the following simple result whose proof follows directly from Eq.~\eqref{eq:chernoff-multiple}. 
+\begin{lem}
+\label{lem:chernoff-1}
+Let $F_0 = \mathcal{N}(\mu_0, \Sigma)$ and $F_1 \sim \mathcal{N}(\mu_1, \Sigma)$ be two multivariate normals with equal covariance matrices. For any linear transformation $A$, let $F_0^{(A)}$ and $F_1^{(A)}$ denotes the distribution of $AX$ when $X \sim F_0$ and $X \sim F_1$, respectively. We then have
+\begin{equation}
+\begin{split}
+C(F_0^{(A)}, F_1^{(A)}) &= \frac{1}{8} (\mu_1 - \mu_0)^{\top} A^{\top} (A \Sigma A^{\top})^{-1} A (\mu_1 - \mu_0) \\ & = \frac{1}{8} (\mu_1 - \mu_0)^{\top} \Sigma^{-1/2} \Sigma^{1/2} A^{\top} (A \Sigma A^{\top})^{-1} A \Sigma^{1/2} \Sigma^{-1/2} (\mu_1 - \mu_0) \\
+&= \frac{1}{8} \|P_{\Sigma^{1/2} A^{\top}} \Sigma^{-1/2} (\mu_1 - \mu_0) \|_{F}^{2}
+\end{split}
+\end{equation}
+where $P_{Z} = Z(Z^{\top} Z)^{-1} Z^{\top}$ denotes the matrix corresponding to the orthogonal projection onto the columns of $Z$. 
+\end{lem}
+
+Thus for a classification problem where $X | Y = 0$ and $X | Y = 1$ are distributed multivariate normals with mean $\mu_0$ and $\mu_1$ and the same covariance matrix $\Sigma$, Lemma~\ref{lem:chernoff-1} then states that for any two linear transformations $A$ and $B$, the transformed data $AX$ is to be preferred over the transformed data $BX$ if
+$$ (\mu_1 - \mu_0)^{\top} A^{\top} (A \Sigma A^{\top})^{-1} A (\mu_1 - \mu_0) > (\mu_1 - \mu_0)^{\top} B^{\top} (B \Sigma B^{\top})^{-1} B (\mu_1 - \mu_0). $$
+
+As an example, suppose $\Sigma$ is diagonal with distinct eigenvalues where the diagonal entries of $\Sigma$ are in non-increasing order. 
+Denote by $\delta = \mu_1 - \mu_0$ and let
+$A = \delta$ and $B = e_1 = (1,0,0,\dots,0)$ be the linear transformations for LOL and PCA of $X$ into $\mathbb{R}$. We then have  
+\begin{gather*}
+C(F_0^{(A)}, F_1^{(A)}) = \frac{(\delta^{\top} \delta)^2}{\delta^{\top} \Sigma \delta} = \frac{(\sum_{i} \delta_i^{2})^{2}}{\sum_{i} \delta_i^{2} \lambda_i}; \quad 
+C(F_0^{(B)}, F_1^{(B)}) = \frac{\delta_1^2}{\lambda_1}
+\end{gather*}
+where $\lambda_1$ is the largest eigenvalue of $\Sigma$. Suppose furthermore that $\delta_1 \leq \delta_2 \leq \dots \leq \delta_p$ and $\lambda_1 > \lambda_2 > \dots > \lambda_p$. Then $C(F_0^{(A)}, F_1^{(A)})$ can be lower-bounded as
+$$ C(F_0^{(A)}, F_1^{(A)}) = \frac{(\sum_{i} \delta_i^{2})^{2}}{\sum_{i} \delta_i^{2} \lambda_i} \geq \frac{(p \delta_1^2)^2}{p \delta_p^{2} \lambda_1} $$
+and hence $C(F_0^{(A)}, F_1^{(A)}) > C(F_0^{(B)}, F_1^{(B)})$ provided $p \delta_1^{2}  \geq \delta_p^2$. 
+
+When $A = \bigl[ \delta \mid e_1 \mid e_2 \dots \mid e_{d-1} \bigr]$ and $B = \bigl[e_1 \mid e_2 \mid \dots \mid e_d \bigr]$ are the linear transformation for LOL and PCA of $X$ into $\mathbb{R}^{d}$, we have
+\begin{gather*}
+C(F_0^{(A)}, F_1^{(A)}) = \frac{(\sum_{i=d}^{p} \delta_i^2)^2 + \sum_{i=1}^{d-1} \lambda_i^{-1} \delta_i^2}{\sum_{i=d}^{p} \delta_i^2 \lambda_i};  \quad 
+C(F_0^{(B)}, F_1^{(B)}) = \sum_{i=1}^{d} \frac{\delta_i^2}{\lambda_i}
+\end{gather*}
+ 
 
 \subsection{Simplifying the Objective Function}
 
@@ -740,77 +811,77 @@ If $\angle(\bP_A, \bP_*) <1$, then there exists an $\bx$ such that $\II\{ \bx\T 
 \label{q:a2}
 $$\angle(\bP_A,\bP_*) \leq \angle(\bP_B,\bP_*) \implies L_A \leq L_B.$$
 \end{lem}
-\begin{proof}
-We recall from the definitions that $\bP_{\bA} = \bA\T (\bA \mb{\Sigma} \bA\T)^{-1} \bA \mb{\delta}$ and $\bP_{\mathbf{B}} = \mathbf{B}\T (\mathbf{B} \mb{\Sigma} \mathbf{B}\T)^{-1} \mathbf{B} \mb{\delta}$. In addition, $\bP_{*} = \mb{\Sigma}^{-1} \mb{\delta}$. For ease of notation, let $\mb{a} = \bP_{\bA}$ and $\mb{b} = \bP_{\mathbf{B}}$. 
-Therefore,
-$$ 
-\frac{\bP_{\bA}\T \bP_{*}}{\|\bP_{\bA}\|_{F} \|\bP_{*}\|_{F}} = \frac{\mb{a}\T \mb{\Sigma}^{-1} \mb{\delta}}{\|\mb{a}\| \|\bP_{*}\|_{F}} \geq  \frac{\mb{b}\T \mb{\Sigma}^{-1} \mb{\delta}}{\|\mb{b}\| \|\bP_{*}\|_{F}} = \frac{\bP_{\mathbf{B}}\T \bP_{*}}{\|\bP_{\mathbf{B}}\|_{F} \|\bP_{*}\|_{F}}
-$$
-Without loss of generality, assume that $\mb{a}\T \mb{a} = 1$ and  $\mb{b}\T \mb{b} = 1$. Then the above condition reduced to
-$$ \mb{a}\T \mb{\Sigma}^{-1} \mb{\delta} \geq \mb{b}\T \mb{\Sigma}^{-1} \mb{\delta}.$$
+% \begin{proof}
+% We recall from the definitions that $\bP_{\bA} = \bA\T (\bA \mb{\Sigma} \bA\T)^{-1} \bA \mb{\delta}$ and $\bP_{\mathbf{B}} = \mathbf{B}\T (\mathbf{B} \mb{\Sigma} \mathbf{B}\T)^{-1} \mathbf{B} \mb{\delta}$. In addition, $\bP_{*} = \mb{\Sigma}^{-1} \mb{\delta}$. For ease of notation, let $\mb{a} = \bP_{\bA}$ and $\mb{b} = \bP_{\mathbf{B}}$. 
+% Therefore,
+% $$ 
+% \frac{\bP_{\bA}\T \bP_{*}}{\|\bP_{\bA}\|_{F} \|\bP_{*}\|_{F}} = \frac{\mb{a}\T \mb{\Sigma}^{-1} \mb{\delta}}{\|\mb{a}\| \|\bP_{*}\|_{F}} \geq  \frac{\mb{b}\T \mb{\Sigma}^{-1} \mb{\delta}}{\|\mb{b}\| \|\bP_{*}\|_{F}} = \frac{\bP_{\mathbf{B}}\T \bP_{*}}{\|\bP_{\mathbf{B}}\|_{F} \|\bP_{*}\|_{F}}
+% $$
+% Without loss of generality, assume that $\mb{a}\T \mb{a} = 1$ and  $\mb{b}\T \mb{b} = 1$. Then the above condition reduced to
+% $$ \mb{a}\T \mb{\Sigma}^{-1} \mb{\delta} \geq \mb{b}\T \mb{\Sigma}^{-1} \mb{\delta}.$$
 
-We now analyze $L_{A}$. Let $C = \tfrac{1}{2}(2 \pi \mathrm{\det}(\mb{\Sigma}))^{-1/2}$. We have
-\begin{equation*}
-\begin{split}
-L_{A} &= \mathbb{E}[\mathbb{I}\{\mb{x}\T \mb{a} > 0\} \not = y] \\ &=
-\int_{\mb{x}\T \mb{a} \leq 0} C \exp\Bigl(-\tfrac{1}{2}(\mb{x} - \mb{\mu})\T \mb{\Sigma}^{-1} (\mb{x} - \mb{\mu})\Bigr) \mathrm{d} \mb{x} + \int_{\mb{x}\T \mb{a} > 0} C \exp\Bigl(-\tfrac{1}{2}(\mb{x} + \mb{\mu})\T \mb{\Sigma}^{-1} (\mb{x} + \mb{\mu})\Bigr) \mathrm{d} \mb{x}
-\\ &= 0.5 - 
-\int_{\mb{x}\T \mb{a} > 0} C \exp\Bigl(-\tfrac{1}{2}(\mb{x} - \mb{\mu})\T \mb{\Sigma}^{-1} (\mb{x} - \mb{\mu})\Bigr) \mathrm{d} \mb{x}
-+ \int_{\mb{x}\T \mb{a} > 0} C \exp\Bigl(-\tfrac{1}{2}(\mb{x} + \mb{\mu})\T \mb{\Sigma}^{-1} (\mb{x} + \mb{\mu})\Bigr) \mathrm{d} \mb{x}
-\\ &= 0.5 - C \int_{\mb{x}\T \mb{a} > 0} \Bigl(\exp(-\tfrac{1}{2}(\mb{x} - \mb{\mu})\T \mb{\Sigma}^{-1} (\mb{x} - \mb{\mu})) - \exp(-\tfrac{1}{2}(\mb{x} + \mb{\mu})\T \mb{\Sigma}^{-1} (\mb{x} + \mb{\mu})) \Bigr) \mathrm{d} \mb{x}
-\\ &= 0.5 - C \int_{\mb{x}\T \mb{a} > 0} h(\mb{x}) \mathrm{d} \mb{x}
-\end{split}
-\end{equation*}
-where $h(\mb{x}) = \exp(-\tfrac{1}{2}(\mb{x} - \mb{\mu})\T \mb{\Sigma}^{-1} (\mb{x} - \mb{\mu})) - \exp(-\tfrac{1}{2}(\mb{x} + \mb{\mu})\T \mb{\Sigma}^{-1} (\mb{x} + \mb{\mu}))$.
-In particular, $L_*$ is given by
-$$L_* = 0.5 - C \int_{\mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} > 0} h(\mb{x}) \mathrm{d} \mb{x}, $$
-where $h(\mb{x}) = \exp(-\tfrac{1}{2}(\mb{x} - \mb{\mu})\T \mb{\Sigma}^{-1} (\mb{x} - \mb{\mu})) - \exp(-\tfrac{1}{2}(\mb{x} + \mb{\mu})\T \mb{\Sigma}^{-1} (\mb{x} + \mb{\mu})$. 
-And since  $h(\mb{x}) \geq 0$ if and only if $\mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} \geq 0$, $L_*$ is indeed the Bayes risk. 
+% We now analyze $L_{A}$. Let $C = \tfrac{1}{2}(2 \pi \mathrm{\det}(\mb{\Sigma}))^{-1/2}$. We have
+% \begin{equation*}
+% \begin{split}
+% L_{A} &= \mathbb{E}[\mathbb{I}\{\mb{x}\T \mb{a} > 0\} \not = y] \\ &=
+% \int_{\mb{x}\T \mb{a} \leq 0} C \exp\Bigl(-\tfrac{1}{2}(\mb{x} - \mb{\mu})\T \mb{\Sigma}^{-1} (\mb{x} - \mb{\mu})\Bigr) \mathrm{d} \mb{x} + \int_{\mb{x}\T \mb{a} > 0} C \exp\Bigl(-\tfrac{1}{2}(\mb{x} + \mb{\mu})\T \mb{\Sigma}^{-1} (\mb{x} + \mb{\mu})\Bigr) \mathrm{d} \mb{x}
+% \\ &= 0.5 - 
+% \int_{\mb{x}\T \mb{a} > 0} C \exp\Bigl(-\tfrac{1}{2}(\mb{x} - \mb{\mu})\T \mb{\Sigma}^{-1} (\mb{x} - \mb{\mu})\Bigr) \mathrm{d} \mb{x}
+% + \int_{\mb{x}\T \mb{a} > 0} C \exp\Bigl(-\tfrac{1}{2}(\mb{x} + \mb{\mu})\T \mb{\Sigma}^{-1} (\mb{x} + \mb{\mu})\Bigr) \mathrm{d} \mb{x}
+% \\ &= 0.5 - C \int_{\mb{x}\T \mb{a} > 0} \Bigl(\exp(-\tfrac{1}{2}(\mb{x} - \mb{\mu})\T \mb{\Sigma}^{-1} (\mb{x} - \mb{\mu})) - \exp(-\tfrac{1}{2}(\mb{x} + \mb{\mu})\T \mb{\Sigma}^{-1} (\mb{x} + \mb{\mu})) \Bigr) \mathrm{d} \mb{x}
+% \\ &= 0.5 - C \int_{\mb{x}\T \mb{a} > 0} h(\mb{x}) \mathrm{d} \mb{x}
+% \end{split}
+% \end{equation*}
+% where $h(\mb{x}) = \exp(-\tfrac{1}{2}(\mb{x} - \mb{\mu})\T \mb{\Sigma}^{-1} (\mb{x} - \mb{\mu})) - \exp(-\tfrac{1}{2}(\mb{x} + \mb{\mu})\T \mb{\Sigma}^{-1} (\mb{x} + \mb{\mu}))$.
+% In particular, $L_*$ is given by
+% $$L_* = 0.5 - C \int_{\mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} > 0} h(\mb{x}) \mathrm{d} \mb{x}, $$
+% where $h(\mb{x}) = \exp(-\tfrac{1}{2}(\mb{x} - \mb{\mu})\T \mb{\Sigma}^{-1} (\mb{x} - \mb{\mu})) - \exp(-\tfrac{1}{2}(\mb{x} + \mb{\mu})\T \mb{\Sigma}^{-1} (\mb{x} + \mb{\mu})$. 
+% And since  $h(\mb{x}) \geq 0$ if and only if $\mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} \geq 0$, $L_*$ is indeed the Bayes risk. 
 
-Thus, $L_A \leq L_B$ is equivalent to 
-\begin{equation*}
-\int_{\mb{x}\T \mb{a} > 0} h(x) \mathrm{d} \mb{x} \geq \int_{\mb{x}\T \mb{b} > 0} h(x) \mathrm{d} \mb{x}.
-\end{equation*}
+% Thus, $L_A \leq L_B$ is equivalent to 
+% \begin{equation*}
+% \int_{\mb{x}\T \mb{a} > 0} h(x) \mathrm{d} \mb{x} \geq \int_{\mb{x}\T \mb{b} > 0} h(x) \mathrm{d} \mb{x}.
+% \end{equation*}
 
-We now analyze the set $\{\mb{x} \colon \mb{x}\T \mb{a} > 0\}$. We write 
-$\mb{x}\T \mb{a} = \mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} + \mb{x}\T (\mb{a} - \mb{\Sigma}^{-1} \mb{\delta})$. 
-Without loss of generality, we can further assume that $\|(\mb{\Sigma}^{-1} \mb{\delta})\T \| = 1$. Then, because $\mb{a}\T \mb{a} = 1$, we have that
-$\|\mb{a} - \mb{\Sigma}^{-1} \mb{\delta} \|^{2} = 2 - 2 \mb{a}\T \mb{\Sigma}^{-1} \mb{\delta}$. 
-Let $c_a = 2 - 2 \mb{a}\T \mb{\Sigma}^{-1} \mb{\delta}$; we shall assume for the moment that $c_a$ is ``small''. Then for any $\eta > 0$, we have
-\begin{equation*}
-\{\mb{x} \colon \mb{x}\T \mb{a} > 0 \} = \{ \mb{x} \colon \mb{x}\T \mb{a} > 0 \} \cap \Bigl(\{\mb{x} \colon \mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} > \eta \} \cup \{\mb{x} \colon \mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} \in [-\eta, \eta] \} \cup \{ \mb{x} \colon \mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} < -\eta \}\Bigr)
-\end{equation*}
-Now provided that $c_a$ is ``small'' we can choose $\eta = Kc_a$ for some constant $K$ such that 
-\begin{gather}
-\int_{\mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} \in [-\eta, \eta]} h(\mb{x}) \mathrm{d} \mb{x} \approx 0
-\label{part:a}
-\\
-\int_{\substack{\mb{x} \colon \mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} < -\eta \\ \mb{x}\T \mb{a} > 0 }} h(\mb{x}) \mathrm{d}\mb{x} \approx 0 
-\label{part:b}
-\\
- \int_{\substack{\mb{x} \colon \mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} > \eta \\ \mb{x}\T \mb{a} > 0 }} h(\mb{x}) \mathrm{d}\mb{x} \approx 
-\int_{\mb{x} \colon \mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} > \eta } h(\mb{x}) \mathrm{d} \mb{x}
-\label{part:c}
-\end{gather}
+% We now analyze the set $\{\mb{x} \colon \mb{x}\T \mb{a} > 0\}$. We write 
+% $\mb{x}\T \mb{a} = \mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} + \mb{x}\T (\mb{a} - \mb{\Sigma}^{-1} \mb{\delta})$. 
+% Without loss of generality, we can further assume that $\|(\mb{\Sigma}^{-1} \mb{\delta})\T \| = 1$. Then, because $\mb{a}\T \mb{a} = 1$, we have that
+% $\|\mb{a} - \mb{\Sigma}^{-1} \mb{\delta} \|^{2} = 2 - 2 \mb{a}\T \mb{\Sigma}^{-1} \mb{\delta}$. 
+% Let $c_a = 2 - 2 \mb{a}\T \mb{\Sigma}^{-1} \mb{\delta}$; we shall assume for the moment that $c_a$ is ``small''. Then for any $\eta > 0$, we have
+% \begin{equation*}
+% \{\mb{x} \colon \mb{x}\T \mb{a} > 0 \} = \{ \mb{x} \colon \mb{x}\T \mb{a} > 0 \} \cap \Bigl(\{\mb{x} \colon \mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} > \eta \} \cup \{\mb{x} \colon \mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} \in [-\eta, \eta] \} \cup \{ \mb{x} \colon \mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} < -\eta \}\Bigr)
+% \end{equation*}
+% Now provided that $c_a$ is ``small'' we can choose $\eta = Kc_a$ for some constant $K$ such that 
+% \begin{gather}
+% \int_{\mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} \in [-\eta, \eta]} h(\mb{x}) \mathrm{d} \mb{x} \approx 0
+% \label{part:a}
+% \\
+% \int_{\substack{\mb{x} \colon \mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} < -\eta \\ \mb{x}\T \mb{a} > 0 }} h(\mb{x}) \mathrm{d}\mb{x} \approx 0 
+% \label{part:b}
+% \\
+%  \int_{\substack{\mb{x} \colon \mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} > \eta \\ \mb{x}\T \mb{a} > 0 }} h(\mb{x}) \mathrm{d}\mb{x} \approx 
+% \int_{\mb{x} \colon \mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} > \eta } h(\mb{x}) \mathrm{d} \mb{x}
+% \label{part:c}
+% \end{gather}
 
-Therefore,
-\begin{equation*}
-\int_{\mb{x}\T \mb{a} > 0} h(\mb{x}) \mathrm{d} \mb{x} \approx \int_{\mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} > K c_a} h(\mb{x}) \mathrm{d} \mb{x}
-\end{equation*}
+% Therefore,
+% \begin{equation*}
+% \int_{\mb{x}\T \mb{a} > 0} h(\mb{x}) \mathrm{d} \mb{x} \approx \int_{\mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} > K c_a} h(\mb{x}) \mathrm{d} \mb{x}
+% \end{equation*}
 
-We note that in general, the integrals in Eq.~\eqref{part:a} and Eq.~\eqref{part:b} are non-positive. Therefore, letting $\eta' = K c_b$ where $c_b = 2 - 2 \mb{a}\T \mb{\Sigma}^{-1} \mb{\delta}$, we have
-\begin{equation*}
-\int_{\mb{x}\T \mb{b} > 0} h(\mb{x}) \mathrm{d} \mb{x} \leq \int_{\substack{\mb{x} \colon \mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} > K c_b \\ \mb{x}\T \mb{b} > 0 }} h(\mb{x}) \mathrm{d} \mb{x} \leq
-\int_{\mb{x} \colon \mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} > K c_b } h(\mb{x}) \mathrm{d} \mb{x}.
-\end{equation*}
-for any $\mb{b}$. 
-Therefore, because $h(\mb{x})$ is positive on the set $\mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} > 0$, we can thus conclude that there exists some $\epsilon_2 > \epsilon_1 > 0$ such that
-\begin{equation*}
-\int_{\mb{x}\T \mb{a} > 0} h(\mb{x}) \geq \int_{\mb{x}\T \mb{b} > 0} h(\mb{x}).
-\end{equation*}
-for any $\mb{a}$ and $\mb{b}$ with $c_a < \epsilon_1$ and $c_b > \epsilon_2$. 
+% We note that in general, the integrals in Eq.~\eqref{part:a} and Eq.~\eqref{part:b} are non-positive. Therefore, letting $\eta' = K c_b$ where $c_b = 2 - 2 \mb{a}\T \mb{\Sigma}^{-1} \mb{\delta}$, we have
+% \begin{equation*}
+% \int_{\mb{x}\T \mb{b} > 0} h(\mb{x}) \mathrm{d} \mb{x} \leq \int_{\substack{\mb{x} \colon \mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} > K c_b \\ \mb{x}\T \mb{b} > 0 }} h(\mb{x}) \mathrm{d} \mb{x} \leq
+% \int_{\mb{x} \colon \mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} > K c_b } h(\mb{x}) \mathrm{d} \mb{x}.
+% \end{equation*}
+% for any $\mb{b}$. 
+% Therefore, because $h(\mb{x})$ is positive on the set $\mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} > 0$, we can thus conclude that there exists some $\epsilon_2 > \epsilon_1 > 0$ such that
+% \begin{equation*}
+% \int_{\mb{x}\T \mb{a} > 0} h(\mb{x}) \geq \int_{\mb{x}\T \mb{b} > 0} h(\mb{x}).
+% \end{equation*}
+% for any $\mb{a}$ and $\mb{b}$ with $c_a < \epsilon_1$ and $c_b > \epsilon_2$. 
 
-\end{proof}
+% \end{proof}
 
 
 
