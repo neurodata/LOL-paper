@@ -107,14 +107,14 @@ In addition to the above quantitative properties, LOL is intuitive, only has a s
 \includegraphics[width=0.7\linewidth,trim=1cm 0cm 0cm 4.0cm,clip=true]{../Figs/mnist}
 \caption{
 Illustrating three different classifiers---\sct{Lasso}~(top), \sct{Fld$\circ$Pca}~(middle), and \Lol~(bottom)---for embedding images of the digits 3, 7, and 8 (from MNIST), each of which is 28 $\times$ 28 = 784 dimensional.
-\textbf{(A)} Exemplars, boundary colors are only for visualization purposes.
+\textbf{(A)} A subset of training samples  (boundary colors are only for visualization purposes).
 \textbf{(B)} The first four projection matrices learned by the three different approaches on 300 training samples. Note that \sct{Lasso}~is sparse and supervised, \Pca~is dense and unsupervised, and \Lol~is dense and supervised.
 \textbf{(C)} Embedding 500 test samples into the top 2 dimensions using each approach.  Digits color coded as in A.
 \textbf{(D)}  The estimated posterior distribution of test samples after
-5-dimensional projection learned via each method.
+projecting data into 5-dimensions via each method.
 We show only 3 vs.~8 for simplicity.
 The vertical line shows the classification threshold.
-The filled area is the estimated error rate: the goal of any classification algorithm is to minimize that area.
+The filled area is the estimated error rate; the goal of any classification algorithm is to minimize that area.
 Clearly, \Lol~exhibits the best separation after embedding, which results in the best classification performance.
 }
 \label{f:mnist}
@@ -150,7 +150,7 @@ The above real data example suggests the geometric intuition for when \Lol~outpe
 
 
 % To motivate \Lol, and the following simulations, lets c
-Consider what the optimal projection would be in this scenario. The optimal low-dimensional projection is analytically available as the dot product of the difference of means and the inverse covariance matrix, $\mb{A}_*=\mb{\delta}\T \bSig^{-1}$ \cite{Bickel2004a} (see Methods for derivation).
+Consider what the optimal projection would be in this scenario. The optimal low-dimensional projection is analytically available as the dot product of the difference of means and the inverse covariance matrix, $\mb{A}_*=\bdel\T \bSig^{-1}$ \cite{Bickel2004a} (see Methods for derivation).
 \Pca, the dominant unsupervised manifold learning method, utilizes only the covariance structure of the data, and ignores the difference between the means (because \Pca~for classification operates on the class-conditionally centered data, see Methods for details).
 In particular, \Pca~would project the data on the top d eigenvectors of the  covariance matrix.
 \textbf{The key insight of our work is the following: we can combine the difference of the means and the covariance matrix in a simple fashion, rather than just the covariance matrix, to find a low dimensional projection.}
@@ -169,15 +169,15 @@ In this sense, \Lol~can be thought of as a very simple  ``supervised \Pca''.
 \Lol~achieves near optimal performance for a wide variety of distributions.
 Each point is sampled from a multivariate Gaussian;
 the three columns correspond to different simulation parameters (see Methods for details).
-In each of 3 simulations, we sample $n=100$ points in $p=1000$ dimensions.  And for each approach, we embed into the top 20 dimensions. Note that we use the sample estimates, rather than the true population values of the parameters.  In this setting, the results are  similar.
-\textbf{(A)} The mean difference vector is aligned with the direction of maximal variance, maxing it ideal for both \Pca~to discover the discriminant direction and a sparse solution.
-\textbf{(B)} The mean difference vector is orthogonal to the direction of maximal variance, making \Pca~fail, but sparse methods can still recover the correct dimensions.
-\textbf{(C)} Same as B, but the data are rotated.
+In each of 3 simulations, we sample $n=100$ points in $p=1000$ dimensions.  And for each approach, we embed into the top 20 dimensions. Note that we use the sample estimates, rather than the true population values of the parameters.  The five columns show (in decreasing order): 
 \textbf{Row 1}: A scatter plot of the first two dimensions of the sampled points, with class 0 and 1 as black and gray dots, respectively.
 \textbf{Row 2} \sct{Fld $\circ$ Pca}.
 \textbf{Row 3} \Road, a sparse method designed specifically for this model \cite{Fan2012a}.
 \textbf{Row 4} \Lol, our newly proposed method.
 \textbf{Row 5} the Bayes optimal classifier, which is what all classifiers strive to achieve.
+\textbf{(A)} The mean difference vector is aligned with the direction of maximal variance, maxing it ideal for both \Pca~to discover the discriminant direction and a sparse solution. In this setting, the results are  similar for all methods, and essentially optimal.
+\textbf{(B)} The mean difference vector is orthogonal to the direction of maximal variance, making \Pca~fail, but sparse methods and \Lol~can still recover the correct dimensions, achieving nearly optimal performance. 
+\textbf{(C)} Same as B, but the data are rotated, in this case, only \Lol~performs well.
 Note that \Lol~is closest to Bayes optimal in all three settings.
 }
 \label{f:cigars}
@@ -260,16 +260,17 @@ In the previous section, we proved that \Lol~is often better than \Pca, and neve
 \centering
 \includegraphics[width=1\linewidth]{../Figs/properties}
 \caption{
-Seven simulations demonstrating that even when the true discriminant boundary is high-dimensional, \Lol~can find a low-dimensional projection that wins the bias-variance trade-off against competing methods.
-For the first four, the top panels depict the means (top), the shared covariance matrix (middle).  For the next three, the top panels depict a 2D scatter plot (left), mean and level set of one standard deviation of covariance matrix (right).  For all seven simulations, the bottom panel shows misclassification rate as a function of the number of embedded dimensions, for several different classifiers.  The simulations settings are as follows:
+Seven simulations demonstrating \Lol~achieves superior finite sample performance over competitors both in settings for which we have asymptotic theoretical guarantees, and those for which we do not. 
+% that even when the true discriminant boundary is high-dimensional, \Lol~can find a low-dimensional projection that wins the bias-variance trade-off against competing methods.
+For the first three, the top panels depict the means (top), the shared covariance matrix (middle).  For the next three, the top panels depict a 2D scatter plot (left), mean and level set of one standard deviation of covariance matrix (right).  For all seven simulations, the bottom panel shows misclassification rate as a function of the number of embedded dimensions, for several different classifiers.  The simulations settings are as follows:
 \textbf{(A)} Rotated Trunk: same as Figure \ref{f:cigars}C.
 \textbf{(B)} Toeplitz: another setting where mean difference is not well correlated with any eigenvector, and no ambient coordinate is particularly useful on its own.
-\textbf{(C)} 3 Classes: \Lol~naturally adapts to multiple classes.
+\textbf{(C)} 3 Class variant of the rotated Trunk example to demonstrate that \Lol~naturally adapts, and excels in, multi-class problems.
 \textbf{(D)} Fat Tails: a common phenomenon in real data that is more general than our theory supports.
-\textbf{(E)} QDA: QOQ, a variant of \Lol~when each class has a unique covariance, outperforms \Lol, as expected.
+\textbf{(E)} QDA: \Qoq, a variant of \Lol~when each class has a unique covariance, outperforms \Lol, as expected, when the true discriminant boundary is a quadratic, rather than linear, function.
 \textbf{(F)} Outliers: adding high-dimensional outliers degrades performance of standard eigensolvers, but those can easily be replaced in \Lol~for a robust variants (called \Lrl).
-\textbf{(G)} XOR: a high-dimensional stochastic generalization of XOR, demonstrating the \Lol~and QOQ work even in scenarios that are quite distinct from the original motivating problems.
-In all 7 cases, \Lol, or the appropriate generalization thereof, outperforms unsupervised, sparse, or other methods.  Moreover, the optimal embedding dimension is never the true discriminant dimension, but rather, a smaller number jointly determined by parameter settings and sample size.
+\textbf{(G)} XOR: a high-dimensional stochastic generalization of XOR, demonstrating that \Qoq~works even in scenarios that are quite distinct from the original motivating problems.
+In all 7 cases, \Lol, or the appropriate generalization thereof, outperforms unsupervised or sparse methods.  Moreover, the optimal embedding dimension is never the true discriminant dimension, but rather, a smaller number jointly determined by parameter settings and sample size.
 }
 \label{f:properties}
 \end{figure}
@@ -294,7 +295,7 @@ The above simulations were all under the \Lda~model, for which we have theoretic
 
 \subsection*{Computational Efficiency}
 
-In many applications, the main quantifiable consideration in whether to use a particular method, other than accuracy, is computational efficiency.  Because implementing \Lol~requires only highly optimized linear algebraic routines---including computing moments and singular value decomposition---rather than the costly iterative programming techniques currently required for sparse or dictionary learning type problems.  Moreover, because \Lol~only requires computing means and covariances, we can leverage recent advances in parallel matrix operations \cite{FlashMatrix} on fast solid-state drives (SSDs) \cite{SAFS}. We implement LOL with the R interface of FlashX \cite{FlashGraph, FlashMatrix, FlashEigen}.
+In many applications, the main quantifiable consideration in whether to use a particular method, other than accuracy, is computational efficiency.  Because implementing \Lol~requires only highly optimized linear algebraic routines---including computing moments and singular value decomposition---rather than the costly iterative programming techniques currently required for sparse or dictionary learning type problems.  Moreover, because \Lol~only requires computing means and covariances, we can leverage recent advances in parallel matrix operations \cite{FlashMatrix} on fast solid-state drives (SSDs). We implement LOL with the R interface of FlashX \cite{FlashGraph, FlashMatrix, FlashEigen}.
 %More specifically, we modified FlashX to be able to perform all the computational primitives required for \Lol~on matrices that are short and fat, rather than tall and skinny.
 Given the FlashX programming framework, we can run \Lol~on essentially arbitrarily large data.  For these examples, we simulated data satisfying the \Lda~model; specifically, we used a spherically symmetric covariance matrix, with means just $\pm$ the one vector (see Methods for simulation details).
 
@@ -315,7 +316,7 @@ Figure \ref{f:speed}B shows the error for \Lol~and \PoF~in this scenario, simply
 % \includegraphics[width=1\linewidth]{../Figs/speed_test}
 \includegraphics[width=1\linewidth]{../Figs/scalability}
 \caption{
-Computational efficiency of various low-dimensional projection methods. In all cases, $n=2000$, and we used spherically symmetric  simulation parameters (see Methods for details).   We compare \Pca~with the projection steps with \Lol~(light green solid line for in memory implementation, and dark green dashed line for semi-external memory implementation) and \Lfl~(solid cyan line) for different observed dimensions ($p$). \textbf{(A)} \Lol~exhibits optimal (linear) scale up and scale out, as far as we tried, requiring 23 minutes to find the embedding on a 250 GB dataset.  \textbf{(B)} Error for \Lfl~is the same as \Lol~in this setting, and both are significantly better than \PoF~for all choices of embedding dimension.  
+Computational efficiency of various low-dimensional projection methods. In all cases, $n=2000$, and we used spherically symmetric  simulation parameters (see Methods for details).   We compare \Pca~with the projection step of \Lol~(light green for in memory, dark green for semi-external memory ) and \Lfl~(light orange for in-memory, dark orange for semi-external memory) for different observed dimensions ($p$). \textbf{(A)} \Lol~exhibits optimal (linear) scale up and scale out, requiring only 46 minutes to find the embedding on a 2TB dataset, and only 3 minutes using \Lal (the sparse constant of sparse random projection $c=\dfrac{1}{\sqrt{p}}$). \textbf{(B)} Error for \Lal~is the same as \Lol~in this setting, and both are significantly better than \PoF~for all choices of embedding dimension.  
 % from \Lol, \Qoq, \Lrl, \Lfl, and \Lal, for different values of $(p,d)$.  The addition of the mean difference vector is essentially negligible.  Moreover, for small $d$, the \Lfl~is advantageous.  \Lal~is always fastest, and its performance is often comparable to other methods (not shown).
 }
 \label{f:speed}
@@ -351,12 +352,12 @@ Top panels show error rate as a function of log$_2$ number of embedded dimension
 Bottom panels show the minimum error rate achieved by each of the five algorithms versus time.
 The lower left dark gray (upper right light gray) rectangle is the area in which any algorithm is \emph{better}  (worse) than \Lol~in terms of both accuracy and efficiency.
 \textbf{(A)} Prostate: a standard sparse dataset.  1-dimensional \Lol~does very well, although keeping $2^5$ ambient coordinates slightly improves performance, at a significant cost of compute time (two orders of magnitude), with minimal additional interpretability.
-\textbf{(B)} Colon: another standard sparse dataset.  Here, 2-4 dimensions of \Lol~outperforms all other approaches considered.
-\textbf{(C)} MNIST: 10 image categories here, so \Road~is not possible.  \Lol~does very well regardless of the number of dimensions kept.  SVN marginally improves on \Lol~accuracy, at a significant cost in computation (two orders of magnitude).
+\textbf{(B)} Colon: another standard sparse dataset.  Here, 2-4 dimensions of \Lol~outperforms all other approaches considered regardless of how many dimensions they keep.
+\textbf{(C)} MNIST: 10 image categories, so \Road~is not possible.  \Lol~does very well regardless of the number of dimensions kept.  SVN marginally improves on \Lol~accuracy, at a significant cost in computation (two orders of magnitude).
 \textbf{(D)} CIFAR-10: a higher dimensional and newer 10 category image classification problem.  Results are qualitatively similar to C.
 %
-Note that, for none of the problems is there an algorithm ever performing better and faster than \Lol; rather, most algorithms typically perform worse and slower (though some are more accurate and much more computationally expensive.
-This suggests that regardless of how one subjectively weights computational efficiency versus accuracy, \Lol~is the best default algorithm in a variety of real data settings.
+Note that, for all four of the problems, there is no algorithmperforming better and faster than \Lol; rather, most algorithms typically perform worse and slower (though some are more accurate and much more computationally expensive).
+% This suggests that regardless of how one subjectively weights computational efficiency versus accuracy, \Lol~is the best default algorithm in a variety of real data settings.
 }
 \label{f:realdata}
 \end{figure}
@@ -389,7 +390,7 @@ High-dimensional  regression is another supervised learning method that can util
 \caption{
 The intuition of including the mean difference vector is equally useful for other supervised manifold learning problems, including testing and regression.
 \textbf{(A)} and \textbf{(B)} show two different high-dimensional testing settings, as described in Methods.  Power is plotted against the decay rate of the spectrum, which approximates the effective number of dimensions.  \Lol~composed with Hotelling's test outperforms the random projections variants described in \cite{Lopes2011a}, as well as several other variants.
-\textbf{(C)} shows a sparse high-dimensional regression settings, as described in Methods, designed for sparse methods to perform well.  Log$_{10}$ mean squared error is plotted against the number of embedded dimensions.
+\textbf{(C)} A sparse high-dimensional regression setting, as described in Methods, designed for sparse methods to perform well.  Log$_{10}$ mean squared error is plotted against the number of embedded dimensions.
 \Lol~composed with linear regression outperforms \sct{Lasso}~(cyan), the classic sparse regression method, as well as partial least squares (PLS; black).
 % In the legend, 'A' denote either 'linear regression' (in C), or 'Hotelling' (in A and B).
 These three simulation settings therefore demonstrate the generality of this technique.
@@ -403,7 +404,7 @@ These three simulation settings therefore demonstrate the generality of this tec
 \section*{Discussion}
 % get 64 lines, only using 20.
 
-We have introduced a very simple, yet new, methodology to improve performance on supervised learning problems with big and wide data.  In particular, we have proposed a supervised manifold learning procedure that utilizes both the difference of the means, and the covariance matrices, and proved that it performs better than first apply \Pca~to the data.  This is in stark contrast to most previous approaches, which only utilize the covariance matrices (or kernel variants thereof), or solve a difficult optimization theoretic problem.  In addition to demonstrating the statistical accuracy and computational efficiency of \Lol~on simulated and real classification problems, we also demonstrate how the same idea can also be used for other kinds of supervised learning problems, including regression and hypothesis testing. Theoretical guarantees suggest that this line of research is promising and can be extended to other more general settings and tasks.
+We have introduced a very simple, yet new, methodology to improve performance on supervised learning problems with big and wide data.  In particular, we have proposed a supervised manifold learning procedure that utilizes both the difference of the means, and the covariance matrices, and proved that it performs better than first applying \Pca~to the data under reasonable assumptions.  This is in stark contrast to most previous approaches, which only utilize the covariance matrices (or kernel variants thereof), or try to solve a difficult optimization theoretic problem.  In addition to demonstrating the statistical accuracy and computational efficiency of \Lol~on simulated and real classification problems, we also demonstrate how the same idea can also be used for other kinds of supervised learning problems, including regression and hypothesis testing. Theoretical guarantees suggest that this line of research is promising and can be extended to other more general settings and tasks.
 
 
 % \subsection*{Qualitative Design Considerations}
@@ -423,7 +424,169 @@ We also prove that Fisherfaces can be implemented very efficiently (see Methods)
 
 \para{Next Steps}
 % 
-The \Lol~idea, appending the mean difference vector to convert unsupervised manifold learning to supervised manifold learning, has many potential applications.  We have presented the first few.  Incorporating additional nonlinearities via kernel methods \cite{Mika1999a}, ensemble methods such as random forests \cite{Breiman2001a}, multiscale methods \cite{Allard2012},  and more scalable implementations \cite{Chang2011a}, are all of immediate interest. All code for the experiments performed in this manuscript is available from \url{http://docs.neurodata.io/LOL/}.
+The \Lol~idea, appending the mean difference vector to convert unsupervised manifold learning to supervised manifold learning, has many potential applications.  We have presented the first few.  Incorporating additional nonlinearities via kernel methods \cite{Mika1999a}, ensemble methods such as random forests \cite{Breiman2001a}, and multiscale methods \cite{Allard2012}
+% ,  and more scalable implementations \cite{Chang2011a}, 
+are all of immediate interest. MATLAB, R, and FlashR code for the experiments performed in this manuscript is available from \url{http://docs.neurodata.io/LOL/}.
+
+\clearpage
+\appendix
+
+\section{Simulations}
+
+% \subsection{Simulations}
+
+For most simulation settings, each class is Guassian:
+$f_{x|y} = \mc{N}(\bmu_y,\mb{\Sigma_y})$,
+$f_y = \mc{B}(\pi)$.  
+We typically assume that both classes are equally like, $\pi=0.5$, and the covariance matrices are the same, $\bSig_0=\bSig_1=\bSig$. Under such assumptions, we merely specify $\bth=\{\bmu_0,\bmu_1, \bSig\}$.
+
+
+\paragraph*{Stacked Cigars} 
+\begin{compactitem}
+\item $\bmu_0=\mb{0}$, 
+\item $\bmu_1=(a, b, a, \ldots, a)$, 
+\item $\bSig$ is a diagonal matrix, with diagonal vector, $\bd=(1,b,1\ldots,1)$,
+\end{compactitem}
+where $a=0.15$ and $b=4$.
+
+
+\paragraph*{Trunk} 
+\begin{compactitem}
+\item $\bmu_0=b/\sqrt{(1, 3, 5, \ldots, 2p)}$, 
+\item $\bmu_1=-\bmu_0$, 
+\item $\bSig$ is a diagonal matrix, with diagonal vector, $\bd=100/\sqrt{(p, p-1, p-2, \ldots, 1)}$,
+\end{compactitem}
+where $b=4$.
+
+% if ~isfield(task,'b'), b=4; else b=task.b; end
+% mu1=b./sqrt(1:2:2*D)';
+% mu0=-mu1;
+
+% Sigma=eye(D);
+% Sigma(1:D+1:end)=100./sqrt(D:-1:1);
+
+\paragraph*{Rotated Trunk} Same as Trunk, but the data are randomly rotated, that is, we sample $\mb{Q}$ uniformly from the set of p-dimensional rotation matrices, and then set:
+\begin{compactitem}
+\item $\bmu_0 \leftarrow \mb{Q} \bmu_0$, 
+\item $\bmu_1 \leftarrow \mb{Q} \bmu_1$, 
+\item $\bSig \leftarrow \mb{Q} \bSig \mb{Q}\T$.
+\end{compactitem}
+
+
+\paragraph*{Toeplitz} 
+\begin{compactitem}
+\item $\bmu_0=b \times (1,-1,1,-1,\ldots,1)$, 
+\item $\bmu_1= - \bmu_0$, 
+\item $\bSig$ is a Toeplitz matrix, where the top row is $\rho^{(0,1,2,\ldots,p-1)}$,
+\end{compactitem}
+where $b$ is a function of the Toeplitz matrix such that the noise stays constant as dimensionality increases, and $\rho=0.5$.
+
+% D1=10;
+% rho=0.5;
+% c=rho.^(0:D1-1);
+% A = toeplitz(c);
+% K1=sum(A(:));
+
+% c=rho.^(0:D-1);
+% A = toeplitz(c);
+% K=sum(A(:));
+
+% mudelt=(K1*b^2/K)^0.5/2;
+% mu0 = ones(D,1);
+% mu0(2:2:end)=-1;
+% mu0=mudelt*mu0;
+% mu1=-mu0;
+
+% Sigma=A;
+
+
+\paragraph*{3 Classes} Same as Trunk, but with a third mean equal to the zero vector, $\mu_2=\mb{0}$.
+
+
+\paragraph*{Fat Tails} For this setting, each class is actually a mixture of two Gaussians with the same mean (the two classes have the same covariances): 
+\begin{compactitem}
+\item $\bmu_0=\mb{0}$, 
+\item $\bmu_1=(0,\ldots,0,1,\ldots,1)$, where the first $s=10$ elements are zero, 
+\item $\bSig_0$ is a matrix with one's on the diagonal, and $0.2$ on the off diagonal,
+\item $\bSig_1 = 15 \times \bSig_0$,
+\end{compactitem}
+and then we randomly rotated as in the rotated Trunk example.
+
+
+
+
+\paragraph*{QDA} A generalization of the Toeplitz setting, where the two classes have two different covariance matrices, meaning that the optimal discriminant boundary is quadratic.
+\begin{compactitem}
+\item $\bmu_0=b \times (1,-1,1,-1,\ldots,1)$, 
+\item $\bmu_1=-\mb{Q} \times (\bmu_0+0.1)$, 
+\item $\bSig_0$ is the same Toeplitz matrix as described above, and 
+\item $\bSig_1 = \mb{Q} \bSig_0 \mb{Q}\T$.
+\end{compactitem}
+
+
+
+% if ~isfield(task,'b'), b=0.4; else b=task.b; end
+% D1=10;
+
+% rho=0.5;
+% c=rho.^(0:D1-1);
+% A = toeplitz(c);
+% K1=sum(A(:));
+
+% c=rho.^(0:D-1);
+% A = toeplitz(c);
+% K=sum(A(:));
+% Sigma=A;
+
+% mudelt=(K1*b^2/K)^0.5/2;
+% mu0 = ones(D,1);
+% mu0(2:2:end)=-1;
+% mu0=mudelt*mu0;
+
+
+% [Q, ~] = qr(randn(D));
+% if det(Q)<-.99
+%     Q(:,1)=-Q(:,1);
+% end
+
+% th=pi/4;
+% Q(1:2,1:2)=[cos(th) -sin(th); sin(th) cos(th)];
+% Q(1,3:end)=0;
+% Q(2,3:end)=0;
+% Q(3:end,1)=0;
+% Q(3:end,2)=0;
+
+% Sigma(:,:,2)=Q*Sigma*Q';
+% mu1=-Q*(mu0+0.1);
+
+
+
+\paragraph*{Outliers} In this dataset, we generate $n/2$ samples from an inlier model, and the remaining $n/2$ samples from an outlier model.  For the inlier model, we first generate a random $d \times p$ dimensional orthonormal matrix, $V$, where $d=p/10$.  Then, the first half of the inlier points are generated by $f_{x|0}$, the next half by $f_{x|1}$, and the remaining points generated by $f_{x | \emptyset}$. For the outliers, we sampled their class randomly from a fair Bernoulli distribution:   
+\begin{compactitem}
+\item $f_{x|0} = \mc{N}_d(0,\sigma^2) \times V\T$,
+\item $f_{x|1} = \mc{N}_d(0,\sigma^2) \times V\T + b$,
+\item $f_{x|\emptyset} = \mc{N}_p(\mb{0},\sigma^2\mb{I})$,
+\item $f_{\emptyset} = \mc{B}(0.5)$.
+\end{compactitem}
+where we set $\sigma=0.1$ and $b=0.5$.  
+
+% Ninlier=task.n/2; 
+% n0=Ninlier/2;
+% n1=n0;
+% Noutlier=task.n-Ninlier;
+% task.D=200;
+% d=round(task.D/10);
+% noise=0.1;
+% offset=0.5;
+% V=orth(rand(task.D,d));
+% X0=randn(n0,d)*V';
+% X1=randn(n1,d)*V'+offset;
+% X=[X0;X1; randn(Noutlier,task.D)];
+% X=X+randn(size(X))*noise;
+
+% Y=[zeros(n0,1); ones(n1,1); rand(Noutlier,1)>0.5]+1;
+
+
 
 
 \clearpage
@@ -438,12 +601,11 @@ The \Lol~idea, appending the mean difference vector to convert unsupervised mani
 
 
 
-
-
-
-
 \clearpage
-\appendix
+
+
+
+
 
 \section[theory]{Theoretical Background}
 
@@ -667,7 +829,7 @@ This will be useful later.
 
 \subsection[]{Rotation of Projection Based Linear Classifiers $g_A$}
 
-By a similar arguement as above, one can easily show that:
+By a similar argument as above, one can easily show that:
 
 \begin{align*}
 (\bA  \bW \bx) \T  (\bA \bW  \bSig  \bW\T \bA\T)^{-1} \bA \bW \bdel
@@ -685,9 +847,80 @@ $g_A$ is rotationally invariant if and only if span($\bA$)=span($\bSig_d$).
 In other words, \Pca~is the only rotationally invariant projection.
 \end{lem}
 
+\subsection{Chernoff information}
+We now introduce the notion of the Chernoff information, which serves as our surrogate measure for the Bayes error of any classification procedure given the {\em projected} data -- in the context of this paper the projection is via LOL or PCA. Our discussion of the Chernoff information is under the context of decision rules for hypothesis testing, nevertheless, as evidenced by the fact that the Maximum A Posterior decision rule -- equivalently the Bayes classifier -- achieves the Chernoff information rate, this distinction between hypothesis testing and classification is mainly for ease of exposition.
 
+Let $F_0$ and $F_1$ be two absolutely continuous multivariate distribution in $\Omega \subset \mathbb{R}^{d}$ with density function $f_0$ and $f_1$, respectively. Suppose that $Y_1, Y_2, \dots, Y_m$ are independent and identically distributed random variables, with $Y_i$ distributed either $F_0$ or $F_1$. We are interested in testing the simple null hypothesis $\mathbb{H}_0 \colon F = F_0$ against the simple alternative hypothesis $\mathbb{H}_1 \colon F = F_1$. A test $T$ is a sequence of mapping $T_m \colon \Omega^{m} \mapsto \{0,1\}$ such that given $Y_1 = y_1, Y_2 = y_2, \dots, Y_m = y_m$, the test rejects $\mathbb{H}_0$ in favor of $\mathbb{H}_1$ if $T_m(y_1, y_2, \dots, y_m) = 1$; similarly, the test rejects $\mathbb{H}_1$ in favor of $\mathbb{H}_0$ if $T_m(y_1, y_2, \dots, y_m) = 0$. 
+The Neyman-Pearson lemma states that, given $Y_1 = y_1, Y_2 = y_2, \dots, Y_m = y_m$ and a threshold $\eta_m \in \mathbb{R}$, the likelihood ratio test which rejects $\mathbb{H}_0$ in favor of $\mathbb{H}_1$ whenever
+$$ \Bigl(\sum_{i=1}^{m} \log{f_0(y_i)} - \sum_{i=1}^{m} \log{f_1(y_i)} \Bigr) \leq \eta_m $$
+is the most powerful test at significance level $\alpha_m = \alpha(\eta_m)$, i.e., the likelihood ratio test minimizes the type-II error $\beta_m$ subject to the contrainst that the type-I error is at most $\alpha_m$. 
 
+Assuming that $\pi \in (0,1)$ is a prior probability that $\mathbb{H}_0$ is true. Then, for a given $\alpha_m^{*} \in (0,1)$, let $\beta_m^{*} = \beta_m^{*}(\alpha_m^{*})$ be the type-II error associated with the likelihood ratio test when the type-I error is at most $\alpha_m^{*}$. The quantity $\inf_{\alpha_m^{*} \in (0,1)} \pi \alpha_m^{*} + (1 - \pi) \beta_m^{*}$ is then the Bayes risk in deciding between $\mathbb{H}_0$ and $\mathbb{H}_1$ given the $m$ independent random variables $Y_1, Y_2, \dots, Y_m$. A classical result of Chernoff \cite{chernoff_1952} states that the Bayes risk is intrinsically linked to a quantity known as the {\em Chernoff information}. More specifically, let $C(F_0, F_1)$ be the quantity
+\begin{equation}
+\label{eq:chernoff-defn}
+\begin{split} C(F_0, F_1) & = - \log \, \Bigl[\, \inf_{t \in (0,1)} \int_{\mathbb{R}^{d}} f_0^{t}(\bm{x}) f_1^{1-t}(\bm{x}) \mathrm{d}\bm{x} \Bigr] \\
+&= \sup_{t \in (0,1)} \Bigl[ - \log \int_{\mathbb{R}^{d}} f_0^{t}(\bm{x}) f_1^{1-t}(\bm{x}) \mathrm{d}\bm{x} \Bigr]
+\end{split}
+\end{equation}
+Then we have
+\begin{equation}
+\label{eq:chernoff-binary}
+\begin{split}
+\lim_{m \rightarrow \infty} \frac{1}{m} \inf_{\alpha_m^{*} \in (0,1)} \log( \pi \alpha_m^{*} + (1 - \pi) \beta_m^{*}) & = - \, C(F_0, F_1).
+\end{split}
+\end{equation}
+Thus $C(F_0, F_1)$ is the {\em exponential} rate at which the Bayes error $\inf_{\alpha_m^{*} \in (0,1)} \pi \alpha_m^{*} + (1 - \pi) \beta_m^{*}$ decreases as $m \rightarrow \infty$; we also note that the $C(F_0, F_1)$ is independent of $\pi$. We also define, for a given $t \in (0,1)$ the Chernoff divergence $C_t(F_0, F_1) $ between $F_0$ and $F_1$ by
+$$ C_{t}(F_0,F_1) = - \log \int_{\mathbb{R}^{d}} f_0^{t}(\bm{x}) f_1^{1-t}(\bm{x}) \mathrm{d}\bm{x}. $$
+The Chernoff divergence is an example of a $f$-divergence as defined in \cite{Csizar}. When $t = 1/2$, $C_t(F_0,F_1)$ is the Bhattacharyya distance between $F_0$ and $F_1$. 
 
+The result of Eq.~\eqref{eq:chernoff-binary} can be extended to $K + 1 \geq 2$ hypothesis, with the exponential rate being the minimum of the Chernoff information between any pair of hypothesis. More specifically, let $F_0, F_1, \dots, F_{K}$ be distributions on $\mathbb{R}^{d}$ and let $Y_1, Y_2, \dots, Y_m$ be independent and identically distributed random variables with distribution $F \in \{F_0, F_1, \dots, F_K\}$. Our inference task is in determining the distribution of the $Y_i$ among the $K+1$ hypothesis $\mathbb{H}_0 \colon F = F_0, \dots, \mathbb{H}_{K} \colon F = F_K$. Suppose also that hypothesis $\mathbb{H}_k$ has {\em a priori} probabibility $\pi_k$. For any decision rule $\delta$, the risk of $\delta$ is $r(\delta) = \sum_{k} \pi_k \sum_{l \not = k} \alpha_{lk}(\delta) $ where $\alpha_{lk}(\delta)$ is the probability of accepting hypothesis $\mathbb{H}_l$ when hypothesis $\mathbb{H}_k$ is true. Then we have \cite{leang-johnson}
+\begin{equation}
+\label{eq:chernoff-multiple}
+\inf_{\delta} \lim_{m \rightarrow \infty}  \frac{r(\delta)}{m} = - \min_{k \not = l} C(F_k, F_l).
+\end{equation}
+where the infimum is over all decision rule $\delta$, i.e., for any $\delta$, $r(\delta)$ decreases to $0$ as $m \rightarrow \infty$ at a rate no faster than $\exp(- m \min_{k \not = l} C(F_k, F_l))$. 
+%It was also shown in \cite{leang-johnson} that the {\em Maximum A Posterior} decision rule achieves this rate. 
+
+When the distributions $F_0$ and $F_1$ are multivariate normal, that is, $F_0 =  \mathcal{N}(\mu_0, \Sigma_0)$ and $F_1 = \mathcal{N}(\mu_1, \Sigma_1)$; then, denoting by $\Sigma_t = t \Sigma_0 + (1 - t) \Sigma_1$, we have 
+\begin{equation*}
+C(F_0, F_1) = \sup_{t \in (0,1)} \Bigl(\frac{t(1 - t)}{2} (\mu_1 - \mu_2)^{\top}\Sigma_t^{-1}(\mu_1 - \mu_2) + \frac{1}{2} \log \frac{|\Sigma_t|}{|\Sigma_0|^{t} |\Sigma_1|^{1 - t}}  \Bigr).
+\end{equation*}
+
+\subsection{Projecting data and Chernoff information}
+We now discuss how the Chernoff information characterizes the effect a linear transformation $A$ of the data has on classification accuracy.
+We start with the following simple result whose proof follows directly from Eq.~\eqref{eq:chernoff-multiple}. 
+\begin{lem}
+\label{lem:chernoff-1}
+Let $F_0 = \mathcal{N}(\mu_0, \Sigma)$ and $F_1 \sim \mathcal{N}(\mu_1, \Sigma)$ be two multivariate normals with equal covariance matrices. For any linear transformation $A$, let $F_0^{(A)}$ and $F_1^{(A)}$ denotes the distribution of $AX$ when $X \sim F_0$ and $X \sim F_1$, respectively. We then have
+\begin{equation}
+\begin{split}
+C(F_0^{(A)}, F_1^{(A)}) &= \frac{1}{8} (\mu_1 - \mu_0)^{\top} A^{\top} (A \Sigma A^{\top})^{-1} A (\mu_1 - \mu_0) \\ & = \frac{1}{8} (\mu_1 - \mu_0)^{\top} \Sigma^{-1/2} \Sigma^{1/2} A^{\top} (A \Sigma A^{\top})^{-1} A \Sigma^{1/2} \Sigma^{-1/2} (\mu_1 - \mu_0) \\
+&= \frac{1}{8} \|P_{\Sigma^{1/2} A^{\top}} \Sigma^{-1/2} (\mu_1 - \mu_0) \|_{F}^{2}
+\end{split}
+\end{equation}
+where $P_{Z} = Z(Z^{\top} Z)^{-1} Z^{\top}$ denotes the matrix corresponding to the orthogonal projection onto the columns of $Z$. 
+\end{lem}
+
+Thus for a classification problem where $X | Y = 0$ and $X | Y = 1$ are distributed multivariate normals with mean $\mu_0$ and $\mu_1$ and the same covariance matrix $\Sigma$, Lemma~\ref{lem:chernoff-1} then states that for any two linear transformations $A$ and $B$, the transformed data $AX$ is to be preferred over the transformed data $BX$ if
+$$ (\mu_1 - \mu_0)^{\top} A^{\top} (A \Sigma A^{\top})^{-1} A (\mu_1 - \mu_0) > (\mu_1 - \mu_0)^{\top} B^{\top} (B \Sigma B^{\top})^{-1} B (\mu_1 - \mu_0). $$
+
+As an example, suppose $\Sigma$ is diagonal with distinct eigenvalues where the diagonal entries of $\Sigma$ are in non-increasing order. 
+Denote by $\delta = \mu_1 - \mu_0$ and let
+$A = \delta$ and $B = e_1 = (1,0,0,\dots,0)$ be the linear transformations for LOL and PCA of $X$ into $\mathbb{R}$. We then have  
+\begin{gather*}
+C(F_0^{(A)}, F_1^{(A)}) = \frac{(\delta^{\top} \delta)^2}{\delta^{\top} \Sigma \delta} = \frac{(\sum_{i} \delta_i^{2})^{2}}{\sum_{i} \delta_i^{2} \lambda_i}; \quad 
+C(F_0^{(B)}, F_1^{(B)}) = \frac{\delta_1^2}{\lambda_1}
+\end{gather*}
+where $\lambda_1$ is the largest eigenvalue of $\Sigma$. Suppose furthermore that $\delta_1 \leq \delta_2 \leq \dots \leq \delta_p$ and $\lambda_1 > \lambda_2 > \dots > \lambda_p$. Then $C(F_0^{(A)}, F_1^{(A)})$ can be lower-bounded as
+$$ C(F_0^{(A)}, F_1^{(A)}) = \frac{(\sum_{i} \delta_i^{2})^{2}}{\sum_{i} \delta_i^{2} \lambda_i} \geq \frac{(p \delta_1^2)^2}{p \delta_p^{2} \lambda_1} $$
+and hence $C(F_0^{(A)}, F_1^{(A)}) > C(F_0^{(B)}, F_1^{(B)})$ provided $p \delta_1^{2}  \geq \delta_p^2$. 
+
+When $A = \bigl[ \delta \mid e_1 \mid e_2 \dots \mid e_{d-1} \bigr]$ and $B = \bigl[e_1 \mid e_2 \mid \dots \mid e_d \bigr]$ are the linear transformation for LOL and PCA of $X$ into $\mathbb{R}^{d}$, we have
+\begin{gather*}
+C(F_0^{(A)}, F_1^{(A)}) = \frac{(\sum_{i=d}^{p} \delta_i^2)^2 + \sum_{i=1}^{d-1} \lambda_i^{-1} \delta_i^2}{\sum_{i=d}^{p} \delta_i^2 \lambda_i};  \quad 
+C(F_0^{(B)}, F_1^{(B)}) = \sum_{i=1}^{d} \frac{\delta_i^2}{\lambda_i}
+\end{gather*}
+ 
 
 \subsection{Simplifying the Objective Function}
 
@@ -737,77 +970,149 @@ If $\angle(\bP_A, \bP_*) <1$, then there exists an $\bx$ such that $\II\{ \bx\T 
 \label{q:a2}
 $$\angle(\bP_A,\bP_*) \leq \angle(\bP_B,\bP_*) \implies L_A \leq L_B.$$
 \end{lem}
-\begin{proof}
-We recall from the definitions that $\bP_{\bA} = \bA\T (\bA \mb{\Sigma} \bA\T)^{-1} \bA \mb{\delta}$ and $\bP_{\mathbf{B}} = \mathbf{B}\T (\mathbf{B} \mb{\Sigma} \mathbf{B}\T)^{-1} \mathbf{B} \mb{\delta}$. In addition, $\bP_{*} = \mb{\Sigma}^{-1} \mb{\delta}$. For ease of notation, let $\mb{a} = \bP_{\bA}$ and $\mb{b} = \bP_{\mathbf{B}}$. 
-Therefore,
-$$ 
-\frac{\bP_{\bA}\T \bP_{*}}{\|\bP_{\bA}\|_{F} \|\bP_{*}\|_{F}} = \frac{\mb{a}\T \mb{\Sigma}^{-1} \mb{\delta}}{\|\mb{a}\| \|\bP_{*}\|_{F}} \geq  \frac{\mb{b}\T \mb{\Sigma}^{-1} \mb{\delta}}{\|\mb{b}\| \|\bP_{*}\|_{F}} = \frac{\bP_{\mathbf{B}}\T \bP_{*}}{\|\bP_{\mathbf{B}}\|_{F} \|\bP_{*}\|_{F}}
-$$
-Without loss of generality, assume that $\mb{a}\T \mb{a} = 1$ and  $\mb{b}\T \mb{b} = 1$. Then the above condition reduced to
-$$ \mb{a}\T \mb{\Sigma}^{-1} \mb{\delta} \geq \mb{b}\T \mb{\Sigma}^{-1} \mb{\delta}.$$
+% <<<<<<< HEAD
+% \begin{proof}
+% We recall from the definitions that $\bP_{\bA} = \bA\T (\bA \bSig \bA\T)^{-1} \bA \bdel$ and $\bP_{\bB} = \bB\T (\bB \bSig \bB\T)^{-1} \bB \bdel$. In addition, $\bP_{*} = \bSig^{-1} \bdel$. For ease of notation, let $\ba = \bP_{\bA}$ and $\mb{b} = \bP_{\bB}$. 
+% Therefore,
+% $$ 
+% \frac{\bP_{\bA}\T \bP_{*}}{\|\bP_{\bA}\|_{F} \|\bP_{*}\|_{F}} = \frac{\ba\T \bSig^{-1} \bdel}{\|\ba\| \|\bP_{*}\|_{F}} \geq  \frac{\mb{b}\T \bSig^{-1} \bdel}{\|\mb{b}\| \|\bP_{*}\|_{F}} = \frac{\bP_{\bB}\T \bP_{*}}{\|\bP_{\bB}\|_{F} \|\bP_{*}\|_{F}}
+% $$
+% Without loss of generality, assume that $\ba\T \ba = 1$ and  $\mb{b}\T \mb{b} = 1$. Then the above condition reduced to
+% $$ \ba\T \bSig^{-1} \bdel \geq \mb{b}\T \bSig^{-1} \bdel.$$
 
-We now analyze $L_{A}$. Let $C = \tfrac{1}{2}(2 \pi \mathrm{\det}(\mb{\Sigma}))^{-1/2}$. We have
-\begin{equation*}
-\begin{split}
-L_{A} &= \mathbb{E}[\mathbb{I}\{\mb{x}\T \mb{a} > 0\} \not = y] \\ &=
-\int_{\mb{x}\T \mb{a} \leq 0} C \exp\Bigl(-\tfrac{1}{2}(\mb{x} - \mb{\mu})\T \mb{\Sigma}^{-1} (\mb{x} - \mb{\mu})\Bigr) \mathrm{d} \mb{x} + \int_{\mb{x}\T \mb{a} > 0} C \exp\Bigl(-\tfrac{1}{2}(\mb{x} + \mb{\mu})\T \mb{\Sigma}^{-1} (\mb{x} + \mb{\mu})\Bigr) \mathrm{d} \mb{x}
-\\ &= 0.5 - 
-\int_{\mb{x}\T \mb{a} > 0} C \exp\Bigl(-\tfrac{1}{2}(\mb{x} - \mb{\mu})\T \mb{\Sigma}^{-1} (\mb{x} - \mb{\mu})\Bigr) \mathrm{d} \mb{x}
-+ \int_{\mb{x}\T \mb{a} > 0} C \exp\Bigl(-\tfrac{1}{2}(\mb{x} + \mb{\mu})\T \mb{\Sigma}^{-1} (\mb{x} + \mb{\mu})\Bigr) \mathrm{d} \mb{x}
-\\ &= 0.5 - C \int_{\mb{x}\T \mb{a} > 0} \Bigl(\exp(-\tfrac{1}{2}(\mb{x} - \mb{\mu})\T \mb{\Sigma}^{-1} (\mb{x} - \mb{\mu})) - \exp(-\tfrac{1}{2}(\mb{x} + \mb{\mu})\T \mb{\Sigma}^{-1} (\mb{x} + \mb{\mu})) \Bigr) \mathrm{d} \mb{x}
-\\ &= 0.5 - C \int_{\mb{x}\T \mb{a} > 0} h(\mb{x}) \mathrm{d} \mb{x}
-\end{split}
-\end{equation*}
-where $h(\mb{x}) = \exp(-\tfrac{1}{2}(\mb{x} - \mb{\mu})\T \mb{\Sigma}^{-1} (\mb{x} - \mb{\mu})) - \exp(-\tfrac{1}{2}(\mb{x} + \mb{\mu})\T \mb{\Sigma}^{-1} (\mb{x} + \mb{\mu}))$.
-In particular, $L_*$ is given by
-$$L_* = 0.5 - C \int_{\mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} > 0} h(\mb{x}) \mathrm{d} \mb{x}, $$
-where $h(\mb{x}) = \exp(-\tfrac{1}{2}(\mb{x} - \mb{\mu})\T \mb{\Sigma}^{-1} (\mb{x} - \mb{\mu})) - \exp(-\tfrac{1}{2}(\mb{x} + \mb{\mu})\T \mb{\Sigma}^{-1} (\mb{x} + \mb{\mu})$. 
-And since  $h(\mb{x}) \geq 0$ if and only if $\mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} \geq 0$, $L_*$ is indeed the Bayes risk. 
+% We now analyze $L_{A}$. Let $C = \tfrac{1}{2}(2 \pi \mathrm{\det}(\bSig))^{-1/2}$. We have
+% \begin{equation*}
+% \begin{split}
+% L_{A} &= \mathbb{E}[\mathbb{I}\{\mb{x}\T \ba > 0\} \not = y] \\ &=
+% \int_{\mb{x}\T \ba \leq 0} C \exp\Bigl(-\tfrac{1}{2}(\mb{x} - \bmu)\T \bSig^{-1} (\mb{x} - \bmu)\Bigr) \mathrm{d} \mb{x} + \int_{\mb{x}\T \ba > 0} C \exp\Bigl(-\tfrac{1}{2}(\mb{x} + \bmu)\T \bSig^{-1} (\mb{x} + \bmu)\Bigr) \mathrm{d} \mb{x}
+% \\ &= 0.5 - 
+% \int_{\mb{x}\T \ba > 0} C \exp\Bigl(-\tfrac{1}{2}(\mb{x} - \bmu)\T \bSig^{-1} (\mb{x} - \bmu)\Bigr) \mathrm{d} \mb{x}
+% + \int_{\mb{x}\T \ba > 0} C \exp\Bigl(-\tfrac{1}{2}(\mb{x} + \bmu)\T \bSig^{-1} (\mb{x} + \bmu)\Bigr) \mathrm{d} \mb{x}
+% \\ &= 0.5 - C \int_{\mb{x}\T \ba > 0} \Bigl(\exp(-\tfrac{1}{2}(\mb{x} - \bmu)\T \bSig^{-1} (\mb{x} - \bmu)) - \exp(-\tfrac{1}{2}(\mb{x} + \bmu)\T \bSig^{-1} (\mb{x} + \bmu)) \Bigr) \mathrm{d} \mb{x}
+% \\ &= 0.5 - C \int_{\mb{x}\T \ba > 0} h(\mb{x}) \mathrm{d} \mb{x}
+% \end{split}
+% \end{equation*}
+% where $h(\mb{x}) = \exp(-\tfrac{1}{2}(\mb{x} - \bmu)\T \bSig^{-1} (\mb{x} - \bmu)) - \exp(-\tfrac{1}{2}(\mb{x} + \bmu)\T \bSig^{-1} (\mb{x} + \bmu))$.
+% In particular, $L_*$ is given by
+% $$L_* = 0.5 - C \int_{\mb{x}\T \bSig^{-1} \bdel > 0} h(\mb{x}) \mathrm{d} \mb{x}, $$
+% where $h(\mb{x}) = \exp(-\tfrac{1}{2}(\mb{x} - \bmu)\T \bSig^{-1} (\mb{x} - \bmu)) - \exp(-\tfrac{1}{2}(\mb{x} + \bmu)\T \bSig^{-1} (\mb{x} + \bmu)$. 
+% And since  $h(\mb{x}) \geq 0$ if and only if $\mb{x}\T \bSig^{-1} \bdel \geq 0$, $L_*$ is indeed the Bayes risk. 
 
-Thus, $L_A \leq L_B$ is equivalent to 
-\begin{equation*}
-\int_{\mb{x}\T \mb{a} > 0} h(x) \mathrm{d} \mb{x} \geq \int_{\mb{x}\T \mb{b} > 0} h(x) \mathrm{d} \mb{x}.
-\end{equation*}
+% Thus, $L_A \leq L_B$ is equivalent to 
+% \begin{equation*}
+% \int_{\mb{x}\T \ba > 0} h(x) \mathrm{d} \mb{x} \geq \int_{\mb{x}\T \mb{b} > 0} h(x) \mathrm{d} \mb{x}.
+% \end{equation*}
 
-We now analyze the set $\{\mb{x} \colon \mb{x}\T \mb{a} > 0\}$. We write 
-$\mb{x}\T \mb{a} = \mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} + \mb{x}\T (\mb{a} - \mb{\Sigma}^{-1} \mb{\delta})$. 
-Without loss of generality, we can further assume that $\|(\mb{\Sigma}^{-1} \mb{\delta})\T \| = 1$. Then, because $\mb{a}\T \mb{a} = 1$, we have that
-$\|\mb{a} - \mb{\Sigma}^{-1} \mb{\delta} \|^{2} = 2 - 2 \mb{a}\T \mb{\Sigma}^{-1} \mb{\delta}$. 
-Let $c_a = 2 - 2 \mb{a}\T \mb{\Sigma}^{-1} \mb{\delta}$; we shall assume for the moment that $c_a$ is ``small''. Then for any $\eta > 0$, we have
-\begin{equation*}
-\{\mb{x} \colon \mb{x}\T \mb{a} > 0 \} = \{ \mb{x} \colon \mb{x}\T \mb{a} > 0 \} \cap \Bigl(\{\mb{x} \colon \mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} > \eta \} \cup \{\mb{x} \colon \mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} \in [-\eta, \eta] \} \cup \{ \mb{x} \colon \mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} < -\eta \}\Bigr)
-\end{equation*}
-Now provided that $c_a$ is ``small'' we can choose $\eta = Kc_a$ for some constant $K$ such that 
-\begin{gather}
-\int_{\mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} \in [-\eta, \eta]} h(\mb{x}) \mathrm{d} \mb{x} \approx 0
-\label{part:a}
-\\
-\int_{\substack{\mb{x} \colon \mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} < -\eta \\ \mb{x}\T \mb{a} > 0 }} h(\mb{x}) \mathrm{d}\mb{x} \approx 0 
-\label{part:b}
-\\
- \int_{\substack{\mb{x} \colon \mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} > \eta \\ \mb{x}\T \mb{a} > 0 }} h(\mb{x}) \mathrm{d}\mb{x} \approx 
-\int_{\mb{x} \colon \mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} > \eta } h(\mb{x}) \mathrm{d} \mb{x}
-\label{part:c}
-\end{gather}
+% We now analyze the set $\{\mb{x} \colon \mb{x}\T \ba > 0\}$. We write 
+% $\mb{x}\T \ba = \mb{x}\T \bSig^{-1} \bdel + \mb{x}\T (\ba - \bSig^{-1} \bdel)$. 
+% Without loss of generality, we can further assume that $\|(\bSig^{-1} \bdel)\T \| = 1$. Then, because $\ba\T \ba = 1$, we have that
+% $\|\ba - \bSig^{-1} \bdel \|^{2} = 2 - 2 \ba\T \bSig^{-1} \bdel$. 
+% Let $c_a = 2 - 2 \ba\T \bSig^{-1} \bdel$; we shall assume for the moment that $c_a$ is ``small''. Then for any $\eta > 0$, we have
+% \begin{equation*}
+% \{\mb{x} \colon \mb{x}\T \ba > 0 \} = \{ \mb{x} \colon \mb{x}\T \ba > 0 \} \cap \Bigl(\{\mb{x} \colon \mb{x}\T \bSig^{-1} \bdel > \eta \} \cup \{\mb{x} \colon \mb{x}\T \bSig^{-1} \bdel \in [-\eta, \eta] \} \cup \{ \mb{x} \colon \mb{x}\T \bSig^{-1} \bdel < -\eta \}\Bigr)
+% \end{equation*}
+% Now provided that $c_a$ is ``small'' we can choose $\eta = Kc_a$ for some constant $K$ such that 
+% \begin{gather}
+% \int_{\mb{x}\T \bSig^{-1} \bdel \in [-\eta, \eta]} h(\mb{x}) \mathrm{d} \mb{x} \approx 0
+% \label{part:a}
+% \\
+% \int_{\substack{\mb{x} \colon \mb{x}\T \bSig^{-1} \bdel < -\eta \\ \mb{x}\T \ba > 0 }} h(\mb{x}) \mathrm{d}\mb{x} \approx 0 
+% \label{part:b}
+% \\
+%  \int_{\substack{\mb{x} \colon \mb{x}\T \bSig^{-1} \bdel > \eta \\ \mb{x}\T \ba > 0 }} h(\mb{x}) \mathrm{d}\mb{x} \approx 
+% \int_{\mb{x} \colon \mb{x}\T \bSig^{-1} \bdel > \eta } h(\mb{x}) \mathrm{d} \mb{x}
+% \label{part:c}
+% \end{gather}
 
-Therefore,
-\begin{equation*}
-\int_{\mb{x}\T \mb{a} > 0} h(\mb{x}) \mathrm{d} \mb{x} \approx \int_{\mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} > K c_a} h(\mb{x}) \mathrm{d} \mb{x}
-\end{equation*}
+% Therefore,
+% \begin{equation*}
+% \int_{\mb{x}\T \ba > 0} h(\mb{x}) \mathrm{d} \mb{x} \approx \int_{\mb{x}\T \bSig^{-1} \bdel > K c_a} h(\mb{x}) \mathrm{d} \mb{x}
+% \end{equation*}
 
-We note that in general, the integrals in Eq.~\eqref{part:a} and Eq.~\eqref{part:b} are non-positive. Therefore, letting $\eta' = K c_b$ where $c_b = 2 - 2 \mb{a}\T \mb{\Sigma}^{-1} \mb{\delta}$, we have
-\begin{equation*}
-\int_{\mb{x}\T \mb{b} > 0} h(\mb{x}) \mathrm{d} \mb{x} \leq \int_{\substack{\mb{x} \colon \mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} > K c_b \\ \mb{x}\T \mb{b} > 0 }} h(\mb{x}) \mathrm{d} \mb{x} \leq
-\int_{\mb{x} \colon \mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} > K c_b } h(\mb{x}) \mathrm{d} \mb{x}.
-\end{equation*}
-for any $\mb{b}$. 
-Therefore, because $h(\mb{x})$ is positive on the set $\mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} > 0$, we can thus conclude that there exists some $\epsilon_2 > \epsilon_1 > 0$ such that
-\begin{equation*}
-\int_{\mb{x}\T \mb{a} > 0} h(\mb{x}) \geq \int_{\mb{x}\T \mb{b} > 0} h(\mb{x}).
-\end{equation*}
-for any $\mb{a}$ and $\mb{b}$ with $c_a < \epsilon_1$ and $c_b > \epsilon_2$. 
+% We note that in general, the integrals in Eq.~\eqref{part:a} and Eq.~\eqref{part:b} are non-positive. Therefore, letting $\eta' = K c_b$ where $c_b = 2 - 2 \ba\T \bSig^{-1} \bdel$, we have
+% \begin{equation*}
+% \int_{\mb{x}\T \mb{b} > 0} h(\mb{x}) \mathrm{d} \mb{x} \leq \int_{\substack{\mb{x} \colon \mb{x}\T \bSig^{-1} \bdel > K c_b \\ \mb{x}\T \mb{b} > 0 }} h(\mb{x}) \mathrm{d} \mb{x} \leq
+% \int_{\mb{x} \colon \mb{x}\T \bSig^{-1} \bdel > K c_b } h(\mb{x}) \mathrm{d} \mb{x}.
+% \end{equation*}
+% for any $\mb{b}$. 
+% Therefore, because $h(\mb{x})$ is positive on the set $\mb{x}\T \bSig^{-1} \bdel > 0$, we can thus conclude that there exists some $\epsilon_2 > \epsilon_1 > 0$ such that
+% \begin{equation*}
+% \int_{\mb{x}\T \ba > 0} h(\mb{x}) \geq \int_{\mb{x}\T \mb{b} > 0} h(\mb{x}).
+% \end{equation*}
+% for any $\ba$ and $\mb{b}$ with $c_a < \epsilon_1$ and $c_b > \epsilon_2$. 
+% =======
+% \begin{proof}
+% We recall from the definitions that $\bP_{\bA} = \bA\T (\bA \mb{\Sigma} \bA\T)^{-1} \bA \mb{\delta}$ and $\bP_{\mathbf{B}} = \mathbf{B}\T (\mathbf{B} \mb{\Sigma} \mathbf{B}\T)^{-1} \mathbf{B} \mb{\delta}$. In addition, $\bP_{*} = \mb{\Sigma}^{-1} \mb{\delta}$. For ease of notation, let $\mb{a} = \bP_{\bA}$ and $\mb{b} = \bP_{\mathbf{B}}$. 
+% Therefore,
+% $$ 
+% \frac{\bP_{\bA}\T \bP_{*}}{\|\bP_{\bA}\|_{F} \|\bP_{*}\|_{F}} = \frac{\mb{a}\T \mb{\Sigma}^{-1} \mb{\delta}}{\|\mb{a}\| \|\bP_{*}\|_{F}} \geq  \frac{\mb{b}\T \mb{\Sigma}^{-1} \mb{\delta}}{\|\mb{b}\| \|\bP_{*}\|_{F}} = \frac{\bP_{\mathbf{B}}\T \bP_{*}}{\|\bP_{\mathbf{B}}\|_{F} \|\bP_{*}\|_{F}}
+% $$
+% Without loss of generality, assume that $\mb{a}\T \mb{a} = 1$ and  $\mb{b}\T \mb{b} = 1$. Then the above condition reduced to
+% $$ \mb{a}\T \mb{\Sigma}^{-1} \mb{\delta} \geq \mb{b}\T \mb{\Sigma}^{-1} \mb{\delta}.$$
 
-\end{proof}
+% We now analyze $L_{A}$. Let $C = \tfrac{1}{2}(2 \pi \mathrm{\det}(\mb{\Sigma}))^{-1/2}$. We have
+% \begin{equation*}
+% \begin{split}
+% L_{A} &= \mathbb{E}[\mathbb{I}\{\mb{x}\T \mb{a} > 0\} \not = y] \\ &=
+% \int_{\mb{x}\T \mb{a} \leq 0} C \exp\Bigl(-\tfrac{1}{2}(\mb{x} - \mb{\mu})\T \mb{\Sigma}^{-1} (\mb{x} - \mb{\mu})\Bigr) \mathrm{d} \mb{x} + \int_{\mb{x}\T \mb{a} > 0} C \exp\Bigl(-\tfrac{1}{2}(\mb{x} + \mb{\mu})\T \mb{\Sigma}^{-1} (\mb{x} + \mb{\mu})\Bigr) \mathrm{d} \mb{x}
+% \\ &= 0.5 - 
+% \int_{\mb{x}\T \mb{a} > 0} C \exp\Bigl(-\tfrac{1}{2}(\mb{x} - \mb{\mu})\T \mb{\Sigma}^{-1} (\mb{x} - \mb{\mu})\Bigr) \mathrm{d} \mb{x}
+% + \int_{\mb{x}\T \mb{a} > 0} C \exp\Bigl(-\tfrac{1}{2}(\mb{x} + \mb{\mu})\T \mb{\Sigma}^{-1} (\mb{x} + \mb{\mu})\Bigr) \mathrm{d} \mb{x}
+% \\ &= 0.5 - C \int_{\mb{x}\T \mb{a} > 0} \Bigl(\exp(-\tfrac{1}{2}(\mb{x} - \mb{\mu})\T \mb{\Sigma}^{-1} (\mb{x} - \mb{\mu})) - \exp(-\tfrac{1}{2}(\mb{x} + \mb{\mu})\T \mb{\Sigma}^{-1} (\mb{x} + \mb{\mu})) \Bigr) \mathrm{d} \mb{x}
+% \\ &= 0.5 - C \int_{\mb{x}\T \mb{a} > 0} h(\mb{x}) \mathrm{d} \mb{x}
+% \end{split}
+% \end{equation*}
+% where $h(\mb{x}) = \exp(-\tfrac{1}{2}(\mb{x} - \mb{\mu})\T \mb{\Sigma}^{-1} (\mb{x} - \mb{\mu})) - \exp(-\tfrac{1}{2}(\mb{x} + \mb{\mu})\T \mb{\Sigma}^{-1} (\mb{x} + \mb{\mu}))$.
+% In particular, $L_*$ is given by
+% $$L_* = 0.5 - C \int_{\mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} > 0} h(\mb{x}) \mathrm{d} \mb{x}, $$
+% where $h(\mb{x}) = \exp(-\tfrac{1}{2}(\mb{x} - \mb{\mu})\T \mb{\Sigma}^{-1} (\mb{x} - \mb{\mu})) - \exp(-\tfrac{1}{2}(\mb{x} + \mb{\mu})\T \mb{\Sigma}^{-1} (\mb{x} + \mb{\mu})$. 
+% And since  $h(\mb{x}) \geq 0$ if and only if $\mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} \geq 0$, $L_*$ is indeed the Bayes risk. 
+
+% Thus, $L_A \leq L_B$ is equivalent to 
+% \begin{equation*}
+% \int_{\mb{x}\T \mb{a} > 0} h(x) \mathrm{d} \mb{x} \geq \int_{\mb{x}\T \mb{b} > 0} h(x) \mathrm{d} \mb{x}.
+% \end{equation*}
+
+% We now analyze the set $\{\mb{x} \colon \mb{x}\T \mb{a} > 0\}$. We write 
+% $\mb{x}\T \mb{a} = \mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} + \mb{x}\T (\mb{a} - \mb{\Sigma}^{-1} \mb{\delta})$. 
+% Without loss of generality, we can further assume that $\|(\mb{\Sigma}^{-1} \mb{\delta})\T \| = 1$. Then, because $\mb{a}\T \mb{a} = 1$, we have that
+% $\|\mb{a} - \mb{\Sigma}^{-1} \mb{\delta} \|^{2} = 2 - 2 \mb{a}\T \mb{\Sigma}^{-1} \mb{\delta}$. 
+% Let $c_a = 2 - 2 \mb{a}\T \mb{\Sigma}^{-1} \mb{\delta}$; we shall assume for the moment that $c_a$ is ``small''. Then for any $\eta > 0$, we have
+% \begin{equation*}
+% \{\mb{x} \colon \mb{x}\T \mb{a} > 0 \} = \{ \mb{x} \colon \mb{x}\T \mb{a} > 0 \} \cap \Bigl(\{\mb{x} \colon \mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} > \eta \} \cup \{\mb{x} \colon \mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} \in [-\eta, \eta] \} \cup \{ \mb{x} \colon \mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} < -\eta \}\Bigr)
+% \end{equation*}
+% Now provided that $c_a$ is ``small'' we can choose $\eta = Kc_a$ for some constant $K$ such that 
+% \begin{gather}
+% \int_{\mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} \in [-\eta, \eta]} h(\mb{x}) \mathrm{d} \mb{x} \approx 0
+% \label{part:a}
+% \\
+% \int_{\substack{\mb{x} \colon \mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} < -\eta \\ \mb{x}\T \mb{a} > 0 }} h(\mb{x}) \mathrm{d}\mb{x} \approx 0 
+% \label{part:b}
+% \\
+%  \int_{\substack{\mb{x} \colon \mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} > \eta \\ \mb{x}\T \mb{a} > 0 }} h(\mb{x}) \mathrm{d}\mb{x} \approx 
+% \int_{\mb{x} \colon \mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} > \eta } h(\mb{x}) \mathrm{d} \mb{x}
+% \label{part:c}
+% \end{gather}
+
+% Therefore,
+% \begin{equation*}
+% \int_{\mb{x}\T \mb{a} > 0} h(\mb{x}) \mathrm{d} \mb{x} \approx \int_{\mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} > K c_a} h(\mb{x}) \mathrm{d} \mb{x}
+% \end{equation*}
+
+% We note that in general, the integrals in Eq.~\eqref{part:a} and Eq.~\eqref{part:b} are non-positive. Therefore, letting $\eta' = K c_b$ where $c_b = 2 - 2 \mb{a}\T \mb{\Sigma}^{-1} \mb{\delta}$, we have
+% \begin{equation*}
+% \int_{\mb{x}\T \mb{b} > 0} h(\mb{x}) \mathrm{d} \mb{x} \leq \int_{\substack{\mb{x} \colon \mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} > K c_b \\ \mb{x}\T \mb{b} > 0 }} h(\mb{x}) \mathrm{d} \mb{x} \leq
+% \int_{\mb{x} \colon \mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} > K c_b } h(\mb{x}) \mathrm{d} \mb{x}.
+% \end{equation*}
+% for any $\mb{b}$. 
+% Therefore, because $h(\mb{x})$ is positive on the set $\mb{x}\T \mb{\Sigma}^{-1} \mb{\delta} > 0$, we can thus conclude that there exists some $\epsilon_2 > \epsilon_1 > 0$ such that
+% \begin{equation*}
+% \int_{\mb{x}\T \mb{a} > 0} h(\mb{x}) \geq \int_{\mb{x}\T \mb{b} > 0} h(\mb{x}).
+% \end{equation*}
+% for any $\mb{a}$ and $\mb{b}$ with $c_a < \epsilon_1$ and $c_b > \epsilon_2$. 
+>>>>>>> 10e9e0fe9df8fe199320671c68fa2ecc62bdc025
+
+% \end{proof}
 
 
 
@@ -840,7 +1145,7 @@ Similarly, the right hand side means that:
 $$\frac{\bdel\T \bA\T (\bA \bSig \bA\T)^{-1} \bA \bSig^{-1} \bdel}{\|\bdel\T \bA\T (\bA \bSig \bA\T)^{-1} \bA\| \|\bSig^{-1} \bdel\|} > \frac{\bdel\T \bB\T (\bB \bSig \bB\T)^{-1} \bB \bSig^{-1} \bdel}{\|\bdel\T \bB\T (\bB \bSig \bB\T)^{-1} \bB\| \|\bSig^{-1} \bdel \|}$$.
 
 Furthermore, $\bA \bSig \bA\T \in \mathbb{R}$ and $\bB \bSig \bB\T \in \mathbb{R}$ as $\mb{A}$ and $\mb{B}$ are, in this case, both $1 \times p$ matrices. 
-Similary, $\mb{\delta}\T \bA\T \in \mathbb{R}$ and $\mb{\delta}\T \bB\T \in \mathbb{R}$. Thus, the above display equation is equivalent to
+Similary, $\bdel\T \bA\T \in \mathbb{R}$ and $\bdel\T \bB\T \in \mathbb{R}$. Thus, the above display equation is equivalent to
 $$\frac{\bA \bSig^{-1} \bdel}{\|\bA\|} \geq \frac{\bB \bSig^{-1} \bdel}{\|\bB\|}$$
 which holds if and only if left hand side holds.
 \end{proof}
