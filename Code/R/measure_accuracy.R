@@ -31,6 +31,11 @@ for (i in 1:10) {
 	test2 <- sweep(test2, 2, sqrt(sigma.vec), "*")
 	test2 <- sweep(test2, 2, -mu, "+")
 	test <- fm.rbind(test1, test2)
+
+	mat1 <- NULL
+	mat2 <- NULL
+	test1 <- NULL
+	test2 <- NULL
 	gc()
 
 	for (red.p in c(10, 50, 100, 500)) {
@@ -59,6 +64,8 @@ for (i in 1:10) {
 		truth <- rep.int(1, length(pred$class))
 		truth[(length(truth)/2 + 1):length(truth)]<-2
 		cat("LAL:", sum((as.integer(pred$class) - truth) != 0)/length(pred$class), "\n")
+		proj <- NULL
+		gc()
 
 		#PCA
 		mu <- colMeans(mat)
@@ -73,6 +80,9 @@ for (i in 1:10) {
 		truth <- rep.int(1, length(pred$class))
 		truth[(length(truth)/2 + 1):length(truth)]<-2
 		cat("PCA:", sum((as.integer(pred$class) - truth) != 0)/length(pred$class), "\n")
+		mu <- NULL
+		center.mat <- NULL
+		gc()
 
 		#LR-LDA
 		gr.sum <- fm.groupby(mat, 2, fm.as.factor(fm.conv.R2FM(as.integer(labels)), 2), fm.bo.add)
@@ -93,6 +103,16 @@ for (i in 1:10) {
 		truth <- rep.int(1, length(pred$class))
 		truth[(length(truth)/2 + 1):length(truth)]<-2
 		cat("LR-LDA:", sum((as.integer(pred$class) - truth) != 0)/length(pred$class), "\n")
+		gr.sum <- NULL
+		gr.mean <- NULL
+		mean.list <- NULL
+		res <- NULL
+		gc()
 
 	} # vary # reduced dimensions
+
+	mat <- NULL
+	test <- NULL
+	gc()
+
 } # run experiments 10 times
