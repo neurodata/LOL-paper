@@ -38,7 +38,7 @@ for (i in 1:10) {
 	test2 <- NULL
 	gc()
 
-	for (red.p in c(10, 50, 100, 500)) {
+	for (red.p in c(1, 10, 50, 100, 500)) {
 		cat("#reduced dim:", red.p)
 
 		#LOL
