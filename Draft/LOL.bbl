@@ -161,6 +161,17 @@ D.~Zheng, D.~Mhembere, J.~T. Vogelstein, C.~E. Priebe, and R.~Burns,
   operations using commodity ssds,'' \emph{arXiv preprint arXiv:1604.06414},
   2016.
 
+\bibitem{FlashGraph}
+D.~Zheng, D.~Mhembere, R.~Burns, J.~Vogelstein, C.~E. Priebe, and A.~S. Szalay,
+  ``{FlashGraph}: Processing billion-node graphs on an array of commodity
+  {SSDs},'' in \emph{13th USENIX Conference on File and Storage Technologies
+  (FAST 15)}, Santa Clara, CA, 2015.
+
+\bibitem{FlashEigen}
+D.~Zheng, R.~Burns, J.~Vogelstein, C.~E. Priebe, and A.~S. Szalay, ``An
+  ssd-based eigensolver for spectral analysis on billion-node graphs,''
+  \emph{CoRR}, vol. abs/1602.01421, 2016.
+
 \bibitem{SEM_SpMM}
 D.~Zheng, D.~Mhembere, V.~Lyzinski, J.~Vogelstein, C.~E. Priebe, and R.~Burns,
   ``Semi-external memory sparse matrix multiplication on billion-node graphs in
@@ -244,6 +255,21 @@ E.~Anderson, Z.~Bai, C.~Bischof, S.~Blackford, J.~Demmel, J.~Dongarra, J.~D.
   0.4em\relax SIAM, 1999. [Online]. Available:
   \url{https://books.google.com/books?hl=en\&lr=\&id=AZlvEnr9gCgC\&pgis=1}
 \BIBentrySTDinterwordspacing
+
+\bibitem{chernoff_1952}
+H.~Chernoff, ``A measure of asymptotic efficiency for tests of a hypothesis
+  based on the sum of observations,'' \emph{Annals of Mathematical Statistics},
+  vol.~23, pp. 493--507, 1952.
+
+\bibitem{Csizar}
+I.~Csiz\'{a}r, ``Information-type measures of difference of probability
+  distributions and indirect observations,'' \emph{Studia Scientiarum
+  Mathematicarum Hungarica}, vol.~2, pp. 229--318, 1967.
+
+\bibitem{leang-johnson}
+C.~C. Leang and D.~H. Johnson, ``On the asymptotics of {M}-hypothesis bayesian
+  detection,'' \emph{IEEE Transactions on Information Theory}, vol.~43, pp.
+  280--282, 1997.
 
 \bibitem{Fisher1925a}
 \BIBentryALTinterwordspacing
