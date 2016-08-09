@@ -12,9 +12,9 @@ for i=0:length(gits)-1
 end
 addpath(p);
 
-newsim=1;
+newsim=0;
 if newsim==1
-    task.savestuff=0;
+    task.savestuff=1;
     task.types={'DENL'};
     [task,T,S,P,Pro,Z]= run_MNIST(rootDir,task);
 else
@@ -29,14 +29,17 @@ gray=0.75*[1 1 1];
 colormap('bone')
 Ncols=4;
 
-width=0.18;
+width=0.17;
 height=width;
 leftside=0.1;
 space=0.01;
 hspace=0.05;
-bottom(3)=0.01;
-bottom(2)=bottom(3)+height+hspace;
-bottom(1)=bottom(3)+2*(height+hspace); %1-(height+space);
+
+bottom(4)=0.01;
+bottom(3)=bottom(4)+height+hspace;
+bottom(2)=bottom(4)+2*(height+hspace); %1-(height+space);
+bottom(1)=bottom(4)+3*(height+hspace); %1-(height+space);
+
 right=leftside+3*(width+space)+7*space;
 left2=leftside+width+hspace-0.02;         % left for 2nd column
 left3=left2+(width+hspace)+0.05;% left for 3rd column
@@ -59,7 +62,7 @@ training=Z.Xtrain;
 un=unique(group);
 
 clear aind im v vj
-nex=7;
+nex=9;
 imj=nan(29*nex,29*3);
 siz=size(imj);
 for j=1:3
@@ -86,7 +89,7 @@ imj([1:29:end],58:end,[1 3])=0;
 
 imagesc(imj)
 colormap('bone')
-subplot('Position',[leftside, bottom(3), width, width*3+hspace*2]), %[left,bottom,width,height]
+subplot('Position',[leftside, bottom(end), width, width*length(bottom)+hspace*3]), %[left,bottom,width,height]
 
 imagesc(imj),
 set(gca,'XTickLabel',[],'YTickLabel',[]);
@@ -97,8 +100,8 @@ title([{'(A) Training'};{'Samples'}],'FontSize',tfs)
 %% plot projections
 clear aind im v vj
 im1=zeros(28*4,28*4);
-for j=1:3
-    aind{j}=find(group==un(j));
+for j=1:4
+%     aind{j}=find(group==un(j));
     for k=1:4
         v{j}{k}=reshape(Pro{j}.V(k,:),[28 28]);
     end
@@ -107,7 +110,7 @@ for j=1:3
     vj{j}=[v{j}{1}, m*ones(28,1) v{j}{2}; m*ones(1,28*2+1); v{j}{3}, m*ones(28,1), v{j}{4}];
 end
 
-for j=1:3
+for j=1:4
     subplot('Position',[left2, bottom(j), width, height]),
     if j==1
         imagesc(abs(vj{3})<1e-4),
@@ -116,6 +119,8 @@ for j=1:3
         imagesc(vj{1}),
     elseif j==3
         imagesc(vj{2}),
+    elseif j==4
+        imagesc(vj{4})
     end
     set(gca,'XTickLabel',[],'YTickLabel',[]);
 end
@@ -125,20 +130,18 @@ end
 
 ticks=-20:4:20;
 ticks3=-20:0.5:20;
-ylab{3}=' LOL';
-ylab{2}=[{' FLD'};{'  o'}; {' PCA'}];
-ylab{1}='Lasso';
 
-for i=1:3;
+% si=[4 2 1 3];
+for i=1:4;
     iproj=i;
     Xtest=Pro{iproj}.V*Z.Xtest;
     Xtrain=Pro{iproj}.V*Z.Xtrain;
     
     if i==1,
-        si=3; 
+        si=4; 
         tit='';
     elseif i==2
-        si=i; 
+        si=2; 
         tit='';
         if plot3d
             set(get(gca,'xlabel'),'rotation',45);
@@ -149,6 +152,9 @@ for i=1:3;
         si=1; 
         tit=[{'(C) Embedded'};{'Test Samples'}];
         ticks=ticks3;
+    elseif i==4
+        si=3;
+        tit='';
     end
     
     subplot('Position',[left3 bottom(si), width, height]); hold all %[left,bottom,width,height]
@@ -181,16 +187,23 @@ for i=1:3;
 end
 
 %%
-y_begin=[bottom(3), bottom(2)+0.02, bottom(1)]+0.01;
-si=[3 2 1];
-for i=1:3  %[x_begin y_begin length height]
-    pos=[0.5, y_begin(i), 0.5, 0.1];
-    annotation('textbox', pos,'String', ylab{si(i)},'EdgeColor','none','FontWeight','bold','FontName','FixedWidth'); %,'Interpreter','latex');
+y_begin=[bottom(1), bottom(2), bottom(3), bottom(4)]+0.01;
+
+ylab{4}=' LOL';
+ylab{2}=[{'  LR'};{'   o'}; {'  FLD'}];
+ylab{1}='Lasso';
+ylab{3}=[{'eigen'};{'  o'}; {'faces'}];
+
+% si=[4 2 1 3];
+for i=1:4  %[x_begin y_begin length height]
+    pos=[0.47, y_begin(i), 0.5, 0.1];
+    annotation('textbox', pos,'String', ylab{i},'EdgeColor','none','FontWeight','bold','FontName','FixedWidth'); %,'Interpreter','latex');
 end
 
 
 %% plot posteriors
 
+% clf
 task.ntest=500;
 task.rotate=false;
 task.algs={'LOL';'ROAD'};
@@ -219,14 +232,15 @@ Z = parse_data(X,Y,task1.ntrain,task1.ntest,0);
 
 [transformers, deciders] = parse_algs(task1.types);
 Proj = LOL(Z.Xtrain,Z.Ytrain,transformers,task1.Kmax);
-PP{2}=Proj{1};
-PP{1}=Proj{2};
-Proj=PP;
+% PP{2}=Proj{1};
+% PP{1}=Proj{2};
+% Proj=PP;
+Proj{4}=Pro{4};
 
-numDim=4;
+numDim=2;
 
-for i=1:3
-    if i<3
+for i=[1,2,4,3]
+    if ismember(i,[1,2,4])
         Xtest=Proj{i}.V(1:numDim,:)*Z.Xtest;
         Xtrain=Proj{i}.V(1:numDim,:)*Z.Xtrain;
         [Yhat, parms, eta] = LDA_train_and_predict(Xtrain, Z.Ytrain, Xtest);
@@ -293,6 +307,7 @@ for i=1:3
     
     
     % class 1 parms
+    clear eta1 eta2
     eta1=eta(Z.Ytest==1);
     mu1=mean(eta1);
     sig1=std(eta1);
@@ -322,13 +337,16 @@ for i=1:3
         yy2=y1;
     elseif i==2
         col1='g'; col2=col1;
-        si=3;
+        si=2;
     elseif i==1
         col1='m'; col2=col1;
-        si=2;
+        si=4;
+    elseif i==4
+        si=3;
+        col1='m'; col2=col1;
     end
     
-    if ~(i==4 && j==1)
+%     if ~(j==1)
         subplot('Position',[left4 bottom(si), width, height]) %[left,bottom,width,height]
         cla
         hold on
@@ -336,17 +354,18 @@ for i=1:3
         plot(t,yy1,'linestyle',ls1,'color','g','linewidth',2)
 %         dashline(t,yy1,dd,gg,dd,gg,'color','g','linewidth',2)
         if i~=3
-            fill(t,[y1(1:50),y2(51:end)],'k','EdgeColor','k')
+            cp=max(find(y2>y1));
+            fill(t,[y1(1:cp),y2(cp+1:end)],'k','EdgeColor','k')
         elseif i==3
             yend=find(y2>y1,1)-1;
             fill(t,[y2(1:yend), y1(yend+1:end)],'k','EdgeColor','k')
         end
-        plot([0,0],[0, maxy],'k')
+%         plot([t(cp),t(cp)],[0, maxy],'k')
         
         axis([min(min2,min1), max(max2,max1), 0, 1.05*maxy])
         
         set(gca,'XTickLabel',[],'YTickLabel',[],'XTick',[],'YTick',[])
-    end
+%     end
     
     if si==1, title([{'(D) Testing'};{'Posteriors'}],'FontSize',tfs); end
 end

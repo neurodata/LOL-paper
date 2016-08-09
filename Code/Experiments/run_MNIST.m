@@ -57,6 +57,13 @@ for ijk=1:ln
 end
 Pro{3}.name='GLM';
 
+%% run eigenfaces
+
+[eigenfaces] = run_eigenfaces(Z,task);
+Pro{4}.V=eigenfaces;
+Pro{4}.name='eigenfaces';
+
+
 %% save stuff
 if task.savestuff
     save([rootDir, '../Data/Results/mnist.mat'],'task','T','S','P','Pro','Z')
