@@ -906,7 +906,7 @@ $$ (\mu_1 - \mu_0)^{\top} A^{\top} (A \Sigma A^{\top})^{-1} A (\mu_1 - \mu_0) > 
 
 As an example, suppose $\Sigma$ is diagonal with distinct eigenvalues where the diagonal entries of $\Sigma$ are in non-increasing order. 
 Denote by $\delta = \mu_1 - \mu_0$ and let
-$A = \delta$ and $B = e_1 = (1,0,0,\dots,0)$ be the linear transformations for LOL and PCA of $X$ into $\mathbb{R}$. We then have  
+$A = \delta^{\top}$ and $B = e_1^{\top} = (1,0,0,\dots,0)$ be the linear transformations for LOL and PCA of $X$ into $\mathbb{R}$. We then have  
 \begin{gather*}
 C(F_0^{(A)}, F_1^{(A)}) = \frac{(\delta^{\top} \delta)^2}{\delta^{\top} \Sigma \delta} = \frac{(\sum_{i} \delta_i^{2})^{2}}{\sum_{i} \delta_i^{2} \lambda_i}; \quad 
 C(F_0^{(B)}, F_1^{(B)}) = \frac{\delta_1^2}{\lambda_1}
@@ -915,11 +915,69 @@ where $\lambda_1$ is the largest eigenvalue of $\Sigma$. Suppose furthermore tha
 $$ C(F_0^{(A)}, F_1^{(A)}) = \frac{(\sum_{i} \delta_i^{2})^{2}}{\sum_{i} \delta_i^{2} \lambda_i} \geq \frac{(p \delta_1^2)^2}{p \delta_p^{2} \lambda_1} $$
 and hence $C(F_0^{(A)}, F_1^{(A)}) > C(F_0^{(B)}, F_1^{(B)})$ provided $p \delta_1^{2}  \geq \delta_p^2$. 
 
-When $A = \bigl[ \delta \mid e_1 \mid e_2 \dots \mid e_{d-1} \bigr]$ and $B = \bigl[e_1 \mid e_2 \mid \dots \mid e_d \bigr]$ are the linear transformation for LOL and PCA of $X$ into $\mathbb{R}^{d}$, we have
+When $A = \bigl[ \delta \mid e_1 \mid e_2 \dots \mid e_{d-1} \bigr]^{\top} \in \mathbb{R}^{d \times p}$ and $B = \bigl[e_1 \mid e_2 \mid \dots \mid e_d \bigr]^{\top} \in \mathbb{R}^{d \times p}$ are the linear transformation for LOL and PCA of $X$ into $\mathbb{R}^{d}$, we have
 \begin{gather*}
-C(F_0^{(A)}, F_1^{(A)}) = \frac{(\sum_{i=d}^{p} \delta_i^2)^2 + \sum_{i=1}^{d-1} \lambda_i^{-1} \delta_i^2}{\sum_{i=d}^{p} \delta_i^2 \lambda_i};  \quad 
-C(F_0^{(B)}, F_1^{(B)}) = \sum_{i=1}^{d} \frac{\delta_i^2}{\lambda_i}
+C(F_0^{(A)}, F_1^{(A)}) = \frac{(\sum_{i=d}^{p} \delta_i^2)^2}{\sum_{i=d}^{p} \delta_i^2 \lambda_i} + \sum_{i=1}^{d-1} \frac{\delta_i^{2}}{\lambda_i};  \quad 
+C(F_0^{(B)}, F_1^{(B)}) = \sum_{i=1}^{d} \frac{\delta_i^2}{\lambda_i}.
 \end{gather*}
+
+This can be seen as follows. Let $\xi_{d-1} = \bigl[e_1 \mid e_2 \mid \dots \mid e_{d-1} \bigr] \in \mathbb{R}^{p \times (d-1)}$ and $\zeta_{d-1} = (\lambda_1 \delta_1, \lambda_2 \delta_2, \dots, \lambda_{d-1} \delta_{d-1})^{\top} \in \mathbb{R}^{d-1}$. Then
+\begin{equation}
+A \Sigma A^{\top} = \bigl[ \delta \mid \xi_{d-1} \bigr]^{\top} \, \Sigma \, \bigl[ \delta \mid \xi_{d-1} \bigr] = \begin{bmatrix} \delta^{\top} \Sigma \delta & \delta^{\top} \Sigma \xi_{d-1} \\ \xi_{d-1}^{\top} \Sigma \delta & \xi_{d-1}^{\top} \Sigma \xi_{d-1} \end{bmatrix} = 
+\begin{bmatrix} \sum_{i=1}^{p} \delta_i^{2} \lambda_i & \zeta_{d-1}^{\top} \\ \zeta_{d-1} & \Sigma_{d-1} \end{bmatrix}
+\end{equation}
+where $\Sigma_{d-1} = \mathrm{diag}(\lambda_1, \lambda_2, \dots, \lambda_{d-1})$ is the submatrix of $\Sigma$ corresponding to the eigenvalues $\lambda_1, \lambda_2, \dots, \lambda_{d-1}$. Using a formula for the inverse of a partitioned matrix, we have
+\begin{equation}
+\begin{split}
+(A \Sigma A^{\top})^{-1} &= \begin{bmatrix} \sum_{i=1}^{p} \delta_i^{2} \lambda_i & \zeta_{d-1}^{\top} \\ \zeta_{d-1} & \Sigma_{d-1} \end{bmatrix}^{-1} 
+\\ & = \begin{bmatrix} \bigl(\sum_{i=1}^{p} \delta_i^{2} \lambda_i - \zeta_{d-1}^{\top} \Sigma_{d-1}^{-1} \zeta_{d-1}\bigr)^{-1} & - \bigl(\sum_{i=1}^{p} \delta_i^{2} \lambda_i\bigr)^{-1} \zeta_{d-1}^{\top} \bigl(\Sigma_{d-1} - \frac{\zeta_{d-1} \zeta_{d-1}^{\top}}{\sum_{i=1}^{p} \delta_i^{2} \lambda_i}\bigr)^{-1} \\ - \bigl(\sum_{i=1}^{p} \delta_i^{2} \lambda_i\bigr)^{-1} \bigl(\Sigma_{d-1} - \frac{\zeta_{d-1} \zeta_{d-1}^{\top}}{\sum_{i=1}^{p} \delta_i^{2} \lambda_i}\bigr)^{-1} \zeta_{d-1} & \bigl(\Sigma_{d-1} - \frac{\zeta_{d-1} \zeta_{d-1}^{\top}}{\sum_{i=1}^{p} \delta_i^{2} \lambda_i}\bigr)^{-1}
+\end{bmatrix}
+\end{split}
+\end{equation}
+Now, $\sum_{i=1}^{p} \delta_i^{2} \lambda_i - \zeta_{d-1}^{\top} \Sigma_{d-1}^{-1} \zeta_{d-1} = \sum_{i=1}^{p} \delta_i^{2} - \sum_{i=1}^{d-1} \delta_i^{2} \lambda_i = \sum_{i=d}^{p} \delta_i^{2} \lambda_i$. In addition, by the Sherman-Morrison-Woodbury formula, we have
+\begin{equation*}
+\begin{split}
+(\Sigma_{d-1} - \frac{\zeta_{d-1} \zeta_{d-1}^{\top}}{\sum_{i=1}^{p} \delta_i^{2} \lambda_i}\bigr)^{-1} &= \Sigma_{d-1}^{-1} + \frac{\Sigma_{d-1}^{-1} \zeta_{d-1} \zeta_{d-1}^{\top} \Sigma_{d-1}^{-1}/ \bigl(\sum_{i=1}^{p} \delta_i^{2} \lambda_i\bigr)}{1 - \zeta_{d-1}^{\top} \Sigma_{d-1}^{-1} \zeta_{d-1}/\bigl(\sum_{i=1}^{p} \delta_i^{2} \lambda_i\bigr)} \\
+&= \Sigma_{d-1}^{-1} + \frac{\Sigma_{d-1}^{-1} \zeta_{d-1} \zeta_{d-1}^{\top} \Sigma_{d-1}^{-1}}{\sum_{i=1}^{p} \delta_i^{2} \lambda_i - \zeta_{d-1}^{\top} \Sigma_{d-1}^{-1} \zeta_{d-1}} \\
+&= \Sigma_{d-1}^{-1} + \frac{\Sigma_{d-1}^{-1} \zeta_{d-1} \zeta_{d-1}^{\top} \Sigma_{d-1}^{-1}}{\sum_{i=1}^{p} \delta_i^{2} \lambda_i - \sum_{i=1}^{d-1} \delta_i^{2} \lambda_i} = \Sigma_{d-1}^{-1} + \frac{\Sigma_{d-1}^{-1} \zeta_{d-1} \zeta_{d-1}^{\top} \Sigma_{d-1}^{-1}}{\sum_{i=d}^{p} \delta_i^{2} \lambda_i}.
+\end{split}
+\end{equation*}
+Therefore,
+\begin{equation*}
+\begin{split}
+\bigl(\sum_{i=1}^{p} \delta_i^{2} \lambda_i\bigr)^{-1} \zeta_{d-1}^{\top} \bigl(\Sigma_{d-1}^{-1} + \frac{\Sigma_{d-1}^{-1} \zeta_{d-1} \zeta_{d-1}^{\top} \Sigma_{d-1}^{-1}}{\sum_{i=d}^{p} \delta_i^{2} \lambda_i} \bigr) &= \bigl(\sum_{i=1}^{p} \delta_i^{2} \lambda_i\bigr)^{-1} \Bigl(\zeta_{d-1}^{\top} \Sigma_{d-1}^{-1} + \frac{\zeta_{d-1}^{\top} \Sigma_{d-1}^{-1} \zeta_{d-1} \zeta_{d-1}^{\top} \Sigma_{d-1}^{-1}}{\sum_{i=d}^{p} \delta_i^{2} \lambda_i} \Bigr) \\
+&= \bigl(\sum_{i=1}^{p} \delta_i^{2} \lambda_i\bigr)^{-1} \Bigl(\zeta_{d-1}^{\top} \Sigma_{d-1}^{-1} + \frac{(\sum_{i=1}^{d-1} \delta_i^{2} \lambda_i)
+\zeta_{d-1}^{\top} \Sigma_{d-1}^{-1}}{\sum_{i=d}^{p} \delta_i^{2} \lambda_i}\Bigr) \\
+%&= \bigl(\sum_{i=1}^{p} \delta_i^{2} \lambda_i\bigr)^{-1} \zeta_{d-1}^{\top} \Sigma_{d-1}^{-1} \frac{\sum_{i=d}^{p} \delta_i^{2} \lambda_i + \sum_{i=1}^{d-1} \delta_i^{2} \lambda_i}{\sum_{i=d}^{p} \delta_i^{2} \lambda_i} \\ 
+& = \frac{\zeta_{d-1}^{\top} \Sigma_{d-1}^{-1}}{\sum_{i=d}^{p} \delta_i^{2} \lambda_i}
+\end{split}
+\end{equation*}
+
+Combining the above, we have
+\begin{equation}
+\begin{split}
+(A \Sigma A^{\top})^{-1} &= \begin{bmatrix} \bigl(\sum_{i=d}^{p} \delta_i^{2} \lambda_i\bigr)^{-1} & - \frac{\zeta_{d-1}^{\top} \Sigma_{d-1}^{-1}}{\sum_{i=d}^{p} \delta_i^{2} \lambda_i} \\
+ - \frac{\Sigma_{d-1}^{-1} \zeta_{d-1}}{\sum_{i=d}^{p} \delta_i^{2} \lambda_i} 
+  & \Sigma_{d-1}^{-1} + \frac{\Sigma_{d-1}^{-1} \zeta_{d-1} \zeta_{d-1}^{\top} \Sigma_{d-1}^{-1}}{\sum_{i=d}^{p} \delta_i^{2} \lambda_i}.
+\end{bmatrix}
+\end{split}
+\end{equation}
+In addition, $A(\mu_1 - \mu_0) = (\delta^{\top} \delta, \delta_1, \delta_2, \dots, \delta_{d-1})^{top} = (\delta^{\top} \delta, \zeta_{d-1}^{\top} \Sigma_{d-1}^{-1})^{\top} \in \mathbb{R}^{d}$. Hence
+\begin{equation*} 
+\begin{split}
+(\mu_1 - \mu_0)^{\top} A^{\top} (A \Sigma A^{\top})^{-1} A (\mu_1 - \mu_0) &= 
+\bigl[\delta^{\top} \delta \mid \zeta_{d-1}^{\top} \Sigma_{d-1}^{-1} \bigr] 
+\begin{bmatrix} \bigl(\sum_{i=d}^{p} \delta_i^{2} \lambda_i\bigr)^{-1} & - \frac{\zeta_{d-1}^{\top} \Sigma_{d-1}^{-1}}{\sum_{i=d}^{p} \delta_i^{2} \lambda_i} \\
+ - \frac{\Sigma_{d-1}^{-1} \zeta_{d-1}}{\sum_{i=d}^{p} \delta_i^{2} \lambda_i} 
+  & \Sigma_{d-1}^{-1} + \frac{\Sigma_{d-1}^{-1} \zeta_{d-1} \zeta_{d-1}^{\top} \Sigma_{d-1}^{-1}}{\sum_{i=d}^{p} \delta_i^{2} \lambda_i} \end{bmatrix} \begin{bmatrix} \delta^{\top} \delta \\ \Sigma_{d-1}^{-1} \zeta_{d-1} \end{bmatrix} \\
+  &= \frac{(\delta^{\top} \delta)^{2}}{\sum_{i=d}^{p} \delta_i^{2} \lambda_i} - 2 \delta^{\top} \delta \frac{\zeta_{d-1}^{\top} \Sigma_{d-1}^{-2} \zeta_{d-1}}{\sum_{i=d}^{p} \delta_i^2 \lambda_i} + \Bigl(\zeta_{d-1}^{\top} \Sigma_{d-1}^{-3} \zeta_{d-1} + \frac{(\zeta_{d-1}^{\top} \Sigma_{d-1}^{2} \zeta_{d-1})^{2}}{\sum_{i=d}^{p} \delta_i^{2} \lambda_i} \Bigr) \\
+  &= \frac{(\delta^{\top} \delta - \zeta_{d-1}^{\top} \Sigma_{d-1}^{-2} \zeta_{d-1})^{2}}{\sum_{i=d}^{p} \delta_i^{2} \lambda_i} + \zeta_{d-1}^{\top} \Sigma_{d-1}^{-3} \zeta_{d-1} \\
+  &= \frac{\bigl(\sum_{i=1}^{p} \delta_i^{2} - \sum_{i=1}^{d-1} \delta_i^{2}\bigr)^{2}}{\sum_{i=d}^{p} \delta_i^{2} \lambda_i} + \sum_{i=1}^{d-1} \frac{\delta_i^{2}}{\lambda_i} = \frac{\bigl(\sum_{i=d}^{p} \delta_i^{2}\bigr)^{2}}{\sum_{i=d}^{p} \delta_i^{2} \lambda_i} + \sum_{i=1}^{d-1} \frac{\delta_i^{2}}{\lambda_i}.
+\end{split}
+\end{equation*}
+The deriviation of $C(F_0^{(B)}, F_1^{(B)})$ is straightforward and will be omitted. Thus a sufficient condition for $C(F_0^{(A)}, F_1^{(A)}) > C(F_0^{(B)}, F_1^{(B)})$ is that
+$$ \frac{\bigl(\sum_{i=d}^{p} \delta_i^{2}\bigr)^{2}}{\sum_{i=d}^{p} \delta_i^{2} \lambda_i} > \frac{\delta_{d}^{2}}{\lambda_d}. $$
+Once again, assuming $\delta_{d} \leq \delta_{d+1} \leq \dots \leq \delta_{p}$ and $\lambda_d > \lambda_{d+1} > \dots > \lambda_{p}$, the above is implied by the condition $(p - d) \delta_{d}^{2} > \delta_p^2$. 
  
 
 \subsection{Simplifying the Objective Function}
