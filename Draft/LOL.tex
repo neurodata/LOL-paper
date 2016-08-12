@@ -949,7 +949,7 @@ Therefore,
 &= \bigl(\sum_{i=1}^{p} \delta_i^{2} \lambda_i\bigr)^{-1} \Bigl(\zeta_{d-1}^{\top} \Sigma_{d-1}^{-1} + \frac{(\sum_{i=1}^{d-1} \delta_i^{2} \lambda_i)
 \zeta_{d-1}^{\top} \Sigma_{d-1}^{-1}}{\sum_{i=d}^{p} \delta_i^{2} \lambda_i}\Bigr) \\
 %&= \bigl(\sum_{i=1}^{p} \delta_i^{2} \lambda_i\bigr)^{-1} \zeta_{d-1}^{\top} \Sigma_{d-1}^{-1} \frac{\sum_{i=d}^{p} \delta_i^{2} \lambda_i + \sum_{i=1}^{d-1} \delta_i^{2} \lambda_i}{\sum_{i=d}^{p} \delta_i^{2} \lambda_i} \\ 
-& = \frac{\zeta_{d-1}^{\top} \Sigma_{d-1}^{-1}}{\sum_{i=d}^{p} \delta_i^{2} \lambda_i}
+& = \frac{\zeta_{d-1}^{\top} \Sigma_{d-1}^{-1}}{\sum_{i=d}^{p} \delta_i^{2} \lambda_i}.
 \end{split}
 \end{equation*}
 
@@ -958,8 +958,8 @@ Combining the above, we have
 \begin{split}
 (A \Sigma A^{\top})^{-1} &= \begin{bmatrix} \bigl(\sum_{i=d}^{p} \delta_i^{2} \lambda_i\bigr)^{-1} & - \frac{\zeta_{d-1}^{\top} \Sigma_{d-1}^{-1}}{\sum_{i=d}^{p} \delta_i^{2} \lambda_i} \\
  - \frac{\Sigma_{d-1}^{-1} \zeta_{d-1}}{\sum_{i=d}^{p} \delta_i^{2} \lambda_i} 
-  & \Sigma_{d-1}^{-1} + \frac{\Sigma_{d-1}^{-1} \zeta_{d-1} \zeta_{d-1}^{\top} \Sigma_{d-1}^{-1}}{\sum_{i=d}^{p} \delta_i^{2} \lambda_i}.
-\end{bmatrix}
+  & \Sigma_{d-1}^{-1} + \frac{\Sigma_{d-1}^{-1} \zeta_{d-1} \zeta_{d-1}^{\top} \Sigma_{d-1}^{-1}}{\sum_{i=d}^{p} \delta_i^{2} \lambda_i}
+\end{bmatrix}.
 \end{split}
 \end{equation}
 In addition, $A(\mu_1 - \mu_0) = (\delta^{\top} \delta, \delta_1, \delta_2, \dots, \delta_{d-1})^{top} = (\delta^{\top} \delta, \zeta_{d-1}^{\top} \Sigma_{d-1}^{-1})^{\top} \in \mathbb{R}^{d}$. Hence
@@ -975,10 +975,72 @@ In addition, $A(\mu_1 - \mu_0) = (\delta^{\top} \delta, \delta_1, \delta_2, \dot
   &= \frac{\bigl(\sum_{i=1}^{p} \delta_i^{2} - \sum_{i=1}^{d-1} \delta_i^{2}\bigr)^{2}}{\sum_{i=d}^{p} \delta_i^{2} \lambda_i} + \sum_{i=1}^{d-1} \frac{\delta_i^{2}}{\lambda_i} = \frac{\bigl(\sum_{i=d}^{p} \delta_i^{2}\bigr)^{2}}{\sum_{i=d}^{p} \delta_i^{2} \lambda_i} + \sum_{i=1}^{d-1} \frac{\delta_i^{2}}{\lambda_i}.
 \end{split}
 \end{equation*}
-The deriviation of $C(F_0^{(B)}, F_1^{(B)})$ is straightforward and will be omitted. Thus a sufficient condition for $C(F_0^{(A)}, F_1^{(A)}) > C(F_0^{(B)}, F_1^{(B)})$ is that
+The deriviation of $C(F_0^{(B)}, F_1^{(B)})$ is straightforward and will be omitted. Thus a necessary and sufficient condition for $C(F_0^{(A)}, F_1^{(A)}) > C(F_0^{(B)}, F_1^{(B)})$ is that
 $$ \frac{\bigl(\sum_{i=d}^{p} \delta_i^{2}\bigr)^{2}}{\sum_{i=d}^{p} \delta_i^{2} \lambda_i} > \frac{\delta_{d}^{2}}{\lambda_d}. $$
 Once again, assuming $\delta_{d} \leq \delta_{d+1} \leq \dots \leq \delta_{p}$ and $\lambda_d > \lambda_{d+1} > \dots > \lambda_{p}$, the above is implied by the condition $(p - d) \delta_{d}^{2} > \delta_p^2$. 
- 
+
+Finally we consider the case where $\Sigma$ is an arbitrary covariance matrix. Let $\lambda_1 \geq \lambda_2 \geq \dots \geq \lambda_{p}$ be the eigenvalues of $\Sigma$ and let $u_1, u_2, \dots, u_p$ be the corresponding eigenvectors. For $d \leq p$,  let $U_{d-1} = \bigl[ u_1 \mid u_2 \mid \dots \mid u_{d-1}] \in \mathbb{R}^{p \times (d-1)}$ be the matrix whose columns are the eigenvectors $u_1, u_2, \dots, u_{d-1}$ of $\Sigma$. Then the LOL projection matrix into $\mathbb{R}^{d}$ is given by $A = \bigl[ \delta | U_{d-1} \bigr]^{\top}$. We first have
+\begin{equation*}
+A \Sigma A^{\top} = \bigl[ \delta | U_{d-1} \bigr]^{\top}\, \Sigma \, \bigl[ \delta | U_{d-1} \bigr] = \begin{bmatrix} \delta^{\top} \Sigma & \delta^{\top} \Sigma U_{d-1} \\ U_{d-1}^{\top} \Sigma \delta & U_{d-1}^{\top} \Sigma U_{d-1} \end{bmatrix} = \begin{bmatrix} \delta^{\top} \Sigma & \delta^{\top} \Sigma U_{d-1} \\ U_{d-1}^{\top} \Sigma \delta & \Lambda_{d-1} \end{bmatrix}
+\end{equation*}
+where $\Lambda_{d-1} = \mathrm{diag}(\lambda_1, \lambda_2, \dots, \lambda_{d-1})$ is the $(d-1) \times (d-1)$ diagonal matrix formed by the eigenvalues $\lambda_1, \lambda_2, \dots, \lambda_{d-1}$. 
+Therefore, letting $\gamma = \delta^{\top} \Sigma \delta - \delta^{\top} \Sigma U_{d-1} \Lambda_{d-1}^{-1} U_{d-1}^{\top} \Sigma \delta$, we have
+\begin{equation*}
+\begin{split}
+(A \Sigma A^{\top})^{-1} &= \begin{bmatrix} \delta^{\top} \Sigma \delta & \delta^{\top} \Sigma U_{d-1} \\ U_{d-1}^{\top} \Sigma \delta & U_{d-1}^{\top} \Sigma U_{d-1} \end{bmatrix}^{-1} \\
+&= \begin{bmatrix} \gamma^{-1} & - \delta^{\top} \Sigma U_{d-1} \Lambda_{d-1}^{-1} \gamma^{-1} \\
+- \Lambda_{d-1}^{-1} U_{d-1}^{\top} \Sigma \delta \gamma^{-1} & \bigl(\Lambda_{d-1} - \frac{U_{d-1}^{\top} \Sigma \delta \delta^{\top} \Sigma U_{d-1}}{\delta^{\top} \Sigma \delta} \bigr)^{-1} \end{bmatrix}. 
+\end{split}
+\end{equation*}
+The Sherman-Morrison-Woodbury formula then implies
+\begin{equation*}
+\begin{split}
+\Bigl(\Lambda_{d-1} - \frac{U_{d-1}^{\top} \Sigma \delta \delta^{\top} \Sigma U_{d-1}}{\delta^{\top} \Sigma \delta} \Bigr)^{-1} & = \Lambda_{d-1}^{-1} + \frac{\Lambda_{d-1}^{-1} U_{d-1}^{\top} \Sigma \delta \delta^{\top} \Sigma U_{d-1} \Lambda_{d-1}^{-1} /(\delta^{\top} \Sigma \delta)}{1 - \delta^{\top} \Sigma U_{d-1} \Lambda_{d-1}^{-1} U_{d-1}^{\top} \Sigma \delta/(\delta^{\top} \Sigma \delta)} \\
+&= \Lambda_{d-1}^{-1} + \frac{\Lambda_{d-1}^{-1} U_{d-1}^{\top} \Sigma \delta \delta^{\top} \Sigma U_{d-1} \Lambda_{d-1}^{-1}}{\delta^{\top} \Sigma \delta - \delta^{\top} \Sigma U_{d-1} \Lambda_{d-1}^{-1} U_{d-1}^{\top} \Sigma \delta} \\
+&= \Lambda_{d-1}^{-1} + \gamma^{-1} \Lambda_{d-1}^{-1} U_{d-1}^{\top} \Sigma \delta \delta^{\top} \Sigma U_{d-1} \Lambda_{d-1}^{-1}
+\end{split}
+\end{equation*}
+
+We note that $\Sigma U_{d-1} = U_{d-1} \Lambda_{d-1}$ and $U_{d-1}^{\top} \Sigma = \Lambda_{d-1} U_{d-1}^{\top}$ and hence
+\begin{equation*}
+\begin{split}
+ \gamma = \delta^{\top} \Sigma \delta - \delta^{\top} \Sigma U_{d-1} \Lambda_{d-1}^{-1} U_{d-1}^{\top} \Sigma \delta &= \delta^{\top} \Sigma \delta - \delta^{\top} U_{d-1} \Lambda_{d-1} \Lambda_{d-1}^{-1} \Lambda_{d-1} U_{d-1}^{\top} \delta \\ & =  \delta^{\top} \Sigma \delta - U_{d-1} \Lambda_{d-1} U_{d-1}^{\top} \delta = \delta^{\top} (\Sigma - \Sigma_{d-1}) \delta
+ \end{split}
+ \end{equation*}
+ where $\Sigma_{d-1} = U_{d-1} \Lambda_{d-1} U_{d-1}^{\top}$ is the best rank $d-1$ approximation to $\Sigma$ with respect to any unitaritly invariant norm. In addition,
+ $$ \Lambda_{d-1}^{-1} U_{d-1}^{\top} \Sigma \delta \delta^{\top} \Sigma U_{d-1} \Lambda_{d-1}^{-1} = \Lambda_{d-1}^{-1} \Lambda_{d-1} U_{d-1}^{\top} \delta \delta^{\top} U_{d-1} \Lambda_{d-1} \Lambda_{d-1}^{-1} = U_{d-1}^{\top} \delta \delta^{\top} U_{d-1}.$$
+ We thus have
+ \begin{equation*}
+ (A \Sigma A^{\top})^{-1} = \begin{bmatrix} \gamma^{-1} & - \delta^{\top} \Sigma U_{d-1} \Lambda_{d-1}^{-1} \gamma^{-1} \\
+- \Lambda_{d-1}^{-1} U_{d-1}^{\top} \Sigma \delta \gamma^{-1} & \bigl(\Lambda_{d-1} - \frac{U_{d-1}^{\top} \Sigma \delta \delta^{\top} \Sigma U_{d-1}}{\delta^{\top} \Sigma \delta} \bigr)^{-1} \end{bmatrix} = \begin{bmatrix} \gamma^{-1} & - \gamma^{-1} \delta^{\top} U_{d-1} \\ - \gamma^{-1} U_{d-1}^{\top} \delta & \Lambda_{d-1}^{-1} + \gamma^{-1}  U_{d-1}^{\top} \delta \delta^{\top} U_{d-1} \end{bmatrix}.
+ \end{equation*}
+ Therefore,
+ \begin{equation*}
+ \begin{split}
+ \delta^{\top} A^{\top} (A \Sigma A^{\top})^{-1} A \delta & = \delta^{\top} \bigl[ \delta \mid U_{d-1} \bigr] \begin{bmatrix} \gamma^{-1} & - \gamma^{-1} \delta^{\top} U_{d-1} \\ - \gamma^{-1} U_{d-1}^{\top} \delta & \Lambda_{d-1}^{-1} + \gamma^{-1}  U_{d-1}^{\top} \delta \delta^{\top} U_{d-1} \end{bmatrix} \bigl[ \delta | U_{d-1} \bigr]^{\top} \delta \\
+ &= \bigl[\delta^{\top} \delta \mid \delta^{\top} U_{d-1} \bigr] \begin{bmatrix} \gamma^{-1} & - \gamma^{-1} \delta^{\top} U_{d-1} \\ - \gamma^{-1} U_{d-1}^{\top} \delta & \Lambda_{d-1}^{-1} + \gamma^{-1}  U_{d-1}^{\top} \delta \delta^{\top} U_{d-1} \end{bmatrix} \begin{bmatrix} \delta^{\top} \delta \\ U_{d-1}^{\top} \delta \end{bmatrix} \\
+ &= \gamma^{-1} (\delta^{\top} \delta)^{2} - 2 \gamma^{-1} \delta^{\top} \delta \delta^{\top} U_{d-1} U_{d-1}^{\top} \delta + \delta^{\top} U_{d-1} (\Lambda_{d-1}^{-1} + \gamma^{-1} U_{d-1}^{\top} \delta \delta^{\top} U_{d-1}) U_{d-1}^{\top} \delta \\
+ &= \gamma^{-1} (\delta^{\top} \delta - \delta^{\top} U_{d-1} U_{d-1}^{\top} \delta)^{2} + \delta^{\top} U_{d-1} \Lambda_{d-1}^{-1} U_{d-1} \delta \\
+ &= \gamma^{-1} (\delta^{\top} (I - U_{d-1} U_{d-1}^{\top}) \delta)^{2} + \delta^{\top} \Sigma_{d-1}^{\dagger} \delta
+ \end{split}
+ \end{equation*}
+ where $\Sigma_{d-1}^{\dagger}$ is the Moore-Penrose pseudo-inverse of $\Sigma_{d-1}$. The PCA projection matrix into $\mathbb{R}^{d}$ is given by $B = U_{d}^{\top}$ and hence
+ \begin{equation}
+ \delta^{\top} B^{\top} (B \Sigma B^{\top})^{-1} B \delta = \delta^{\top} U_{d} \Lambda_d^{-1} U_d^{\top} \delta = \delta^{\top} \Sigma_{d}^{\dagger} \delta. 
+ \end{equation}
+ We thus have $C(F_0^{(A)}, F_1^{(A)}) > C(F_0^{(B)}, F_1^{(B)})$ if and only if
+ $$ \gamma^{-1} (\delta^{\top} (I - U_{d-1} U_{d-1}^{\top}) \delta)^{2} > \delta^{\top} (\Sigma_{d}^{\dagger} - \Sigma_{d-1}^{\dagger}) \delta \Leftrightarrow (\delta^{\top} (I - U_{d-1} U_{d-1}^{\top}) \delta)^{2} > (\delta^{\top} (\Sigma_{d}^{\dagger} - \Sigma_{d-1}^{\dagger}) \delta) (\delta^{\top} (\Sigma - \Sigma_{d-1}) \delta). $$
+
+ Finally, we consider the case when $A = \bigl[ \delta | U_{d-1} \bigr]^{\top}$ and $B = U_{d}$ where $U_{d}$ is an arbitrary $p \times d$ matrix with $U_d^{\top} U_d = I$, i.e., $U_d$ has $d$ orthonornal columns, and $U_{d-1}$ is the first $d-1$ columns of $U_d$. A similar derivation to the above yields
+ \begin{gather}
+ C(F_0^{(A)}, F_1^{(A)}) = \frac{(\delta^{\top} \Sigma^{-1/2} (I - V_{d-1} V_{d-1}^{\top}) \Sigma^{1/2} \delta)^2}{\delta^{\top} \Sigma^{1/2} (I - V_{d-1} V_{d-1}^{\top}) \Sigma^{1/2} \delta} + \delta^{\top} \Sigma^{-1/2} V_{d-1} V_{d-1}^{\top} \Sigma^{-1/2} \delta \\
+ C(F_0^{(B)}, F_1^{(B)} = \delta^{\top} \Sigma^{-1/2} V_d V_d^{\top} \Sigma^{-1/2} \delta
+ \end{gather}
+ where $V_{d} V_{d-1}^{\top} = \Sigma^{1/2} U_d (U_d^{\top} \Sigma U_d)^{-1} U_d^{\top} \Sigma^{1/2}$ is the orthogonal projection onto the column space of $\Sigma^{1/2} U_d$. Hence $C(F_0^{(A)}, F_1^{(A)}) > C(F_0^{(B)}, F_1^{(B)})$ if and only if
+ $$ \frac{(\delta^{\top} \Sigma^{-1/2} (I - V_{d-1} V_{d-1}^{\top}) \Sigma^{1/2} \delta)^2}{\delta^{\top} \Sigma^{1/2} (I - V_{d-1} V_{d-1}^{\top}) \Sigma^{1/2} \delta} > \delta^{\top} \Sigma^{-1/2} (V_d V_d^{\top} - V_{d-1} V_{d-1}^{\top}) \Sigma^{-1/2} \delta. $$
+
+Let $C(F_0^{(A)}, F_1^{(A)})$ and $C(F_0^{(B)}, F_1^{(B)})$ be the Chernoff informations when $A = [\delta \mid U_{d-1}]^{\top}$ and $B = [\delta \mid U_d]^{\top}$ where $U_{d-1}$ and $U_d$ contain the eignevectors of the population covariance matrices $\Sigma$; similarly, let $\hat{C}(F_0^{(A)}, F_1^{(A)})$ and $\hat{C}(F_0^{(B)}, F_1^{(B)})$ be the Chernoff informations when $A = [\delta \mid \hat{U}_{d-1}]$ and $B = [\delta \mid \hat{U}_d]$ where $\hat{U}_{d-1}$ and $\hat{U}_d$ contain the eigenvectors of the {\emph sample} covariance matrices $\hat{\Sigma}$. Suppose furthermore that $C(F_0^{(A)}, F_1^{(A)}) > C(F_0^{(B)}, F_1^{(B)})$. Then for sufficiently large $n$, with high probability, $\hat{C}(F_0^{(A)}, F_1^{(A)}) > \hat{C}(F_0^{(B)}, F_1^{(B)})$. 
+
 
 \subsection{Simplifying the Objective Function}
 
