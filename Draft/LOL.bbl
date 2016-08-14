@@ -271,13 +271,4 @@ C.~C. Leang and D.~H. Johnson, ``On the asymptotics of {M}-hypothesis bayesian
   detection,'' \emph{IEEE Transactions on Information Theory}, vol.~43, pp.
   280--282, 1997.
 
-\bibitem{Fisher1925a}
-\BIBentryALTinterwordspacing
-R.~A. Fisher, ``\BIBforeignlanguage{English}{{Theory of Statistical
-  Estimation}},'' \emph{\BIBforeignlanguage{English}{Mathematical Proceedings
-  of the Cambridge Philosophical Society}}, vol.~22, no.~05, pp. 700--725, Oct.
-  1925. [Online]. Available:
-  \url{http://journals.cambridge.org/abstract\_S0305004100009580}
-\BIBentrySTDinterwordspacing
-
 \end{thebibliography}

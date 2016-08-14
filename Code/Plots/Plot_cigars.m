@@ -25,7 +25,7 @@ task.ntrain=1000;
 task_list = set_task_list(task_list_name);
 task.ntest=500;
 task.rotate=false;
-task.algs={'LOL';'ROAD'};
+task.algs={'LOL';'ROAD';'eigenfaces'};
 task.types={'NENL';'DENL'};
 task.Nks=100;
 
@@ -38,7 +38,7 @@ gray=0.7*[1 1 1];
 
 width=1/(Nsims+2); %0.28;
 scatsize=1/(Nsims+2.5); %0.21;
-height=0.13;
+height=0.10;
 left=0.06;
 left1=0.03;
 y3=0.63;
@@ -74,7 +74,7 @@ for j=1:Nsims
     
     % scatter plots
     figure(1)
-    subplot('Position',[left1+(j-1)*(width+hspace)+0.035 bottom+4*(height+vspace), scatsize, scatsize]) %[left,bottom,width,height]
+    subplot('Position',[left1+(j-1)*(width+hspace)+0.035 bottom+5*(height+vspace), scatsize, scatsize]) %[left,bottom,width,height]
     hold on
     Xtest=Z.Xtest(ids(1:2),:);
     Xtest=Xtest-repmat(mean(Xtest,2),1,length(Z.Ytest));
@@ -98,7 +98,7 @@ for j=1:Nsims
         case 2, tit='(B) Trunk';
         case 3, tit='(C) Rotated Trunk';
     end
-%     tit=[{tit}; {'D=1000, n=100'}];
+    %     tit=[{tit}; {'D=1000, n=100'}];
     title(tit,'fontsize',8)
     
     [transformers, deciders] = parse_algs(task1.types);
@@ -108,7 +108,7 @@ for j=1:Nsims
     Proj=PP;
     
     for i=1:Nrows-1
-        if i<3 % for PCA & LOL
+        if ismember(i,[1 2]) % for PCA & LOL
             if truth
                 [u,d,v]=svd(P.Sigma);
                 Dd=diag(d);
@@ -134,6 +134,11 @@ for j=1:Nsims
             while nl<=k, nl=nnz(fit.wPath(:,kk)); kk=kk+1; end
             [~,Yhat,eta] = roadPredict(Z.Xtest', fit);
             eta=eta(:,kk);
+        elseif i==4 % for eigenfaces
+            V = run_eigenfaces(Z,task1);
+            Xtest=V(1:k,:)*Z.Xtest;
+            Xtrain=V(1:k,:)*Z.Xtrain;
+            [Yhat, parms, eta] = LDA_train_and_predict(Xtrain, Z.Ytrain, Xtest);
         else % for Bayes Optimal
             parms.del=P.del;
             parms.InvSig=pinv(P.Sigma);
@@ -172,7 +177,7 @@ for j=1:Nsims
         if i==3
             ylab='ROAD';
             col1='c'; col2=col1;
-            si=3;
+            si=5;
             yy1=y2;
             yy2=y1;
         elseif i==2
@@ -180,10 +185,15 @@ for j=1:Nsims
             col1='g'; col2=col1;
             si=2;
         elseif i==1
-            ylab='FLD o PCA';
+            ylab=[{'LRo'};{'FLD'}];
+            %             ylab='FLD o PCA';
             col1='m'; col2=col1;
             si=4;
         elseif i==4
+            ylab=[{'eigen-'};{'faces'}];
+            col1='y'; col2=col1;
+            si=3;
+        elseif i==5
             ylab=[{'Bayes'};{'Optimal'}];
             col1='k';
             col2='k';
@@ -194,15 +204,17 @@ for j=1:Nsims
         hold on
         if range(t)<teps, t=1:100; end
         plot(t,yy2,'linestyle',ls1,'color',col2,'linewidth',2)
-%         plot(t,yy1,'linestyle',ls2,'color',col2,'linewidth',2)
+        %         plot(t,yy1,'linestyle',ls2,'color',col2,'linewidth',2)
         dashline(t,yy1,dd,gg,dd,gg,'color',col1,'linewidth',2)
         if i~=3
-            fill(t,[y1(1:50),y2(51:end)],col1,'EdgeColor',col1)
+            cp=find(y2>y1, 1, 'last' );
+            %             fill(t,[y1(1:cp),y2(cp+1:end)],'k','EdgeColor',col1)
+            fill(t,[y1(1:cp),y2(cp+1:end)],col1,'EdgeColor',col1)
         elseif i==3
-            yend=find(y2>y1,1)-1;
-            fill(t,[y2(1:yend), y1(yend+1:end)],col1,'EdgeColor',col1)
+            cp=find(y2>y1,1)-1;
+            fill(t,[y2(1:cp), y1(cp+1:end)],col1,'EdgeColor',col1)
         end
-        plot([t(50),t(50)],[0, maxy],'k')
+        plot([0,0],[0, maxy],'k')
         axis([min(t), max(t), 0, 1.05*maxy])
         if j==1, ylabel(ylab,'fontsize',8,'FontWeight','bold','FontName','FixedWidth'), end
         set(gca,'XTickLabel',[],'YTickLabel',[],'XTick',[],'YTick',[])

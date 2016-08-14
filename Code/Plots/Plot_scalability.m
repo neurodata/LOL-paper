@@ -34,26 +34,38 @@ mid_orange = [255, 140, 0]/310;
 % subplot(131), 
 subplot('position',pos), cla
 hold all
-filename = [rootDir, '../Data/Results/FM-IM.n-1000.d-100.csv'];
-FMEM = import_da(filename);
-da2=FMEM(2:end-1,2:end);
-pvec2=FMEM(1,2:end);
 
-filename = [rootDir, '../Data/Results/FM-EM.n-1000.d-100.csv'];
+filename = [rootDir, '../Data/Results/FM-LOL-IM.n-1000.d-100.csv'];
 FMEM = import_da(filename);
-da1=FMEM(2:end,2:end);
-pvec=FMEM(1,2:end);
+LOL_IM=FMEM(2:end,2:end);
+pvec_OI=FMEM(1,2:end);
+
+filename = [rootDir, '../Data/Results/FM-LOL-EM.n-1000.d-100.csv'];
+FMEM = import_da(filename);
+LOL_EM=FMEM(2:end,2:end);
+pvec_OE=FMEM(1,2:end);
+
+filename = [rootDir, '../Data/Results/FM-LAL-IM.n-1000.d-100.csv'];
+FMEM = import_da(filename);
+LAL_IM=FMEM(2:end,2:end);
+pvec_AI=FMEM(1,2:end);
+
+filename = [rootDir, '../Data/Results/FM-LAL-EM.n-1000.d-100.csv'];
+FMEM = import_da(filename);
+LAL_EM=FMEM(2:end,2:end);
+pvec_AE=FMEM(1,2:end);
 
 
-filename = [rootDir, '../Data/Results/sparse-EM.n-1000.d-100.csv'];
+filename = [rootDir, '../Data/Results/FM-PCA-IM.n-1000.d-100.csv'];
 FMEM = import_da(filename);
-da3=FMEM(2:end,2:end);
-pvec3=FMEM(1,2:end);
+PCA_IM=FMEM(2:end,2:end);
+pvec_PI=FMEM(1,2:end);
 
-filename = [rootDir, '../Data/Results/sparse-IM.n-1000.d-100.csv'];
+filename = [rootDir, '../Data/Results/FM-PCA-EM.n-1000.d-100.csv'];
 FMEM = import_da(filename);
-da4=FMEM(2:end,2:end);
-pvec4=FMEM(1,2:end);
+PCA_EM=FMEM(2:end,2:end);
+pvec_PE=FMEM(1,2:end);
+
 
 
 % hem=errorbar(pvec,nanmean(da1),nanstd(da1),'--','color','g','linewidth',2);
@@ -61,16 +73,22 @@ pvec4=FMEM(1,2:end);
 % hrpe=errorbar(pvec3,nanmean(da3),nanstd(da3),'--','color',orange,'linewidth',2);
 % hrpi=errorbar(pvec4,nanmean(da4),nanstd(da4),'color',orange,'linewidth',4);
 
-hem=plot(pvec,nanmean(da1),'-','color',dark_green,'linewidth',2);
-hin=plot(pvec2,nanmean(da2),'g','linewidth',2);
-hrpe=plot(pvec3,nanmean(da3),'-','color',dark_orange,'linewidth',2);
-hrpi=plot(pvec4,nanmean(da4),'color',orange,'linewidth',2);
 
-xticks=pvec(1,[2:2:end]);
+hrpe=plot(pvec_PE,nanmean(PCA_EM),'--','color','m','linewidth',2);
+aem=plot(pvec_AE,nanmean(LAL_EM),'--','color',orange,'linewidth',2);
+hem=plot(pvec_OE,nanmean(LOL_EM),'--','color','g','linewidth',2);
+
+
+hrpi=plot(pvec_PI,nanmean(PCA_IM),'-','color','m','linewidth',2);
+ain=plot(pvec_AI,nanmean(LAL_IM),'-','color',orange,'linewidth',2);
+hin=plot(pvec_OI,nanmean(LOL_IM),'-g','linewidth',2);
+
+
+xticks=pvec_OE(1,[2:2:end]);
 yticks=[1,10,100,1000];
-set(gca,'XTick',xticks,'XTickLabel',xticks/1e6,'XScale','log');
+set(gca,'XTick',xticks,'XTickLabel',xticks,'XScale','log');
 set(gca,'YTick',yticks,'Yscale','log');
-xlim([min(pvec), max(pvec)])
+xlim([min(pvec_OE), max(pvec_OE)])
 xscale('log');
 axis('tight')
 
@@ -81,14 +99,17 @@ xlabel('p=dimensionality (in millions)')
 ylabel('time (sec)')
 title('n=2000, d=100')
 
-%
-text(max(pvec2(:))+1e7,max(da2(:))-1e2,'I','color','g','fontsize',12,'FontName','FixedWidth')
-text(max(pvec(:))+1e7,max(da1(:)),'E','color',dark_green,'fontsize',12,'FontName','FixedWidth')
-text(max(pvec(:))-3e7,max(da2(:))-1e2,'LOL','color',mid_green,'fontsize',12,'FontName','FixedWidth')
 
-text(max(pvec2(:))+1e7,max(da4(:)),'I','color',orange,'fontsize',12,'FontName','FixedWidth')
-text(max(pvec(:))+1e7,max(da3(:)),'E','color',dark_orange,'fontsize',12,'FontName','FixedWidth')
-text(max(pvec(:))-3e7,max(da4(:)),'LAL','color',mid_orange,'fontsize',12,'FontName','FixedWidth')
+
+%%
+pvec=pvec_OE
+text(max(pvec(:))+1,max(LOL_IM(:))-1e2,'I','color','g','fontsize',12,'FontName','FixedWidth')
+text(max(pvec(:))+1,max(LOL_EM(:)),'E','color',dark_green,'fontsize',12,'FontName','FixedWidth')
+text(max(pvec(:))-3,max(LOL_EM(:))-1e2,'LOL','color',mid_green,'fontsize',12,'FontName','FixedWidth')
+
+text(max(pvec(:))+1,max(PCA_IM(:)),'I','color',orange,'fontsize',12,'FontName','FixedWidth')
+text(max(pvec(:))+1,max(PCA_EM(:)),'E','color',dark_orange,'fontsize',12,'FontName','FixedWidth')
+text(max(pvec(:))-3,max(LAL_EM(:)),'LAL','color',mid_orange,'fontsize',12,'FontName','FixedWidth')
 % legend([hin, hem, hrpi, hrpe],'LOL-IM','LOL-EM','LAL-IM','LAL-EM','location','SouthEast')
 % legend('boxoff')
 % grid('on')
@@ -101,18 +122,20 @@ pos(3)=pos(3)-0.04;
 subplot('position',pos), cla
 
 hold all
-filename = [rootDir, '../Data/Results/FM.n-1000.p-16000000-more.csv'];
-FMEM = import_da2(filename);
+filename = [rootDir, '../Data/Results/FM.n-1000.p-16000000.csv'];
+FMEM = import_da3(filename);
 
 title('n=2000, p=16,000,000')
-LOL=FMEM(:,[1,3:3:end]);
-LFL=FMEM(:,[1,4:3:end]);
-PCA=FMEM(:,2:3:end);
+LOL=FMEM(:,[1:5]);
+LFL=FMEM(:,[6:10]);
+PCA=FMEM(:,11:15);
+LR_FLD=FMEM(:,16:20);
 pvec=[1,10,50,100,500];
 z=sqrt(size(PCA,2));
 hpca=errorbar(pvec,nanmean(PCA),nanstd(PCA)/z,'m','linewidth',2);
 hlfl=errorbar(pvec,nanmean(LFL),nanstd(LFL)/z,'color',orange,'linewidth',2);
 hlol=errorbar(pvec,nanmean(LOL),nanstd(LOL)/z,'g','linewidth',2);
+hlr=errorbar(pvec,nanmean(LR_FLD),nanstd(LR_FLD)/z,'c','linewidth',2);
 xtick=pvec([1,2,3:end]);
 ytick=[0.1:0.1:1];
 set(gca,'XTick',xtick,'YTick',ytick,'XScale','log');
