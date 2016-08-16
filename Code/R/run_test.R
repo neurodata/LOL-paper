@@ -1,4 +1,4 @@
-train.classifier <- function(data, labels, proj=c("LOL", "LAL", "PCA"), red.p=1)
+embed.classifier <- function(data, labels, proj=c("LOL", "LAL", "PCA"), red.p=1)
 {
 	if (proj == "LOL")
 		proj <- LOL(data, fm.conv.R2FM(as.integer(labels)), red.p, 
@@ -12,7 +12,10 @@ train.classifier <- function(data, labels, proj=c("LOL", "LAL", "PCA"), red.p=1)
 		res <- fm.svd(t(center.mat), red.p, red.p)
 		proj <- res$v
 	}
+}
 
+train.classifier <- function(data, labels, proj)
+{
 	proj.res <- t(data) %*% proj
 	lda.res <- lda(as.matrix(fm.conv.FM2R(proj.res)), as.factor(labels))
 	list(proj=proj, lda.res=lda.res)
@@ -24,7 +27,7 @@ predict.classifier <- function(object, newdata)
 	predict(object=object$lda.res, newdata=as.matrix(fm.conv.FM2R(proj.res)))
 }
 
-rand.split.test <- function(data, labels, count, train.percent, red.p)
+rand.split.test <- function(data, labels, count, train.percent, red.ps)
 {
 	train.size <- as.integer(ncol(data) * train.percent)
 	for (run in 1:count) {
@@ -36,18 +39,32 @@ rand.split.test <- function(data, labels, count, train.percent, red.p)
 		train.labels <- labels[train.idxs]
 		truth <- labels[test.idxs]+1
 
-		res <- train.classifier(train, train.labels, proj="LOL", red.p)
-		pred <- predict.classifier(object=res, newdata=test)
-		# measure the accuracy
-		cat("LOL:", sum((as.integer(pred$class) - truth) != 0)/length(pred$class), "\n")
-		res <- NULL
+		proj <- embed.classifier(train, train.labels, proj="LOL", max(red.ps))
+		for (red.p in red.ps) {
+			res <- train.classifier(train, train.labels, proj[, 1:red.p])
+			pred <- predict.classifier(object=res, newdata=test)
+			# measure the accuracy
+			out <- paste("LOL-", red.p, "dim: ",
+						 sum((as.integer(pred$class) - truth) != 0)/length(pred$class), sep="")
+			print(out)
+			res <- NULL
+			gc()
+		}
+		proj <- NULL
 		gc()
 
-		res <- train.classifier(train, train.labels, proj="PCA", red.p)
-		pred <- predict.classifier(object=res, newdata=test)
-		# measure the accuracy
-		cat("PCA:", sum((as.integer(pred$class) - truth) != 0)/length(pred$class), "\n")
-		res <- NULL
+		proj <- embed.classifier(train, train.labels, proj="PCA", max(red.ps))
+		for (red.p in red.ps) {
+			res <- train.classifier(train, train.labels, proj[, 1:red.p])
+			pred <- predict.classifier(object=res, newdata=test)
+			# measure the accuracy
+			out <- paste("PCA-", red.p, "dim: ",
+						 sum((as.integer(pred$class) - truth) != 0)/length(pred$class), sep="")
+			print(out)
+			res <- NULL
+			gc()
+		}
+		proj <- NULL
 		gc()
 	}
 }
