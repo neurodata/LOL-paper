@@ -16,7 +16,7 @@ function FM = import_da2(filename, startRow, endRow)
 %% Initialize variables.
 delimiter = ',';
 if nargin<=2
-    startRow = 3;
+    startRow = 2;
     endRow = inf;
 end
 
