@@ -1031,7 +1031,9 @@ We note that $\Sigma U_{d-1} = U_{d-1} \Lambda_{d-1}$ and $U_{d-1}^{\top} \Sigma
  We thus have $C(F_0^{(A)}, F_1^{(A)}) > C(F_0^{(B)}, F_1^{(B)})$ if and only if
  $$ \gamma^{-1} (\delta^{\top} (I - U_{d-1} U_{d-1}^{\top}) \delta)^{2} > \delta^{\top} (\Sigma_{d}^{\dagger} - \Sigma_{d-1}^{\dagger}) \delta \Leftrightarrow (\delta^{\top} (I - U_{d-1} U_{d-1}^{\top}) \delta)^{2} > (\delta^{\top} (\Sigma_{d}^{\dagger} - \Sigma_{d-1}^{\dagger}) \delta) (\delta^{\top} (\Sigma - \Sigma_{d-1}) \delta). $$
 
- Finally, we consider the case when $A = \bigl[ \delta | U_{d-1} \bigr]^{\top}$ and $B = U_{d}$ where $U_{d}$ is an arbitrary $p \times d$ matrix with $U_d^{\top} U_d = I$, i.e., $U_d$ has $d$ orthonornal columns, and $U_{d-1}$ is the first $d-1$ columns of $U_d$. A similar derivation to the above yields
+
+ Next we consider the case when $A = \bigl[ \delta | U_{d-1} \bigr]^{\top}$ and $B = U_{d}$ where $U_{d}$ is an arbitrary $p \times d$ matrix with $U_d^{\top} U_d = I$, i.e., $U_d$ has $d$ orthonornal columns, and $U_{d-1}$ is the first $d-1$ columns of $U_d$. A similar derivation to the above yields
+
  \begin{gather}
  C(F_0^{(A)}, F_1^{(A)}) = \frac{(\delta^{\top} \Sigma^{-1/2} (I - V_{d-1} V_{d-1}^{\top}) \Sigma^{1/2} \delta)^2}{\delta^{\top} \Sigma^{1/2} (I - V_{d-1} V_{d-1}^{\top}) \Sigma^{1/2} \delta} + \delta^{\top} \Sigma^{-1/2} V_{d-1} V_{d-1}^{\top} \Sigma^{-1/2} \delta \\
  C(F_0^{(B)}, F_1^{(B)}) = \delta^{\top} \Sigma^{-1/2} V_d V_d^{\top} \Sigma^{-1/2} \delta
@@ -1039,7 +1041,32 @@ We note that $\Sigma U_{d-1} = U_{d-1} \Lambda_{d-1}$ and $U_{d-1}^{\top} \Sigma
  where $V_{d} V_{d-1}^{\top} = \Sigma^{1/2} U_d (U_d^{\top} \Sigma U_d)^{-1} U_d^{\top} \Sigma^{1/2}$ is the orthogonal projection onto the column space of $\Sigma^{1/2} U_d$. Hence $C(F_0^{(A)}, F_1^{(A)}) > C(F_0^{(B)}, F_1^{(B)})$ if and only if
  $$ \frac{(\delta^{\top} \Sigma^{-1/2} (I - V_{d-1} V_{d-1}^{\top}) \Sigma^{1/2} \delta)^2}{\delta^{\top} \Sigma^{1/2} (I - V_{d-1} V_{d-1}^{\top}) \Sigma^{1/2} \delta} > \delta^{\top} \Sigma^{-1/2} (V_d V_d^{\top} - V_{d-1} V_{d-1}^{\top}) \Sigma^{-1/2} \delta. $$
 
-Let $C(F_0^{(A)}, F_1^{(A)})$ and $C(F_0^{(B)}, F_1^{(B)})$ be the Chernoff informations when $A = [\delta \mid U_{d-1}]^{\top}$ and $B = [U_d]^{\top}$ where $U_{d-1}$ and $U_d$ contain the eignevectors of the population covariance matrices $\Sigma$; similarly, let $\hat{C}(F_0^{(A)}, F_1^{(A)})$ and $\hat{C}(F_0^{(B)}, F_1^{(B)})$ be the Chernoff informations when $A = [\hat{\delta} \mid \hat{U}_{d-1}]$ and $B = [ \hat{U}_d]$ where $\hat{U}_{d-1}$ and $\hat{U}_d$ contain the eigenvectors of the {\emph sample} covariance matrices $\hat{\Sigma}$. Suppose furthermore that $C(F_0^{(A)}, F_1^{(A)}) > C(F_0^{(B)}, F_1^{(B)})$. Then for sufficiently large $n$, with high probability, $\hat{C}(F_0^{(A)}, F_1^{(A)}) > \hat{C}(F_0^{(B)}, F_1^{(B)})$. 
+
+Let $C(F_0^{(A)}, F_1^{(A)})$ and $C(F_0^{(B)}, F_1^{(B)})$ be the Chernoff informations when $A = [\delta \mid U_{d-1}]^{\top}$ and $B = [\delta \mid U_d]^{\top}$ where $U_{d-1}$ and $U_d$ contain the eignevectors of the population covariance matrices $\Sigma$; similarly, let $\hat{C}(F_0^{(A)}, F_1^{(A)})$ and $\hat{C}(F_0^{(B)}, F_1^{(B)})$ be the Chernoff informations when $A = [\delta \mid \hat{U}_{d-1}]$ and $B = [\delta \mid \hat{U}_d]$ where $\hat{U}_{d-1}$ and $\hat{U}_d$ contain the eigenvectors of the {\emph sample} covariance matrices $\hat{\Sigma}$. Suppose furthermore that $C(F_0^{(A)}, F_1^{(A)}) > C(F_0^{(B)}, F_1^{(B)})$. Then for sufficiently large $n$, with high probability, $\hat{C}(F_0^{(A)}, F_1^{(A)}) > \hat{C}(F_0^{(B)}, F_1^{(B)})$. 
+
+Finally we consider the case when $B = \tilde{U}_d^{\top}$ where $\tilde{U}_d$ is the $p \times d$ matrix whose columns are the $d$ largest eigenvectors of the {\emph pooled} covariance matrix $\tilde{\Sigma} = \mathbb{E}[(X - \tfrac{\mu_0 + \mu_1}{2})(X - \tfrac{\mu_0 + \mu_1}{2})^{\top}]$. Assume, without loss of generality, that $\mu_1 = -\mu_0 = \mu$. We then have
+
+$$\tilde{\Sigma} = \mathbb{E}[X X^{\top}] = \pi \Sigma + \pi \mu_0 \mu_0^{\top} + (1 - \pi) \Sigma (1 - \pi) \mu_1 \mu_1^{\top} = \Sigma + \mu \mu^{\top} = \Sigma + \tfrac{1}{4} \delta \delta^{\top}. $$
+
+Therefore
+$$ (B \Sigma B^{\top})^{-1} = \bigl(\tilde{U}_{d}^{\top} \Sigma \tilde{U}_d \bigr)^{-1} = \bigl( \tilde{U}_d^{\top} (\tilde{\Sigma} - \tfrac{1}{4} \delta \delta^{\top}) \tilde{U}_d\bigr)^{-1} = \bigl(\tilde{S}_d - \tfrac{1}{4} \tilde{U}_d^{\top} \delta \delta^{\top} \tilde{U}_d \bigr)^{-1} = \tilde{S}_d^{-1} + \frac{\tilde{S}_d^{-1} \tilde{U}_d^{\top} \delta \delta^{\top} \tilde{U}_d \tilde{S}_d^{-1}}{4 - \delta^{\top} \tilde{U}_d \tilde{S}_d^{-1} \tilde{U}_d^{\top} \delta} $$
+where $\tilde{S}_d$ is the diagonal matrix containing the $d$ largest eigenvalues of $\tilde{\Sigma}$. Hence
+\begin{equation}
+\begin{split}
+C(F_0^{(B)}, F_1^{(B)}) = \delta^{\top} B^{\top} (B \Sigma B^{\top})^{-1} B \delta & = \delta^{\top} \tilde{U}_d \Bigl(\tilde{S}_d^{-1} + \frac{\tilde{S}_d^{-1} \tilde{U}_d^{\top} \delta \delta^{\top} \tilde{U}_d \tilde{S}_d^{-1}}{4 - \delta^{\top} \tilde{U}_d \tilde{S}_d^{-1} \tilde{U}_d^{\top} \delta} \Bigr) \tilde{U}_d^{\top} \delta \\ &= \delta^{\top} \tilde{U}_d \tilde{S}_d^{-1} \tilde{U}_d^{\top} \delta + \frac{(\delta^{\top} \tilde{U}_d \tilde{S}_d^{-1} \tilde{U}_d^{\top} \delta)^{2}}{4 - \delta^{\top} \tilde{U}_d \tilde{S}_d^{-1} \tilde{U}_d^{\top} \delta} \\
+&= \delta^{\top} \tilde{\Sigma}_d^{\dagger} \delta - \frac{(\delta^{\top} \tilde{\Sigma}_d^{\dagger} \delta)^2}{4 - \delta^{\top} \tilde{\Sigma}_d^{\dagger} \delta} = \frac{4 \delta^{\top} \tilde{\Sigma}_d^{\dagger} \delta}{4 - \delta^{\top} \tilde{\Sigma}_d^{\dagger} \delta}.
+\end{split}
+\end{equation}
+where $\tilde{\Sigma}_d = \tilde{U}_d \tilde{S}_d \tilde{U}_d^{\top}$ is the best rank $d$ approximation to $\tilde{\Sigma} = \Sigma + \tfrac{1}{4} \delta \delta^{\top}$. 
+
+We recall that the LOL projection $A = [\delta \mid U_{d-1}]^{\top}$ yields
+$$ C(F_0^{(A)}, F_1^{(A)}) = \frac{(\delta^{\top} (I - U_{d-1} U_{d-1}^{\top}) \delta)^{2}}{\delta^{\top} (\Sigma - \Sigma_{d-1}) \delta} + \delta^{\top} \Sigma_{d-1}^{\dagger} \delta. $$
+
+To illustrate the difference between the LOL projection and that based on the eigenvectors of the {\emph pooled} covariance matrix, consider the following contrived example. Let $\Sigma = \mathrm{diag}(\lambda_1, \lambda_2, \dots, \lambda_p)$ be a diagonal matrix with $\lambda_1 \geq \lambda_2 \geq \dots \geq \lambda_p$. Also let $\delta = (0,0,\dots,0,s)$. Suppose furthermore that $\lambda_p + s^{2}/4 < \lambda_d$. Then we have $\tilde{\Sigma}_d = \mathrm{diag}(\lambda_1, \lambda_2, \dots, \lambda_d, 0, 0, \dots, 0)$. Thus $\tilde{\Sigma}_d^{\dagger} = \mathrm{diag}(1/\lambda_1, 1/\lambda_2, \dots, 1/\lambda_d, 0,0, \dots, 0)$ and $\delta^{\dagger} \tilde{\Sigma}_d^{\dagger} \delta = 0$. Therefore, $C(F_0^{(B)}, F_1^{(B)}) = 0$.
+
+On the other hand, we have
+$$ C(F_0^{(A)}, F_1^{(A)}) = \frac{(\delta^{\top} (I - U_{d-1} U_{d-1}^{\top}) \delta)^{2}}{\delta^{\top} (\Sigma - \Sigma_{d-1}) \delta} + \delta^{\top} \Sigma_{d-1}^{\dagger} \delta = \frac{s^4}{s^2 \lambda_p} + 0 = s^{2}/\lambda_p.$$
+
 
 
 \clearpage
