@@ -38,11 +38,15 @@ rand.split.test <- function(data, labels, count, train.percent, red.ps)
 		test <- data[,test.idxs]
 		train.labels <- labels[train.idxs]
 		truth <- labels[test.idxs]+1
+		print("truth:")
+		print(truth)
 
 		proj <- embed.classifier(train, train.labels, proj="LOL", max(red.ps))
 		for (red.p in red.ps) {
 			res <- train.classifier(train, train.labels, proj[, 1:red.p])
 			pred <- predict.classifier(object=res, newdata=test)
+			print("LOL+LDA predict:")
+			print(pred$class)
 			# measure the accuracy
 			out <- paste("LOL-", red.p, "dim: ",
 						 sum((as.integer(pred$class) - truth) != 0)/length(pred$class), sep="")
@@ -57,6 +61,8 @@ rand.split.test <- function(data, labels, count, train.percent, red.ps)
 		for (red.p in red.ps) {
 			res <- train.classifier(train, train.labels, proj[, 1:red.p])
 			pred <- predict.classifier(object=res, newdata=test)
+			print("PCA+LDA predict:")
+			print(pred$class)
 			# measure the accuracy
 			out <- paste("PCA-", red.p, "dim: ",
 						 sum((as.integer(pred$class) - truth) != 0)/length(pred$class), sep="")
