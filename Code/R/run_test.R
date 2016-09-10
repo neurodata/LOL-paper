@@ -1,4 +1,4 @@
-embed.classifier <- function(data, labels, proj=c("LOL", "LAL", "PCA"), red.p=1)
+embed.classifier <- function(data, labels, proj=c("LOL", "LAL", "QOQ", "PCA"), red.p=1)
 {
 	if (proj == "LOL")
 		proj <- LOL(data, fm.conv.R2FM(as.integer(labels)), red.p, 
@@ -6,6 +6,8 @@ embed.classifier <- function(data, labels, proj=c("LOL", "LAL", "PCA"), red.p=1)
 	else if (proj == "LAL")
 		proj <- LOL(data, fm.conv.R2FM(as.integer(labels)), red.p, 
 					type="rand_sparse")
+	else if (proj == "QOQ")
+		proj <- QOQ(data, fm.conv.R2FM(as.integer(labels)), red.p)
 	else if (proj == "PCA") {
 		mu <- rowMeans(data)
 		center.mat <- sweep(data, 1, mu, "-")
