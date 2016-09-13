@@ -28,7 +28,7 @@ In the 21st century high-dimensional observations abound.  In classical statisti
 
 % intro: we get 64, we have 157.  need to reduce by 2x
 
-Supervised learning (SL)---the art and science of estimating statistical relationships using labeled training data---is a crucial tool in scientific discovery.  SL has been enabled a wide variety of basic and applied findings, ranging from discovering biomarkers in omics data \cite{Vogelstein2014a}, to object recognition from images \cite{Krizhevsky2012}, and includes celebrated methods such as support vector machines, random forests, and deep networks \cite{Hastie2004}.  A special case of SL is classification; a classifier  predicts the 'class' of a novel observation via partitioning the space of observations into different classes. 
+Supervised learning (SL)---the art and science of estimating statistical relationships using labeled training data---is a crucial tool in scientific discovery.  SL has been enabled a wide variety of basic and applied findings, ranging from discovering biomarkers in omics data \cite{Vogelstein2014a}, to object recognition from images \cite{Krizhevsky2012}, and includes celebrated methods such as support vector machines, random forests, and deep networks \cite{Hastie2004}.  A special case of SL is classification; a classifier  predicts the `class' of a novel observation via partitioning the space of observations into different classes. 
 (for example, predicting male vs.~female from MRI scans).  
 In this big data age,  the ambient (or observed) dimensionality of the observations is quickly ballooning, and with it, the ambient dimensionality of the discriminant boundary.  While historical data may have consisted of only a few dimensions (e.g., height and weight), modern scientific datasets often consist of hundreds, thousands, or even millions of dimensions (e.g. genetics, neuroscience, omics). 
 Regardless of the dimensionality, when  scientists or analysts obtain new datasets, they must make a number of decisions, by either implicitly or explicitly weighting considerations across several levels of analysis, including both statistical and computational considerations. 
@@ -1067,7 +1067,28 @@ To illustrate the difference between the LOL projection and that based on the ei
 On the other hand, we have
 $$ C(F_0^{(A)}, F_1^{(A)}) = \frac{(\delta^{\top} (I - U_{d-1} U_{d-1}^{\top}) \delta)^{2}}{\delta^{\top} (\Sigma - \Sigma_{d-1}) \delta} + \delta^{\top} \Sigma_{d-1}^{\dagger} \delta = \frac{s^4}{s^2 \lambda_p} + 0 = s^{2}/\lambda_p.$$
 
+\subsection{Finite Sample Performance}
+We now consider the finite sample performance of LOL and PCA-based classifiers in the high-dimensional setting with small or moderate sample sizes, e.g., when $p$ is comparable to $n$ or when $p \gg n$. Once again we assume that $X | Y = i \sim \mathcal{N}(\mu_i, \Sigma)$ for $i = 0, 1$. Furthermore, we also assume that $\Sigma$ belongs to the class $\Theta(p,r,k,\tau,\lambda)$ as defined below. 
 
+{\bf Definition} Let $\lambda > 0$, $\tau \geq 1$ and $k \leq p$ be given. Denote by $\Theta(p,r,k,\tau,\lambda,\sigma^2)$ the collection of matrices $\Sigma$ such that
+
+$$ \Sigma = V \Lambda V^{\top} + \sigma^2 I $$
+where $V$ is a $p \times r$  matrix with orthonormal columns and $\Lambda$ is a $r \times r$ diagonal matrix whose diagonal entries $\lambda_1, \lambda_2, \dots, \lambda_r$ satisfy $\lambda \geq \lambda_1 \geq \lambda_2 \geq \dots \geq \lambda_r \geq \lambda/\tau$. In addition, assume also that $|\mathrm{supp}(V)| \leq k$ where $\mathrm{supp}(V)$ denote the non-zero rows of $V$, i.e., $\mathrm{supp}(V)$ is the subset of $\{1,2,\dots,p\}$ such that $V_j \not = 0$ if and only if $j \in \mathrm{supp}(V)$. 
+
+We note that in general $r \leq k \ll p$ and $\lambda/\tau \gg \sigma^2$. We then have the following result.
+
+{\bf Theorem \cite{cai-pca-1}} 
+Suppose there exists constants $M_0$ and $M_1$ such that $M_1 \log p \geq \log n \geq M_0 \log \lambda$. Then there exists a constant $c_0 = c_0(M_0, M_1)$ depending on $M_0$ and $M_1$ such that for all $n$ and $p$ for which 
+$$ \frac{\tau k}{n} \log \frac{e p}{k} \leq c_0, $$ there exists an estimate $\hat{V}$ of $V$ such that 
+
+$$ \sup_{\Sigma \in \Theta(p,r,k,\tau,\lambda,\sigma^2)} \mathbb{E} \|\hat{V} \hat{V}^{\top} - V V^{\top} \|^{2} \leq \frac{C k (\sigma \lambda + \sigma^2)}{n \lambda^{2}} \log \frac{e p}{k}$$
+where $C$ is a universal constant not depending on $p,r,k,\tau,\lambda$ and $\sigma^2$. 
+
+We can therefore show that provided that $M_0$ and $M_1$ is large enough, and $n$ and $p$ satisfies the condition in the preceding theorem, then provided that the Chernoff information of the population version of LOL is larger than the Chernoff information of the population version of PCA, the expected Chernoff information for the sample version of LOL is also larger than the expected Chernoff information of the sample version of PCA. We emphasize that it is necessary that the LOL and the PCA version both projected into the top $d \leq r$ dimension of the sample covariance matrices.
+
+
+
+ 
 
 \clearpage
 \section{The R implementation of LOL}
