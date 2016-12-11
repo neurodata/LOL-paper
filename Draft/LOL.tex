@@ -1068,7 +1068,7 @@ where $\tilde{S}_d$ is the diagonal matrix containing the $d$ largest eigenvalue
 \begin{equation}
 \begin{split}
 C(F_0^{(B)}, F_1^{(B)}) = \delta^{\top} B^{\top} (B \Sigma B^{\top})^{-1} B \delta & = \delta^{\top} \tilde{U}_d \Bigl(\tilde{S}_d^{-1} + \frac{\tilde{S}_d^{-1} \tilde{U}_d^{\top} \delta \delta^{\top} \tilde{U}_d \tilde{S}_d^{-1}}{4 - \delta^{\top} \tilde{U}_d \tilde{S}_d^{-1} \tilde{U}_d^{\top} \delta} \Bigr) \tilde{U}_d^{\top} \delta \\ &= \delta^{\top} \tilde{U}_d \tilde{S}_d^{-1} \tilde{U}_d^{\top} \delta + \frac{(\delta^{\top} \tilde{U}_d \tilde{S}_d^{-1} \tilde{U}_d^{\top} \delta)^{2}}{4 - \delta^{\top} \tilde{U}_d \tilde{S}_d^{-1} \tilde{U}_d^{\top} \delta} \\
-&= \delta^{\top} \tilde{\Sigma}_d^{\dagger} \delta - \frac{(\delta^{\top} \tilde{\Sigma}_d^{\dagger} \delta)^2}{4 - \delta^{\top} \tilde{\Sigma}_d^{\dagger} \delta} = \frac{4 \delta^{\top} \tilde{\Sigma}_d^{\dagger} \delta}{4 - \delta^{\top} \tilde{\Sigma}_d^{\dagger} \delta}.
+&= \delta^{\top} \tilde{\Sigma}_d^{\dagger} \delta + \frac{(\delta^{\top} \tilde{\Sigma}_d^{\dagger} \delta)^2}{4 - \delta^{\top} \tilde{\Sigma}_d^{\dagger} \delta} = \frac{4 \delta^{\top} \tilde{\Sigma}_d^{\dagger} \delta}{4 - \delta^{\top} \tilde{\Sigma}_d^{\dagger} \delta}.
 \end{split}
 \end{equation}
 where $\tilde{\Sigma}_d = \tilde{U}_d \tilde{S}_d \tilde{U}_d^{\top}$ is the best rank $d$ approximation to $\tilde{\Sigma} = \Sigma + \tfrac{1}{4} \delta \delta^{\top}$. 
@@ -1076,10 +1076,31 @@ where $\tilde{\Sigma}_d = \tilde{U}_d \tilde{S}_d \tilde{U}_d^{\top}$ is the bes
 We recall that the LOL projection $A = [\delta \mid U_{d-1}]^{\top}$ yields
 $$ C(F_0^{(A)}, F_1^{(A)}) = \frac{(\delta^{\top} (I - U_{d-1} U_{d-1}^{\top}) \delta)^{2}}{\delta^{\top} (\Sigma - \Sigma_{d-1}) \delta} + \delta^{\top} \Sigma_{d-1}^{\dagger} \delta. $$
 
-To illustrate the difference between the LOL projection and that based on the eigenvectors of the {\em pooled} covariance matrix, consider the following contrived example. Let $\Sigma = \mathrm{diag}(\lambda_1, \lambda_2, \dots, \lambda_p)$ be a diagonal matrix with $\lambda_1 \geq \lambda_2 \geq \dots \geq \lambda_p$. Also let $\delta = (0,0,\dots,0,s)$. Suppose furthermore that $\lambda_p + s^{2}/4 < \lambda_d$. Then we have $\tilde{\Sigma}_d = \mathrm{diag}(\lambda_1, \lambda_2, \dots, \lambda_d, 0, 0, \dots, 0)$. Thus $\tilde{\Sigma}_d^{\dagger} = \mathrm{diag}(1/\lambda_1, 1/\lambda_2, \dots, 1/\lambda_d, 0,0, \dots, 0)$ and $\delta^{\dagger} \tilde{\Sigma}_d^{\dagger} \delta = 0$. Therefore, $C(F_0^{(B)}, F_1^{(B)}) = 0$.
+To illustrate the difference between the LOL projection and that based on the eigenvectors of the {\em pooled} covariance matrix, consider the following simple example. Let $\Sigma = \mathrm{diag}(\lambda_1, \lambda_2, \dots, \lambda_p)$ be a diagonal matrix with $\lambda_1 \geq \lambda_2 \geq \dots \geq \lambda_p$. Also let $\delta = (0,0,\dots,0,s)$. Suppose furthermore that $\lambda_p + s^{2}/4 < \lambda_d$. Then we have $\tilde{\Sigma}_d = \mathrm{diag}(\lambda_1, \lambda_2, \dots, \lambda_d, 0, 0, \dots, 0)$. Thus $\tilde{\Sigma}_d^{\dagger} = \mathrm{diag}(1/\lambda_1, 1/\lambda_2, \dots, 1/\lambda_d, 0,0, \dots, 0)$ and $\delta^{\dagger} \tilde{\Sigma}_d^{\dagger} \delta = 0$. Therefore, $C(F_0^{(B)}, F_1^{(B)}) = 0$.
 
 On the other hand, we have
 $$ C(F_0^{(A)}, F_1^{(A)}) = \frac{(\delta^{\top} (I - U_{d-1} U_{d-1}^{\top}) \delta)^{2}}{\delta^{\top} (\Sigma - \Sigma_{d-1}) \delta} + \delta^{\top} \Sigma_{d-1}^{\dagger} \delta = \frac{s^4}{s^2 \lambda_p} + 0 = s^{2}/\lambda_p.$$
+
+
+We can generalize the previous example as follows. Let $\Sigma$ be a $p \times p$ covariance matrix of the form
+$$ \Sigma = \begin{bmatrix} \Sigma_{d} & 0 \\ 0 & \Sigma_{d}^{\perp} \end{bmatrix} $$ where $\Sigma_{d}$ is a $d \times d$ matrix. 
+Let $\lambda_1 \geq \lambda_2 \geq \dots \geq \lambda_p$ be the eigenvalues of $\Sigma$ and suppose furthermore that the eigenvalues of $\Sigma_{d}$ are $\lambda_1, \lambda_2, \dots, \lambda_d$. Let $\gamma = \lambda_{d} - \lambda_{d+1}$. 
+We now assume that $\delta$ are generated randomly as follows. The entries of $\delta$ are i.i.d. random variable sampled according to the following distribution. Given an index $i$, with probability $\epsilon$, $\delta_i = 0$ and with probability $1 - \epsilon$, $\delta_i$ is distributed according to a normal distribution with mean $\tau > 0$ and variance $\sigma^2$. Then with probability at least $\epsilon^{d}$, the covariance matrix for $\tilde{\Sigma}$ is of the form
+$$ \tilde{\Sigma} = \begin{bmatrix} \Sigma_{d} & 0 \\ 0 & \Sigma_{d}^{\perp} + \tfrac{1}{4} (\tilde{\delta} \tilde{\delta}^{\top}) \end{bmatrix} $$
+where $\tilde{\delta} \in \mathbb{R}^{p - d}$ is formed by excluding the first $d$ elements of $\delta$. 
+Now, if $\lambda_{d+1} + \tfrac{1}{4} \|\tilde{\delta}\|^{2} < \lambda_d$, then 
+the $d$ largest eigenvalues of $\tilde{\Sigma}$ is still $\lambda_1, \lambda_2, \dots, \lambda_d$, and thus the eigenvectors corresponding to the $d$ largest eigenvalues of $\tilde{\Sigma}$ is the same as that for the $d$ largest eigenvalues of $\Sigma$. That is to say, $$ \lambda_{d+1} + \tfrac{1}{4} \|\tilde{\delta}\|^{2} < \lambda_d \Longrightarrow \tilde{\Sigma}_{d}^{\dagger} = \Sigma_{d}^{\dagger} \Longrightarrow \delta^{\top} \tilde{\Sigma}_{d}^{\dagger} \delta = 0 \Longrightarrow C(F_0^{(B)}, F_1^{(B)}) = 0.$$
+
+We now compute the probability that $\lambda_{d+1} + \tfrac{1}{4} \|\tilde{\delta}\|^{2} < \lambda_d$. Suppose for the moment that $\epsilon > 0$ is fixed and do not varies with $p$. We then have
+$$ \frac{\sum_{i=d+1}^{p} \delta_i^{2} - (p - d) (1 - \epsilon) \tau^2}{\sqrt{(p - d)(2 (1 - \epsilon) (2 \tau^2 \sigma^2 + \sigma^4) + \epsilon (1 - \epsilon) (\tau^4 + 2 \tau^2 \sigma^2 + \sigma^4))}} \overset{\mathrm{d}}{\longrightarrow} N(0,1).$$
+
+Thus, as $p \rightarrow \infty$, the probability that $\lambda_{d+1} + \tfrac{1}{4} \|\tilde{\delta}\|^{2} < \lambda_d$ converges to that of
+$$\Phi\Bigl(\frac{4(\lambda_d - \lambda_{d+1}) - (p - d) (1 - \epsilon) \tau^2}{\sqrt{(p - d)(2 (1 - \epsilon) (2 \tau^2 \sigma^2 + \sigma^4) + \epsilon (1 - \epsilon) (\tau^4 + 2 \tau^2 \sigma^2 + \sigma^4))}} \Bigr).$$ This probability can be made arbitrarily close to $1$ provided that $\lambda_{d} - \lambda_{d+1} \geq Cp(1 - \epsilon) \tau^2$ for all sufficiently large $p$ and for some constant $C > 1/4$. Since the probability that $\delta_1 = \delta_2 = \dots = \delta_d$ is at least $\epsilon^{d}$, we thus conclude that for sufficiently large $p$, with probability at least $\epsilon^{d}$, 
+$$C(F_0^{(B)}, F_1^{(B)}) = 0 < C(F_0^{(A)}, F_1^{(A)}).$$
+
+In the case where $\epsilon = \epsilon(p) \rightarrow 1$ as $p \rightarrow \infty$ such that $p(1 - \epsilon) \rightarrow \theta$ for some constant $K$, then the probability that $\lambda_{d+1} + \tfrac{1}{4} \|\tilde{\delta}\|^{2} < \lambda_d$ converges to the probability that
+$$\frac{1}{4} \sum_{i=1}^{K} \sigma^2 \chi_{1}^{2}(\tau) \geq \lambda_{d} - \lambda_{d+1} $$
+where $K$ is Poisson distributed with mean parameter $\theta$ and $\chi_{i}^{2}(\tau)$ is the non-central chi-square distribution with one degree of freedom and non-centrality parameter $\tau$. Thus if $\lambda_{d} - \lambda_{d+1} \geq C \theta \tau^2 \log{p}$ for sufficiently large $p$ and for some constant $C$, then this probability can also be made arbitrarily close to $1$. 
 
 \subsection{Finite Sample Performance}
 We now consider the finite sample performance of LOL and PCA-based classifiers in the high-dimensional setting with small or moderate sample sizes, e.g., when $p$ is comparable to $n$ or when $p \gg n$. Once again we assume that $X | Y = i \sim \mathcal{N}(\mu_i, \Sigma)$ for $i = 0, 1$. Furthermore, we also assume that $\Sigma$ belongs to the class $\Theta(p,r,k,\tau,\lambda)$ as defined below. 
