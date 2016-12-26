@@ -33,6 +33,9 @@ function [Proj, P, Q] = LOL(X,Y,types,Kmax)
 
 [D,n]=size(X);
 if n~=length(Y), X=X'; [D,n]=size(X); end
+if nargin<3, types={'DENL'}; end
+if nargin<4, Kmax=min(D,n); end
+
 ntypes=length(types);
 for i=1:ntypes
     if isempty(strfind('TDRNS',types{i}(1))), error('failed to specify a legit estimator of delta'), end

@@ -18,7 +18,7 @@ task1.ks=1:50;
 task1.ks=unique(round(logspace(0,log10(67),50)));
 [T{j},S{j},P{j}] = run_task(task1);
 
-%% prostate
+%% colon
 
 j=2;
 task1=task;

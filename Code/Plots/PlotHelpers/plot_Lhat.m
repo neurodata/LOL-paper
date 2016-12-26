@@ -96,7 +96,11 @@ for i=1:Nalgs;
 %     if i==1, ti=1; elseif i==2, ti=3; elseif i==3, ti=2; end
     if length(location)>1
         if ~isnan(location(2))
-            h(i)=plot(ks2,location,'color',F.colors{i},'linewidth',2,'linestyle',F.linestyle{i});
+            try
+                h(i)=plot(ks2,location,'color',F.colors{i},'linewidth',2,'linestyle',F.linestyle{i});
+            catch
+                keyboard
+            end
             eh=errorbar(...
                 ks2(F.tick_ids{i}),...
                 location(F.tick_ids{i}),...

@@ -2,7 +2,7 @@ function loop = task_loop(task_in)
 % this function implements a parloop for ntrials iterations and outputs the results
 
 loop = cell(1,task_in.ntrials);
-parfor k=1:task_in.ntrials
+for k=1:task_in.ntrials
     
     if mod(k,10)==0, display(['trial # ', num2str(k)]); end
     
@@ -46,6 +46,11 @@ parfor k=1:task_in.ntrials
                 [loop{k}.out(jj,1)] = run_LAD(Z,task);
             case 'SVM'
                 loop{k}.out(jj,:) = run_SVM(Z,task.Nks);
+            case 'eigenfaces'
+                [~, loop{k}.out(jj,:)] = run_eigenfaces(Z,task);
+%                 Xtest=V(1:k,:)*Z.Xtest;
+%                 Xtrain=V(1:k,:)*Z.Xtrain;
+%                 [Yhat, parms, eta] = LDA_train_and_predict(Xtrain, Z.Ytrain, Xtest);
         end
         loop{k}.time(jj)=toc;
         loop{k}.algs{j}=task.algs{j};

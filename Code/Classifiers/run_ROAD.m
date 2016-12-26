@@ -2,7 +2,7 @@ function [out, ROAD_num,Yhat,eta] = run_ROAD(Z,task)
 
 para.K=task.Nks;
 ys=unique(Z.Ytrain);
-if length(ys)>2, 
+if length(ys)>2
     error('ROAD only works for 2 class problems'), 
 else % convert ys to be 0 & 1, as ROAD requires
     Z.Ytrain(Z.Ytrain==ys(1))=0;

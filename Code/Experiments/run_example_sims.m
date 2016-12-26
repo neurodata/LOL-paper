@@ -14,7 +14,7 @@ if nargin==0
     task=struct;
 end
 
-if ~isfield(task,'algs'),   task.algs={'LOL';'ROAD'}; end
+if ~isfield(task,'algs'),   task.algs={'LOL';'ROAD';'eigenfaces'}; end
 if ~isfield(task,'ntrials'),task.ntrials=50; end
 if ~isfield(task,'simulation'),         task.simulation=1; end
 if ~isfield(task,'percent_unlabeled'),  task.percent_unlabeled=0; end
@@ -86,7 +86,7 @@ if task.plot
     orange=[1 0.6 0];
     gray=0.75*[1 1 1];
     purple=[0.5 0 0.5];
-    G.colors = {'g';'m';'c'};
+    G.colors = {'g';'m';'c';'b'};
     dd=2;
     gg=dd*0.75;
     G.ti=[1,3,2]; % order of ticks
@@ -121,13 +121,13 @@ if task.plot
             title('(A) Rotated Trunk')
             ylabel('means')
             ytick=[-1,0,1];
-        elseif j==2,
+        elseif j==2
             %         title('')
             xlim=[1,4];
             xtick=2:2:xlim(end);
             xlabel('ambient dimension index');
             ytick=[];
-        elseif j==3,
+        elseif j==3
             title('(C) Fat Tails')
             ytick=[];
         end

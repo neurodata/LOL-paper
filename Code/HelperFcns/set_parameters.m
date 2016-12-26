@@ -542,7 +542,6 @@ if ~isfield(task,'P')
             Sigma(1:D+1:end)=100./sqrt(D:-1:1);
             
             
-            
         case ['rtrunk4, D=', num2str(D)]
             
             if ~isfield(task,'b'), b=4; else b=task.b; end
@@ -557,12 +556,6 @@ if ~isfield(task,'P')
             if det(Q)<-.99
                 Q(:,1)=-Q(:,1);
             end
-%             th=pi/4;
-%             Q(1:2,1:2)=[cos(th) -sin(th); sin(th) cos(th)];
-%             Q(1,3:end)=0;
-%             Q(2,3:end)=0;
-%             Q(3:end,1)=0;
-%             Q(3:end,2)=0;
             mu0=Q*mu0;
             mu1=Q*mu1;
             Sigma=Q*Sigma*Q';

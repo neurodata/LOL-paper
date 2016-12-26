@@ -22,17 +22,17 @@ T.algs=loop{1}.algs;
 S = get_loop_stats(T,loop);      % get stats
 if isfield(P,'Risk'), S.Risk=P.Risk; else S.Risk=nan; end % save risk
 if isstruct(task), name=task.name; else name=task; end % store name to save as
-if nargout==4,
+if nargout==4
     transformers = parse_algs(T.types);
     Z = parse_data(X,Y,T.ntrain,T.ntest,T.percent_unlabeled);
     [Proj, P] = LOL(Z.Xtrain',Z.Ytrain,transformers,max(T.ks));
 end
-if T.savestuff, 
+if T.savestuff 
     fpath = mfilename('fullpath');
     findex=strfind(fpath,'/');
     rootDir=fpath(1:findex(end-2));
     save([rootDir, 'Data/Results/', name],'T','S','P'), 
-    if nargout==4,
+    if nargout==4
         save([rootDir, 'Data/Results/', name],'Proj','-append'),
     end        
 end % save results

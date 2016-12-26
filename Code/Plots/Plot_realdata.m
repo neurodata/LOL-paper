@@ -17,7 +17,7 @@ addpath(p);
 tic
 newRun=0;
 task.savestuff=1;
-if newRun==1;
+if newRun==1
     task.ntrials=40;
     [T, S, P] = run_realdata(rootDir,task);
 else

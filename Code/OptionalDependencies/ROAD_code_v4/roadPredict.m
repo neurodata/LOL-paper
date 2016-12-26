@@ -14,7 +14,7 @@ if(fit.para.sRoad)
 end
 etaall=(xtest-repmat(mua', ntest, 1))*fit.wPath;
 classAll = etaall>0;
-if nargin==3,
+if nargin==3
     class    = (xtest-repmat(mua', ntest, 1))*fitCV.w>0;
 else
     class = [];

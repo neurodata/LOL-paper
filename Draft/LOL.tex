@@ -104,7 +104,8 @@ In addition to the above quantitative properties, LOL is intuitive, only has a s
 % \begin{wrapfigure}{R}{0.7\textwidth}%[h!]
 \begin{figure}
 \centering % l b r t
-\includegraphics[width=0.7\linewidth,trim=1cm 0cm 0cm 4.0cm,clip=true]{../Figs/mnist}
+%  trim={<left> <lower> <right> <upper>}
+\includegraphics[width=0.7\linewidth,trim=1cm 0cm 0cm 1.0cm,clip=true]{../Figs/mnist}
 \caption{
 Illustrating three different classifiers---\sct{Lasso}~(top), \sct{Fld$\circ$Pca}~(middle), and \Lol~(bottom)---for embedding images of the digits 3, 7, and 8 (from MNIST), each of which is 28 $\times$ 28 = 784 dimensional.
 \textbf{(A)} A subset of training samples  (boundary colors are only for visualization purposes).

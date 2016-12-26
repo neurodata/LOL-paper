@@ -14,13 +14,13 @@ addpath(p);
 
 %% load example data
 newsim=0;
-if newsim==1;
+if newsim==1
     [T,S,P,task] = run_example_sims;
 else
     load([rootDir, '../Data/Results/example_sims'])
 end
 pp=P; TT=T; SS=S;
-if newsim==1;
+if newsim==1
     [T,S,P,task] = run_generalization_sims(task);
 else
     load([rootDir, '../Data/Results/generalizations'])
@@ -63,7 +63,7 @@ G.xscale='linear';
 orange=[1 0.6 0];
 gray=0.75*[1 1 1];
 purple=[0.5 0 0.5];
-G.colors = {'g';'m';'c'};
+G.colors = {'g';'m';'c';'y'};
 dd=2;
 gg=dd*0.75;
 % G.tick_ids{1}=G.xtick;
@@ -321,13 +321,13 @@ for j=[0,1:3]
         F.xlim = [1 15];
         F.xtick=[5:5:max(F.xlim)]; %:F.xlim(end)];
         F.legendOn=0;
-        F.colors = {'g';'b'};
+        F.colors = {'g';'b';'y'};
         F.linestyle={'-';'-';'--'};
         
     end
     
     pos=[left+(j)*(width+hspace) bottom+(height+vspace)*0+0.01 width height]; %[left,bottom,width,height]
-    if j==0;
+    if j==0
         plot_Lhat(T{3},S{3},F,pos)
     else
         plot_Lhat(T{j+4},S{j+4},F,pos)
