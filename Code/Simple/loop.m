@@ -26,7 +26,7 @@ nmc=40;
 
 %%
 
-for s=4:S
+for s=3:S
     setting=settings{s}
     D=nan(nmc,1);
     ntrain=nan(nmc,1);
