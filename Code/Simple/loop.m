@@ -21,7 +21,7 @@ algs={'LOL';'RRLDA';'QOQ';'LRL';'eigenfaces';'ROAD';'lasso'};
 
 A=length(algs);
 S=length(settings);
-nmc=40;
+nmc=2;
 
 save('goodstuff.mat')
 
@@ -33,8 +33,7 @@ save('goodstuff.mat')
 % ntest=nan(S,nmc);
 for s=1:S
     setting=settings{s}
-    display('trial # ')
-    parfor i=1:nmc
+    for i=1:nmc
         [Lhat(i),ks{i},D(i),ntrain(i),ntest(i)]=simple(setting,algs);
         fprintf('\n trial # %d\n', i)
     end
