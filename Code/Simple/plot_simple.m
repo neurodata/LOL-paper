@@ -10,7 +10,7 @@ Lmin=1;
 ddiv=4;
 A=length(algs);
 nmc=length(Lhat);
-for a=1:A
+for a=1:7
     if isfield(Lhat,algs{a})
         for i=1:nmc
             L(i,:)=Lhat(i).(algs{a});
