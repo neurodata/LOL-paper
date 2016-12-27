@@ -31,7 +31,7 @@ for s=1:S
     D=nan(nmc,1);
     ntrain=nan(nmc,1);
     ntest=nan(nmc,1);
-    for i=1:nmc
+    parfor i=1:nmc
         [Lhat(i),ks{i},D(i),ntrain(i),ntest(i)]=simple(setting,algs);
         fprintf('\n trial # %d\n', i)
     end
