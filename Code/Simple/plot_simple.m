@@ -1,24 +1,28 @@
 %% plot
-load('rtrunk')
+clear, clc
+load('toeplitz')
 
 
 %%
 figure(1), clf, hold all
 Lmax=0;
 Lmin=1;
-A=length(algs)
+A=length(algs);
+nmc=length(Lhat);
 for a=1:A
-    for i=1:nmc
-        L(i,:)=Lhat(s,i).(algs{a});
+    if isfield(Lhat,algs{a})
+        for i=1:nmc
+            L(i,:)=Lhat(i).(algs{a});
+        end
+        meanL=mean(L);
+        plot(ks{1},meanL,'linewidth',2,'DisplayName',algs{a})
+        Lmax=max(Lmax,max(meanL));
+        Lmin=min(Lmin,min(meanL));
     end
-    meanL=mean(L);
-    plot(ks{s,1},meanL,'linewidth',2,'DisplayName',algs{a})
-    Lmax=max(Lmax,max(meanL));
-    Lmin=min(Lmin,min(meanL));
 end
-ylabel(settings{s})
-title(['D = ', num2str(D(s,1)), ', n = ', num2str(n(s,1))])
-xlim([0,D(s,1)/4])
+ylabel(setting)
+title(['D = ', num2str(D(1)), ', n = ', num2str(ntrain(1))])
+xlim([0,D(1)/4])
 ylim([Lmin,Lmax])
 legend('show')
 
