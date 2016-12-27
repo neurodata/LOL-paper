@@ -1,12 +1,13 @@
 %% plot
 clear, clc
-load('toeplitz')
+load('rtrunk')
 
 
 %%
 figure(1), clf, hold all
 Lmax=0;
 Lmin=1;
+ddiv=4;
 A=length(algs);
 nmc=length(Lhat);
 for a=1:A
@@ -22,7 +23,7 @@ for a=1:A
 end
 ylabel(setting)
 title(['D = ', num2str(D(1)), ', n = ', num2str(ntrain(1))])
-xlim([0,D(1)/4])
+xlim([0,D(1)/ddiv])
 ylim([Lmin,Lmax])
 legend('show')
 

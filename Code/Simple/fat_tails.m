@@ -9,7 +9,12 @@ rho=0.2;
 A=rho*ones(D);
 A(1:D+1:end)=1;
 
-[mu,Sigma]=random_rotate(mu,A);
+Sigma=A;
+p=1; 
+while p>0  % make sure after rotation we still have a proper covariance matrix
+    [mu,Sigma]=random_rotate(mu,Sigma);
+    [~,p]=chol(Sigma);
+end
 w=1/2*ones(2,1);
 
 gmm = gmdistribution(mu',Sigma,w);
