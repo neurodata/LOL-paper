@@ -5,7 +5,7 @@ K=size(mu,2); % # of classes
 try
     gmm = gmdistribution(mu',Sigma,1/K*ones(K,1));
 catch
-    keyboard
+    gmm = gmdistribution(mu',Sigma,1/K*ones(K,1));
 end
 [Xtrain,Ytrain] = random(gmm,n);
 [Xtest,Ytest] = random(gmm,ntest);
