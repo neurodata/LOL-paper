@@ -1,4 +1,4 @@
-function [Lhat,ks,D,ntrain] = simple(setting,algs)
+function [Lhat,ks,D,ntrain,ntest] = simple(setting,algs)
 
 %% generate/load data
 switch setting
@@ -84,4 +84,4 @@ for i=1:length(algs)
     end
 end
 
-save([setting, '.mat'],'Lhat','ks','D','ntrain','algs')
+save([setting, '.mat'],'Lhat','ks','D','ntrain','ntrain','algs','setting')

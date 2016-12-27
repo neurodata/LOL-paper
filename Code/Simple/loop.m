@@ -1,5 +1,10 @@
 clear, clc
+fpath = mfilename('fullpath');
+findex=strfind(fpath,'/');
+p = genpath(fpath(1:findex(end-2)));
+addpath(p);
 
+%%
 
 settings={...
     'rtrunk';...
@@ -22,44 +27,19 @@ save('goodstuff.mat')
 
 %%
 
+% ks=nan(S,nmc);
+% D=nan(S,nmc);
+% ntrain=nan(S,nmc);
+% ntest=nan(S,nmc);
 for s=1:S
-    setting=settings{s};
+    setting=settings{s}
+    display('trial # ')
     parfor i=1:nmc
-        [Lhat(s,i),ks(s,i),D(s,i),ntrain(s,i)]=simple(setting,algs);
+        [Lhat(i),ks{i},D(i),ntrain(i),ntest(i)]=simple(setting,algs);
+        fprintf('\n trial # %d\n', i)
     end
- 	save('goodstuff.mat','Lhat','-append')
+    save([setting, '.mat'],'Lhat','ks','D','ntrain','ntrain','algs','setting')
+%     save('goodstuff.mat','Lhat','-append')
 end
 
 
-%% plot
-figure(1), clf
-for s=1:S
-    subplot(S,1,s), cla, hold all
-    Lmax=0;
-    Lmin=1;
-    for a=1:A
-        for i=1:nmc
-            L(i,:)=Lhat(s,i).(algs{a});
-        end
-        meanL=mean(L);
-        plot(ks{s,1},meanL,'linewidth',2,'DisplayName',algs{a})
-        Lmax=max(Lmax,max(meanL));
-        Lmin=min(Lmin,min(meanL));
-    end
-    ylabel(settings{s})
-    title(['D = ', num2str(D(s,1)), ', n = ', num2str(n(s,1))])
-    xlim([0,D(s,1)/4])
-    ylim([Lmin,Lmax])
-end
-legend('show')
-
-% clf, hold all
-% plot(ks,Lhat.LOL,'linewidth',2,'DisplayName','LOL')
-% plot(ks,Lhat.RRLDA,'linewidth',2,'DisplayName','RR-LDA')
-% plot(ks,Lhat.QOQ,'linewidth',2,'DisplayName','QOQ')
-% plot(ks,Lhat.LRL,'linewidth',2,'DisplayName','LRL')
-% plot(ks,Lhat.eigenfaces,'linewidth',2,'DisplayName','Eigenfaces')
-% plot(ks,Lhat.ROAD,'linewidth',2,'DisplayName','ROAD')
-% plot(ks,Lhat.lasso,'linewidth',2,'DisplayName','Lasso')
-% 
-% legend('show')
