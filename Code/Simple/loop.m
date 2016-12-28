@@ -26,7 +26,7 @@ S=length(settings);
 
 %%
 
-Svec=4:S;
+Svec=5:S;
 nmc=40;
 
 for s=Svec
