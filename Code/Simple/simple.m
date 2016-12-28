@@ -64,11 +64,12 @@ for i=1:length(algs)
                 %                 Z.Ytest=Z.Ytest+1;
                 %                 Z.Ytrain=Z.Ytrain+1;
                 %             end
+                if size(Xtrain,2)~=length(Ytrain); Xtrain=Xtrain'; end
                 fit=glmnet(Xtrain',Ytrain,'multinomial',opts);
                 pfit=glmnetPredict(fit,Xtest,fit.lambda,'response','false',fit.offset);
                 [~,yhat]=max(pfit,[],2);
-                Yhat_GLM=squeeze(yhat)';
-                Lhat.lasso=misclass(Yhat+1,Ytest);
+                Yhat=squeeze(yhat);
+                Lhat.lasso=misclass(Yhat,Ytest);
         end
         wt.(alg)=toc;
     catch
