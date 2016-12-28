@@ -1,4 +1,4 @@
-function [Xtrain,Ytrain,Xtest,Ytest,D,ntrain]=load_data2(which)
+function [Xtrain,Ytrain,Xtest,Ytest,D,ntrain,ntest]=load_data2(which)
 
 switch which
     case 'prostate'

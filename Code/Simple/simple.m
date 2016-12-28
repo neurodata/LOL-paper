@@ -1,33 +1,22 @@
 function [Lhat,ks,D,ntrain,ntest] = simple(setting,algs)
 
 %% generate/load data
+ntest=1000;
 switch setting
-    case 'rtrunk'
-        D=100; ntrain=100; ntest=1000;
-        [Xtrain,Ytrain,Xtest,Ytest] = load_gmm(setting,D,ntrain,ntest);
-    case 'toeplitz'
-        D=100; ntrain=100; ntest=1000;
-        [Xtrain,Ytrain,Xtest,Ytest] = load_gmm(setting,D,ntrain,ntest);
-    case '3trunk4'
-        D=100; ntrain=100; ntest=1000;
+    case {'rtrunk','toeplitz','3trunk4'}
+        D=100; ntrain=100; 
         [Xtrain,Ytrain,Xtest,Ytest] = load_gmm(setting,D,ntrain,ntest);
     case 'fat_tails'
-        D=1000; ntrain=100; ntest=1000;
+        D=1000; ntrain=100; 
         [Xtrain,Ytrain,Xtest,Ytest] = fat_tails(D,ntrain,ntest);
     case 'xor2'
-        D=100; ntrain=100; ntest=1000;
+        D=100; ntrain=100; 
         [Xtrain,Ytrain,Xtest,Ytest] = xor2(D,ntrain,ntest);
     case 'outliers'
-        D=100; ntrain=100; ntest=1000;
+        D=100; ntrain=100; 
         [Xtrain,Ytrain,Xtest,Ytest] = outliers(D,ntrain,ntest);
-    case 'prostate'
-        [Xtrain,Ytrain,Xtest,Ytest,D,ntrain]=load_data2('prostate');
-    case 'colon'
-        [Xtrain,Ytrain,Xtest,Ytest,D,ntrain]=load_data2('colon');
-    case 'MNIST'
-        [Xtrain,Ytrain,Xtest,Ytest,D,ntrain]=load_data2('MNIST');
-    case 'CIFAR-10'
-        [Xtrain,Ytrain,Xtest,Ytest,D,ntrain]=load_data2('CIFAR-10');
+    case {'prostate','colon','MNIST','CIFAR-10'}
+        [Xtrain,Ytrain,Xtest,Ytest,D,ntrain,ntest]=load_data2(setting);
 end
 
 %% run classifiers
@@ -84,4 +73,4 @@ for i=1:length(algs)
     end
 end
 
-save([setting, '.mat'],'Lhat','ks','D','ntrain','ntrain','algs','setting')
+% save([setting, '.mat'],'Lhat','ks','D','ntrain','ntrain','algs','setting')
