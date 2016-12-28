@@ -8,9 +8,11 @@ mu=[mu0,mu1];
 rho=0.2;
 A=rho*ones(D);
 A(1:D+1:end)=1;
-
-[mu,Sigma]=random_rotate(mu,A);
+Sigma=A;
+% [mu,Sigma]=random_rotate(mu,A);
 w=1/2*ones(2,1);
+
+Q=rand_rot(D);
 
 gmm = gmdistribution(mu',Sigma,w);
 [X0,Y0] = random(gmm,n*0.8);

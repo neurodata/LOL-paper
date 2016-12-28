@@ -1,13 +1,13 @@
 %% plot
 clear, clc
-load('rtrunk')
+load('fat_tails')
 
 
 %%
 figure(1), clf, hold all
 Lmax=0;
 Lmin=1;
-ddiv=4;
+ddiv=2;
 A=length(algs);
 nmc=length(Lhat);
 for a=1:7
