@@ -26,7 +26,7 @@ S=length(settings);
 
 %%
 
-Svec=7:S;
+Svec=[1,7:S];
 nmc=40;
 
 for s=Svec
@@ -36,10 +36,12 @@ for s=Svec
     ntest=nan(nmc,1);
     clear Lhat ks
     for i=1:nmc
-        [Lhat(i),ks{i},D(i),ntrain(i),ntest(i)]=simple(setting,algs);
+        [Lhat(i),wt(i),ks{i},D(i),ntrain(i),ntest(i)]=simple(setting,algs);
         fprintf('\n trial # %d\n', i)
     end
-    save([setting, '.mat'],'Lhat','ks','D','ntrain','ntrain','algs','setting')
+    if savestuff=1
+        save([setting, '.mat'],'Lhat','ks','D','ntrain','ntrain','algs','setting')
+    end
 end
 
 
