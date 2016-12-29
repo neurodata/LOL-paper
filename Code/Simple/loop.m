@@ -41,7 +41,7 @@ for s=Svec
         fprintf('\n trial # %d\n', i)
     end
     if savestuff==1
-        save([setting, '.mat'],'Lhat','ks','D','ntrain','ntrain','algs','setting','ksROAD','kslasso')
+        save([setting, '.mat'],'Lhat','ks','D','ntrain','ntrain','algs','setting')
     end
 end
 
