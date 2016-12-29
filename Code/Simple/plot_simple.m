@@ -1,5 +1,6 @@
-%% plot
-clear, clc
+function plot_simple(setting)
+% %% plot
+% clear, clc
 % settings={...
 %     'rtrunk';...
 %     'toeplitz';...
@@ -12,7 +13,7 @@ clear, clc
 %     'MNIST';...
 %     'CIFAR-10'};
 
-load('xor2')
+load(setting)
 
 
 %%
@@ -22,20 +23,28 @@ Lmin=1;
 ddiv=2;
 A=length(algs);
 nmc=length(Lhat);
-for a=1:7
-    if isfield(Lhat,algs{a})
+for a=1:A
+    alg=algs{a};
+    if isfield(Lhat,alg)
+        L=[];
         for i=1:nmc
-            L(i,:)=Lhat(i).(algs{a});
+            if strcmp(alg,'lasso')
+                LL=lasso_interp(ks{i}.(alg),Lhat(i).(alg),ks{i}.('LOL'));
+            else
+                LL=Lhat(i).(alg);
+            end
+            L(i,:)=LL;
         end
         meanL=mean(L);
-        plot(ks{1},meanL,'linewidth',2,'DisplayName',algs{a})
+        plot(ks{1}.('LOL'),meanL,'linewidth',2,'DisplayName',alg)
         Lmax=max(Lmax,max(meanL));
         Lmin=min(Lmin,min(meanL));
     end
 end
 ylabel(setting)
 title(['D = ', num2str(D(1)), ', n = ', num2str(ntrain(1))])
-xlim([0,D(1)/ddiv])
+xmax=min(D(1),ntrain(1));
+xlim([0,xmax/ddiv])
 ylim([Lmin,Lmax])
 legend('show')
 

@@ -1,4 +1,4 @@
-function [Lhat,wt,ks,D,ntrain,ntest] = simple(setting,algs)
+function [Lhat,wt,KS,D,ntrain,ntest] = simple(setting,algs)
 
 %% generate/load data
 ntest=1000;
@@ -25,9 +25,9 @@ end
 ks=unique(round(logspace(0,log10(min(ntrain,D)-2),50)));
 Nks=length(ks);
 
-
 for i=1:length(algs)
     alg=algs{i};
+    KS.(alg)=ks;
     try
         tic
         switch alg
@@ -58,18 +58,10 @@ for i=1:length(algs)
                 fit = road(Xtr, Ytrain,0,0,para);
                 [~,Yhat] = roadPredict(Xte, fit);
                 Lhat.ROAD=misclass(Yhat+1,Ytest);
+                KS.(alg)=fit.num';
             case 'lasso'
-                opts=struct('nlambda',Nks);
-                %             if max(Z.Ytrain)==9
-                %                 Z.Ytest=Z.Ytest+1;
-                %                 Z.Ytrain=Z.Ytrain+1;
-                %             end
-                if size(Xtrain,2)~=length(Ytrain); Xtrain=Xtrain'; end
-                fit=glmnet(Xtrain',Ytrain,'multinomial',opts);
-                pfit=glmnetPredict(fit,Xtest,fit.lambda,'response','false',fit.offset);
-                [~,yhat]=max(pfit,[],2);
-                Yhat=squeeze(yhat);
-                Lhat.lasso=misclass(Yhat,Ytest);
+                [Lhat.lasso, KS.(alg)] = run_lasso(Xtrain,Xtest,Ytrain,Ytest,Nks);
+
         end
         wt.(alg)=toc;
     catch

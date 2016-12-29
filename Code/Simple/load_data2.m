@@ -16,6 +16,7 @@ switch which
     case 'MNIST'
         X = loadMNISTImages('../../Data/Raw/MNIST/t10k-images.idx3-ubyte');
         Y = loadMNISTLabels('../../Data/Raw/MNIST/t10k-labels.idx1-ubyte');
+        Y=Y+1;
         [D, n] = size(X);
         ntest=n-100;
     case 'CIFAR-10'

@@ -26,7 +26,7 @@ S=length(settings);
 
 %%
 
-Svec=[5:S];
+Svec=[1:S];
 nmc=40;
 savestuff=1;
 
@@ -41,8 +41,9 @@ for s=Svec
         fprintf('\n trial # %d\n', i)
     end
     if savestuff==1
-        save([setting, '.mat'],'Lhat','ks','D','ntrain','ntrain','algs','setting')
+        save([setting, '.mat'],'Lhat','ks','D','ntrain','ntrain','algs','setting','ksROAD','kslasso')
     end
 end
 
-
+%%
+% plot_simple(setting)
