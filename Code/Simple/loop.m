@@ -9,7 +9,7 @@ addpath(p);
 settings={...
     'rtrunk';...
     'toeplitz';...
-    '3trunk4';...
+    '3trunk';...
     'fat_tails';...
     'xor2';...
     'outliers';...
@@ -17,21 +17,35 @@ settings={...
     'colon';...
     'MNIST';...
     'CIFAR-10'};
-algs={'LOL';'RRLDA';'eigenfaces';'ROAD';'lasso'};
+
+algs={'LOL';'RRLDA';'eigenfaces';'ROAD';'lasso';'LRL';'QOQ'};
 
 A=length(algs);
 S=length(settings);
 
-
-
 %%
 
-Svec=[5:S];
+Svec=5;%[5:S];
 nmc=40;
 savestuff=1;
 
 for s=Svec
     setting=settings{s}
+    switch setting
+        case {'rtrunk','toeplitz'}
+            algs={'LOL';'RRLDA';'eigenfaces';'ROAD';'lasso'};
+        case {'3trunk','3trunk4'}
+            algs={'LOL';'RRLDA';'eigenfaces';'lasso'}; 
+        case 'fat_tails'
+            algs={'LOL';'RRLDA';'eigenfaces';'ROAD'};            
+        case 'xor2'
+            algs={'LOL';'RRLDA';'eigenfaces';'QOQ';'ROAD'};            
+        case 'outliers'
+            algs={'LOL';'RRLDA';'eigenfaces';'QOQ';'ROAD';'LRL'};  
+        case {'CIFAR-10','MNIST','colon','prostate'}
+            algs={'LOL';'RRLDA';'eigenfaces';'lasso'};
+    end
+    
     D=nan(nmc,1);
     ntrain=nan(nmc,1);
     ntest=nan(nmc,1);
@@ -46,4 +60,4 @@ for s=Svec
 end
 
 %%
-% plot_simple(setting)
+plot_Lhat_v_dvec(setting)

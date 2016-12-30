@@ -2,22 +2,7 @@ function [Lhat,wt,KS,D,ntrain,ntest] = simple(setting,algs)
 
 %% generate/load data
 ntest=1000;
-switch setting
-    case {'rtrunk','toeplitz','3trunk4'}
-        D=100; ntrain=100;
-        [Xtrain,Ytrain,Xtest,Ytest] = load_gmm(setting,D,ntrain,ntest);
-    case 'fat_tails'
-        D=1000; ntrain=100;
-        [Xtrain,Ytrain,Xtest,Ytest] = fat_tails(D,ntrain,ntest);
-    case 'xor2'
-        D=100; ntrain=100;
-        [Xtrain,Ytrain,Xtest,Ytest] = xor2(D,ntrain,ntest);
-    case 'outliers'
-        D=100; ntrain=100;
-        [Xtrain,Ytrain,Xtest,Ytest] = outliers(D,ntrain,ntest);
-    case {'prostate','colon','MNIST','CIFAR-10'}
-        [Xtrain,Ytrain,Xtest,Ytest,D,ntrain,ntest]=load_data2(setting);
-end
+[Xtrain,Ytrain,Xtest,Ytest,D,ntrain,ntest] = load_data(setting,ntest);
 
 %% run classifiers
 
@@ -61,7 +46,14 @@ for i=1:length(algs)
                 KS.(alg)=fit.num';
             case 'lasso'
                 [Lhat.lasso, KS.(alg)] = run_lasso(Xtrain,Xtest,Ytrain,Ytest,Nks);
-
+            case 'RF'       % random forest
+%                 loop{k}.out(jj,1) = run_RF(Z);
+            case 'DR'       % sufficient dimensionality reduciton
+%                 [loop{k}.out(jj,1)] = run_DR(Z,task);
+            case 'LAD'      % likelihood acquired directions (Cook and Forzani, 2009b)
+%                 [loop{k}.out(jj,1)] = run_LAD(Z,task);
+            case 'SVM'
+%                 loop{k}.out(jj,:) = run_SVM(Z,task.Nks);
         end
         wt.(alg)=toc;
     catch

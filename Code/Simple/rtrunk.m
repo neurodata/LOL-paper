@@ -8,7 +8,11 @@ if nargin<4, K=2; end % number of classes
 mu1=b./sqrt(1:2:2*D)';
 mu0=-mu1;
 mu=[mu1, mu0];
-if K==3, mu=[mu0, 0*mu0, mu1]; end
+if K==3
+    mu=[mu0, 0*mu0, mu1];
+elseif K==4
+    mu=[mu0, [b./sqrt(D:-2:1)'; b./sqrt(1:2:D)'], mu1];
+end
 Sigma=eye(D);
 Sigma(1:D+1:end)=100./sqrt(D:-1:1);
 if r==1, [mu,Sigma]=random_rotate(mu,Sigma); end
