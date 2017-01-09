@@ -2,7 +2,7 @@ function [Lhat,wt,KS,D,ntrain,ntest] = simple(setting,algs)
 
 %% generate/load data
 ntest=1000;
-[Xtrain,Ytrain,Xtest,Ytest,D,ntrain,ntest] = load_data(setting,ntest);
+[Xtrain,Ytrain,Xtest,Ytest,D,ntrain,ntest,Lhat.Bayes] = get_data(setting,ntest);
 
 %% run classifiers
 

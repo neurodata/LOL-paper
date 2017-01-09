@@ -24,7 +24,7 @@ switch which
         X=double(data)';
         Y=labels;
         [D, n] = size(X);
-        ntest=n-300;
+        ntest=n-100;
 end
 
 ntrain=n-ntest;

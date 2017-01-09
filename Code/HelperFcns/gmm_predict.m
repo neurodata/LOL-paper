@@ -4,7 +4,7 @@ P.groups=unique(Y);
 P.Ngroups=length(P.groups);
 
 [P.D,P.n]=size(X);
-if ~isfield(P,'nvec'),
+if ~isfield(P,'nvec')
     P.nvec=nan(P.Ngroups,1);
     for k=1:P.Ngroups
         k_idx=find(Y==P.groups(k));
@@ -12,7 +12,7 @@ if ~isfield(P,'nvec'),
     end
 end
 
-if ~isfield(P,'InvSig'),
+if ~isfield(P,'InvSig')
     [~,~,K]=size(P.Sigma);
     if K>1
         for k=1:K

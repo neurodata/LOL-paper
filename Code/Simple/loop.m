@@ -7,25 +7,28 @@ addpath(p);
 %%
 
 settings={...
-    'rtrunk';...
-    'toeplitz';...
-    '3trunk';...
-    'fat_tails';...
-    'xor2';...
-    'outliers';...
+%     'rtrunk';...
+%     'toeplitz';...
+%     '3trunk';...
+%     'fat_tails100';...
+%     'r2toeplitz';...
+%     'xor2';...
+%     'fat_tails';...
+%     'outliers';...
     'prostate';...
     'colon';...
     'MNIST';...
-    'CIFAR-10'};
+%     'CIFAR-10';...
+    };%...
 
-algs={'LOL';'RRLDA';'eigenfaces';'ROAD';'lasso';'LRL';'QOQ'};
+algs={'LOL';'RRLDA';'eigenfaces';'QOQ';'ROAD'};%'lasso';'LRL';'QOQ'};
 
 A=length(algs);
 S=length(settings);
 
 %%
 
-Svec=5;%[5:S];
+Svec=1:S;
 nmc=40;
 savestuff=1;
 
@@ -33,17 +36,19 @@ for s=Svec
     setting=settings{s}
     switch setting
         case {'rtrunk','toeplitz'}
-            algs={'LOL';'RRLDA';'eigenfaces';'ROAD';'lasso'};
+            algs={'LOL';'RRLDA';'eigenfaces';'QOQ';'ROAD'};
         case {'3trunk','3trunk4'}
-            algs={'LOL';'RRLDA';'eigenfaces';'lasso'}; 
-        case 'fat_tails'
-            algs={'LOL';'RRLDA';'eigenfaces';'ROAD'};            
-        case 'xor2'
-            algs={'LOL';'RRLDA';'eigenfaces';'QOQ';'ROAD'};            
+            algs={'LOL';'RRLDA';'eigenfaces';'QOQ';'lasso'};
+        case {'fat_tails','fat_tails100'}
+            algs={'LOL';'RRLDA';'eigenfaces';'QOQ';'ROAD'};
+        case {'xor2','r2toeplitz'}
+            algs={'LOL';'RRLDA';'eigenfaces';'QOQ';'ROAD'};
         case 'outliers'
-            algs={'LOL';'RRLDA';'eigenfaces';'QOQ';'ROAD';'LRL'};  
-        case {'CIFAR-10','MNIST','colon','prostate'}
-            algs={'LOL';'RRLDA';'eigenfaces';'lasso'};
+            algs={'LOL';'RRLDA';'eigenfaces';'QOQ';'ROAD';'LRL'};
+        case {'CIFAR-10','MNIST'}
+            algs={'LOL';'RRLDA';'eigenfaces';'QOQ';'lasso'};
+        case {'colon','prostate'}
+            algs={'LOL';'RRLDA';'eigenfaces';'QOQ';'ROAD';'lasso'};
     end
     
     D=nan(nmc,1);
@@ -60,4 +65,5 @@ for s=Svec
 end
 
 %%
-plot_Lhat_v_dvec(setting)
+F.algs=algs;
+plot_Lhat_v_dvec(setting,F)

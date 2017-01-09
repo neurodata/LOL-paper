@@ -1,5 +1,6 @@
-function [mu,Sigma] = toep(D)
+function [mu,Sigma] = toep(D,r)
 
+if nargin<2, r=0; end
 b=0.4;
 D1=10;
 rho=0.5;
@@ -18,3 +19,11 @@ mu0=mudelt*mu0;
 mu1=-mu0;
 mu=[mu1, mu0];
 Sigma=A;
+
+if r==1 
+    [mu2,Sigma2]=random_rotate(mu,Sigma); 
+    mu(:,2)=mu2(:,2);
+    Sigma(:,:,2)=Sigma2;
+end
+
+    

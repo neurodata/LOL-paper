@@ -2,12 +2,12 @@
 clear, clc
 settings={...
     'rtrunk';...
-    'toeplitz';...
     '3trunk';...
-    'xor2';...
+    'toeplitz';...
     'fat_tails';...
-    'outliers'};
-% ;...
+    'r2toeplitz'};%...
+%     'xor2';...
+%     'outliers'};
 %     'prostate';...
 %     'colon';...
 %     'MNIST';...
@@ -18,62 +18,73 @@ S=length(settings);
 
 %%
 col=get(groot,'defaultAxesColorOrder');
-algs={'LOL';'RRLDA';'eigenfaces';'ROAD';'lasso';'LRL';'QOQ'};
+algs={'LOL';'RRLDA';'eigenfaces';'ROAD';'lasso';'QOQ';'LRL'};
 
 for a=1:length(algs)
     F.color.(algs{a})=col(a,:);
 end
+F.color.('Bayes')=[0 0 0];
+F.col=col;
 F.nrows=S;
 F.ncols=3;
-%%
 F.xlab=[];
 F.xmax=1;
+F.legend=false;
+
+%%
 h=figure(1); clf
 for s=1:S
     setting=settings{s};
     F.row=s;
+    G=F;
     switch setting
         case 'rtrunk'
-            F.ylab='Trunk';
-            F.xmax=20;
-            F.legend=false;
+            G.ylab='Trunk-2';
+            G.xmax=30;
+            G.legend=false;
+            G.algs=algs(1:4);
         case 'toeplitz'
-            F.ylab='Toeplitz';
-            F.xmax=50;
+            G.ylab='Toeplitz';
+            G.xmax=90;
+            G.algs=algs(1:4);
         case '3trunk'
-            F.ylab='3-Trunk';
-            F.xmax=20;  
+            G.ylab='Trunk-3';
+            G.xmax=30;  
         case 'xor2'
-            F.ylab='XOR';
-            F.xmax=20;  
+            G.ylab='XOR';
+            G.xmax=30;  
+        case 'r2toeplitz'
+            G.ylab='QDA';
+            G.xmax=30;  
         case 'outliers'
-            F.ylab='Outliers';
-            F.xmax=70;  
+            G.ylab='Outliers';
+            G.xmax=70;  
+            G.ymax=0.3;
         case 'fat_tails'
-            F.ylab='Fat Tails';
-            F.xmax=25;  
+            G.ylab='Fat Tails (D=1000)';
+            G.xmax=30;  
         case 'prostate'
-            F.ylab='Prostate';
-            F.xmax=20;  
+            G.ylab='Prostate';
+            G.xmax=20;  
         case 'colon'
-            F.ylab='Colon';
-            F.xmax=20;  
+            G.ylab='Colon';
+            G.xmax=20;  
         case 'MNIST'
-            F.ylab='MNIST';
-            F.xmax=20;  
+            G.ylab='MNIST';
+            G.xmax=20;  
         case 'CIFAR-10'
-            F.ylab='CIFAR-10';
-            F.xmax=20;  
-            F.xlab='# of Embedded Dimensions';
+            G.ylab='CIFAR-10';
+            G.xmax=20;  
+            G.xlab='# of Embedded Dimensions';
     end
-    plot_Lhat_v_dvec(setting,F);
-    if s==S, legend('show'); end
+    plot_Lhat_v_dvec(setting,G);
+%     if s==S, legend('show'); end
 
     plot_means(setting,F);
 end
 
 
-%
-H.wh=[6 10];
+%%
+H.wh=[6.5 9];
 H.fname=['plot_all'];
 print_fig(h,H)
