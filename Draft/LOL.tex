@@ -28,30 +28,30 @@ In the 21st century high-dimensional observations abound.  In classical statisti
 
 % intro: we get 64, we have 157.  need to reduce by 2x
 
-Supervised learning (SL)---the art and science of estimating statistical relationships using labeled training data---is a crucial tool in scientific discovery.  SL has been enabled a wide variety of basic and applied findings, ranging from discovering biomarkers in omics data \cite{Vogelstein2014a}, to object recognition from images \cite{Krizhevsky2012}, and includes celebrated methods such as support vector machines, random forests, and deep networks \cite{Hastie2004}.  A special case of SL is classification; a classifier  predicts the `class' of a novel observation via partitioning the space of observations into different classes. 
-(for example, predicting male vs.~female from MRI scans).  
-In this big data age,  the ambient (or observed) dimensionality of the observations is quickly ballooning, and with it, the ambient dimensionality of the discriminant boundary.  While historical data may have consisted of only a few dimensions (e.g., height and weight), modern scientific datasets often consist of hundreds, thousands, or even millions of dimensions (e.g. genetics, neuroscience, omics). 
-Regardless of the dimensionality, when  scientists or analysts obtain new datasets, they must make a number of decisions, by either implicitly or explicitly weighting considerations across several levels of analysis, including both statistical and computational considerations. 
+Supervised learning (SL)---the art and science of estimating statistical relationships using labeled training data---is a crucial tool in scientific discovery.  SL has been enabled a wide variety of basic and applied findings, ranging from discovering biomarkers in omics data \cite{Vogelstein2014a}, to object recognition from images \cite{Krizhevsky2012}, and includes celebrated methods such as support vector machines, random forests, and deep networks \cite{Hastie2004}.  A special case of SL is classification; a classifier  predicts the `class' of a novel observation via partitioning the space of observations into different classes.
+(for example, predicting male vs.~female from MRI scans).
+In this big data age,  the ambient (or observed) dimensionality of the observations is quickly ballooning, and with it, the ambient dimensionality of the discriminant boundary.  While historical data may have consisted of only a few dimensions (e.g., height and weight), modern scientific datasets often consist of hundreds, thousands, or even millions of dimensions (e.g. genetics, neuroscience, omics).
+Regardless of the dimensionality, when  scientists or analysts obtain new datasets, they must make a number of decisions, by either implicitly or explicitly weighting considerations across several levels of analysis, including both statistical and computational considerations.
 
-As suggested above, the goal of such problems is to estimate a discriminant boundary that  partitions the space as optimally and efficiently  as possible. If we knew the ``true data generating mechanism'', then writing down the optimal discriminant boundary would be relatively trivial.  However, in all real data science problems, at least some parts of the true data generating mechanism remain unknown, because the ``Truth'' is likely infinitely complex.  Because we do not know the truth, we seek tools that will estimate boundaries as accurately and efficiencly as possible given the training data available to us.  To do so, one must make a series of decisions. These decisions have a variety of ramifications; the art of supervised learning is making choices that balance those ramifications appropriately for the problem at hand.  The choices can reasonably be organized into four levels of analysis: (i) model, (ii) algorithm, (iii) implementation, and (iv) platform, each have different implications, both quantitative and qualitative.  The quantitative impact can be further subdivided into statistical and computational implications, with statistical implications largely determined by the top two levels, and computational implications governed by the bottom two.   
+As suggested above, the goal of such problems is to estimate a discriminant boundary that  partitions the space as optimally and efficiently  as possible. If we knew the ``true data generating mechanism'', then writing down the optimal discriminant boundary would be relatively trivial.  However, in all real data science problems, at least some parts of the true data generating mechanism remain unknown, because the ``Truth'' is likely infinitely complex.  Because we do not know the truth, we seek tools that will estimate boundaries as accurately and efficiencly as possible given the training data available to us.  To do so, one must make a series of decisions. These decisions have a variety of ramifications; the art of supervised learning is making choices that balance those ramifications appropriately for the problem at hand.  The choices can reasonably be organized into four levels of analysis: (i) model, (ii) algorithm, (iii) implementation, and (iv) platform, each have different implications, both quantitative and qualitative.  The quantitative impact can be further subdivided into statistical and computational implications, with statistical implications largely determined by the top two levels, and computational implications governed by the bottom two.
 Below, we list in italics the \emph{choices} one must make, and in bold the \textbf{design considerations} associated with each.  These considerations directly determine the design goals of our machine learning system, as will be elaborated upon below.
 
 
 % trade-offs:
 % stats: bias-variance trade-off
-% comp: We make design tradeoffs to balance the opposing forces of minimizing memory usage and maximizing CPU cycles spent computing in parallel. The design trade-off is cache freshness for reduced cache maintenance overhead. 
+% comp: We make design tradeoffs to balance the opposing forces of minimizing memory usage and maximizing CPU cycles spent computing in parallel. The design trade-off is cache freshness for reduced cache maintenance overhead.
 
 
-First, one must choose a \emph{discriminant model} (often called feasible region or action space in other contexts, and often this choice is implicit in the algorithm choice). 
+First, one must choose a \emph{discriminant model} (often called feasible region or action space in other contexts, and often this choice is implicit in the algorithm choice).
 This modeling assumptions determine geometric constraints on the shape of the estimated boundary.
 For example, a linear boundary is a potential discriminant model, and the particular feasiable optimal boundary for a given problem is then specified by (a potentially multidimensional) parameter: the slope and intercept.  \textbf{Model bias}  is the minimum distance between the optimal discriminant boundary in the discriminant model and true boundary (determined by the data generating mechanism).  As mentioned above, in real data problems, we always expect some model bias unless the discriminant model is ``non-parametric'', meaning that it can account for any discriminant boundary.
 
-Second, one must choose an \emph{algorithm} to estimate the boundary, such as Fisher’s Linear Discriminant (\Fld), linear Support Vector Machines (\Svm), or logistic regression.  Each such algorithm has different convergence properties as sample size increases.  Importantly, for different data generating mechanisms, different algorithms may converge on different solutions.  The additional distance between the expected estimated boundary and the optimal boundary is called the \textbf{estimator bias}, which we also want to minimize by choosing an algorithm that will select an estimate as close as possible to the truth.  Different algorithms will also differ in their \textbf{estimator variance}, which is a function both of the size of the discriminant model, and the idiosyncrasies of the algorithm.  Of note, in certain circumstances, the two bias terms and the variance together determine expected mean square error, so one also desires to minimize the variance of the estimated boundary. 
+Second, one must choose an \emph{algorithm} to estimate the boundary, such as Fisher’s Linear Discriminant (\Fld), linear Support Vector Machines (\Svm), or logistic regression.  Each such algorithm has different convergence properties as sample size increases.  Importantly, for different data generating mechanisms, different algorithms may converge on different solutions.  The additional distance between the expected estimated boundary and the optimal boundary is called the \textbf{estimator bias}, which we also want to minimize by choosing an algorithm that will select an estimate as close as possible to the truth.  Different algorithms will also differ in their \textbf{estimator variance}, which is a function both of the size of the discriminant model, and the idiosyncrasies of the algorithm.  Of note, in certain circumstances, the two bias terms and the variance together determine expected mean square error, so one also desires to minimize the variance of the estimated boundary.
 
-In real data problems, there are two additional quantitative considerations impacted by the algorithm choice: \textbf{hyper-parameter searches} and \textbf{robustness}. As mentioned above, we desire to minimize both the bias and the variance; alas, decreasing one often comes at the cost increasing the other.  For any given data generating mechanism and dataset, the optimal trade-off is unknown. Fortunately, many algorithms are equiped with a hyper-parameter, that enables the practictioner to ``tune'' the bias vs.~variance to obtain an ``optimal'' fit in terms of expected error on other data.  The ease and efficiency with which those hyper-parameters can be tuned can substantially impact performance.   The robustness of an algorithm quantifies its ability to estimate nearly optimal boundaries when there are outliers. This is another consideration that plays a crucial role in real data.  
+In real data problems, there are two additional quantitative considerations impacted by the algorithm choice: \textbf{hyper-parameter searches} and \textbf{robustness}. As mentioned above, we desire to minimize both the bias and the variance; alas, decreasing one often comes at the cost increasing the other.  For any given data generating mechanism and dataset, the optimal trade-off is unknown. Fortunately, many algorithms are equiped with a hyper-parameter, that enables the practictioner to ``tune'' the bias vs.~variance to obtain an ``optimal'' fit in terms of expected error on other data.  The ease and efficiency with which those hyper-parameters can be tuned can substantially impact performance.   The robustness of an algorithm quantifies its ability to estimate nearly optimal boundaries when there are outliers. This is another consideration that plays a crucial role in real data.
 
 
-The third and fourths choices impact computational considerations.  Third, one must choose an \emph{implementation}.  First, implementations should be \textbf{numerically stable}, over the range  of the number of samples and dimensions under consideration.  Second, one desires an implementation that minimizes computational complexity, both in terms of  \textbf{space} and \textbf{time}.  
+The third and fourths choices impact computational considerations.  Third, one must choose an \emph{implementation}.  First, implementations should be \textbf{numerically stable}, over the range  of the number of samples and dimensions under consideration.  Second, one desires an implementation that minimizes computational complexity, both in terms of  \textbf{space} and \textbf{time}.
 Fourth, one must choose a \emph{platform} upon which the implementation operates,  including both software dependencies and hardware choice.  In the big data age, both \textbf{scale-up} and \textbf{scale-out} are crucial design considerations.  Scale-up, generically speaking, refers to the ability of utilizing all available computational resources, rather than allowing computers to sit idly.  Scale-out refers to the ability to incorporate additional available resources.  Together, these terms determine the scalability and resource efficiency of a system, which can have dramatic consequences in real world big data problems.
 
 
@@ -61,7 +61,7 @@ All of the above quantitative considerations can be evaluated \textbf{theoretica
 The design or choice of a machine learning system for solving a given real world problem reflects each of the above design considerations.   Regardless of the problem, we want a discriminant model that exhibits low bias for that problem, an algorithm with low estimator bias and variance, with easy hyper-parameter searches that is robust to outliers, an implementation that is numerically stable with small space and time requirements, deployed on a platform that scales both up and out.  And we want all the properties demonstrated via theory, buttressed by simulations, and corroborated by real data experiments.  Obviously, it is quite a challenge to optimize along all of the above dimensions for any particular kind of exploitation task.  We therefore focus  on the simplest supervised learning task we can think of: a high-dimensional two-class classification problem.  To our knowledge, there does not yet exist a machine learning system that performs well along each of the above design considerations for even this problem.
 
 
-The first century of statistical pattern recognition focused on elegant SL approaches for low-dimensional problems (e.g., Fisher's Linear Discriminant (FLD) \cite{Fisher}), and dimensionality reduction techniques for high-dimensional problems (e.g., Principal Components Analysis (PCA) \cite{PCA}), but did not seriously investigate high-dimensional SL approaches.  More recent work has focused on high-dimensional SL approaches, including sparse methods (e.g., Lasso \cite{Lasso}) and supervised dictionary learning techniques \cite{Mairal2009}.  However, theoretical guarantees for sparse methods require very strict assumptions that are often far from accurate \cite{??}, meaning that sparse methods tend to exhibit significant bias.  Moreover, their suseptibility to correlations of the predictor variables can lead to substantial variance, insofar that which variables are selector can be highly noise dependent \cite{Meinshausen2010c}.  Dictionary learning, on the other hand, has scant theoretical guarantees in any setting \cite{??}.  Moreover, because dictionary learning tends to consider a large complex discriminant model, its resulting estimates are highly dependent on initialization choice.  Finally, computationally, both are problematic for big data, in that they require large amounts of time, and implementations on scalable platforms are currently unavailable.   
+The first century of statistical pattern recognition focused on elegant SL approaches for low-dimensional problems (e.g., Fisher's Linear Discriminant (FLD) \cite{Fisher}), and dimensionality reduction techniques for high-dimensional problems (e.g., Principal Components Analysis (PCA) \cite{PCA}), but did not seriously investigate high-dimensional SL approaches.  More recent work has focused on high-dimensional SL approaches, including sparse methods (e.g., Lasso \cite{Lasso}) and supervised dictionary learning techniques \cite{Mairal2009}.  However, theoretical guarantees for sparse methods require very strict assumptions that are often far from accurate \cite{??}, meaning that sparse methods tend to exhibit significant bias.  Moreover, their suseptibility to correlations of the predictor variables can lead to substantial variance, insofar that which variables are selector can be highly noise dependent \cite{Meinshausen2010c}.  Dictionary learning, on the other hand, has scant theoretical guarantees in any setting \cite{??}.  Moreover, because dictionary learning tends to consider a large complex discriminant model, its resulting estimates are highly dependent on initialization choice.  Finally, computationally, both are problematic for big data, in that they require large amounts of time, and implementations on scalable platforms are currently unavailable.
 
 In complementary work, generalizations of principal components to include various kinds of nonlinear dimensionality reduction techniques, collectively referred to as  ``manifold learning'', have been developing recently \cite{??}. These tools are predominantly ``unsupervised'', and therefore, do not explicitly search for a discriminant boundary, and therefore may add significant bias to the problem at hand.  Adding supervision to these techniques so far has been difficult; methods proposed thus far embed the data in an unsupervised fashion first, again, potentially adding bias \cite{Belkin2004a}, and require substantial computations.   Thus, a supervised manifold learning algorithm designed for one of the simplest possible high-dimensional classification problems remains amiss.
 
@@ -70,24 +70,24 @@ The computer science community has been developing tools for big data for severa
 
 
 
-% , where each class is sampled from a Gaussian distribution and they only differ in their means.  Such a situation is a big data problem when either the dimensionality $p$ or sample size $n$ is large; we focus  on the setting where $p$ is large, and in fact, when $p$ is much larger than $n$, that is, $p>n$.  In this setting, much of classical statistics that relies on asymptotic results with $n$ increasing and $p$ fixed, is not appropriate.  Moreover, methods developed on the basis of the increasing sample size assumption suffer along many of the above considerations; in particular, they exhibit unacceptably large variance and numerical instability. 
+% , where each class is sampled from a Gaussian distribution and they only differ in their means.  Such a situation is a big data problem when either the dimensionality $p$ or sample size $n$ is large; we focus  on the setting where $p$ is large, and in fact, when $p$ is much larger than $n$, that is, $p>n$.  In this setting, much of classical statistics that relies on asymptotic results with $n$ increasing and $p$ fixed, is not appropriate.  Moreover, methods developed on the basis of the increasing sample size assumption suffer along many of the above considerations; in particular, they exhibit unacceptably large variance and numerical instability.
 
-% Fisher’s Linear Discriminant (\Fld), while asymptotically optimal (zero bias and variance as n goes to infinity), is numerically unstable when $n < p$, and therefore will not even run.  
+% Fisher’s Linear Discriminant (\Fld), while asymptotically optimal (zero bias and variance as n goes to infinity), is numerically unstable when $n < p$, and therefore will not even run.
 
-% To address the above statistical considerations in such high-dimensional settings, a number of strategies have been developed recently in the literature.  A very natural “fix” to this is to first ``pre-process'' the data via a truncated Principal Components Analysis (tPCA), and then apply \Fld (an approach called Fisherfaces \cite{}.  While first running tPCA greatly reduces the variance relative to directly running FLD, and therefore makes the algorithm numerically stable, it adds estimator bias because the dimension reduction performed by PCA does not consider the class labels, only the predictor variables, and the discriminant boundary is determined by the relationship between the class labels and predictor variables. 
+% To address the above statistical considerations in such high-dimensional settings, a number of strategies have been developed recently in the literature.  A very natural “fix” to this is to first ``pre-process'' the data via a truncated Principal Components Analysis (tPCA), and then apply \Fld (an approach called Fisherfaces \cite{}.  While first running tPCA greatly reduces the variance relative to directly running FLD, and therefore makes the algorithm numerically stable, it adds estimator bias because the dimension reduction performed by PCA does not consider the class labels, only the predictor variables, and the discriminant boundary is determined by the relationship between the class labels and predictor variables.
 
-% Other ``manifold learning techniques'', such as isomap \cite{Tenenbaum2000a}, local linear embedding \cite{Roweis2000a}, Laplacian eigenmaps \cite{Belkin2003a}, Diffusion maps \cite{Coifman2006a} and others are similarly ``unsupervised'', and therefore, do not explicitly search for a discriminant boundary, and therefore may add significant bias.  Adding supervision to these techniques so far has been difficult, methods proposed thus far embed the data in an unsupervised fashion first, again, potentially adding bias \cite{Belkin2004a}, and require substantial computations. Sparse methods (e.g., \cite{}) can use both the class labels and predictor variables, but they come with substantial costs. In particular, if certain very restrictive assumptions of the data are not satisfied, such as the restrictive isometry property, sparse methods add both significant estimator bias and variance.  Moreover, they require much greater computational time than Fisherfaces.  
+% Other ``manifold learning techniques'', such as isomap \cite{Tenenbaum2000a}, local linear embedding \cite{Roweis2000a}, Laplacian eigenmaps \cite{Belkin2003a}, Diffusion maps \cite{Coifman2006a} and others are similarly ``unsupervised'', and therefore, do not explicitly search for a discriminant boundary, and therefore may add significant bias.  Adding supervision to these techniques so far has been difficult, methods proposed thus far embed the data in an unsupervised fashion first, again, potentially adding bias \cite{Belkin2004a}, and require substantial computations. Sparse methods (e.g., \cite{}) can use both the class labels and predictor variables, but they come with substantial costs. In particular, if certain very restrictive assumptions of the data are not satisfied, such as the restrictive isometry property, sparse methods add both significant estimator bias and variance.  Moreover, they require much greater computational time than Fisherfaces.
 
-% To address the above computational considerations, a number of strategies have been developed recently in the literature.  Most such approaches have focused on the large $n$ setting, including sub-sampling \cite{}, random sketching \cite{Woodruff14a},  and distributed learning \cite{Guha12a,Agarwal2014a,Meng15a,}.  
+% To address the above computational considerations, a number of strategies have been developed recently in the literature.  Most such approaches have focused on the large $n$ setting, including sub-sampling \cite{}, random sketching \cite{Woodruff14a},  and distributed learning \cite{Guha12a,Agarwal2014a,Meng15a,}.
 
-% To date, we are unaware of any machine learning library designed specifically to address ``wide data'' (where $p>n$), rather they all focus on ``tall data'' (where $n>p$).  The computational considerations and implementation details for wide and tall data are sufficiently different to demand different implementations for optimized efficiency.  
+% To date, we are unaware of any machine learning library designed specifically to address ``wide data'' (where $p>n$), rather they all focus on ``tall data'' (where $n>p$).  The computational considerations and implementation details for wide and tall data are sufficiently different to demand different implementations for optimized efficiency.
 
 
 Thus, a gap remains in the literature for a statistical tool that, under relatively general assumptions, achieves both small bias and variance, can be made robust, and has easily tunable hyper-parameters.  And complementarily, an implementation of that algorithm that is numerically stable, requires minimal space and time, is highly scalable for high-dimensional problems. Importantly, the method should perform well both on simulated and real data experiments.  And ideally, the software is intuitive, free and open source, and easy to use.
 
-Here, we describe a novel solution, called Low-Rank Optimal Linear Discriminant Analysis (LOL), that satisfies all of the above desiderata. We developed LOL by considering the above described simple scenario, and realizing that the optimal dimension reduction for such a setting would have to combine both the means and the covariances, because together those two parameters determine the optimal decision boundary.  While other methods have previous had a similar insight (in particular the ``First Two Moment'' (F2M) methods \cite{Li1991a, Tishby1999a, Globerson2003a, Cook2005a,Fukumizu2004a}), F2M methods only operate in low-dimensional settings.  Therefore, we decided to combine the means and covariances differently, essentially by first projecting the data onto the means, and then effectively computing PCA on the ``residuals''.  Running FLD after projecting the data onto the subspace spanned jointly by the means and the top principal components comprises the LOL method.  In addition to MATLAB and R, we also implemented LOL using FlashX, a recently developed big data analytics library \cite{??}.  We were therefore able to take advantage of matrix parallelizations optimized for machines with solid state drives.  
+Here, we describe a novel solution, called Low-Rank Optimal Linear Discriminant Analysis (LOL), that satisfies all of the above desiderata. We developed LOL by considering the above described simple scenario, and realizing that the optimal dimension reduction for such a setting would have to combine both the means and the covariances, because together those two parameters determine the optimal decision boundary.  While other methods have previous had a similar insight (in particular the ``First Two Moment'' (F2M) methods \cite{Li1991a, Tishby1999a, Globerson2003a, Cook2005a,Fukumizu2004a}), F2M methods only operate in low-dimensional settings.  Therefore, we decided to combine the means and covariances differently, essentially by first projecting the data onto the means, and then effectively computing PCA on the ``residuals''.  Running FLD after projecting the data onto the subspace spanned jointly by the means and the top principal components comprises the LOL method.  In addition to MATLAB and R, we also implemented LOL using FlashX, a recently developed big data analytics library \cite{??}.  We were therefore able to take advantage of matrix parallelizations optimized for machines with solid state drives.
 
-We demonstrate LOL outperforms---or at least performs no worse than---several reference benchmarks along every statistical consideration mentioned above.  This includes proving the improvement over several standards, along both statistical considerations (bias and variance) for the simple Gaussian setting mentioned above. Moreover, we provide a distributed implementation that improves on previous computational capabilities in terms of: stability, time, space, and scalability under more general settings.  Moreover, numerical experiments quantitatively demonstrate the improvement of LOL over reference methods on a wide range of simulated experiments that satisfy our theoretical assumptions. By virtue of LOL being built upon geometric intuition, it is easy to extend it along various dimensions.  Additional numerical experiments demonstrate that practice matches our intuition, in particular, generalizations of LOL can easily be constructed to match different geometric assumptions of the data.  Indeed, even when data are sampled from distributions outside our theory and intuition, we see that LOL achieves smaller error than its competitors. In fact, we can extend our intuition outside of classification problems to other problems, including wide regression and hypothesis testing.  A trivial modification of LOL leads to regression and testing procedures that also outperform the natural competitors.  Computationally, LOL is always numerically stable, and requires no more computational space, and smaller computational time, than both Fisherfaces and sparse methods.  Moreover, we provide a highly scalable implementation that efficiently runs on terabyte datasets with hundreds of thousands or millions of features. Finally, we test LOL against a set of standard methods on four different benchmark real datasets.  For any of the four different settings, there was not a single method that outperformed LOL on both accuracy and time.   
+We demonstrate LOL outperforms---or at least performs no worse than---several reference benchmarks along every statistical consideration mentioned above.  This includes proving the improvement over several standards, along both statistical considerations (bias and variance) for the simple Gaussian setting mentioned above. Moreover, we provide a distributed implementation that improves on previous computational capabilities in terms of: stability, time, space, and scalability under more general settings.  Moreover, numerical experiments quantitatively demonstrate the improvement of LOL over reference methods on a wide range of simulated experiments that satisfy our theoretical assumptions. By virtue of LOL being built upon geometric intuition, it is easy to extend it along various dimensions.  Additional numerical experiments demonstrate that practice matches our intuition, in particular, generalizations of LOL can easily be constructed to match different geometric assumptions of the data.  Indeed, even when data are sampled from distributions outside our theory and intuition, we see that LOL achieves smaller error than its competitors. In fact, we can extend our intuition outside of classification problems to other problems, including wide regression and hypothesis testing.  A trivial modification of LOL leads to regression and testing procedures that also outperform the natural competitors.  Computationally, LOL is always numerically stable, and requires no more computational space, and smaller computational time, than both Fisherfaces and sparse methods.  Moreover, we provide a highly scalable implementation that efficiently runs on terabyte datasets with hundreds of thousands or millions of features. Finally, we test LOL against a set of standard methods on four different benchmark real datasets.  For any of the four different settings, there was not a single method that outperformed LOL on both accuracy and time.
 
 In addition to the above quantitative properties, LOL is intuitive, only has a single hyper-parameter which is exceedingly easy to tune, and we provide free and open source implementations, in MATLAB, R, and FlashX, as well as pre-configured environments that will enable anybody to run LOL on commodity machines, including laptops, workstations, and cloud instances.  LOL is not likely to necessarily be the best algorithm on any given new high-dimensional challenge problem.  Rather, the arguments and methodology developed herein provide a framework for developing big supervised manifold learning algorithms to tackle the data science problems of the next century.
 
@@ -170,14 +170,14 @@ In this sense, \Lol~can be thought of as a very simple  ``supervised \Pca''.
 \Lol~achieves near optimal performance for a wide variety of distributions.
 Each point is sampled from a multivariate Gaussian;
 the three columns correspond to different simulation parameters (see Methods for details).
-In each of 3 simulations, we sample $n=100$ points in $p=1000$ dimensions.  And for each approach, we embed into the top 20 dimensions. Note that we use the sample estimates, rather than the true population values of the parameters.  The five columns show (in decreasing order): 
+In each of 3 simulations, we sample $n=100$ points in $p=1000$ dimensions.  And for each approach, we embed into the top 20 dimensions. Note that we use the sample estimates, rather than the true population values of the parameters.  The five columns show (in decreasing order):
 \textbf{Row 1}: A scatter plot of the first two dimensions of the sampled points, with class 0 and 1 as black and gray dots, respectively.
 \textbf{Row 2} \sct{Fld $\circ$ Pca}.
 \textbf{Row 3} \Road, a sparse method designed specifically for this model \cite{Fan2012a}.
 \textbf{Row 4} \Lol, our newly proposed method.
 \textbf{Row 5} the Bayes optimal classifier, which is what all classifiers strive to achieve.
 \textbf{(A)} The mean difference vector is aligned with the direction of maximal variance, maxing it ideal for both \Pca~to discover the discriminant direction and a sparse solution. In this setting, the results are  similar for all methods, and essentially optimal.
-\textbf{(B)} The mean difference vector is orthogonal to the direction of maximal variance, making \Pca~fail, but sparse methods and \Lol~can still recover the correct dimensions, achieving nearly optimal performance. 
+\textbf{(B)} The mean difference vector is orthogonal to the direction of maximal variance, making \Pca~fail, but sparse methods and \Lol~can still recover the correct dimensions, achieving nearly optimal performance.
 \textbf{(C)} Same as B, but the data are rotated, in this case, only \Lol~performs well.
 Note that \Lol~is closest to Bayes optimal in all three settings.
 }
@@ -216,11 +216,11 @@ Now, there is no small number of ambient dimensions that separate the data well,
 
 The above numerical experiments provide the intuition to guide our theoretical developments.
 \begin{thm} \label{t:LDA}
-\Lol~better than (or as good as) \Pca, under the \Lda~model when the parameters are provided.  
-% This is true for all possible observed dimensionality of the data, and number of dimensions into which we embed. 
+\Lol~better than (or as good as) \Pca, under the \Lda~model when the parameters are provided.
+% This is true for all possible observed dimensionality of the data, and number of dimensions into which we embed.
 \end{thm}
-In words, it is better to incorporate the mean difference vector into the projection matrix.  The \emph{degree} of improvement is a function of the embedding dimension d, the ambient dimensionality p, and the parameters (see Methods for details and proof), but the \emph{existence} of an improvement, or at least no worse performance, is independent of those factors.  Note that better here includes both bias and variance.  In the population version of these two methods, there is no variance, so only the bias is important.  Moreover, we know the conditions under which \Lol~is strictly better than \Pca, they are formally stated in Assumption \ref{a:2} (in Methods).  Informally, \Lol~is better than \Pca~whenever the angle between the mean vector and the top $d$ principal components is large enough. Under reasonable assumptions, in the appendix, we show that this happens $84\%$ of the time.  
-% Note that Theorem \ref{t:LDA} is true regardless of the truncation dimension and ambient (observed) dimension.  
+In words, it is better to incorporate the mean difference vector into the projection matrix.  The \emph{degree} of improvement is a function of the embedding dimension d, the ambient dimensionality p, and the parameters (see Methods for details and proof), but the \emph{existence} of an improvement, or at least no worse performance, is independent of those factors.  Note that better here includes both bias and variance.  In the population version of these two methods, there is no variance, so only the bias is important.  Moreover, we know the conditions under which \Lol~is strictly better than \Pca, they are formally stated in Assumption \ref{a:2} (in Methods).  Informally, \Lol~is better than \Pca~whenever the angle between the mean vector and the top $d$ principal components is large enough. Under reasonable assumptions, in the appendix, we show that this happens $84\%$ of the time.
+% Note that Theorem \ref{t:LDA} is true regardless of the truncation dimension and ambient (observed) dimension.
 
 
 
@@ -237,9 +237,9 @@ In words, it is better to incorporate the mean difference vector into the projec
 % \end{thm}
 % Note that the degree of improvement is a function of the number of samples $n$, in addition to the embedding dimension $d$, the ambient dimensionality $p$, and the parameters (see Methods for details and proof).
 
-In the previous section, we proved that \Lol~is often better than \Pca, and never worse under the \Lda~model, regardless of observed dimensionality, embedded dimensionality, and parameters, assuming the parameters are given.  In this section, we numerically investigate what happens when the parameters must be estimated from training data, and in particular, from $n=100$ training samples, when the observed dimensionality is $p=100$.  These results strengthen our theoretical results by providing exact magnitudes of performance, rather than merely better than guarantees, in addition to operating in a finite sample setting, more akin to real data scenarios. 
+In the previous section, we proved that \Lol~is often better than \Pca, and never worse under the \Lda~model, regardless of observed dimensionality, embedded dimensionality, and parameters, assuming the parameters are given.  In this section, we numerically investigate what happens when the parameters must be estimated from training data, and in particular, from $n=100$ training samples, when the observed dimensionality is $p=100$.  These results strengthen our theoretical results by providing exact magnitudes of performance, rather than merely better than guarantees, in addition to operating in a finite sample setting, more akin to real data scenarios.
 
-\para{\Lda~Model} We begin by investigating three scenarios that satisfy the \Lda~model assumptions required by our proofs. First, consider  the rotated trunk example from Figure \ref{f:cigars}C as well as a ``Toeplitz'' example, as depicted in Figures \ref{f:properties}A and B, respectively.  In both cases, we compare \Lol~to \FoP~and \Road.  In both scenarios, for all dimensions, \Lol~achieves a lower error rate than either of its competitors. 
+\para{\Lda~Model} We begin by investigating three scenarios that satisfy the \Lda~model assumptions required by our proofs. First, consider  the rotated trunk example from Figure \ref{f:cigars}C as well as a ``Toeplitz'' example, as depicted in Figures \ref{f:properties}A and B, respectively.  In both cases, we compare \Lol~to \FoP~and \Road.  In both scenarios, for all dimensions, \Lol~achieves a lower error rate than either of its competitors.
 
 
 \para{Multiple Classes} \Lol~can trivially be extended to $>2$ class situations.  Nai\"vely it may seem like we would need to keep all pairwise differences between means.  However, given $k$ classes, the set of all $k^2$ differences is only rank $k-1$.  In other words, we can equivalently compute the distance of each mean to a single mean (in practice, for minimizing variance reasons, we use the class which has the maximum number of samples (breaking ties randomly).  Figure \ref{f:properties}C shows a 3-class generalization of the rotated Trunk example from Figure \ref{f:properties}A.  While \Lol~uses the additional class naturally,  many previously proposed high-dimensional classifiers, such as \Road, natively only work for 2-classes. Thus, we only compare \Lol~to \PoF~here. As before, \Lol~significantly outperforms \PoF~for all embedding dimensions.
@@ -261,7 +261,7 @@ In the previous section, we proved that \Lol~is often better than \Pca, and neve
 \centering
 \includegraphics[width=0.8\linewidth]{../Figs/plot_all}
 \caption{
-Seven simulations demonstrating \Lol~achieves superior finite sample performance over competitors both in settings for which we have asymptotic theoretical guarantees, and those for which we do not. 
+Seven simulations demonstrating \Lol~achieves superior finite sample performance over competitors both in settings for which we have asymptotic theoretical guarantees, and those for which we do not.
 % that even when the true discriminant boundary is high-dimensional, \Lol~can find a low-dimensional projection that wins the bias-variance trade-off against competing methods.
 For the first three, the top panels depict the means (top), the shared covariance matrix (middle).  For the next three, the top panels depict a 2D scatter plot (left), mean and level set of one standard deviation of covariance matrix (right).  For all seven simulations, the bottom panel shows misclassification rate as a function of the number of embedded dimensions, for several different classifiers.  The simulations settings are as follows:
 \textbf{(A)} Rotated Trunk: same as Figure \ref{f:cigars}C.
@@ -284,7 +284,7 @@ In all 7 cases, \Lol, or the appropriate generalization thereof, outperforms uns
 
 The above simulations were all under the \Lda~model, for which we have theoretical guarantees that \Lol~should outperform \PoF.  In this section, we explore simulation settings that extend beyond the geometric constraints we required for our proofs, to develop an even deeper understanding of \Lol.
 
-\para{Fat Tails} Figure \ref{f:properties}D shows a sparse example with ``fat tails'' to mirror real data settings better. More specifically, each class is the sum of multiple Gaussians, with the same mean, but different covariances (see Methods for details). The qualitative results are consistent with those of A and B, even though the setting is no longer exactly the setting under which we have theoretical confirmation. More specifically, \Lol~outperforms \PoF~and \Road~for all dimensions.  
+\para{Fat Tails} Figure \ref{f:properties}D shows a sparse example with ``fat tails'' to mirror real data settings better. More specifically, each class is the sum of multiple Gaussians, with the same mean, but different covariances (see Methods for details). The qualitative results are consistent with those of A and B, even though the setting is no longer exactly the setting under which we have theoretical confirmation. More specifically, \Lol~outperforms \PoF~and \Road~for all dimensions.
 
 
 \para{QDA} Sometimes, it makes more sense to model each class as having a unique covariance matrix, rather than a shared covariance matrix.  Assuming everything is Gaussian, the optimal classifier in this scenario is called  Quadratic Discriminant Analysis (QDA) \cite{Hastie2004}.  Intuitively then, we can modify \Lol~to compute the eigenvectors separately for each class, and concatenate them (sorting them according to their singular values).  Moreover, rather than classifying the projected data with \Lda, we can then classify the projected data with QDA.  Indeed, simulating data according to such a model (Figure \ref{f:properties}E), \Lol~performs slightly better than chance, regardless of the number of dimensions we use to project, whereas QOQ (for Quadratic Optimal QDA) performs significantly better regardless of how many dimensions it keeps. This demonstrates a  straightforward generalization of \Lol, available to us because of the simplicity and intuitiveness of \Lol.
@@ -300,14 +300,14 @@ In many applications, the main quantifiable consideration in whether to use a pa
 %More specifically, we modified FlashX to be able to perform all the computational primitives required for \Lol~on matrices that are short and fat, rather than tall and skinny.
 Given the FlashX programming framework, we can run \Lol~on essentially arbitrarily large data.  For these examples, we simulated data satisfying the \Lda~model; specifically, we used a spherically symmetric covariance matrix, with means just $\pm$ the one vector (see Methods for simulation details).
 
-Figure \ref{f:speed}A demonstrates both the in memory and semi-external memory \cite{SEM_SpMM} computing models of our implementation.  For the in memory implementation (light green line), we see that the run time increases linearly with the number of dimensions, requiring about 11 minutes to run \Lol~on a $p=32$,$000$,$000$ dimensional problem with $n=2000$ samples.   This linear increase is the optimal scale up according to Ahmdel's Law \cite{Amdahl1967}.  This example already requires 477 gigabyte (GB) to store the data, but $<$1 GB to perform the computations.  For larger data, we developed a semi-external memory implementation, which stores the data matrix on solid state drives, and the low-rank estimates in RAM \cite{abello1998functional}.  This strategy allows us to run \Lol~as long as the data can fit on disk, and the low-rank approximation can fit in RAM.  The semi-external memory implementation (dark green line) achieves the same performance as the in memory implementation whenever the data are small enough for in memory, and continues scaling optimally (linearly) as the dimensionality further increases to $p=128,000,000$ dimensions, a multi-terabyte scenario.   
+Figure \ref{f:speed}A demonstrates both the in memory and semi-external memory \cite{SEM_SpMM} computing models of our implementation.  For the in memory implementation (light green line), we see that the run time increases linearly with the number of dimensions, requiring about 11 minutes to run \Lol~on a $p=32$,$000$,$000$ dimensional problem with $n=2000$ samples.   This linear increase is the optimal scale up according to Ahmdel's Law \cite{Amdahl1967}.  This example already requires 477 gigabyte (GB) to store the data, but $<$1 GB to perform the computations.  For larger data, we developed a semi-external memory implementation, which stores the data matrix on solid state drives, and the low-rank estimates in RAM \cite{abello1998functional}.  This strategy allows us to run \Lol~as long as the data can fit on disk, and the low-rank approximation can fit in RAM.  The semi-external memory implementation (dark green line) achieves the same performance as the in memory implementation whenever the data are small enough for in memory, and continues scaling optimally (linearly) as the dimensionality further increases to $p=128,000,000$ dimensions, a multi-terabyte scenario.
 
 Another option for making \Lol~scale up better is to utilize randomized algorithms.  In particular, random projections---for which the data are multiplied by a lower-dimensional random matrix---have been shown to provide excellent approximation eigenvectors \cite{Candes2006b}.  Moreover, very sparse random projections, in which the elements of the matrix are mostly zero, with $\pm 1$ randomly distributed, have been shown to be effective, and have significant computational benefits \cite{Hastie2006}. We therefore further modified FlashX to incorporate random projections and very sparse random projections, and let \Lal~denote Linear Approximate Low-rank.  Figure \ref{f:speed}A shows an order of magnitude improvement in both the in-memory and semi-external memory implementations of \Lal.
 
 
 Figure \ref{f:speed}B shows the error for \Lol~and \PoF~in this scenario, simply to demonstrate that even in this extremely high dimensional setting, \Lol~still outperforms \PoF. As expected, \Lal~performs as well as \Lol for the low dimensional settings.
 
-% we also implement a randomized variant of \Lol, that uses a novel FlashX implementation of random projection (in memory).  In this simulation setting, \Lfl~(short for Linear Fast Low-rank) performs just as well as \Lol, though at a substantially reduced computational burden. 
+% we also implement a randomized variant of \Lol, that uses a novel FlashX implementation of random projection (in memory).  In this simulation setting, \Lfl~(short for Linear Fast Low-rank) performs just as well as \Lol, though at a substantially reduced computational burden.
 
 
 % To quantify the computational efficiency of \Lol~and its variants, Figure \ref{f:speed} shows the wall time it takes to run each method on the stacked cigars problem, varying the ambient dimensionality, embedded dimensionality, and sample size.  Note that for completeness, we include two additional variants of \Lol: \Lal~and \Lfl.  \Lfl~(short for Linear Fast Low-rank) replaces the standard \Svd~algorithm with a randomized variant, which can be much faster in certain situations \cite{Halko2011a}.  \Lal~(short for Linear Approximate Low-rank) goes even one step further, replacing \Svd~with random projections \cite{Candes2006a}.  This variant of \Lol~is the fastest, its runtime is  least sensitive to $(p,d,n)$, and its accuracy is often commensurate (or better) than other variants of \Lol.  The runtime of all the variants of \Lol~are quite similar to \sct{Fld $\circ$ Pca}.  Given, given \Lol's improved accuracy, and nearly identical simplicity, it seems there is very little reason to not use \Lol~instead of \sct{Fld $\circ$ Pca}.
@@ -317,7 +317,7 @@ Figure \ref{f:speed}B shows the error for \Lol~and \PoF~in this scenario, simply
 % \includegraphics[width=1\linewidth]{../Figs/speed_test}
 \includegraphics[width=1\linewidth]{../Figs/scalability}
 \caption{
-Computational efficiency of various low-dimensional projection methods. In all cases, $n=2000$, and we used spherically symmetric  simulation parameters (see Methods for details).   We compare \Pca~with the projection step of \Lol~(light green for in memory, dark green for semi-external memory ) and \Lfl~(light orange for in-memory, dark orange for semi-external memory) for different observed dimensions ($p$). \textbf{(A)} \Lol~exhibits optimal (linear) scale up and scale out, requiring only 46 minutes to find the embedding on a 2TB dataset, and only 3 minutes using \Lal (the sparse constant of sparse random projection $c=\dfrac{1}{\sqrt{p}}$). \textbf{(B)} Error for \Lal~is the same as \Lol~in this setting, and both are significantly better than \PoF~for all choices of embedding dimension.  
+Computational efficiency of various low-dimensional projection methods. In all cases, $n=2000$, and we used spherically symmetric  simulation parameters (see Methods for details).   We compare \Pca~with the projection step of \Lol~(light green for in memory, dark green for semi-external memory ) and \Lfl~(light orange for in-memory, dark orange for semi-external memory) for different observed dimensions ($p$). \textbf{(A)} \Lol~exhibits optimal (linear) scale up and scale out, requiring only 46 minutes to find the embedding on a 2TB dataset, and only 3 minutes using \Lal (the sparse constant of sparse random projection $c=\dfrac{1}{\sqrt{p}}$). \textbf{(B)} Error for \Lal~is the same as \Lol~in this setting, and both are significantly better than \PoF~for all choices of embedding dimension.
 % from \Lol, \Qoq, \Lrl, \Lfl, and \Lal, for different values of $(p,d)$.  The addition of the mean difference vector is essentially negligible.  Moreover, for small $d$, the \Lfl~is advantageous.  \Lal~is always fastest, and its performance is often comparable to other methods (not shown).
 }
 \label{f:speed}
@@ -330,12 +330,12 @@ The sparse random projection however only requires $\mc{O}(n p d / c)$, where $c
 %The randomized version of \Svd~however only requires $\mc{O}(d^2 (n + p))+ (q+1) 2 d M$, where $M$ is the flop count required for matrix vector multiply.
 Since, $d \ll n,p$, this can substantially reduce computational complexity.  Regardless, \Lol~computation is clearly bottlenecked by the \Pca~computation or random projection for single threaded operations.
 
-Our parallel in memory implementation scales-up optimally (linearly) with the number of threads, requiring $\mc{O}(n p d / T)$ flops for \Lol, 
-and $\mc{O}(n p d / c T)$ flops for \Lal, 
+Our parallel in memory implementation scales-up optimally (linearly) with the number of threads, requiring $\mc{O}(n p d / T)$ flops for \Lol,
+and $\mc{O}(n p d / c T)$ flops for \Lal,
 where $T$ is the number of threads.  Our parallel semi-external memory implementation scales-out optimally (linearly) as well.  This is in agreement with the linear fit of the lines in Figure \ref{f:speed}A.
 
 
-% first computing a dot product, which requires $\mc{O}(n p d/T)$ space and time. Given that dot product, the result is an $n \times n$ matrix, so computing the first $d$ singular triples only requires $\mc{O}( n^2 d / T)$ space and time.  Therefore, the most computationally taxing operation is the dot product.  This is, in fact, the motivation for developing a randomized version of \Lol.  Specifically, if we employ a very sparse random projection matrix \cite{??} with only $z$ non-zeros, then the dot product operation reduces to $\mc{O}(n z p/T)$, which can yield a significant computational savings. 
+% first computing a dot product, which requires $\mc{O}(n p d/T)$ space and time. Given that dot product, the result is an $n \times n$ matrix, so computing the first $d$ singular triples only requires $\mc{O}( n^2 d / T)$ space and time.  Therefore, the most computationally taxing operation is the dot product.  This is, in fact, the motivation for developing a randomized version of \Lol.  Specifically, if we employ a very sparse random projection matrix \cite{??} with only $z$ non-zeros, then the dot product operation reduces to $\mc{O}(n z p/T)$, which can yield a significant computational savings.
 
 
 
@@ -363,9 +363,9 @@ Note that, for all four of the problems, there is no algorithmperforming better 
 \label{f:realdata}
 \end{figure}
 
-Although \Lol~both statistically and computationally outperforms its natural competitors both in theory and in a variety of simulation settings, real data often tell a different story. 
-% 
-% To more comprehensively understand the relative advantages and disadvantages of \Lol~with respect to other high-dimensional classification approaches, in addition to evaluating its performance in theory, and in a variety of numerical simulations, it is important to evaluate it also on benchmark datasets.  
+Although \Lol~both statistically and computationally outperforms its natural competitors both in theory and in a variety of simulation settings, real data often tell a different story.
+%
+% To more comprehensively understand the relative advantages and disadvantages of \Lol~with respect to other high-dimensional classification approaches, in addition to evaluating its performance in theory, and in a variety of numerical simulations, it is important to evaluate it also on benchmark datasets.
 We have  therefore selected four commonly used high-dimensional datasets to compare \Lol~to several state-of-the-art algorithms (see Methods for details).  For each dataset, we compare \Lol~to (i) support vector machines (SVM), (ii) \Road, (iii) lasso, (iv) and random forest (RF).  Because in practice all these approaches have ``hyperparameters'' to tune, we consider several possible values for  SVM, lasso, and \Lol~(but not RF, as its runtime was too high).  Figure \ref{f:realdata} shows the results for all four datasets. For each, we use MATLAB implementations, partially because \Road~provides MATLAB code, and also because of MATLAB's ubiquity in certain communities.  Because we also have R and FlashX implementations of \Lol, comparisons using other languages would be straightforward.
 
 
@@ -410,23 +410,23 @@ We have introduced a very simple, yet new, methodology to improve performance on
 
 % \subsection*{Qualitative Design Considerations}
 
-% Finally, in addition to the above mentioned quantitative criteria, there are also many qualitative criteria that merit consideration at each level of analysis.  For the problem specification level,  the model choices also determine the  \textbf{appropriateness}.  Indeed, real decision criteria are often quite difficult to specify precisely, and so our problem specification is almost always related to but not exactly the problem we hope to achieve.  For example, while we might want to parse a scene, we often tackle a simpler problem of checking whether an object of a particular kind is present because it is easier.  For the algorithm level, the \textbf{interpretability} of the resulting estimator is often an important consideration.  For example, when developing biomarkers, it is important that the doctors and insurance companies can understand the decision making process of the algorithm, otherwise they might not believe the results. For the implementation level,  how \textbf{accessible} is the implementation is crucial.  In particular as more people outside the ivory academic tower---such as citizen scientists and even academics in the developing world---are contributing to data science and scientific discovery in general, access to the implementation is increasingly important.  Finally, at the platform level, the \textbf{ease of use} of the platform is increasingly important.  For example, requiring tedious installations of many different software libraries, or specialized hardware, can make the platform difficult to employ.  
+% Finally, in addition to the above mentioned quantitative criteria, there are also many qualitative criteria that merit consideration at each level of analysis.  For the problem specification level,  the model choices also determine the  \textbf{appropriateness}.  Indeed, real decision criteria are often quite difficult to specify precisely, and so our problem specification is almost always related to but not exactly the problem we hope to achieve.  For example, while we might want to parse a scene, we often tackle a simpler problem of checking whether an object of a particular kind is present because it is easier.  For the algorithm level, the \textbf{interpretability} of the resulting estimator is often an important consideration.  For example, when developing biomarkers, it is important that the doctors and insurance companies can understand the decision making process of the algorithm, otherwise they might not believe the results. For the implementation level,  how \textbf{accessible} is the implementation is crucial.  In particular as more people outside the ivory academic tower---such as citizen scientists and even academics in the developing world---are contributing to data science and scientific discovery in general, access to the implementation is increasingly important.  Finally, at the platform level, the \textbf{ease of use} of the platform is increasingly important.  For example, requiring tedious installations of many different software libraries, or specialized hardware, can make the platform difficult to employ.
 
-\para{Related Work} 
-% 
+\para{Related Work}
+%
 One of the first publications to compose \Fld~with an unsupervised learning method was the celebrated Fisherfaces paper \cite{Belhumeur1997a}.  The authors showed via a sequence of numerical experiments the utility of embedding with \Pca~prior to classifying with \Fld.  We extend this work by adding a supervised component to the initial embedding.  Moreover, we provide the geometric intuition for why and when this is advantageous, as well as show numerous examples demonstrating its superiority.  %Finally, we have matrix concentration inequalities proving the advantages of \Lol~over Fisherfaces.
-We also prove that Fisherfaces can be implemented very efficiently (see Methods), while shedding light on why it is performing relatively well in general. 
+We also prove that Fisherfaces can be implemented very efficiently (see Methods), while shedding light on why it is performing relatively well in general.
 
-% Most manifold learning methods, while exhibiting both strong theoretical \cite{Eckart1936a,deSilva2003, Allard2012} and empirical performance, are fully unsupervised.  Thus, in classification problems, they discover a low-dimensional representation of the data, ignoring the labels.  This can be highly problematic when the discriminant dimensions and the directions of maximal variance in the learned manifold are not aligned (see Figure \ref{f:mnist} for an example).  Supervised dimensionality reduction techniques, therefore, combine the best of both worlds, explicitly searching for low-dimensional discriminant boundaries.  
+% Most manifold learning methods, while exhibiting both strong theoretical \cite{Eckart1936a,deSilva2003, Allard2012} and empirical performance, are fully unsupervised.  Thus, in classification problems, they discover a low-dimensional representation of the data, ignoring the labels.  This can be highly problematic when the discriminant dimensions and the directions of maximal variance in the learned manifold are not aligned (see Figure \ref{f:mnist} for an example).  Supervised dimensionality reduction techniques, therefore, combine the best of both worlds, explicitly searching for low-dimensional discriminant boundaries.
 
 % A set of methods from the statistics community is collectively referred to as   ``sufficient dimensionality reduction'' (SIR) or ``first two moments'' (F2M) methods  \cite{Li1991a, Tishby1999a, Globerson2003a, Cook2005a,Fukumizu2004a}.  These methods are theoretically elegant, but typically require the sample size to be larger than the number of observed dimensions (although see \cite{Cook2013} for some promising work).  Other approaches formulate an optimization problem, such as projection pursuit \cite{Huber1985a}, empirical risk minimization \cite{Belkin2006a}, or supervised dictionary learning \cite{Mairal2009}.  These methods are limited because they are prone to fall into local minima, they require costly iterative algorithms, and lack any theoretical guarantees \cite{Belkin2006a}.   Thus, there remains a gap in the literature: a supervised learning method with theoretical convergence guarantees appropriate when the dimensionality is orders of magnitude larger than the sample size.
 
 
 
 \para{Next Steps}
-% 
+%
 The \Lol~idea, appending the mean difference vector to convert unsupervised manifold learning to supervised manifold learning, has many potential applications.  We have presented the first few.  Incorporating additional nonlinearities via kernel methods \cite{Mika1999a}, ensemble methods such as random forests \cite{Breiman2001a}, and multiscale methods \cite{Allard2012}
-% ,  and more scalable implementations \cite{Chang2011a}, 
+% ,  and more scalable implementations \cite{Chang2011a},
 are all of immediate interest. MATLAB, R, and FlashR code for the experiments performed in this manuscript is available from \url{http://docs.neurodata.io/LOL/}.
 
 \clearpage
@@ -438,23 +438,23 @@ are all of immediate interest. MATLAB, R, and FlashR code for the experiments pe
 
 For most simulation settings, each class is Guassian:
 $f_{x|y} = \mc{N}(\bmu_y,\mb{\Sigma_y})$,
-$f_y = \mc{B}(\pi)$.  
+$f_y = \mc{B}(\pi)$.
 We typically assume that both classes are equally like, $\pi=0.5$, and the covariance matrices are the same, $\bSig_0=\bSig_1=\bSig$. Under such assumptions, we merely specify $\bth=\{\bmu_0,\bmu_1, \bSig\}$.
 
 
-\paragraph*{Stacked Cigars} 
+\paragraph*{Stacked Cigars}
 \begin{compactitem}
-\item $\bmu_0=\mb{0}$, 
-\item $\bmu_1=(a, b, a, \ldots, a)$, 
+\item $\bmu_0=\mb{0}$,
+\item $\bmu_1=(a, b, a, \ldots, a)$,
 \item $\bSig$ is a diagonal matrix, with diagonal vector, $\bd=(1,b,1\ldots,1)$,
 \end{compactitem}
 where $a=0.15$ and $b=4$.
 
 
-\paragraph*{Trunk} 
+\paragraph*{Trunk}
 \begin{compactitem}
-\item $\bmu_0=b/\sqrt{(1, 3, 5, \ldots, 2p)}$, 
-\item $\bmu_1=-\bmu_0$, 
+\item $\bmu_0=b/\sqrt{(1, 3, 5, \ldots, 2p)}$,
+\item $\bmu_1=-\bmu_0$,
 \item $\bSig$ is a diagonal matrix, with diagonal vector, $\bd=100/\sqrt{(p, p-1, p-2, \ldots, 1)}$,
 \end{compactitem}
 where $b=4$.
@@ -468,16 +468,16 @@ where $b=4$.
 
 \paragraph*{Rotated Trunk} Same as Trunk, but the data are randomly rotated, that is, we sample $\mb{Q}$ uniformly from the set of p-dimensional rotation matrices, and then set:
 \begin{compactitem}
-\item $\bmu_0 \leftarrow \mb{Q} \bmu_0$, 
-\item $\bmu_1 \leftarrow \mb{Q} \bmu_1$, 
+\item $\bmu_0 \leftarrow \mb{Q} \bmu_0$,
+\item $\bmu_1 \leftarrow \mb{Q} \bmu_1$,
 \item $\bSig \leftarrow \mb{Q} \bSig \mb{Q}\T$.
 \end{compactitem}
 
 
-\paragraph*{Toeplitz} 
+\paragraph*{Toeplitz}
 \begin{compactitem}
-\item $\bmu_0=b \times (1,-1,1,-1,\ldots,1)$, 
-\item $\bmu_1= - \bmu_0$, 
+\item $\bmu_0=b \times (1,-1,1,-1,\ldots,1)$,
+\item $\bmu_1= - \bmu_0$,
 \item $\bSig$ is a Toeplitz matrix, where the top row is $\rho^{(0,1,2,\ldots,p-1)}$,
 \end{compactitem}
 where $b$ is a function of the Toeplitz matrix such that the noise stays constant as dimensionality increases, and $\rho=0.5$.
@@ -504,10 +504,10 @@ where $b$ is a function of the Toeplitz matrix such that the noise stays constan
 \paragraph*{3 Classes} Same as Trunk, but with a third mean equal to the zero vector, $\mu_2=\mb{0}$.
 
 
-\paragraph*{Fat Tails} For this setting, each class is actually a mixture of two Gaussians with the same mean (the two classes have the same covariances): 
+\paragraph*{Fat Tails} For this setting, each class is actually a mixture of two Gaussians with the same mean (the two classes have the same covariances):
 \begin{compactitem}
-\item $\bmu_0=\mb{0}$, 
-\item $\bmu_1=(0,\ldots,0,1,\ldots,1)$, where the first $s=10$ elements are zero, 
+\item $\bmu_0=\mb{0}$,
+\item $\bmu_1=(0,\ldots,0,1,\ldots,1)$, where the first $s=10$ elements are zero,
 \item $\bSig_0$ is a matrix with one's on the diagonal, and $0.2$ on the off diagonal,
 \item $\bSig_1 = 15 \times \bSig_0$,
 \end{compactitem}
@@ -518,9 +518,9 @@ and then we randomly rotated as in the rotated Trunk example.
 
 \paragraph*{QDA} A generalization of the Toeplitz setting, where the two classes have two different covariance matrices, meaning that the optimal discriminant boundary is quadratic.
 \begin{compactitem}
-\item $\bmu_0=b \times (1,-1,1,-1,\ldots,1)$, 
-\item $\bmu_1=-\mb{Q} \times (\bmu_0+0.1)$, 
-\item $\bSig_0$ is the same Toeplitz matrix as described above, and 
+\item $\bmu_0=b \times (1,-1,1,-1,\ldots,1)$,
+\item $\bmu_1=-\mb{Q} \times (\bmu_0+0.1)$,
+\item $\bSig_0$ is the same Toeplitz matrix as described above, and
 \item $\bSig_1 = \mb{Q} \bSig_0 \mb{Q}\T$.
 \end{compactitem}
 
@@ -562,16 +562,16 @@ and then we randomly rotated as in the rotated Trunk example.
 
 
 
-\paragraph*{Outliers} In this dataset, we generate $n/2$ samples from an inlier model, and the remaining $n/2$ samples from an outlier model.  For the inlier model, we first generate a random $d \times p$ dimensional orthonormal matrix, $V$, where $d=p/10$.  Then, the first half of the inlier points are generated by $f_{x|0}$, the next half by $f_{x|1}$, and the remaining points generated by $f_{x | \emptyset}$. For the outliers, we sampled their class randomly from a fair Bernoulli distribution:   
+\paragraph*{Outliers} In this dataset, we generate $n/2$ samples from an inlier model, and the remaining $n/2$ samples from an outlier model.  For the inlier model, we first generate a random $d \times p$ dimensional orthonormal matrix, $V$, where $d=p/10$.  Then, the first half of the inlier points are generated by $f_{x|0}$, the next half by $f_{x|1}$, and the remaining points generated by $f_{x | \emptyset}$. For the outliers, we sampled their class randomly from a fair Bernoulli distribution:
 \begin{compactitem}
 \item $f_{x|0} = \mc{N}_d(0,\sigma^2) \times V\T$,
 \item $f_{x|1} = \mc{N}_d(0,\sigma^2) \times V\T + b$,
 \item $f_{x|\emptyset} = \mc{N}_p(\mb{0},\sigma^2\mb{I})$,
 \item $f_{\emptyset} = \mc{B}(0.5)$.
 \end{compactitem}
-where we set $\sigma=0.1$ and $b=0.5$.  
+where we set $\sigma=0.1$ and $b=0.5$.
 
-% Ninlier=task.n/2; 
+% Ninlier=task.n/2;
 % n0=Ninlier/2;
 % n1=n0;
 % Noutlier=task.n-Ninlier;
@@ -851,10 +851,10 @@ In other words, \Pca~is the only rotationally invariant projection.
 \subsection{Chernoff information}
 We now introduce the notion of the Chernoff information, which serves as our surrogate measure for the Bayes error of any classification procedure given the {\em projected} data -- in the context of this paper the projection is via LOL or PCA. Our discussion of the Chernoff information is under the context of decision rules for hypothesis testing, nevertheless, as evidenced by the fact that the Maximum A Posterior decision rule -- equivalently the Bayes classifier -- achieves the Chernoff information rate, this distinction between hypothesis testing and classification is mainly for ease of exposition.
 
-Let $F_0$ and $F_1$ be two absolutely continuous multivariate distribution in $\Omega \subset \mathbb{R}^{d}$ with density function $f_0$ and $f_1$, respectively. Suppose that $Y_1, Y_2, \dots, Y_m$ are independent and identically distributed random variables, with $Y_i$ distributed either $F_0$ or $F_1$. We are interested in testing the simple null hypothesis $\mathbb{H}_0 \colon F = F_0$ against the simple alternative hypothesis $\mathbb{H}_1 \colon F = F_1$. A test $T$ is a sequence of mapping $T_m \colon \Omega^{m} \mapsto \{0,1\}$ such that given $Y_1 = y_1, Y_2 = y_2, \dots, Y_m = y_m$, the test rejects $\mathbb{H}_0$ in favor of $\mathbb{H}_1$ if $T_m(y_1, y_2, \dots, y_m) = 1$; similarly, the test rejects $\mathbb{H}_1$ in favor of $\mathbb{H}_0$ if $T_m(y_1, y_2, \dots, y_m) = 0$. 
+Let $F_0$ and $F_1$ be two absolutely continuous multivariate distribution in $\Omega \subset \mathbb{R}^{d}$ with density function $f_0$ and $f_1$, respectively. Suppose that $Y_1, Y_2, \dots, Y_m$ are independent and identically distributed random variables, with $Y_i$ distributed either $F_0$ or $F_1$. We are interested in testing the simple null hypothesis $\mathbb{H}_0 \colon F = F_0$ against the simple alternative hypothesis $\mathbb{H}_1 \colon F = F_1$. A test $T$ is a sequence of mapping $T_m \colon \Omega^{m} \mapsto \{0,1\}$ such that given $Y_1 = y_1, Y_2 = y_2, \dots, Y_m = y_m$, the test rejects $\mathbb{H}_0$ in favor of $\mathbb{H}_1$ if $T_m(y_1, y_2, \dots, y_m) = 1$; similarly, the test rejects $\mathbb{H}_1$ in favor of $\mathbb{H}_0$ if $T_m(y_1, y_2, \dots, y_m) = 0$.
 The Neyman-Pearson lemma states that, given $Y_1 = y_1, Y_2 = y_2, \dots, Y_m = y_m$ and a threshold $\eta_m \in \mathbb{R}$, the likelihood ratio test which rejects $\mathbb{H}_0$ in favor of $\mathbb{H}_1$ whenever
 $$ \Bigl(\sum_{i=1}^{m} \log{f_0(y_i)} - \sum_{i=1}^{m} \log{f_1(y_i)} \Bigr) \leq \eta_m $$
-is the most powerful test at significance level $\alpha_m = \alpha(\eta_m)$, i.e., the likelihood ratio test minimizes the type-II error $\beta_m$ subject to the contrainst that the type-I error is at most $\alpha_m$. 
+is the most powerful test at significance level $\alpha_m = \alpha(\eta_m)$, i.e., the likelihood ratio test minimizes the type-II error $\beta_m$ subject to the contrainst that the type-I error is at most $\alpha_m$.
 
 Assuming that $\pi \in (0,1)$ is a prior probability that $\mathbb{H}_0$ is true. Then, for a given $\alpha_m^{*} \in (0,1)$, let $\beta_m^{*} = \beta_m^{*}(\alpha_m^{*})$ be the type-II error associated with the likelihood ratio test when the type-I error is at most $\alpha_m^{*}$. The quantity $\inf_{\alpha_m^{*} \in (0,1)} \pi \alpha_m^{*} + (1 - \pi) \beta_m^{*}$ is then the Bayes risk in deciding between $\mathbb{H}_0$ and $\mathbb{H}_1$ given the $m$ independent random variables $Y_1, Y_2, \dots, Y_m$. A classical result of Chernoff \cite{chernoff_1952} states that the Bayes risk is intrinsically linked to a quantity known as the {\em Chernoff information}. More specifically, let $C(F_0, F_1)$ be the quantity
 \begin{equation}
@@ -872,24 +872,24 @@ Then we have
 \end{equation}
 Thus $C(F_0, F_1)$ is the {\em exponential} rate at which the Bayes error $\inf_{\alpha_m^{*} \in (0,1)} \pi \alpha_m^{*} + (1 - \pi) \beta_m^{*}$ decreases as $m \rightarrow \infty$; we also note that the $C(F_0, F_1)$ is independent of $\pi$. We also define, for a given $t \in (0,1)$ the Chernoff divergence $C_t(F_0, F_1) $ between $F_0$ and $F_1$ by
 $$ C_{t}(F_0,F_1) = - \log \int_{\mathbb{R}^{d}} f_0^{t}(\bm{x}) f_1^{1-t}(\bm{x}) \mathrm{d}\bm{x}. $$
-The Chernoff divergence is an example of a $f$-divergence as defined in \cite{Csizar}. When $t = 1/2$, $C_t(F_0,F_1)$ is the Bhattacharyya distance between $F_0$ and $F_1$. 
+The Chernoff divergence is an example of a $f$-divergence as defined in \cite{Csizar}. When $t = 1/2$, $C_t(F_0,F_1)$ is the Bhattacharyya distance between $F_0$ and $F_1$.
 
 The result of Eq.~\eqref{eq:chernoff-binary} can be extended to $K + 1 \geq 2$ hypothesis, with the exponential rate being the minimum of the Chernoff information between any pair of hypothesis. More specifically, let $F_0, F_1, \dots, F_{K}$ be distributions on $\mathbb{R}^{d}$ and let $Y_1, Y_2, \dots, Y_m$ be independent and identically distributed random variables with distribution $F \in \{F_0, F_1, \dots, F_K\}$. Our inference task is in determining the distribution of the $Y_i$ among the $K+1$ hypothesis $\mathbb{H}_0 \colon F = F_0, \dots, \mathbb{H}_{K} \colon F = F_K$. Suppose also that hypothesis $\mathbb{H}_k$ has {\em a priori} probabibility $\pi_k$. For any decision rule $\delta$, the risk of $\delta$ is $r(\delta) = \sum_{k} \pi_k \sum_{l \not = k} \alpha_{lk}(\delta) $ where $\alpha_{lk}(\delta)$ is the probability of accepting hypothesis $\mathbb{H}_l$ when hypothesis $\mathbb{H}_k$ is true. Then we have \cite{leang-johnson}
 \begin{equation}
 \label{eq:chernoff-multiple}
 \inf_{\delta} \lim_{m \rightarrow \infty}  \frac{r(\delta)}{m} = - \min_{k \not = l} C(F_k, F_l).
 \end{equation}
-where the infimum is over all decision rule $\delta$, i.e., for any $\delta$, $r(\delta)$ decreases to $0$ as $m \rightarrow \infty$ at a rate no faster than $\exp(- m \min_{k \not = l} C(F_k, F_l))$. 
-%It was also shown in \cite{leang-johnson} that the {\em Maximum A Posterior} decision rule achieves this rate. 
+where the infimum is over all decision rule $\delta$, i.e., for any $\delta$, $r(\delta)$ decreases to $0$ as $m \rightarrow \infty$ at a rate no faster than $\exp(- m \min_{k \not = l} C(F_k, F_l))$.
+%It was also shown in \cite{leang-johnson} that the {\em Maximum A Posterior} decision rule achieves this rate.
 
-When the distributions $F_0$ and $F_1$ are multivariate normal, that is, $F_0 =  \mathcal{N}(\mu_0, \Sigma_0)$ and $F_1 = \mathcal{N}(\mu_1, \Sigma_1)$; then, denoting by $\Sigma_t = t \Sigma_0 + (1 - t) \Sigma_1$, we have 
+When the distributions $F_0$ and $F_1$ are multivariate normal, that is, $F_0 =  \mathcal{N}(\mu_0, \Sigma_0)$ and $F_1 = \mathcal{N}(\mu_1, \Sigma_1)$; then, denoting by $\Sigma_t = t \Sigma_0 + (1 - t) \Sigma_1$, we have
 \begin{equation*}
 C(F_0, F_1) = \sup_{t \in (0,1)} \Bigl(\frac{t(1 - t)}{2} (\mu_1 - \mu_2)^{\top}\Sigma_t^{-1}(\mu_1 - \mu_2) + \frac{1}{2} \log \frac{|\Sigma_t|}{|\Sigma_0|^{t} |\Sigma_1|^{1 - t}}  \Bigr).
 \end{equation*}
 
 \subsection{Projecting data and Chernoff information}
 We now discuss how the Chernoff information characterizes the effect a linear transformation $A$ of the data has on classification accuracy.
-We start with the following simple result whose proof follows directly from Eq.~\eqref{eq:chernoff-multiple}. 
+We start with the following simple result whose proof follows directly from Eq.~\eqref{eq:chernoff-multiple}.
 \begin{lem}
 \label{lem:chernoff-1}
 Let $F_0 = \mathcal{N}(\mu_0, \Sigma)$ and $F_1 \sim \mathcal{N}(\mu_1, \Sigma)$ be two multivariate normals with equal covariance matrices. For any linear transformation $A$, let $F_0^{(A)}$ and $F_1^{(A)}$ denotes the distribution of $AX$ when $X \sim F_0$ and $X \sim F_1$, respectively. We then have
@@ -899,46 +899,46 @@ C(F_0^{(A)}, F_1^{(A)}) &= \frac{1}{8} (\mu_1 - \mu_0)^{\top} A^{\top} (A \Sigma
 &= \frac{1}{8} \|P_{\Sigma^{1/2} A^{\top}} \Sigma^{-1/2} (\mu_1 - \mu_0) \|_{F}^{2}
 \end{split}
 \end{equation}
-where $P_{Z} = Z(Z^{\top} Z)^{-1} Z^{\top}$ denotes the matrix corresponding to the orthogonal projection onto the columns of $Z$. 
+where $P_{Z} = Z(Z^{\top} Z)^{-1} Z^{\top}$ denotes the matrix corresponding to the orthogonal projection onto the columns of $Z$.
 \end{lem}
 
 Thus for a classification problem where $X | Y = 0$ and $X | Y = 1$ are distributed multivariate normals with mean $\mu_0$ and $\mu_1$ and the same covariance matrix $\Sigma$, Lemma~\ref{lem:chernoff-1} then states that for any two linear transformations $A$ and $B$, the transformed data $AX$ is to be preferred over the transformed data $BX$ if
 $$ (\mu_1 - \mu_0)^{\top} A^{\top} (A \Sigma A^{\top})^{-1} A (\mu_1 - \mu_0) > (\mu_1 - \mu_0)^{\top} B^{\top} (B \Sigma B^{\top})^{-1} B (\mu_1 - \mu_0). $$
 
-As an example, suppose $\Sigma$ is diagonal with distinct eigenvalues where the diagonal entries of $\Sigma$ are in non-increasing order. 
+As an example, suppose $\Sigma$ is diagonal with distinct eigenvalues where the diagonal entries of $\Sigma$ are in non-increasing order.
 Denote by $\delta = \mu_1 - \mu_0$ and let
-$A = \delta^{\top}$ and $B = e_1^{\top} = (1,0,0,\dots,0)$ be the linear transformations for LOL and PCA of $X$ into $\mathbb{R}$. We then have  
+$A = \delta^{\top}$ and $B = e_1^{\top} = (1,0,0,\dots,0)$ be the linear transformations for LOL and PCA of $X$ into $\mathbb{R}$. We then have
 \begin{gather*}
-C(F_0^{(A)}, F_1^{(A)}) = \frac{(\delta^{\top} \delta)^2}{\delta^{\top} \Sigma \delta} = \frac{(\sum_{i} \delta_i^{2})^{2}}{\sum_{i} \delta_i^{2} \lambda_i}; \quad 
+C(F_0^{(A)}, F_1^{(A)}) = \frac{(\delta^{\top} \delta)^2}{\delta^{\top} \Sigma \delta} = \frac{(\sum_{i} \delta_i^{2})^{2}}{\sum_{i} \delta_i^{2} \lambda_i}; \quad
 C(F_0^{(B)}, F_1^{(B)}) = \frac{\delta_1^2}{\lambda_1}
 \end{gather*}
 where $\lambda_1$ is the largest eigenvalue of $\Sigma$. Suppose furthermore that $\delta_1 \leq \delta_2 \leq \dots \leq \delta_p$ and $\lambda_1 > \lambda_2 > \dots > \lambda_p$. Then $C(F_0^{(A)}, F_1^{(A)})$ can be lower-bounded as
 $$ C(F_0^{(A)}, F_1^{(A)}) = \frac{(\sum_{i} \delta_i^{2})^{2}}{\sum_{i} \delta_i^{2} \lambda_i} \geq \frac{(p \delta_1^2)^2}{p \delta_p^{2} \lambda_1} $$
-and hence $C(F_0^{(A)}, F_1^{(A)}) > C(F_0^{(B)}, F_1^{(B)})$ provided $p \delta_1^{2}  \geq \delta_p^2$. 
+and hence $C(F_0^{(A)}, F_1^{(A)}) > C(F_0^{(B)}, F_1^{(B)})$ provided $p \delta_1^{2}  \geq \delta_p^2$.
 
 When $A = \bigl[ \delta \mid e_1 \mid e_2 \dots \mid e_{d-1} \bigr]^{\top} \in \mathbb{R}^{d \times p}$ and $B = \bigl[e_1 \mid e_2 \mid \dots \mid e_d \bigr]^{\top} \in \mathbb{R}^{d \times p}$ are the linear transformation for LOL and PCA of $X$ into $\mathbb{R}^{d}$, we have
 \begin{gather*}
-C(F_0^{(A)}, F_1^{(A)}) = \frac{(\sum_{i=d}^{p} \delta_i^2)^2}{\sum_{i=d}^{p} \delta_i^2 \lambda_i} + \sum_{i=1}^{d-1} \frac{\delta_i^{2}}{\lambda_i};  \quad 
+C(F_0^{(A)}, F_1^{(A)}) = \frac{(\sum_{i=d}^{p} \delta_i^2)^2}{\sum_{i=d}^{p} \delta_i^2 \lambda_i} + \sum_{i=1}^{d-1} \frac{\delta_i^{2}}{\lambda_i};  \quad
 C(F_0^{(B)}, F_1^{(B)}) = \sum_{i=1}^{d} \frac{\delta_i^2}{\lambda_i}.
 \end{gather*}
 
 This can be seen as follows. Let $\xi_{d-1} = \bigl[e_1 \mid e_2 \mid \dots \mid e_{d-1} \bigr] \in \mathbb{R}^{p \times (d-1)}$ and $\zeta_{d-1} = (\lambda_1 \delta_1, \lambda_2 \delta_2, \dots, \lambda_{d-1} \delta_{d-1})^{\top} \in \mathbb{R}^{d-1}$. Then
 \begin{equation}
-A \Sigma A^{\top} = \bigl[ \delta \mid \xi_{d-1} \bigr]^{\top} \, \Sigma \, \bigl[ \delta \mid \xi_{d-1} \bigr] = \begin{bmatrix} \delta^{\top} \Sigma \delta & \delta^{\top} \Sigma \xi_{d-1} \\ \xi_{d-1}^{\top} \Sigma \delta & \xi_{d-1}^{\top} \Sigma \xi_{d-1} \end{bmatrix} = 
+A \Sigma A^{\top} = \bigl[ \delta \mid \xi_{d-1} \bigr]^{\top} \, \Sigma \, \bigl[ \delta \mid \xi_{d-1} \bigr] = \begin{bmatrix} \delta^{\top} \Sigma \delta & \delta^{\top} \Sigma \xi_{d-1} \\ \xi_{d-1}^{\top} \Sigma \delta & \xi_{d-1}^{\top} \Sigma \xi_{d-1} \end{bmatrix} =
 \begin{bmatrix} \sum_{i=1}^{p} \delta_i^{2} \lambda_i & \zeta_{d-1}^{\top} \\ \zeta_{d-1} & \Sigma_{d-1} \end{bmatrix}
 \end{equation}
 where $\Sigma_{d-1} = \mathrm{diag}(\lambda_1, \lambda_2, \dots, \lambda_{d-1})$ is the submatrix of $\Sigma$ corresponding to the eigenvalues $\lambda_1, \lambda_2, \dots, \lambda_{d-1}$. Using a formula for the inverse of a partitioned matrix, we have
 \begin{equation}
 \begin{split}
-(A \Sigma A^{\top})^{-1} &= \begin{bmatrix} \sum_{i=1}^{p} \delta_i^{2} \lambda_i & \zeta_{d-1}^{\top} \\ \zeta_{d-1} & \Sigma_{d-1} \end{bmatrix}^{-1} 
-\\ & = \begin{bmatrix} \bigl(\sum_{i=1}^{p} \delta_i^{2} \lambda_i - \zeta_{d-1}^{\top} \Sigma_{d-1}^{-1} \zeta_{d-1}\bigr)^{-1} & 
+(A \Sigma A^{\top})^{-1} &= \begin{bmatrix} \sum_{i=1}^{p} \delta_i^{2} \lambda_i & \zeta_{d-1}^{\top} \\ \zeta_{d-1} & \Sigma_{d-1} \end{bmatrix}^{-1}
+\\ & = \begin{bmatrix} \bigl(\sum_{i=1}^{p} \delta_i^{2} \lambda_i - \zeta_{d-1}^{\top} \Sigma_{d-1}^{-1} \zeta_{d-1}\bigr)^{-1} &
 - \bigl(\sum_{i} \delta_i^{2} \lambda_i - \zeta_{d-1}^{\top} \Sigma_{d-1}^{-1} \zeta_{d-1}\bigr)^{-1} \zeta_{d-1}^{\top} \Sigma_{d-1}^{-1}
-\\ - \Sigma_{d-1}^{-1} \zeta_{d-1} \bigl(\sum_{i} \delta_i^{2} \lambda_i - \zeta_{d-1}^{\top} \Sigma_{d-1}^{-1} \zeta_{d-1}\bigr)^{-1} 
+\\ - \Sigma_{d-1}^{-1} \zeta_{d-1} \bigl(\sum_{i} \delta_i^{2} \lambda_i - \zeta_{d-1}^{\top} \Sigma_{d-1}^{-1} \zeta_{d-1}\bigr)^{-1}
 & \Sigma_{d-1}^{-1} + \Sigma_{d-1}^{-1} \zeta_{d-1} \bigl(\sum_{i} \delta_i^{2} \lambda_i - \zeta_{d-1}^{\top} \Sigma_{d-1}^{-1} \zeta_{d-1}\bigr)^{-1} \zeta_{d-1}^{\top} \Sigma_{d-1}^{-1}
 \end{bmatrix}
 \end{split}
 \end{equation}
- Now, $\sum_{i=1}^{p} \delta_i^{2} \lambda_i - \zeta_{d-1}^{\top} \Sigma_{d-1}^{-1} \zeta_{d-1} = \sum_{i=1}^{p} \delta_i^{2} - \sum_{i=1}^{d-1} \delta_i^{2} \lambda_i = \sum_{i=d}^{p} \delta_i^{2} \lambda_i$. 
+ Now, $\sum_{i=1}^{p} \delta_i^{2} \lambda_i - \zeta_{d-1}^{\top} \Sigma_{d-1}^{-1} \zeta_{d-1} = \sum_{i=1}^{p} \delta_i^{2} - \sum_{i=1}^{d-1} \delta_i^{2} \lambda_i = \sum_{i=d}^{p} \delta_i^{2} \lambda_i$.
 %In addition, by the Sherman-Morrison-Woodbury formula, we have
 % \begin{equation*}
 % \begin{split}
@@ -953,7 +953,7 @@ Therefore,
 % \bigl(\sum_{i=1}^{p} \delta_i^{2} \lambda_i\bigr)^{-1} \zeta_{d-1}^{\top} \bigl(\Sigma_{d-1}^{-1} + \frac{\Sigma_{d-1}^{-1} \zeta_{d-1} \zeta_{d-1}^{\top} \Sigma_{d-1}^{-1}}{\sum_{i=d}^{p} \delta_i^{2} \lambda_i} \bigr) &= \bigl(\sum_{i=1}^{p} \delta_i^{2} \lambda_i\bigr)^{-1} \Bigl(\zeta_{d-1}^{\top} \Sigma_{d-1}^{-1} + \frac{\zeta_{d-1}^{\top} \Sigma_{d-1}^{-1} \zeta_{d-1} \zeta_{d-1}^{\top} \Sigma_{d-1}^{-1}}{\sum_{i=d}^{p} \delta_i^{2} \lambda_i} \Bigr) \\
 % &= \bigl(\sum_{i=1}^{p} \delta_i^{2} \lambda_i\bigr)^{-1} \Bigl(\zeta_{d-1}^{\top} \Sigma_{d-1}^{-1} + \frac{(\sum_{i=1}^{d-1} \delta_i^{2} \lambda_i)
 % \zeta_{d-1}^{\top} \Sigma_{d-1}^{-1}}{\sum_{i=d}^{p} \delta_i^{2} \lambda_i}\Bigr) \\
-% %&= \bigl(\sum_{i=1}^{p} \delta_i^{2} \lambda_i\bigr)^{-1} \zeta_{d-1}^{\top} \Sigma_{d-1}^{-1} \frac{\sum_{i=d}^{p} \delta_i^{2} \lambda_i + \sum_{i=1}^{d-1} \delta_i^{2} \lambda_i}{\sum_{i=d}^{p} \delta_i^{2} \lambda_i} \\ 
+% %&= \bigl(\sum_{i=1}^{p} \delta_i^{2} \lambda_i\bigr)^{-1} \zeta_{d-1}^{\top} \Sigma_{d-1}^{-1} \frac{\sum_{i=d}^{p} \delta_i^{2} \lambda_i + \sum_{i=1}^{d-1} \delta_i^{2} \lambda_i}{\sum_{i=d}^{p} \delta_i^{2} \lambda_i} \\
 % & = \frac{\zeta_{d-1}^{\top} \Sigma_{d-1}^{-1}}{\sum_{i=d}^{p} \delta_i^{2} \lambda_i}.
 % \end{split}
 % \end{equation*}
@@ -962,43 +962,43 @@ Therefore,
 \begin{equation}
 \begin{split}
 (A \Sigma A^{\top})^{-1} &= \begin{bmatrix} \bigl(\sum_{i=d}^{p} \delta_i^{2} \lambda_i\bigr)^{-1} & - \frac{\zeta_{d-1}^{\top} \Sigma_{d-1}^{-1}}{\sum_{i=d}^{p} \delta_i^{2} \lambda_i} \\
- - \frac{\Sigma_{d-1}^{-1} \zeta_{d-1}}{\sum_{i=d}^{p} \delta_i^{2} \lambda_i} 
+ - \frac{\Sigma_{d-1}^{-1} \zeta_{d-1}}{\sum_{i=d}^{p} \delta_i^{2} \lambda_i}
   & \Sigma_{d-1}^{-1} + \frac{\Sigma_{d-1}^{-1} \zeta_{d-1} \zeta_{d-1}^{\top} \Sigma_{d-1}^{-1}}{\sum_{i=d}^{p} \delta_i^{2} \lambda_i}
 \end{bmatrix}.
 \end{split}
 \end{equation}
 In addition, $A(\mu_1 - \mu_0) = (\delta^{\top} \delta, \delta_1, \delta_2, \dots, \delta_{d-1})^{\top} = (\delta^{\top} \delta, \zeta_{d-1}^{\top} \Sigma_{d-1}^{-1})^{\top} \in \mathbb{R}^{d}$. Hence
-\begin{equation*} 
+\begin{equation*}
 \begin{split}
-(\mu_1 - \mu_0)^{\top} A^{\top} (A \Sigma A^{\top})^{-1} A (\mu_1 - \mu_0) &= 
-\bigl[\delta^{\top} \delta \mid \zeta_{d-1}^{\top} \Sigma_{d-1}^{-1} \bigr] 
+(\mu_1 - \mu_0)^{\top} A^{\top} (A \Sigma A^{\top})^{-1} A (\mu_1 - \mu_0) &=
+\bigl[\delta^{\top} \delta \mid \zeta_{d-1}^{\top} \Sigma_{d-1}^{-1} \bigr]
 \begin{bmatrix} \bigl(\sum_{i=d}^{p} \delta_i^{2} \lambda_i\bigr)^{-1} & - \frac{\zeta_{d-1}^{\top} \Sigma_{d-1}^{-1}}{\sum_{i=d}^{p} \delta_i^{2} \lambda_i} \\
- - \frac{\Sigma_{d-1}^{-1} \zeta_{d-1}}{\sum_{i=d}^{p} \delta_i^{2} \lambda_i} 
+ - \frac{\Sigma_{d-1}^{-1} \zeta_{d-1}}{\sum_{i=d}^{p} \delta_i^{2} \lambda_i}
   & \Sigma_{d-1}^{-1} + \frac{\Sigma_{d-1}^{-1} \zeta_{d-1} \zeta_{d-1}^{\top} \Sigma_{d-1}^{-1}}{\sum_{i=d}^{p} \delta_i^{2} \lambda_i} \end{bmatrix} \begin{bmatrix} \delta^{\top} \delta \\ \Sigma_{d-1}^{-1} \zeta_{d-1} \end{bmatrix} \\
   &= \frac{(\delta^{\top} \delta)^{2}}{\sum_{i=d}^{p} \delta_i^{2} \lambda_i} - 2 \delta^{\top} \delta \frac{\zeta_{d-1}^{\top} \Sigma_{d-1}^{-2} \zeta_{d-1}}{\sum_{i=d}^{p} \delta_i^2 \lambda_i} + \Bigl(\zeta_{d-1}^{\top} \Sigma_{d-1}^{-3} \zeta_{d-1} + \frac{(\zeta_{d-1}^{\top} \Sigma_{d-1}^{-2} \zeta_{d-1})^{2}}{\sum_{i=d}^{p} \delta_i^{2} \lambda_i} \Bigr) \\
   &= \frac{(\delta^{\top} \delta - \zeta_{d-1}^{\top} \Sigma_{d-1}^{-2} \zeta_{d-1})^{2}}{\sum_{i=d}^{p} \delta_i^{2} \lambda_i} + \zeta_{d-1}^{\top} \Sigma_{d-1}^{-3} \zeta_{d-1} \\
   &= \frac{\bigl(\sum_{i=1}^{p} \delta_i^{2} - \sum_{i=1}^{d-1} \delta_i^{2}\bigr)^{2}}{\sum_{i=d}^{p} \delta_i^{2} \lambda_i} + \sum_{i=1}^{d-1} \frac{\delta_i^{2}}{\lambda_i} = \frac{\bigl(\sum_{i=d}^{p} \delta_i^{2}\bigr)^{2}}{\sum_{i=d}^{p} \delta_i^{2} \lambda_i} + \sum_{i=1}^{d-1} \frac{\delta_i^{2}}{\lambda_i}.
 \end{split}
 \end{equation*}
-The derivation of $C(F_0^{(B)}, F_1^{(B)})$ is straightforward and will be omitted. 
+The derivation of $C(F_0^{(B)}, F_1^{(B)})$ is straightforward and will be omitted.
 We therefore have
 $$C(F_0^{(A)}, F_1^{(A)}) - C(F_0^{(B)}, F_1^{(B)}) = \frac{\bigl(\sum_{i=d}^{p} \delta_i^{2}\bigr)^{2}}{\sum_{i=d}^{p} \delta_i^{2} \lambda_i} - \frac{\delta_{d}^{2}}{\lambda_d}.$$
 From our assumption that $\lambda_d \geq \lambda_{d+1} \geq \dots \geq \lambda_{p}$, we have $\sum_{i=d}^{p} \delta_i^{2} \lambda_i \leq \lambda_{d} \sum_{i=d}^{p} \delta_{i}^{2}$
 and hence
 $$ \frac{\bigl(\sum_{i=d}^{p} \delta_i^{2}\bigr)^{2}}{\sum_{i=d}^{p} \delta_i^{2} \lambda_i} \geq \frac{\bigl(\sum_{i=d}^{p} \delta_{i}^{2}\bigr)^{2}}{\lambda_d \sum_{i=d}^{p} \delta_i^{2}} = \frac{1}{\lambda_d} \sum_{i=d}^{p} \delta_i^{2} \geq \frac{\delta_{d}^2}{\lambda_d} $$
-and hence $C(F_0^{(A)}, F_1^{(A)}) \geq C(F_0^{(B)}, F_1^{(B)})$ always, and the inequality is strict provided that $\sum_{d+1}^{p} \delta_d^2 > 0$. 
+and hence $C(F_0^{(A)}, F_1^{(A)}) \geq C(F_0^{(B)}, F_1^{(B)})$ always, and the inequality is strict provided that $\sum_{d+1}^{p} \delta_d^2 > 0$.
 
 Finally we consider the case where $\Sigma$ is an arbitrary covariance matrix. Let $\lambda_1 \geq \lambda_2 \geq \dots \geq \lambda_{p}$ be the eigenvalues of $\Sigma$ and let $u_1, u_2, \dots, u_p$ be the corresponding eigenvectors. For $d \leq p$,  let $U_{d-1} = \bigl[ u_1 \mid u_2 \mid \dots \mid u_{d-1}] \in \mathbb{R}^{p \times (d-1)}$ be the matrix whose columns are the eigenvectors $u_1, u_2, \dots, u_{d-1}$ of $\Sigma$. Then the LOL projection matrix into $\mathbb{R}^{d}$ is given by $A = \bigl[ \delta | U_{d-1} \bigr]^{\top}$. We first have
 \begin{equation*}
 A \Sigma A^{\top} = \bigl[ \delta | U_{d-1} \bigr]^{\top}\, \Sigma \, \bigl[ \delta | U_{d-1} \bigr] = \begin{bmatrix} \delta^{\top} \Sigma & \delta^{\top} \Sigma U_{d-1} \\ U_{d-1}^{\top} \Sigma \delta & U_{d-1}^{\top} \Sigma U_{d-1} \end{bmatrix} = \begin{bmatrix} \delta^{\top} \Sigma & \delta^{\top} \Sigma U_{d-1} \\ U_{d-1}^{\top} \Sigma \delta & \Lambda_{d-1} \end{bmatrix}
 \end{equation*}
-where $\Lambda_{d-1} = \mathrm{diag}(\lambda_1, \lambda_2, \dots, \lambda_{d-1})$ is the $(d-1) \times (d-1)$ diagonal matrix formed by the eigenvalues $\lambda_1, \lambda_2, \dots, \lambda_{d-1}$. 
+where $\Lambda_{d-1} = \mathrm{diag}(\lambda_1, \lambda_2, \dots, \lambda_{d-1})$ is the $(d-1) \times (d-1)$ diagonal matrix formed by the eigenvalues $\lambda_1, \lambda_2, \dots, \lambda_{d-1}$.
 Therefore, letting $\gamma = \delta^{\top} \Sigma \delta - \delta^{\top} \Sigma U_{d-1} \Lambda_{d-1}^{-1} U_{d-1}^{\top} \Sigma \delta$, we have
 \begin{equation*}
 \begin{split}
 (A \Sigma A^{\top})^{-1} &= \begin{bmatrix} \delta^{\top} \Sigma \delta & \delta^{\top} \Sigma U_{d-1} \\ U_{d-1}^{\top} \Sigma \delta & U_{d-1}^{\top} \Sigma U_{d-1} \end{bmatrix}^{-1} \\
 &= \begin{bmatrix} \gamma^{-1} & - \delta^{\top} \Sigma U_{d-1} \Lambda_{d-1}^{-1} \gamma^{-1} \\
-- \Lambda_{d-1}^{-1} U_{d-1}^{\top} \Sigma \delta \gamma^{-1} & \bigl(\Lambda_{d-1} - \frac{U_{d-1}^{\top} \Sigma \delta \delta^{\top} \Sigma U_{d-1}}{\delta^{\top} \Sigma \delta} \bigr)^{-1} \end{bmatrix}. 
+- \Lambda_{d-1}^{-1} U_{d-1}^{\top} \Sigma \delta \gamma^{-1} & \bigl(\Lambda_{d-1} - \frac{U_{d-1}^{\top} \Sigma \delta \delta^{\top} \Sigma U_{d-1}}{\delta^{\top} \Sigma \delta} \bigr)^{-1} \end{bmatrix}.
 \end{split}
 \end{equation*}
 The Sherman-Morrison-Woodbury formula then implies
@@ -1035,9 +1035,9 @@ We note that $\Sigma U_{d-1} = U_{d-1} \Lambda_{d-1}$ and $U_{d-1}^{\top} \Sigma
  \end{equation*}
  where $\Sigma_{d-1}^{\dagger}$ is the Moore-Penrose pseudo-inverse of $\Sigma_{d-1}$. The PCA projection matrix into $\mathbb{R}^{d}$ is given by $B = U_{d}^{\top}$ and hence
  \begin{equation}
- \delta^{\top} B^{\top} (B \Sigma B^{\top})^{-1} B \delta = \delta^{\top} U_{d} \Lambda_d^{-1} U_d^{\top} \delta = \delta^{\top} \Sigma_{d}^{\dagger} \delta. 
+ \delta^{\top} B^{\top} (B \Sigma B^{\top})^{-1} B \delta = \delta^{\top} U_{d} \Lambda_d^{-1} U_d^{\top} \delta = \delta^{\top} \Sigma_{d}^{\dagger} \delta.
  \end{equation}
- We thus have 
+ We thus have
 \begin{equation*}
 \begin{split}
 C(F_0^{(A)}, F_1^{(A)}) - C(F_0^{(B)}, F_1^{(B)}) &= \gamma^{-1} (\delta^{\top} (I - U_{d-1} U_{d-1}^{\top}) \delta)^{2} - \delta^{\top} (\Sigma_{d}^{\dagger} - \Sigma_{d-1}^{\dagger}) \delta \\ &= \frac{(\delta^{\top} (I - U_{d-1} U_{d-1}^{\top}) \delta)^{2}}{\delta^{\top} (\Sigma - \Sigma_{d-1}) \delta} - \delta^{\top} (\Sigma_{d}^{\dagger} - \Sigma_{d-1}^{\dagger}) \delta \\ &
@@ -1057,7 +1057,7 @@ where we recall that $u_{d}$ is the $d$-th column of $U_{d}$. Thus $C(F_0^{(A)},
  $$ \frac{(\delta^{\top} \Sigma^{-1/2} (I - V_{d-1} V_{d-1}^{\top}) \Sigma^{1/2} \delta)^2}{\delta^{\top} \Sigma^{1/2} (I - V_{d-1} V_{d-1}^{\top}) \Sigma^{1/2} \delta} > \delta^{\top} \Sigma^{-1/2} (V_d V_d^{\top} - V_{d-1} V_{d-1}^{\top}) \Sigma^{-1/2} \delta. $$
 
 
-Let $C(F_0^{(A)}, F_1^{(A)})$ and $C(F_0^{(B)}, F_1^{(B)})$ be the Chernoff informations when $A = [\delta \mid U_{d-1}]^{\top}$ and $B = [\delta \mid U_d]^{\top}$ where $U_{d-1}$ and $U_d$ contain the eignevectors of the population covariance matrices $\Sigma$; similarly, let $\hat{C}(F_0^{(A)}, F_1^{(A)})$ and $\hat{C}(F_0^{(B)}, F_1^{(B)})$ be the Chernoff informations when $A = [\delta \mid \hat{U}_{d-1}]$ and $B = [\delta \mid \hat{U}_d]$ where $\hat{U}_{d-1}$ and $\hat{U}_d$ contain the eigenvectors of the {\emph sample} covariance matrices $\hat{\Sigma}$. Suppose furthermore that $C(F_0^{(A)}, F_1^{(A)}) > C(F_0^{(B)}, F_1^{(B)})$. Then for sufficiently large $n$, with high probability, $\hat{C}(F_0^{(A)}, F_1^{(A)}) > \hat{C}(F_0^{(B)}, F_1^{(B)})$. 
+Let $C(F_0^{(A)}, F_1^{(A)})$ and $C(F_0^{(B)}, F_1^{(B)})$ be the Chernoff informations when $A = [\delta \mid U_{d-1}]^{\top}$ and $B = [\delta \mid U_d]^{\top}$ where $U_{d-1}$ and $U_d$ contain the eignevectors of the population covariance matrices $\Sigma$; similarly, let $\hat{C}(F_0^{(A)}, F_1^{(A)})$ and $\hat{C}(F_0^{(B)}, F_1^{(B)})$ be the Chernoff informations when $A = [\delta \mid \hat{U}_{d-1}]$ and $B = [\delta \mid \hat{U}_d]$ where $\hat{U}_{d-1}$ and $\hat{U}_d$ contain the eigenvectors of the {\emph sample} covariance matrices $\hat{\Sigma}$. Suppose furthermore that $C(F_0^{(A)}, F_1^{(A)}) > C(F_0^{(B)}, F_1^{(B)})$. Then for sufficiently large $n$, with high probability, $\hat{C}(F_0^{(A)}, F_1^{(A)}) > \hat{C}(F_0^{(B)}, F_1^{(B)})$.
 
 Finally we consider the case when $B = \tilde{U}_d^{\top}$ where $\tilde{U}_d$ is the $p \times d$ matrix whose columns are the $d$ largest eigenvectors of the {\em pooled} covariance matrix $\tilde{\Sigma} = \mathbb{E}[(X - \tfrac{\mu_0 + \mu_1}{2})(X - \tfrac{\mu_0 + \mu_1}{2})^{\top}]$. Assume, without loss of generality, that $\mu_1 = -\mu_0 = \mu$. We then have
 
@@ -1072,7 +1072,7 @@ C(F_0^{(B)}, F_1^{(B)}) = \delta^{\top} B^{\top} (B \Sigma B^{\top})^{-1} B \del
 &= \delta^{\top} \tilde{\Sigma}_d^{\dagger} \delta + \frac{(\delta^{\top} \tilde{\Sigma}_d^{\dagger} \delta)^2}{4 - \delta^{\top} \tilde{\Sigma}_d^{\dagger} \delta} = \frac{4 \delta^{\top} \tilde{\Sigma}_d^{\dagger} \delta}{4 - \delta^{\top} \tilde{\Sigma}_d^{\dagger} \delta}.
 \end{split}
 \end{equation}
-where $\tilde{\Sigma}_d = \tilde{U}_d \tilde{S}_d \tilde{U}_d^{\top}$ is the best rank $d$ approximation to $\tilde{\Sigma} = \Sigma + \tfrac{1}{4} \delta \delta^{\top}$. 
+where $\tilde{\Sigma}_d = \tilde{U}_d \tilde{S}_d \tilde{U}_d^{\top}$ is the best rank $d$ approximation to $\tilde{\Sigma} = \Sigma + \tfrac{1}{4} \delta \delta^{\top}$.
 
 We recall that the LOL projection $A = [\delta \mid U_{d-1}]^{\top}$ yields
 $$ C(F_0^{(A)}, F_1^{(A)}) = \frac{(\delta^{\top} (I - U_{d-1} U_{d-1}^{\top}) \delta)^{2}}{\delta^{\top} (\Sigma - \Sigma_{d-1}) \delta} + \delta^{\top} \Sigma_{d-1}^{\dagger} \delta. $$
@@ -1084,47 +1084,47 @@ $$ C(F_0^{(A)}, F_1^{(A)}) = \frac{(\delta^{\top} (I - U_{d-1} U_{d-1}^{\top}) \
 
 
 We can generalize the previous example as follows. Let $\Sigma$ be a $p \times p$ covariance matrix of the form
-$$ \Sigma = \begin{bmatrix} \Sigma_{d} & 0 \\ 0 & \Sigma_{d}^{\perp} \end{bmatrix} $$ where $\Sigma_{d}$ is a $d \times d$ matrix. 
-Let $\lambda_1 \geq \lambda_2 \geq \dots \geq \lambda_p$ be the eigenvalues of $\Sigma$ and suppose furthermore that the eigenvalues of $\Sigma_{d}$ are $\lambda_1, \lambda_2, \dots, \lambda_d$. Let $\gamma = \lambda_{d} - \lambda_{d+1}$. 
+$$ \Sigma = \begin{bmatrix} \Sigma_{d} & 0 \\ 0 & \Sigma_{d}^{\perp} \end{bmatrix} $$ where $\Sigma_{d}$ is a $d \times d$ matrix.
+Let $\lambda_1 \geq \lambda_2 \geq \dots \geq \lambda_p$ be the eigenvalues of $\Sigma$ and suppose furthermore that the eigenvalues of $\Sigma_{d}$ are $\lambda_1, \lambda_2, \dots, \lambda_d$. Let $\gamma = \lambda_{d} - \lambda_{d+1}$.
 We now assume that $\delta$ are generated randomly as follows. The entries of $\delta$ are i.i.d. random variable sampled according to the following distribution. Given an index $i$, with probability $\epsilon$, $\delta_i = 0$ and with probability $1 - \epsilon$, $\delta_i$ is distributed according to a normal distribution with mean $\tau > 0$ and variance $\sigma^2$. Then with probability at least $\epsilon^{d}$, the covariance matrix for $\tilde{\Sigma}$ is of the form
 $$ \tilde{\Sigma} = \begin{bmatrix} \Sigma_{d} & 0 \\ 0 & \Sigma_{d}^{\perp} + \tfrac{1}{4} (\tilde{\delta} \tilde{\delta}^{\top}) \end{bmatrix} $$
-where $\tilde{\delta} \in \mathbb{R}^{p - d}$ is formed by excluding the first $d$ elements of $\delta$. 
-Now, if $\lambda_{d+1} + \tfrac{1}{4} \|\tilde{\delta}\|^{2} < \lambda_d$, then 
+where $\tilde{\delta} \in \mathbb{R}^{p - d}$ is formed by excluding the first $d$ elements of $\delta$.
+Now, if $\lambda_{d+1} + \tfrac{1}{4} \|\tilde{\delta}\|^{2} < \lambda_d$, then
 the $d$ largest eigenvalues of $\tilde{\Sigma}$ is still $\lambda_1, \lambda_2, \dots, \lambda_d$, and thus the eigenvectors corresponding to the $d$ largest eigenvalues of $\tilde{\Sigma}$ is the same as that for the $d$ largest eigenvalues of $\Sigma$. That is to say, $$ \lambda_{d+1} + \tfrac{1}{4} \|\tilde{\delta}\|^{2} < \lambda_d \Longrightarrow \tilde{\Sigma}_{d}^{\dagger} = \Sigma_{d}^{\dagger} \Longrightarrow \delta^{\top} \tilde{\Sigma}_{d}^{\dagger} \delta = 0 \Longrightarrow C(F_0^{(B)}, F_1^{(B)}) = 0.$$
 
 We now compute the probability that $\lambda_{d+1} + \tfrac{1}{4} \|\tilde{\delta}\|^{2} < \lambda_d$. Suppose for the moment that $\epsilon > 0$ is fixed and do not varies with $p$. We then have
 $$ \frac{\sum_{i=d+1}^{p} \delta_i^{2} - (p - d) (1 - \epsilon) \tau^2}{\sqrt{(p - d)(2 (1 - \epsilon) (2 \tau^2 \sigma^2 + \sigma^4) + \epsilon (1 - \epsilon) (\tau^4 + 2 \tau^2 \sigma^2 + \sigma^4))}} \overset{\mathrm{d}}{\longrightarrow} N(0,1).$$
 
 Thus, as $p \rightarrow \infty$, the probability that $\lambda_{d+1} + \tfrac{1}{4} \|\tilde{\delta}\|^{2} < \lambda_d$ converges to that of
-$$\Phi\Bigl(\frac{4(\lambda_d - \lambda_{d+1}) - (p - d) (1 - \epsilon) \tau^2}{\sqrt{(p - d)(2 (1 - \epsilon) (2 \tau^2 \sigma^2 + \sigma^4) + \epsilon (1 - \epsilon) (\tau^4 + 2 \tau^2 \sigma^2 + \sigma^4))}} \Bigr).$$ This probability can be made arbitrarily close to $1$ provided that $\lambda_{d} - \lambda_{d+1} \geq Cp(1 - \epsilon) \tau^2$ for all sufficiently large $p$ and for some constant $C > 1/4$. Since the probability that $\delta_1 = \delta_2 = \dots = \delta_d$ is at least $\epsilon^{d}$, we thus conclude that for sufficiently large $p$, with probability at least $\epsilon^{d}$, 
+$$\Phi\Bigl(\frac{4(\lambda_d - \lambda_{d+1}) - (p - d) (1 - \epsilon) \tau^2}{\sqrt{(p - d)(2 (1 - \epsilon) (2 \tau^2 \sigma^2 + \sigma^4) + \epsilon (1 - \epsilon) (\tau^4 + 2 \tau^2 \sigma^2 + \sigma^4))}} \Bigr).$$ This probability can be made arbitrarily close to $1$ provided that $\lambda_{d} - \lambda_{d+1} \geq Cp(1 - \epsilon) \tau^2$ for all sufficiently large $p$ and for some constant $C > 1/4$. Since the probability that $\delta_1 = \delta_2 = \dots = \delta_d$ is at least $\epsilon^{d}$, we thus conclude that for sufficiently large $p$, with probability at least $\epsilon^{d}$,
 $$C(F_0^{(B)}, F_1^{(B)}) = 0 < C(F_0^{(A)}, F_1^{(A)}).$$
 
 In the case where $\epsilon = \epsilon(p) \rightarrow 1$ as $p \rightarrow \infty$ such that $p(1 - \epsilon) \rightarrow \theta$ for some constant $K$, then the probability that $\lambda_{d+1} + \tfrac{1}{4} \|\tilde{\delta}\|^{2} < \lambda_d$ converges to the probability that
 $$\frac{1}{4} \sum_{i=1}^{K} \sigma^2 \chi_{1}^{2}(\tau) \geq \lambda_{d} - \lambda_{d+1} $$
-where $K$ is Poisson distributed with mean parameter $\theta$ and $\chi_{i}^{2}(\tau)$ is the non-central chi-square distribution with one degree of freedom and non-centrality parameter $\tau$. Thus if $\lambda_{d} - \lambda_{d+1} \geq C \theta \tau^2 \log{p}$ for sufficiently large $p$ and for some constant $C$, then this probability can also be made arbitrarily close to $1$. 
+where $K$ is Poisson distributed with mean parameter $\theta$ and $\chi_{i}^{2}(\tau)$ is the non-central chi-square distribution with one degree of freedom and non-centrality parameter $\tau$. Thus if $\lambda_{d} - \lambda_{d+1} \geq C \theta \tau^2 \log{p}$ for sufficiently large $p$ and for some constant $C$, then this probability can also be made arbitrarily close to $1$.
 
 \subsection{Finite Sample Performance}
-We now consider the finite sample performance of LOL and PCA-based classifiers in the high-dimensional setting with small or moderate sample sizes, e.g., when $p$ is comparable to $n$ or when $p \gg n$. Once again we assume that $X | Y = i \sim \mathcal{N}(\mu_i, \Sigma)$ for $i = 0, 1$. Furthermore, we also assume that $\Sigma$ belongs to the class $\Theta(p,r,k,\tau,\lambda)$ as defined below. 
+We now consider the finite sample performance of LOL and PCA-based classifiers in the high-dimensional setting with small or moderate sample sizes, e.g., when $p$ is comparable to $n$ or when $p \gg n$. Once again we assume that $X | Y = i \sim \mathcal{N}(\mu_i, \Sigma)$ for $i = 0, 1$. Furthermore, we also assume that $\Sigma$ belongs to the class $\Theta(p,r,k,\tau,\lambda)$ as defined below.
 
 {\bf Definition} Let $\lambda > 0$, $\tau \geq 1$ and $k \leq p$ be given. Denote by $\Theta(p,r,k,\tau,\lambda,\sigma^2)$ the collection of matrices $\Sigma$ such that
 
 $$ \Sigma = V \Lambda V^{\top} + \sigma^2 I $$
-where $V$ is a $p \times r$  matrix with orthonormal columns and $\Lambda$ is a $r \times r$ diagonal matrix whose diagonal entries $\lambda_1, \lambda_2, \dots, \lambda_r$ satisfy $\lambda \geq \lambda_1 \geq \lambda_2 \geq \dots \geq \lambda_r \geq \lambda/\tau$. In addition, assume also that $|\mathrm{supp}(V)| \leq k$ where $\mathrm{supp}(V)$ denote the non-zero rows of $V$, i.e., $\mathrm{supp}(V)$ is the subset of $\{1,2,\dots,p\}$ such that $V_j \not = 0$ if and only if $j \in \mathrm{supp}(V)$. 
+where $V$ is a $p \times r$  matrix with orthonormal columns and $\Lambda$ is a $r \times r$ diagonal matrix whose diagonal entries $\lambda_1, \lambda_2, \dots, \lambda_r$ satisfy $\lambda \geq \lambda_1 \geq \lambda_2 \geq \dots \geq \lambda_r \geq \lambda/\tau$. In addition, assume also that $|\mathrm{supp}(V)| \leq k$ where $\mathrm{supp}(V)$ denote the non-zero rows of $V$, i.e., $\mathrm{supp}(V)$ is the subset of $\{1,2,\dots,p\}$ such that $V_j \not = 0$ if and only if $j \in \mathrm{supp}(V)$.
 
 We note that in general $r \leq k \ll p$ and $\lambda/\tau \gg \sigma^2$. We then have the following result.
 
-{\bf Theorem \cite{cai-pca-1}} 
-Suppose there exists constants $M_0$ and $M_1$ such that $M_1 \log p \geq \log n \geq M_0 \log \lambda$. Then there exists a constant $c_0 = c_0(M_0, M_1)$ depending on $M_0$ and $M_1$ such that for all $n$ and $p$ for which 
-$$ \frac{\tau k}{n} \log \frac{e p}{k} \leq c_0, $$ there exists an estimate $\hat{V}$ of $V$ such that 
+{\bf Theorem \cite{cai-pca-1}}
+Suppose there exists constants $M_0$ and $M_1$ such that $M_1 \log p \geq \log n \geq M_0 \log \lambda$. Then there exists a constant $c_0 = c_0(M_0, M_1)$ depending on $M_0$ and $M_1$ such that for all $n$ and $p$ for which
+$$ \frac{\tau k}{n} \log \frac{e p}{k} \leq c_0, $$ there exists an estimate $\hat{V}$ of $V$ such that
 
 $$ \sup_{\Sigma \in \Theta(p,r,k,\tau,\lambda,\sigma^2)} \mathbb{E} \|\hat{V} \hat{V}^{\top} - V V^{\top} \|^{2} \leq \frac{C k (\sigma \lambda + \sigma^2)}{n \lambda^{2}} \log \frac{e p}{k}$$
-where $C$ is a universal constant not depending on $p,r,k,\tau,\lambda$ and $\sigma^2$. 
+where $C$ is a universal constant not depending on $p,r,k,\tau,\lambda$ and $\sigma^2$.
 
 We can therefore show that provided that $M_0$ and $M_1$ is large enough, and $n$ and $p$ satisfies the condition in the preceding theorem, then provided that the Chernoff information of the population version of LOL is larger than the Chernoff information of the population version of PCA, the expected Chernoff information for the sample version of LOL is also larger than the expected Chernoff information of the sample version of PCA. We emphasize that it is necessary that the LOL and the PCA version both projected into the top $d \leq r$ dimension of the sample covariance matrices.
 
 
 
- 
+
 
 \clearpage
 \section{The R implementation of LOL}
