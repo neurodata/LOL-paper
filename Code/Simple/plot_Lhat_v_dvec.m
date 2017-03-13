@@ -13,6 +13,7 @@ if ~isfield(F,'ylab'), F.ylab=setting; end
 if ~isfield(F,'xlab'), F.xlab=xlab; end
 if ~isfield(F,'xmax'), F.xmax=min(D(1),ntrain(1)); end
 if ~isfield(F,'algs'), F.algs=algs; end
+if ~isfield(F,'savestuff'), F.savestuff=0; end
 if ~isfield(F,'color')
     col=get(groot,'defaultAxesColorOrder');
     algs={'LOL';'RRLDA';'eigenfaces';'ROAD';'lasso';'LRL';'QOQ'};
@@ -78,3 +79,14 @@ if F.legend
     legend('show')
 end
 if F.row==1, title([{'Misclassification Rate'};{'D=100, n=100'}]), end
+
+if F.savestuff
+    if truth==1
+        F.fname=[rootDir, '../Figs/', task_list_name];
+    else
+        F.fname=[rootDir, '../Figs/', task_list_name, '_est'];
+    end
+    F.fname='setting';
+    F.wh=[6, 3.5];
+    print_fig(h(1),F)
+end
