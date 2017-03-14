@@ -25,7 +25,7 @@ end
 
 
 %%
-% figure(1),
+g=figure(1);
 h=subplot(F.nrows,F.ncols,(F.row-1)*F.ncols+1);
 cla, hold all
 Lmax=0;
@@ -51,7 +51,7 @@ for a=1:A
                 end
                 L(i,:)=LL;
             end
-            meanL=mean(L);
+            meanL=nanmean(L);
             plot(ks{1}.('LOL'),meanL,'linewidth',2,'DisplayName',alg,'color',F.color.(alg),'LineStyle',ls)
             Lmax=max(Lmax,max(meanL));
             Lmin=min(Lmin,min(meanL));
@@ -69,9 +69,9 @@ xmax=min(D(1),ntrain(1));
 xlim([1,F.xmax])
 if isfield(F,'ymax'), Lmax=F.ymax; end
 if isfield(Lhat,'Bayes')
-    if ~isnan(Lhat(1).Bayes)
-        plot([1:F.xmax],meanL*ones(F.xmax,1),'k','linewidth',2)
-    end
+%     if ~isnan(Lhat(1).Bayes)
+%         plot([1:F.xmax],meanL*ones(F.xmax,1),'k','linewidth',2)
+%     end
 end
 ylim([Lmin,Lmax])
 set(gca,'XTick',round(linspace(F.xmax/3,F.xmax,3)))
@@ -81,12 +81,7 @@ end
 if F.row==1, title([{'Misclassification Rate'};{'D=100, n=100'}]), end
 
 if F.savestuff
-    if truth==1
-        F.fname=[rootDir, '../Figs/', task_list_name];
-    else
-        F.fname=[rootDir, '../Figs/', task_list_name, '_est'];
-    end
-    F.fname='setting';
+    F.fname=setting;
     F.wh=[6, 3.5];
-    print_fig(h(1),F)
+    print_fig(g,F)
 end
