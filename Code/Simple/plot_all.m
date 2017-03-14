@@ -1,18 +1,34 @@
- % %% plot
+% %% plot
 clear, clc
-settings={...
-%     'rtrunk';...
-%     '3trunk';...
-%     'toeplitz';...
-%     'fat_tails';...
-%     'r2toeplitz';%...
-%     'xor2';...
-%     'outliers'};
-    'prostate';...
-    'colon';...
-    'MNIST';...
-    'CIFAR-10';...
-};
+
+s='sims';
+% s='real';
+% s='dead';
+
+switch s
+    case 'sims'
+        settings={...
+            'rtrunk';...
+            '3trunk';...
+            'toeplitz';...
+            'fat_tails';...
+            };
+        
+    case 'real'
+        settings={...
+            'prostate';...
+            'colon';...
+            'MNIST';...
+            'CIFAR-10';...
+            };
+        
+    case 'dead'
+        settings={...
+            'r2toeplitz';...
+            'xor2';...
+            'outliers';...
+            };
+end
 
 S=length(settings);
 
@@ -49,39 +65,39 @@ for s=1:S
             G.algs=algs(1:4);
         case '3trunk'
             G.ylab='Trunk-3';
-            G.xmax=30;  
+            G.xmax=30;
         case 'xor2'
             G.ylab='XOR';
-            G.xmax=30;  
+            G.xmax=30;
         case 'r2toeplitz'
             G.ylab='QDA';
-            G.xmax=30;  
+            G.xmax=30;
         case 'outliers'
             G.ylab='Outliers';
-            G.xmax=70;  
+            G.xmax=70;
             G.ymax=0.3;
         case 'fat_tails'
             G.ylab='Fat Tails (D=1000)';
-            G.xmax=30;  
+            G.xmax=30;
         case 'prostate'
             G.ylab='Prostate';
-            G.xmax=20;  
+            G.xmax=20;
         case 'colon'
             G.ylab='Colon';
-            G.xmax=20;  
+            G.xmax=20;
         case 'MNIST'
             G.ylab='MNIST';
-            G.xmax=20;  
+            G.xmax=20;
         case 'CIFAR-10'
             G.ylab='CIFAR-10';
-            G.xmax=20;  
+            G.xmax=20;
             G.xlab='# of Embedded Dimensions';
     end
     plot_Lhat_v_dvec(setting,G);
-%     if s==S, legend('show'); end
-if ~strcmp(setting,{'prostate','colon','MNIST','CIFAR-10'})
-    plot_means(setting,F);
-end
+    %     if s==S, legend('show'); end
+    if ~strcmp(setting,{'prostate','colon','MNIST','CIFAR-10'})
+        plot_means(setting,F);
+    end
 end
 
 
