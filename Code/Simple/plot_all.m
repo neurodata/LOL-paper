@@ -1,11 +1,11 @@
 % %% plot
 clear, clc
 
-s='sims';
-% s='real';
-% s='dead';
+% sit='sims';
+sit='real';
+% sit='dead';
 
-switch s
+switch sit
     case 'sims'
         settings={...
             'rtrunk';...
@@ -35,14 +35,20 @@ S=length(settings);
 %%
 col=get(groot,'defaultAxesColorOrder');
 algs={'LOL';'RRLDA';'eigenfaces';'ROAD';'lasso';'QOQ';'LRL'};
-
+ms = {'o';'s';'d';'v';'^';'<';'+';'x';'>';'p';'h';'*'};
 for a=1:length(algs)
     F.color.(algs{a})=col(a,:);
+    F.markerstyle.(algs{a})=ms{a};
 end
 F.color.('Bayes')=[0 0 0];
 F.col=col;
-F.nrows=S;
-F.ncols=3;
+if strcmp(sit,'sims')
+    F.nrows=S;
+    F.ncols=3;
+elseif strcmp(sit,'real')
+    F.ncols=2;
+    F.nrows=S;
+end
 F.xlab=[];
 F.xmax=1;
 F.legend=false;
@@ -81,27 +87,30 @@ for s=1:S
             G.xmax=30;
         case 'prostate'
             G.ylab='Prostate';
-            G.xmax=20;
+            G.xmax=60;
+            G.tit='Misclassification Rate';
         case 'colon'
             G.ylab='Colon';
-            G.xmax=20;
+            G.xmax=30;
         case 'MNIST'
             G.ylab='MNIST';
-            G.xmax=20;
+            G.xmax=30;
         case 'CIFAR-10'
             G.ylab='CIFAR-10';
-            G.xmax=20;
+            G.xmax=30;
             G.xlab='# of Embedded Dimensions';
     end
-    plot_Lhat_v_dvec(setting,G);
+    [minL, wallTime, G] = plot_Lhat_v_dvec(setting,G);
     %     if s==S, legend('show'); end
     if ~strcmp(setting,{'prostate','colon','MNIST','CIFAR-10'})
-        plot_means(setting,F);
+        plot_means(setting,G);
+    else
+        plot_timing(minL,wallTime,s,G);
     end
 end
 
 
 %%
 H.wh=[6.5 9];
-H.fname=['plot_real'];
+H.fname=['plot_', sit];
 print_fig(h,H)

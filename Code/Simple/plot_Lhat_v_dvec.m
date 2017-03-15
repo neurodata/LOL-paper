@@ -1,4 +1,4 @@
-function plot_Lhat_v_dvec(setting,F)
+function [minL, wallTime, F] = plot_Lhat_v_dvec(setting,F)
 
 % run('colorbrewer.m')
 load(setting)
@@ -14,11 +14,14 @@ if ~isfield(F,'xlab'), F.xlab=xlab; end
 if ~isfield(F,'xmax'), F.xmax=min(D(1),ntrain(1)); end
 if ~isfield(F,'algs'), F.algs=algs; end
 if ~isfield(F,'savestuff'), F.savestuff=0; end
+if ~isfield(F,'tit'), F.tit=[{'Misclassification Rate'};{'D=100, n=100'}]; end
 if ~isfield(F,'color')
     col=get(groot,'defaultAxesColorOrder');
     algs={'LOL';'RRLDA';'eigenfaces';'ROAD';'lasso';'LRL';'QOQ'};
+    ms = {'o';'+';'d';'v';'^';'x';'s';'<';'>';'p';'h';'*'};
     for a=1:length(algs)
         F.color.(algs{a})=col(a,:);
+        F.markerstyle.(algs{a})=ms{a};
     end
     F.color.('Bayes')=[0 0 0];
 end
@@ -50,14 +53,18 @@ for a=1:A
                     LL=Lhat(i).(alg);
                 end
                 L(i,:)=LL;
+                if exist('wt'), wallTime(a,i)=wt(i).(alg); else, wallTime=[]; end
             end
             meanL=nanmean(L);
+            minL(a)=min(meanL);
+            maxL=max(meanL);
             plot(ks{1}.('LOL'),meanL,'linewidth',2,'DisplayName',alg,'color',F.color.(alg),'LineStyle',ls)
-            Lmax=max(Lmax,max(meanL));
-            Lmin=min(Lmin,min(meanL));
+            Lmax=max(Lmax,maxL);
+            Lmin=min(Lmin,minL(a));
         end
     end
 end
+algs=F.algs;
 %%
 
 % F.ylab=[{F.ylab};{['n=', num2str(ntrain(1)), ', D=', num2str(D(1))]}];
@@ -78,7 +85,7 @@ set(gca,'XTick',round(linspace(F.xmax/3,F.xmax,3)))
 if F.legend
     legend('show')
 end
-if F.row==1, title([{'Misclassification Rate'};{'D=100, n=100'}]), end
+if F.row==1, title(F.tit), end
 
 if F.savestuff
     F.fname=setting;
