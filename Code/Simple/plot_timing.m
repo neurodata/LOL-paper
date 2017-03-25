@@ -16,44 +16,24 @@ F.ytick=[0:0.1:1];
 minx=0.01;
 miny=0;
 
-subplot(F.nrows,F.ncols,(F.row-1)*F.ncols+2)
+% subplot(F.nrows,F.ncols,(F.row-1)*F.ncols+2)
+subplot(F.nrows,F.ncols,F.ncols+F.row)
 hold all
 
 mwt=mean(wallTime');
+% F.xlim=[min(min(mwt),log(max(mwt))-log(mwt(1))), max(mwt)];
 F.xlim=[min(mwt), max(mwt)];
 F.ylim=[max(0,min(minL)-(max(minL)-minL(1))),max(minL)];
-% if s~=4
-%     minx=0.01; %miny=0.01;
-% else
-%     minx=0.01;
-%     F.ylim(1)=0.65;
-    %         F.xtick=logspace(-1,4,5);
-%     F.xlim=[0.1, 100];
-%     F.ytick=0:0.1:1;
-% end
-% if s>2
-%     F.colors={'g';'m';orange;'b'};
-%     F.markerstyle = {'o';'+';'d';'^'};
-% else
-%     F.ylim(1)=0.05;
-%     F.ytick=[0:0.05:1];
-% end
-if s==1
-    F.xlim(1)=0.01; 
-end
-if s==2
-    F.xlim(1)=0.01;
-%     F.ylim(1)=0.1;
-    %     F.ytick=[0.05:0.1:1]; 
-end
-if s==3
-%     F.ytick=[0:0.2:1]; 
-    F.ytick=[0:0.05:1];
-    F.xtick=[0.1,10];
-%     F.ylim(1)=0.25;
-end
-if s==4
-    F.xtick=[1,30];
+F.ytick=[0:0.1:1];
+switch s
+    case 1
+        F.xlim(1)=0.01;
+    case 2
+        F.xlim(1)=0.01;
+    case 3
+        F.xlim=[0.2,20];
+    case 4
+        F.xtick=[1,30];
 end
 
 

@@ -13,6 +13,7 @@ if ~isfield(F,'ylab'), F.ylab=setting; end
 if ~isfield(F,'xlab'), F.xlab=xlab; end
 if ~isfield(F,'xmax'), F.xmax=min(D(1),ntrain(1)); end
 if ~isfield(F,'algs'), F.algs=algs; end
+if ~isfield(F,'xticks'), F.xticks=round(linspace(F.xmax/3,F.xmax,3)); end
 if ~isfield(F,'savestuff'), F.savestuff=0; end
 if ~isfield(F,'tit'), F.tit=[{'Misclassification Rate'};{'D=100, n=100'}]; end
 if ~isfield(F,'color')
@@ -29,7 +30,11 @@ end
 
 %%
 g=figure(1);
-h=subplot(F.nrows,F.ncols,(F.row-1)*F.ncols+1);
+if F.nrows>F.ncols
+    h=subplot(F.nrows,F.ncols,(F.row-1)*F.ncols+1);
+else
+    h=subplot(F.nrows,F.ncols,F.row);
+end
 cla, hold all
 Lmax=0;
 Lmin=1;
@@ -69,23 +74,29 @@ algs=F.algs;
 
 % F.ylab=[{F.ylab};{['n=', num2str(ntrain(1)), ', D=', num2str(D(1))]}];
 if F.row==F.nrows, F.xlab=xlab; end
-ylabel(F.ylab)
+
+if strcmp(F.sit,'real')
+    title([{F.ylab}; {['D=',num2str(median(D)), ' n=', num2str(median(ntrain))]}]) 
+    if F.row==1, ylabel('Misclassification Rate'); end
+else
+    ylabel(F.ylab)
+%     if F.row==1, title(F.ylab), end
+end
 xlabel(F.xlab)
 % title(['D = ', num2str(D(1)), ', n = ', num2str(ntrain(1))])
 xmax=min(D(1),ntrain(1));
 xlim([1,F.xmax])
 if isfield(F,'ymax'), Lmax=F.ymax; end
 if isfield(Lhat,'Bayes')
-%     if ~isnan(Lhat(1).Bayes)
-%         plot([1:F.xmax],meanL*ones(F.xmax,1),'k','linewidth',2)
-%     end
+    %     if ~isnan(Lhat(1).Bayes)
+    %         plot([1:F.xmax],meanL*ones(F.xmax,1),'k','linewidth',2)
+    %     end
 end
 ylim([Lmin,Lmax])
-set(gca,'XTick',round(linspace(F.xmax/3,F.xmax,3)))
+set(gca,'XTick',F.xticks)
 if F.legend
     legend('show')
 end
-if F.row==1, title(F.tit), end
 
 if F.savestuff
     F.fname=setting;

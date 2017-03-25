@@ -19,7 +19,7 @@ switch sit
             'prostate';...
             'colon';...
             'MNIST';...
-            'CIFAR-10';...
+            'MRN';...
             };
         
     case 'dead'
@@ -27,6 +27,7 @@ switch sit
             'r2toeplitz';...
             'xor2';...
             'outliers';...
+            'CIFAR-10';...
             };
 end
 
@@ -46,12 +47,14 @@ if strcmp(sit,'sims')
     F.nrows=S;
     F.ncols=3;
 elseif strcmp(sit,'real')
-    F.ncols=2;
-    F.nrows=S;
+    F.ncols=S;
+    F.nrows=1;
 end
 F.xlab=[];
 F.xmax=1;
 F.legend=false;
+F.sit=sit;
+F.xticks=[5:5:500];
 
 %%
 h=figure(1); clf
@@ -87,30 +90,47 @@ for s=1:S
             G.xmax=30;
         case 'prostate'
             G.ylab='Prostate';
-            G.xmax=60;
+            G.xmax=20;
             G.tit='Misclassification Rate';
         case 'colon'
             G.ylab='Colon';
+            G.xticks=[10:10:500];
             G.xmax=30;
         case 'MNIST'
             G.ylab='MNIST';
+            G.xticks=[10:10:500];
             G.xmax=30;
         case 'CIFAR-10'
             G.ylab='CIFAR-10';
             G.xmax=30;
+            G.xticks=[10:10:500];
+            G.xlab='# of Embedded Dimensions';
+        case 'MRN'
+            G.ylab='MRN';
+            G.xmax=100;
+            G.xticks=[25:25:500];
             G.xlab='# of Embedded Dimensions';
     end
-    [minL, wallTime, G] = plot_Lhat_v_dvec(setting,G);
+    if ~strcmp(setting,'MRN')
+        [minL, wallTime, G] = plot_Lhat_v_dvec(setting,G);
+    else
+        subplot(F.nrows,F.ncols,F.ncols);
+        plot_mrn
+    end
     %     if s==S, legend('show'); end
-    if ~strcmp(setting,{'prostate','colon','MNIST','CIFAR-10'})
+    if ~strcmp(setting,{'prostate','colon','MNIST','CIFAR-10','MRN'})
         plot_means(setting,G);
     else
-        plot_timing(minL,wallTime,s,G);
+        %         plot_timing(minL,wallTime,s,G);
     end
 end
 
 
 %%
-H.wh=[6.5 9];
+if strcmp(sit,'sims')
+    H.wh=[6.5 9];
+else
+    H.wh=[6.5,2];
+end
 H.fname=['plot_', sit];
 print_fig(h,H)
