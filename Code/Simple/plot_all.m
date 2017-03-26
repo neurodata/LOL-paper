@@ -95,7 +95,7 @@ for s=1:S
         case 'colon'
             G.ylab='Colon';
             G.xticks=[10:10:500];
-            G.xmax=30;
+            G.xmax=20;
         case 'MNIST'
             G.ylab='MNIST';
             G.xticks=[10:10:500];
@@ -130,7 +130,9 @@ end
 if strcmp(sit,'sims')
     H.wh=[6.5 9];
 else
-    H.wh=[6.5,2];
+    H.wh=[11.5,2];
+    legend({'LOL','RR-LDA','Eigenfaces','ROAD','Lasso'},'Position', [0.45 0.3 1 0.2]) ; % [left bottom width height] 'location','bestoutside')
+    legend('boxoff')
 end
 H.fname=['plot_', sit];
 print_fig(h,H)

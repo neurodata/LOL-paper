@@ -114,7 +114,7 @@ plot(x+1,nanmean(PCA_LDA_MRN),'linewidth',2)
 
 axis('tight')
 title([{'MRN'}; {['D=10^8, n=80']}])
-set(gca,'XTick',[25:25:100],'ylim',[min([meanLOL, meanPCA]),max([meanLOL, meanPCA])])
+set(gca,'XTick',[25:25:100],'YTick',[0:0.1:1],'ylim',[min([meanLOL, meanPCA]),0.01+max([meanLOL, meanPCA])])
 
 plot([1 1],[1 1],'linewidth',2)
 plot([1 1],[1 1],'linewidth',2)
@@ -123,6 +123,4 @@ plot([1 1],[1 1],'linewidth',2)
 plot([1 1],[1 1],'linewidth',2)
 
 
-legend('LOL','RR-LDA','Eigenfaces','ROAD','Lasso','location','bestoutside')
-legend('boxoff')
 %  print(h,'mrn','-dpng','-r300')
