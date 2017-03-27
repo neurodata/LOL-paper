@@ -78,9 +78,9 @@ else
     xlim([-100, -90])
     ylim([-100, -90])
     set(gca,'visible','off');
-    h=legend('\textsc{LOL}','RRLDA','Eigenfaces','ROAD','Lasso','QOQ',' ',...
+    h=legend('LOL','RRLDA','Eigenfaces','ROAD','Lasso','QOQ',' ',...
         '$\mu_1$','$\mu_2$','$\mu_3$'); % [left bottom width height]
-    set(h,'Interpreter','latex','Box','off','Position',[0.3 -0.05 1 0.4])
+    set(h,'Interpreter','latex','Box','off','Position',[0.3 0.05 1 0.2])
 end
 
 % if F.legend
