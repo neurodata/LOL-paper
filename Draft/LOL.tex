@@ -1,8 +1,11 @@
 \documentclass[10pt]{article}
 \input{preamble.tex}
 
-\title{\vspace{-50pt}\db{Wide Supervised Manifold Learning by Low-Rank Optimal Linear Discriminant Analysis (LOL)}}
-\author{Joshua T.~Vogelstein, Brett Mensh, \\ Minh Tang, Da Zheng, Randal Burns, Mauro Maggioni}
+\title{\vspace{-50pt}\db{
+Never Use PCA for Subsequent Classification, Low-Rank Optimal Linear is Better
+% Wide Supervised Manifold Learning by Low-Rank Optimal Linear Discriminant Analysis (LOL)
+}}
+\author{Joshua T.~Vogelstein,  Minh Tang, Da Zheng, Randal Burns, Mauro Maggioni}
 \date{}
 
 % Research Articles (up to ~4500 words, including references, notes and captions, or ~5 printed pages) are expected to present a major advance. Research Articles include an abstract, an introduction, up to six figures or tables, sections with brief subheadings, and about 40 references. Materials and Methods should be included in supplementary materials, which should also include information needed to support the paper's conclusions.
@@ -33,26 +36,11 @@ Supervised learning (SL)---the art and science of estimating statistical relatio
 In this big data age,  the ambient (or observed) dimensionality of the observations is quickly ballooning, and with it, the ambient dimensionality of the discriminant boundary.  While historical data may have consisted of only a few dimensions (e.g., height and weight), modern scientific datasets often consist of hundreds, thousands, or even millions of dimensions (e.g. genetics, neuroscience, omics).
 Regardless of the dimensionality, when  scientists or analysts obtain new datasets, they must make a number of decisions, by either implicitly or explicitly weighting considerations across several levels of analysis, including both statistical and computational considerations.
 
-As suggested above, the goal of such problems is to estimate a discriminant boundary that  partitions the space as optimally and efficiently  as possible. If we knew the ``true data generating mechanism'', then writing down the optimal discriminant boundary would be relatively trivial.  However, in all real data science problems, at least some parts of the true data generating mechanism remain unknown, because the ``Truth'' is likely infinitely complex.  Because we do not know the truth, we seek tools that will estimate boundaries as accurately and efficiencly as possible given the training data available to us.  To do so, one must make a series of decisions. These decisions have a variety of ramifications; the art of supervised learning is making choices that balance those ramifications appropriately for the problem at hand.  The choices can reasonably be organized into four levels of analysis: (i) model, (ii) algorithm, (iii) implementation, and (iv) platform, each have different implications, both quantitative and qualitative.  The quantitative impact can be further subdivided into statistical and computational implications, with statistical implications largely determined by the top two levels, and computational implications governed by the bottom two.
-Below, we list in italics the \emph{choices} one must make, and in bold the \textbf{design considerations} associated with each.  These considerations directly determine the design goals of our machine learning system, as will be elaborated upon below.
 
 
 % trade-offs:
 % stats: bias-variance trade-off
 % comp: We make design tradeoffs to balance the opposing forces of minimizing memory usage and maximizing CPU cycles spent computing in parallel. The design trade-off is cache freshness for reduced cache maintenance overhead.
-
-
-First, one must choose a \emph{discriminant model} (often called feasible region or action space in other contexts, and often this choice is implicit in the algorithm choice).
-This modeling assumptions determine geometric constraints on the shape of the estimated boundary.
-For example, a linear boundary is a potential discriminant model, and the particular feasiable optimal boundary for a given problem is then specified by (a potentially multidimensional) parameter: the slope and intercept.  \textbf{Model bias}  is the minimum distance between the optimal discriminant boundary in the discriminant model and true boundary (determined by the data generating mechanism).  As mentioned above, in real data problems, we always expect some model bias unless the discriminant model is ``non-parametric'', meaning that it can account for any discriminant boundary.
-
-Second, one must choose an \emph{algorithm} to estimate the boundary, such as Fisher’s Linear Discriminant (\Fld), linear Support Vector Machines (\Svm), or logistic regression.  Each such algorithm has different convergence properties as sample size increases.  Importantly, for different data generating mechanisms, different algorithms may converge on different solutions.  The additional distance between the expected estimated boundary and the optimal boundary is called the \textbf{estimator bias}, which we also want to minimize by choosing an algorithm that will select an estimate as close as possible to the truth.  Different algorithms will also differ in their \textbf{estimator variance}, which is a function both of the size of the discriminant model, and the idiosyncrasies of the algorithm.  Of note, in certain circumstances, the two bias terms and the variance together determine expected mean square error, so one also desires to minimize the variance of the estimated boundary.
-
-In real data problems, there are two additional quantitative considerations impacted by the algorithm choice: \textbf{hyper-parameter searches} and \textbf{robustness}. As mentioned above, we desire to minimize both the bias and the variance; alas, decreasing one often comes at the cost increasing the other.  For any given data generating mechanism and dataset, the optimal trade-off is unknown. Fortunately, many algorithms are equiped with a hyper-parameter, that enables the practictioner to ``tune'' the bias vs.~variance to obtain an ``optimal'' fit in terms of expected error on other data.  The ease and efficiency with which those hyper-parameters can be tuned can substantially impact performance.   The robustness of an algorithm quantifies its ability to estimate nearly optimal boundaries when there are outliers. This is another consideration that plays a crucial role in real data.
-
-
-The third and fourths choices impact computational considerations.  Third, one must choose an \emph{implementation}.  First, implementations should be \textbf{numerically stable}, over the range  of the number of samples and dimensions under consideration.  Second, one desires an implementation that minimizes computational complexity, both in terms of  \textbf{space} and \textbf{time}.
-Fourth, one must choose a \emph{platform} upon which the implementation operates,  including both software dependencies and hardware choice.  In the big data age, both \textbf{scale-up} and \textbf{scale-out} are crucial design considerations.  Scale-up, generically speaking, refers to the ability of utilizing all available computational resources, rather than allowing computers to sit idly.  Scale-out refers to the ability to incorporate additional available resources.  Together, these terms determine the scalability and resource efficiency of a system, which can have dramatic consequences in real world big data problems.
 
 
 All of the above quantitative considerations can be evaluated \textbf{theoretically}, but typically only under (overly) restrictive assumptions.  Even when the assumptions are met, theory often merely provides bounds, without concrete numbers in any particular situations. \textbf{Simulated experiments} can therefore buttress the theoretical results. By knowing the truth, one  can  compare the performance of different approaches to provide insight into when the theories are working as expected, including in settings that extend beyond the theoretical constraints.  Moreover, \textbf{real data performance}, provide further insight into different methodologies in real data settings.
@@ -107,14 +95,14 @@ In addition to the above quantitative properties, LOL is intuitive, only has a s
 %  trim={<left> <lower> <right> <upper>}
 \includegraphics[width=0.7\linewidth,trim=1cm 0cm 0cm 1.0cm,clip=true]{../Figs/mnist}
 \caption{
-Illustrating three different classifiers---\sct{Lasso}~(top), \sct{Fld$\circ$Pca}~(middle), and \Lol~(bottom)---for embedding images of the digits 3, 7, and 8 (from MNIST), each of which is 28 $\times$ 28 = 784 dimensional.
+Illustrating four different classifiers---\sct{Lasso}~(top), \Lda~(second),  \Pca~(third), and \Lol~(bottom)---for embedding images of the digits 3, 7, and 8 (from MNIST), each of which is 28 $\times$ 28 = 784 dimensional.
 \textbf{(A)} A subset of training samples  (boundary colors are only for visualization purposes).
-\textbf{(B)} The first four projection matrices learned by the three different approaches on 300 training samples. Note that \sct{Lasso}~is sparse and supervised, \Pca~is dense and unsupervised, and \Lol~is dense and supervised.
-\textbf{(C)} Embedding 500 test samples into the top 2 dimensions using each approach.  Digits color coded as in A.
-\textbf{(D)}  The estimated posterior distribution of test samples after
-projecting data into 5-dimensions via each method.
-We show only 3 vs.~8 for simplicity.
-The vertical line shows the classification threshold.
+\textbf{(B)} The first four projection matrices learned by the  different approaches on 100 training samples from each class.
+Note that \sct{Lasso}~is sparse and supervised, \Pca which is dense and unsupervised, and both \Lda~and \Lol~are dense and supervised.
+\textbf{(C)} Embedding 500 test samples into the top two dimensions using each approach.  Digits color coded as in (A).
+\textbf{(D)}  The estimated posterior distributions for 3 and 8 of test samples after
+projecting data into two dimensions via each method and using Lasso or LDA to classify.
+% The vertical line shows the classification threshold.
 The filled area is the estimated error rate; the goal of any classification algorithm is to minimize that area.
 Clearly, \Lol~exhibits the best separation after embedding, which results in the best classification performance.
 }
@@ -123,13 +111,13 @@ Clearly, \Lol~exhibits the best separation after embedding, which results in the
 \end{figure}
 
 A general strategy for high-dimensional classification proceeds as  schematized in Figure \ref{f:mnist}:
-A obtain/select $n$ training samples of the data,
-B learn a low dimensional projection,
-C project $m$ testing samples onto the lower dimensional space,
-D classify the embedded testing samples using some classifier.
-We consider  three different linear dimensionality reduction methods---\sct{Lasso}, \Pca, and \Lol---each of which we compose with a classifier to form high-dimensional classifiers.\footnote{Although \sct{Lasso}~is not a 2-step method (where embedding is learned first, and then a classifier is applied), adaptive lasso \cite{Zou2006a} and its variants improve on lasso's theoretical and empirical properties, so we consider such an approach here.}
+(A) obtain/select $n$ training samples of the data,
+(B) learn a low dimensional projection,
+(C) project $m$ testing samples onto the lower dimensional space,
+(D) classify the embedded testing samples using a classifier.
+We consider  four different linear dimensionality reduction methods---\sct{Lasso}, \Lda, \Pca, and \Lol---each of which we compose with a classifier to form high-dimensional classifiers.\footnote{Although \sct{Lasso}~is not a 2-step method (where embedding is learned first, and then a classifier is applied), adaptive lasso \cite{Zou2006a} and its variants improve on lasso's theoretical and empirical properties, so we consider such an approach here.}
 
-To demonstrate the utility of \Lol, we  first consider one of the most popular benchmark datasets ever, the MNIST dataset \cite{mnist}.  This dataset consists of $n=60$,$000$ examples of images of the digits 0 through 9.  Each such image is represented by a 28$\times$28 matrix, which means that the observed (or ambient) dimensionality of the data is $p=28^2=784$.  Because we are motivated by the $n \ll p$ scenario, we subsample the data to select $n=300$ examples of the numbers $3$, $7$, and $8$. We then apply all three approaches to this subsample of the MNIST dataset, learning a projection, and embedding $m=500$ testing samples, and classifying the resulting embedded data.
+To demonstrate the utility of \Lol, we  first consider one of the most popular benchmark datasets ever, the MNIST dataset \cite{mnist}.  This dataset consists of $n=60$,$000$ examples of images of the digits 0 through 9.  Each such image is represented by a 28$\times$28 matrix, which means that the observed (or ambient) dimensionality of the data is $p=28^2=784$.  Because we are motivated by the $n \ll p$ scenario, we subsample the data to select $n=300$ examples of the numbers $3$, $7$, and $8$ ($100$ of each). We then apply all four approaches to this subsample of the MNIST dataset, learning a projection, and embedding $m=500$ testing samples, and classifying the resulting embedded data.
 
 % Figure \ref{f:mnist}A shows several examples of digit, the border of each digit is colored for visualization purposes only.
 % Figure \ref{f:mnist}B shows the estimated projection matrices for each approach (see Methods for details).
@@ -139,7 +127,15 @@ To demonstrate the utility of \Lol, we  first consider one of the most popular b
 
 % Figure \ref{f:mnist}C shows n'=500 randomly selected training samples from the digits 3, 7, and 8, embedded into the first two dimensions using each of the three approaches. The colors of the embedded points correspond to those in the leftcolumn, that is, 3 is blue, 7 is red, and 8 is green.
 % FIgure \ref{f:mnist}D shows a smoothed histogram of the posterior probabilities of each test samples after classifying.
-\sct{Lasso}, by virtue of being a sparse method, finds the pixels that most discriminate the 3 classes.  The resulting embeddings mostly live along the boundaries, because these images are close to binary, and therefore, images either have or do not have a particular pixel. Indeed, although the images themselves are nearly sparse (over 80\% of the pixels in the dataset have intensity $\leq 0.05$),  a low-dimensional discriminant boundary does not seem to be sparse.  \Pca, on the other hand, finds the linear combinations of training samples that maximize the variance.  This unsupervised linear manifold learning method results in projection matrices that indeed look like linear combinations of the three different digits.  The goal here, however, is separating classes, not maximizing variability.  The resulting embeddings are not particularly well separated, suggesting the the directions of discriminability are not the same as the directions of maximum variance.  \Lol~is our newly proposed supervised linear manifold learning method (see below for details).  The projection matrices it learns look qualitatively much like those of \Pca. This is not surprising, as both are linear combinations of the training examples.  The resulting embeddings however, look quite different.  The three different classes are very clearly separated by even the first two dimensions.  The result of these embeddings yields classifiers whose performance is obvious from looking at the embeddings: \Lol~achieves significantly smaller error than the other two approaches.
+\sct{Lasso}, by virtue of being a sparse method, finds the pixels that most discriminate the 3 classes.  The resulting embeddings mostly live along the boundaries, because these images are close to binary, and therefore, images either have or do not have a particular pixel. Indeed, although the images themselves are nearly sparse (over 80\% of the pixels in the dataset have intensity $\leq 0.05$),  a low-dimensional discriminant boundary does not seem to be sparse.
+\Lda~does poorly, essentially failing to discriminate these digits at all. This is because the low dimensional embedding implicit in \Lda~ignores the difference of the means, only determining the dimensions that maximize variance. In this setting, it seems the directions that maximally separate the classes are not well aligned with the directions of maximal variance.
+%
+\Pca~does reasonably well, as it implictly includes the discriminant directions by not subtracting them out.
+% suggesting that the dimensions that maximize variance in this setting are ``close'' to the directions that maximize differences between classes.
+% \Lda, on the other hand, finds the linear combinations of training samples that maximize the variance.  This unsupervised linear manifold learning method results in projection matrices that indeed look like linear combinations of the three different digits.  The goal here, however, is separating classes, not maximizing variability.  The resulting embeddings are not particularly well separated, suggesting the the directions of discriminability are not the same as the directions of maximum variance.
+\Lol~is our newly proposed supervised linear manifold learning method.  The projection matrices it learns look qualitatively much like those of \Lda~and\Pca. This is not surprising, as they are all linear combinations of the training examples.
+The resulting embeddings however, look quite different.
+ The three different classes are very clearly separated by even the first two dimensions.  The result of these embeddings yields classifiers whose performance is obvious from looking at the embeddings: \Lol~achieves significantly smaller error than the other  approaches.
 This numerical experiment justifies the use of supervised linear manifold learning, we next build a geometric intuition for these methods in simple simulated examples, to better illustrate when we can expect \Lol~to outperform other methods, and perhaps more importantly, when we expect  \Lol~to fail.
 
 % \clearpage

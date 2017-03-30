@@ -112,14 +112,14 @@ end
 
 for j=1:4
     subplot('Position',[left2, bottom(j), width, height]),
-    if j==1
-        imagesc(abs(vj{3})<1e-4),
+    if j==1 % lasso
+        imagesc(abs(vj{3})<1e-4), 
         title([{'(B) Projection'};{'Matrices'}],'FontSize',tfs)
-    elseif j==2
+    elseif j==4 % lol
         imagesc(vj{1}),
-    elseif j==3
+    elseif j==2 % lda
         imagesc(vj{2}),
-    elseif j==4
+    elseif j==3 % pca
         imagesc(vj{4})
     end
     set(gca,'XTickLabel',[],'YTickLabel',[]);
@@ -132,15 +132,15 @@ ticks=-20:4:20;
 ticks3=-20:0.5:20;
 
 % si=[4 2 1 3];
-for i=1:4;
+for i=1:4
     iproj=i;
     Xtest=Pro{iproj}.V*Z.Xtest;
     Xtrain=Pro{iproj}.V*Z.Xtrain;
     
-    if i==1,
+    if i==1 % lol
         si=4; 
         tit='';
-    elseif i==2
+    elseif i==2 % lda
         si=2; 
         tit='';
         if plot3d
@@ -148,11 +148,11 @@ for i=1:4;
             set(get(gca,'ylabel'),'rotation',-45);
         end
 
-    elseif i==3,
+    elseif i==3 % lasso
         si=1; 
         tit=[{'(C) Embedded'};{'Test Samples'}];
         ticks=ticks3;
-    elseif i==4
+    elseif i==4 % pca
         si=3;
         tit='';
     end
@@ -190,9 +190,9 @@ end
 y_begin=[bottom(1), bottom(2), bottom(3), bottom(4)]+0.01;
 
 ylab{4}=' LOL';
-ylab{2}=[{'  LR'};{'   o'}; {'  FLD'}];
+ylab{2}='RR-LDA'; %[{'  LR'};{'   o'}; {'  FLD'}];
 ylab{1}='Lasso';
-ylab{3}=[{'eigen'};{'  o'}; {'faces'}];
+ylab{3}=' PCA'; [{'eigen'};{'  o'}; {'faces'}];
 
 % si=[4 2 1 3];
 for i=1:4  %[x_begin y_begin length height]
@@ -244,7 +244,7 @@ for i=[1,2,4,3]
         Xtest=Proj{i}.V(1:numDim,:)*Z.Xtest;
         Xtrain=Proj{i}.V(1:numDim,:)*Z.Xtrain;
         [Yhat, parms, eta] = LDA_train_and_predict(Xtrain, Z.Ytrain, Xtest);
-    elseif i==3
+    elseif i==3 % 
         if strfind(task.name,'MNIST')
             para.K=task.Nks;
             ys=unique(Z.Ytrain);
@@ -378,6 +378,7 @@ if task.savestuff==1
     F.PaperSize=[6.5 6];ff=findex;
     F.fname=[rootDir, '../Figs/mnist'];
     F.PaperPosition=[-0.5 0 F.PaperSize];
+    F.png=true;
     print_fig(h(6),F)
 end
 
