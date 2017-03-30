@@ -1,8 +1,8 @@
 % %% plot
 clear, clc
 
-sit='sims';
-% sit='real';
+% sit='sims';
+sit='real';
 % sit='dead';
 
 switch sit
