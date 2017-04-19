@@ -31,8 +31,21 @@ In the 21st century high-dimensional observations abound.  In classical statisti
 
 % intro: we get 64, we have 157.  need to reduce by 2x
 
-Supervised learning (SL)---the art and science of estimating statistical relationships using labeled training data---is a crucial tool in scientific discovery.  SL has been enabled a wide variety of basic and applied findings, ranging from discovering biomarkers in omics data \cite{Vogelstein2014a}, to object recognition from images \cite{Krizhevsky2012}, and includes celebrated methods such as support vector machines, random forests, and deep networks \cite{Hastie2004}.  A special case of SL is classification; a classifier  predicts the `class' of a novel observation via partitioning the space of observations into different classes.
-(for example, predicting male vs.~female from MRI scans).
+% par 1: into to general probelm
+% par 2: limitations to LDA
+% par 3 & 4: previous approaches to deal with problem, and their limitations
+% par 5: key thing missing still
+% par 6-8: illustration of limitations in straightforward example
+% par 9-10: explanation of our approach
+% par 11: conclusion of intro
+
+Supervised learning---the art and science of estimating statistical relationships using labeled training data---is a crucial tool in scientific discovery.  Supervised learning has been enabled a wide variety of basic and applied findings, ranging from discovering biomarkers in omics data \cite{Vogelstein2014a}, to object recognition from images \cite{Krizhevsky2012}, and includes celebrated methods such as support vector machines, random forests, and deep networks \cite{Hastie2004}.  A special case is classification; a classifier  predicts the `class' of a novel observation via partitioning the space of observations into different classes.
+(for example, predicting male vs.~female from MRI scans). One of the most foundational and important approaches to classification is called ``Fisher's Linear Discrimnant Analysis'' (LDA).
+
+Unfortunately LDA experiencesscr
+
+
+
 In this big data age,  the ambient (or observed) dimensionality of the observations is quickly ballooning, and with it, the ambient dimensionality of the discriminant boundary.  While historical data may have consisted of only a few dimensions (e.g., height and weight), modern scientific datasets often consist of hundreds, thousands, or even millions of dimensions (e.g. genetics, neuroscience, omics).
 Regardless of the dimensionality, when  scientists or analysts obtain new datasets, they must make a number of decisions, by either implicitly or explicitly weighting considerations across several levels of analysis, including both statistical and computational considerations.
 
