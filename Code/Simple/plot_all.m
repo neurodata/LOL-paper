@@ -89,24 +89,27 @@ for s=1:S
             G.ylab='Fat Tails (D=1000)';
             G.xmax=30;
         case 'prostate'
-            G.ylab='Prostate';
+            G.ylab='(A) Prostate';
             G.xmax=20;
+            G.ymax=0.5;
             G.tit='Misclassification Rate';
         case 'colon'
-            G.ylab='Colon';
+            G.ylab='(B) Colon';
             G.xticks=[10:10:500];
             G.xmax=20;
+            G.ymax=0.5;
         case 'MNIST'
-            G.ylab='MNIST';
+            G.ylab='(C) MNIST';
             G.xticks=[10:10:500];
             G.xmax=30;
+            G.ymax=1.0;
         case 'CIFAR-10'
             G.ylab='CIFAR-10';
             G.xmax=30;
             G.xticks=[10:10:500];
             G.xlab='# of Embedded Dimensions';
         case 'MRN'
-            G.ylab='MRN';
+            G.ylab='(D) MRN';
             G.xmax=100;
             G.xticks=[25:25:500];
             G.xlab='# of Embedded Dimensions';
@@ -115,7 +118,7 @@ for s=1:S
         [minL, wallTime, G] = plot_Lhat_v_dvec(setting,G);
     else
         subplot(F.nrows,F.ncols,F.ncols);
-        plot_mrn
+        plot_mrn2
     end
     %     if s==S, legend('show'); end
     if ~strcmp(setting,{'prostate','colon','MNIST','CIFAR-10','MRN'})
@@ -131,7 +134,7 @@ if strcmp(sit,'sims')
     H.wh=[6.5 9];
 else
     H.wh=[11.5,2];
-    legend({'LOL','RR-LDA','Eigenfaces','ROAD','Lasso'},'Position', [0.45 0.3 1 0.2]) ; % [left bottom width height] 'location','bestoutside')
+    legend({'LOL','RR-LDA','Eigenfaces','ROAD','Lasso'},'Position', [0.46 0.3 1 0.2]) ; % [left bottom width height] 'location','bestoutside')
     legend('boxoff')
 end
 H.fname=['plot_', sit];

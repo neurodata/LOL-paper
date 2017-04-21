@@ -70,13 +70,17 @@ for a=1:A
     end
 end
 algs=F.algs;
+
 %%
 
 % F.ylab=[{F.ylab};{['n=', num2str(ntrain(1)), ', D=', num2str(D(1))]}];
 if F.row==F.nrows, F.xlab=xlab; end
 
 if strcmp(F.sit,'real')
-    title([{F.ylab}; {['D=',num2str(median(D)), ' n=', num2str(median(ntrain))]}]) 
+    t=title([{[ F.ylab]}; {['D = ',num2str(median(D)), ', n = ', num2str(median(ntrain))]}]); 
+    set(t, 'horizontalAlignment', 'left')
+    set(t, 'units', 'normalized')
+    set(t, 'position', [0.1 0.8 0])
     if F.row==1, ylabel('Misclassification Rate'); end
 else
     ylabel(F.ylab)

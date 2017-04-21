@@ -21,17 +21,32 @@
 \providecommand{\BIBdecl}{\relax}
 \BIBdecl
 
-\bibitem{Hastie2004}
-T.~Hastie, R.~Tibshirani, and J.~H. Friedman, ``{The Elements of Statistical
-  Learning: Data Mining, Inference, and Prediction},'' \emph{BeiJing:
-  Publishing House of Electronics Industry}, 2004.
-
-\bibitem{Mairal2009}
+\bibitem{Fisher1925a}
 \BIBentryALTinterwordspacing
-J.~Mairal, J.~Ponce, G.~Sapiro, A.~Zisserman, and F.~R. Bach, ``{Supervised
-  Dictionary Learning},'' in \emph{Advances in Neural Information Processing
-  Systems}, 2009, pp. 1033--1040. [Online]. Available:
-  \url{http://papers.nips.cc/paper/3448-supervised}
+R.~A. Fisher, ``\BIBforeignlanguage{English}{{Theory of Statistical
+  Estimation}},'' \emph{\BIBforeignlanguage{English}{Mathematical Proceedings
+  of the Cambridge Philosophical Society}}, vol.~22, no.~05, pp. 700--725, Oct.
+  1925. [Online]. Available:
+  \url{http://journals.cambridge.org/abstract\_S0305004100009580}
+\BIBentrySTDinterwordspacing
+
+\bibitem{Zou2006a}
+H.~Zou, ``{The Adaptive Lasso and Its Oracle Properties},'' pp. 1418--1429,
+  2006.
+
+\bibitem{mnist}
+\BIBentryALTinterwordspacing
+Y.~LeCun, C.~Cortes, and C.~Burges, ``{MNIST handwritten digit database}.''
+  [Online]. Available: \url{http://yann.lecun.com/exdb/mnist/}
+\BIBentrySTDinterwordspacing
+
+\bibitem{Bickel2004a}
+\BIBentryALTinterwordspacing
+P.~J. Bickel and E.~Levina, ``{Some theory for Fisher's linear discriminant
+  function, `naive Bayes', and some alternatives when there are many more
+  variables than observations},'' \emph{Bernoulli}, vol.~10, no.~6, pp.
+  989--1010, Dec. 2004. [Online]. Available:
+  \url{http://projecteuclid.org/euclid.bj/1106314847}
 \BIBentrySTDinterwordspacing
 
 \bibitem{Li1991a}
@@ -68,25 +83,6 @@ K.~Fukumizu, F.~R. Bach, and M.~I. Jordan, ``{Dimensionality Reduction for
   Supervised Learning with Reproducing Kernel Hilbert Spaces},'' \emph{Journal
   of Machine Learning Research}, vol.~5, pp. 73--99, 2004.
 
-\bibitem{Zou2006a}
-H.~Zou, ``{The Adaptive Lasso and Its Oracle Properties},'' pp. 1418--1429,
-  2006.
-
-\bibitem{mnist}
-\BIBentryALTinterwordspacing
-Y.~LeCun, C.~Cortes, and C.~Burges, ``{MNIST handwritten digit database}.''
-  [Online]. Available: \url{http://yann.lecun.com/exdb/mnist/}
-\BIBentrySTDinterwordspacing
-
-\bibitem{Bickel2004a}
-\BIBentryALTinterwordspacing
-P.~J. Bickel and E.~Levina, ``{Some theory for Fisher's linear discriminant
-  function, `naive Bayes', and some alternatives when there are many more
-  variables than observations},'' \emph{Bernoulli}, vol.~10, no.~6, pp.
-  989--1010, Dec. 2004. [Online]. Available:
-  \url{http://projecteuclid.org/euclid.bj/1106314847}
-\BIBentrySTDinterwordspacing
-
 \bibitem{Fan2012a}
 \BIBentryALTinterwordspacing
 J.~Fan, Y.~Feng, and X.~Tong, ``{A road to classification in high dimensional
@@ -108,6 +104,11 @@ D.~Paul, ``{Asymptotics of sample eigenstructure for a large dimensional spiked
   [Online]. Available:
   \url{http://www3.stat.sinica.edu.tw/statistica/oldpdf/A17n418.pdf}
 \BIBentrySTDinterwordspacing
+
+\bibitem{Hastie2004}
+T.~Hastie, R.~Tibshirani, and J.~H. Friedman, ``{The Elements of Statistical
+  Learning: Data Mining, Inference, and Prediction},'' \emph{BeiJing:
+  Publishing House of Electronics Industry}, 2004.
 
 \bibitem{Huber1981a}
 \BIBentryALTinterwordspacing
