@@ -1,5 +1,4 @@
-LOL <- function(m, labels, k, type=c("svd", "rand_dense", "rand_sparse"),
-				in.mem.proj=fm.in.mem(m)) {
+LOL <- function(m, labels, k, type=c("svd", "rand_dense", "rand_sparse")) {
     counts <- as.data.frame(table(fm.conv.FM2R(labels)))
     num.labels <- length(counts$Freq)
     num.features <- dim(m)[1]
@@ -23,7 +22,7 @@ LOL <- function(m, labels, k, type=c("svd", "rand_dense", "rand_sparse"),
             mean.list[[i]] <- gr.mean[,rlabels[i]]
         mean.mat <- fm.cbind.list(mean.list)
 
-        svd <- fm.svd(m - mean.mat, nv=nv, nu=nv, out.in.mem=in.mem.proj)
+        svd <- fm.svd(m - mean.mat, nv=nv, nu=nv)
         cbind(diff, svd$u)
     }
     else if (type == "rand_dense")
@@ -36,21 +35,18 @@ LOL <- function(m, labels, k, type=c("svd", "rand_dense", "rand_sparse"),
     }
 }
 
-embed.classifier <- function(data, labels, proj=c("LOL", "LAL", "QOQ", "PCA"),
-							 red.p=1, in.mem.proj=fm.in.mem(data))
+embed.classifier <- function(data, labels, proj=c("LOL", "LAL", "QOQ", "PCA"), red.p=1)
 {
 	if (proj == "LOL")
-		proj <- LOL(data, fm.conv.R2FM(as.integer(labels)), red.p, 
-					type="svd", in.mem.proj=in.mem.proj)
+		proj <- LOL(data, fm.conv.R2FM(as.integer(labels)), red.p, type="svd")
 	else if (proj == "LAL")
-		proj <- LOL(data, fm.conv.R2FM(as.integer(labels)), red.p, 
-					type="rand_sparse", in.mem.proj=in.mem.proj)
+		proj <- LOL(data, fm.conv.R2FM(as.integer(labels)), red.p, type="rand_sparse")
 	else if (proj == "QOQ")
 		proj <- QOQ(data, fm.conv.R2FM(as.integer(labels)), red.p)
 	else if (proj == "PCA") {
 		mu <- rowMeans(data)
 		center.mat <- sweep(data, 1, mu, "-")
-		res <- fm.svd(t(center.mat), red.p, red.p, out.in.mem=in.mem.proj)
+		res <- fm.svd(t(center.mat), red.p, red.p)
 		proj <- res$v
 	}
 }
@@ -73,8 +69,7 @@ predict.classifier <- function(object, newdata)
 	predict(object=object$res, newdata=as.matrix(fm.conv.FM2R(proj.res)))
 }
 
-rand.split.test <- function(data, labels, count, train.percent, red.ps,
-							in.mem.proj=fm.in.mem(data))
+rand.split.test <- function(data, labels, count, train.percent, red.ps)
 {
 	train.size <- as.integer(ncol(data) * train.percent)
 	for (run in 1:count) {
@@ -88,7 +83,7 @@ rand.split.test <- function(data, labels, count, train.percent, red.ps,
 		print("truth:")
 		print(truth)
 
-		proj <- embed.classifier(train, train.labels, proj="LOL", max(red.ps), in.mem.proj)
+		proj <- embed.classifier(train, train.labels, proj="LOL", max(red.ps))
 		for (red.p in red.ps) {
 			res <- train.classifier(train, train.labels, proj[, 1:red.p], method="lda")
 			pred <- predict.classifier(object=res, newdata=test)
@@ -113,7 +108,7 @@ rand.split.test <- function(data, labels, count, train.percent, red.ps,
 		proj <- NULL
 		gc()
 
-		proj <- embed.classifier(train, train.labels, proj="PCA", max(red.ps), in.mem.proj)
+		proj <- embed.classifier(train, train.labels, proj="PCA", max(red.ps))
 		for (red.p in red.ps) {
 			res <- train.classifier(train, train.labels, proj[, 1:red.p], method="lda")
 			pred <- predict.classifier(object=res, newdata=test)
