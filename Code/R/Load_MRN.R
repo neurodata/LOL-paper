@@ -5,6 +5,7 @@ df <- read.csv(url("http://neurodata-public-lol.s3-website-us-east-1.amazonaws.c
 files <- read.csv(url("http://neurodata-public-lol.s3-website-us-east-1.amazonaws.com/files.txt"),
 				  header=FALSE)
 vs <- list()
+mats <- list()
 num <- 0
 labels <- rep.int(0, length(df$Sex))
 for (idx in 1:length(df$URSI)) {
@@ -18,13 +19,27 @@ for (idx in 1:length(df$URSI)) {
 		v <- fm.load.dense.matrix.bin(conn, TRUE, 505472240, 1, FALSE, "F", id)
 		if (!is.null(v)) {
 			num <- num + 1
-			vs[[num]] <- v
+			vs <- c(vs, v)
 			labels[num] <- df$Sex[idx]
 		}
 		close(conn)
 	}
+	if (length(vs) == 16) {
+		mat <- fm.cbind.list(vs)
+		name <- paste("MRN", length(mats), ".mat", sep="")
+		mat <- fm.conv.store(mat, in.mem=FALSE, name=name)
+		vs <- list()
+		mats <- c(mats, mat)
+	}
 }
-data <- fm.cbind.list(vs)
-data <- fm.conv.store(data, in.mem=FALSE, name="MRN.mat")
+if (length(vs) > 0) {
+	mat <- fm.cbind.list(vs)
+	name <- paste("MRN", length(mats), ".mat", sep="")
+	mat <- fm.conv.store(mat, in.mem=FALSE, name=name)
+	vs <- list()
+	mats <- c(mats, mat)
+}
+
+data <- fm.cbind.list(mats)
 save(labels, file="/FlashX/MRN.label")
 
