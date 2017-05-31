@@ -30,6 +30,7 @@ for (idx in 1:length(df$URSI)) {
 		mat <- fm.conv.store(mat, in.mem=FALSE, name=name)
 		vs <- list()
 		mats <- c(mats, mat)
+		gc()
 	}
 }
 if (length(vs) > 0) {
@@ -38,6 +39,7 @@ if (length(vs) > 0) {
 	mat <- fm.conv.store(mat, in.mem=FALSE, name=name)
 	vs <- list()
 	mats <- c(mats, mat)
+	gc()
 }
 
 data <- fm.cbind.list(mats)
