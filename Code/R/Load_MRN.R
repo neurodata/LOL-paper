@@ -15,7 +15,7 @@ for (idx in 1:length(df$URSI)) {
 	if (file %in% files$V1) {
 		print(path)
 		conn <- gzcon(url(path))
-		v <- fm.load.dense.matrix.bin(conn, TRUE, 505472240, 1, FALSE, "F", id)
+		v <- fm.load.dense.matrix.bin(conn, FALSE, 505472240, 1, FALSE, "F", id)
 		if (!is.null(v)) {
 			num <- num + 1
 			vs[[num]] <- v
