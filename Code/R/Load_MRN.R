@@ -26,5 +26,5 @@ for (idx in 1:length(df$URSI)) {
 }
 data <- fm.cbind.list(vs)
 tmp <- fm.conv.store(data, in.mem=FALSE, name="MRN-tmp.mat")
-save(labels, "/mnt/nfs2/zhengda/MRN.label")
+save(labels, "/FlashX/MRN.label")
 
