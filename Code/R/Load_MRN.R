@@ -1,6 +1,6 @@
 library(FlashR)
 library(MASS)
-fm.set.conf("/mnt/nfs2/zhengda/FlashX/matrix/conf/run_test-EM.txt")
+fm.set.conf("/FlashX/matrix/conf/run_test.txt")
 df <- read.csv(url("http://neurodata-public-lol.s3-website-us-east-1.amazonaws.com/ndmg.csv"))
 files <- read.csv(url("http://neurodata-public-lol.s3-website-us-east-1.amazonaws.com/files.txt"),
 				  header=FALSE)
