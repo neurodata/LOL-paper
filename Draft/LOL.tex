@@ -1,8 +1,13 @@
 \documentclass[10pt]{article}
 \input{preamble.tex}
 
+% @jlp: put in overleaf
+% @jlp: use my fonts for title and main text
+
 \title{\vspace{-50pt}\db{
-Never Use PCA for Subsequent Classification, Low-Rank Optimal Linear is Better
+\Lol~$>$ PCA
+% Supervised Manifold Learning via Linear Optimal Low-rank Embedding
+% Never Use PCA for Subsequent Classification, Low-Rank Optimal Linear is Better
 % Wide Supervised Manifold Learning by Low-Rank Optimal Linear Discriminant Analysis (LOL)
 }}
 \author{Joshua T.~Vogelstein,  Minh Tang, Da Zheng, Randal Burns, Mauro Maggioni}
@@ -21,12 +26,21 @@ Never Use PCA for Subsequent Classification, Low-Rank Optimal Linear is Better
 %%% 1st sentence should carry the meaning of the whole paragraph
 
 \begin{abstract}
-In the 21st century high-dimensional observations abound.  In classical statistics, it is well known that as the dimensionality of a dataset increase, the number of samples required to estimate properties thereof increases even faster.  A number of techniques have been developed to stave off this ``curse of dimensionality'', including dimensionality reduction and regularization.  Mitigating this curse is especially demanding in supervised learning problems, such as classification. The challenge in finding a low-dimensional discriminant boundary in the face of high-dimensional observations is that direct searches are computationally infeasible.  Therefore, previous art have taken one of two approaches. First, one can ignore the discriminant problem, and try to reduce the dimensionality of the data---for example, using principal components analysis or manifold learning techniques---in hopes that one has not discarded the discriminant information.  Second, one directly solve the problem after making a number of overly restrictive assumptions of the data, such as independence and sparsity.  Here, we demonstrate via a simple geometric argument that one can algebraically compute a low-dimensional embedding that is approximately optimal with high probability in many settings.  The intuition is that we can  project the data both in the directions of maximal variance (ignoring the classification task) and the linear direction of maximal discrimination (ignoring the variance).  The result is an extremely computationally efficient supervised manifold learning method that we call ``Linear Optimal Low-Rank'' (LOL). LOL outperforms state-of-the-art algorithms in a wide variety of settings, including both those for which theoretical arguments predict it should, and in much more general settings for which we are unable as yet to obtain solid theoretical footing.  This includes both simulated settings, where our intuition enables us to characterize a number of simple variants designed for more complex settings, as well as several benchmark problems.  In particular, LOL outperforms several reference algorithms in terms of both efficiency and accuracy on said benchmarks. We therefore believe that LOL could be useful in myriad applications, and many extensions are readily available.
+It is increasingly easy and common to acquire scientific data with hundreds, millions, or billions of predictors. The goal of is often to find a ``discriminant boundary'' that separates predictors into two classes (for example, healthy and diseased). Unfortunately, when the dimensionality of the predictors is larger than the sample size, there are an infinite number of equally good decision boundaries. To address this challenge researchers rely on dimensionality reduction techniques that search for a low-dimensional representations that preserve the discrimination information. Unfortunately, directly solving for the optimal low-dimensional representation for classification is computationally infeasible. Existing approaches either (i) modify the goal to find a low-dimensional representation that maximizes something else (such as Principal Components Analysis (PCA) or manifold learning to maximize variance), or (ii) make restrictive assumptions that require costly algorithms (such as Lasso to maximize sparsity).
+We therefore develop a method called ``Linear Optimal Low-rank'' embedding (\Lol), by jointly utilizing both the directions of maximal variance (ignoring the classification task) and the direction of maximal discrimination (ignoring the variance). We show via a combination of theoretical results and simulations that \Lol~statistically dominates PCA and other linear methods under relatively general settings, meaning that no matter what the dimensionality of the original data, or the dimensionality of embedded data, or sample size, \Lol~finds a better representation of the data for subsequent classification, while adding negligible additional computational cost. Additional numerical experiments demonstrate that the same intuition may fruitfully be applied to hypothesis testing and regression.
+We demonstrate the performance of \Lol~as compared with existing standard methods on a genetics application, an image recognition application, and a connectomics application with over 500 million features comprising $>$400 gigabytes.
+In each case, \Lol~outperforms the other methods, while only requiring a few minutes on a single machine to run even on the huge dataset. Our open source implementation of \Lol~is easy to use, and computationally efficient, making it poised to tackle supervised dimensionality reduction challenges across disciplines.
+
+
+% In the 21st century high-dimensional observations abound.  In classical statistics, it is well known that as the dimensionality of a dataset increase, the number of samples required to estimate properties thereof increases even faster.  A number of techniques have been developed to stave off this ``curse of dimensionality'', including dimensionality reduction and regularization.  Mitigating this curse is especially demanding in supervised learning problems, such as classification. The challenge in finding a low-dimensional discriminant boundary in the face of high-dimensional observations is that direct searches are computationally infeasible.  Therefore, previous art have taken one of two approaches.
+% First, one can ignore the discriminant problem, and try to reduce the dimensionality of the data---for example, using principal components analysis or manifold learning techniques---in hopes that one has not discarded the discriminant information.  Second, one directly solve the problem after making a number of overly restrictive assumptions of the data, such as independence and sparsity.
+% Here, we demonstrate via a simple geometric argument that one can algebraically compute a low-dimensional embedding that is approximately optimal with high probability in many settings.  The intuition is that we can  project the data both in the directions of maximal variance (ignoring the classification task) and the linear direction of maximal discrimination (ignoring the variance).  The result is an extremely computationally efficient supervised manifold learning method that we call ``Linear Optimal Low-Rank'' (LOL). \Lol~outperforms state-of-the-art algorithms in a wide variety of settings, including both those for which theoretical arguments predict it should, and in much more general settings for which we are unable as yet to obtain solid theoretical footing.  This includes both simulated settings, where our intuition enables us to characterize a number of simple variants designed for more complex settings, as well as several benchmark problems.
+% In particular, \Lol~outperforms several reference algorithms in terms of both efficiency and accuracy on said benchmarks. We therefore believe that \Lol~could be useful in myriad applications, and many extensions are readily available.
 \end{abstract}
 
 \vspace{15pt}
 
-\clearpage
+% \clearpage
 \linenumbers
 
 % intro: we get 64, we have 157.  need to reduce by 2x
@@ -55,16 +69,16 @@ In the 21st century high-dimensional observations abound.  In classical statisti
 
 % par 6 action
 %   easy to run, provably better, empirically better, just as fast.
-
+% @jlp: add citations, make comments if you don't know which one they should be.
 
 Supervised learning---the art and science of estimating statistical relationships using labeled training data---is a crucial tool in scientific discovery.  Supervised learning has been enabled a wide variety of basic and applied findings, ranging from discovering biomarkers in omics data \cite{Vogelstein2014a} to object recognition from images \cite{Krizhevsky2012}.
 % , and includes celebrated methods such as support vector machines, random forests, and deep networks \cite{Hastie2004}.
-A special case is classification; a classifier predicts the ``class'' of a novel observation via partitioning the space of observations (for example, predicting male  or female from MRI scans). One of the most foundational and important approaches to classification is called ``Fisher's Linear Discrimnant Analysis'' (\Lda) \cite{Fisher1925a}. One of the most compelling aspects of \Lda~is that it is based on very simple geometric reasoning.  In particular, it is guaranteed to find the optimal linear classifier under the assumption that the data are Gaussian. Moreover, it can be applied no matter how many classes are present. Finally, its solution is analytic, therefore obviating costly numerical optimizations and enabling scalability. This solid theoretical foundation, easy interpretation, computational efficiency, and widespread utility perhaps contribute to \Lda's longevity, as it remains one of \emph{the} reference classifiers nearly a century later.
+A special case is classification; a classifier predicts the ``class'' of a novel observation via partitioning the space of observations (for example, predicting male  or female from MRI scans). One of the most foundational and important approaches to classification is called ``Fisher's Linear Discrimnant Analysis'' (\Lda) \cite{Fisher1925a}, which is based on very simple geometric reasoning.  In particular, it is guaranteed to find the optimal linear classifier under the assumption that the data are Gaussian. Moreover, it can be applied no matter how many classes are present. Finally, its solution is analytic, therefore obviating costly numerical optimizations and enabling scalability. This solid theoretical foundation, easy interpretation, computational efficiency, and widespread utility perhaps contribute to \Lda's longevity, as it remains one of {the} few reference classifiers nearly a century later.
 
 Modern scientific datasets, however, present challenges for classification that were not addressed in Fisher's era.
 Specifically, the dimensionality of datasets is quickly ballooning.
-Currently, across many scientific disciplines, the raw data might consist of millions  of features or dimensions; for example, an entire genome or connectome.  While the dimensionality of these data have increased precipitously, the sample sizes have not witnessed a concommitant increase.
-This ``large p, small n'' problem is disatrous for many classical statistical approaches because they were designed with ``small p, large n'' in mind. For example, \Lda~estimates a hyperplane in $p-1$ dimensions when the data are $p$ dimensional.  But there are an infinite number of $p-1$ dimensional hyperplanes that fit the data exactly when $p<n$.  To see this, imagine fitting a line to a single point, or a plane to two points.  In each case, one can choose any rotation, and still fit the data.  Doing so, however, requires the algorithm to make a choice that is independent of the existing data, and therefore unlikely to be correct.  This problem is typically called ``over-fitting''.
+Currently, across many scientific disciplines, the raw data might consist of hundreds of millions  of features or dimensions; for example, an entire genome or connectome.  While the dimensionality of these data have increased precipitously, the sample sizes have not witnessed a concommitant increase.
+This ``large p, small n'' problem is disatrous for many classical statistical approaches because they were designed with ``small p, large n'' in mind. For example, \Lda~estimates a hyperplane in $p-1$ dimensions when the data are $p$ dimensional.  But there are an infinite number of $p-1$ dimensional hyperplanes that fit the data exactly when $p<n$.  To see this, imagine fitting a line to a single point, or a plane to two points.  In each case, one can choose any rotation, and still fit the data perfectly.  Doing so, however, requires the algorithm to make a choice that is independent of the existing data, and therefore unlikely to be correct.  This problem is typically called ``over-fitting''.
 
 
 
@@ -78,10 +92,15 @@ A different strategy that focuses on utilizing the lable information is called  
 A more recent approach is called ``regularized optimal affine discriminant'' (\Road). \Road~finds the optimal sparse dimensionaly reduction under certain gaussian assumptions.  \Road, however, can only be applied in two-class settings, and requires solving a computationally costly numerical optimization problem, and thus does not scale to large dimensionality.
 
 
-Thus, scientists and data scientists desire a method that has a simple geometric intuition even in high-dimensions and can be applied when there are any number of classes, but also has theoretical gurantees, without making addition assumptions about the data, and can scale to arbitrarily high-dimensional data in a computationally efficient fashion. 
+Thus, analysts desire a method that has a simple geometric intuition even in high-dimensions and can be applied when there are any number of classes, but also has theoretical gurantees, without making addition assumptions about the data and requiring carefully tuning hyperparameters, and can scale to arbitrarily high-dimensional data in a computationally efficient fashion.
+%
+To address these concerns,  we developed ``Linear Optimal Low-rank'' embedding (\Lol). The key intuition behind \Lol~is that we can jointly utilize both  directions that are informative with regard to the classification task (the means) and the directions that maximize the variance (the covariance).
 
-To address these concerns,  we describe a novel solution, called Low-Rank Optimal Linear Discriminant Analysis (\Lol). To understand \Lol, consider the following simplified scenario.  Assume there exists two classes of data, both of which are sampled according to a high-dimensional Gaussian distribution, and both have the same covariance matrix.  Assuming that there are the same number of observations from each class (without loss of generality) implies that the only difference between the two classes is the mean.  Figure \ref{f:cigars} shows three different examples of this setting, each with 100 total samples in 1,000 dimensions (only the first two dimensions are shown).  In panel \textbf{(A)}, each dimension is independent of the others, but the second dimension is different: the means in the second dimension are further away from one another than they are in all the others, and the variance in that dimension is smaller.  This setting, which we called ``stacked cigars'', is easy of all of the approaches described above.
-In particular, \Pca~finds the second dimension, because it is the longest and therefore contains the most variance.  \Rrla
+
+
+% To understand \Lol, consider the following simplified scenario.  Assume there exists two classes of data, both of which are sampled according to a high-dimensional Gaussian distribution, and both have the same covariance matrix.  Assuming that there are the same number of observations from each class  implies that the only difference between the two classes are their means.  Figure \ref{f:cigars} shows three different examples of this setting, each with 100 total samples in 1,000 dimensions (only the first two dimensions are shown).
+% In panel \textbf{(A)}, each dimension is independent of the others, but the second dimension is different: the means in the second dimension are further away from one another than they are in all the others, and the variance in that dimension is smaller.  This setting, which we called ``stacked cigars'', is relatively easy for all the above described methods, because the direction of maximal variance is also the direction that is maximally informative about the classification task.
+% @jovo: possibly continue this line of thought?
 
 
 
@@ -101,16 +120,21 @@ In particular, \Pca~finds the second dimension, because it is the longest and th
 % Thus, a gap remains in the literature for a statistical tool that, under relatively general assumptions, achieves both small bias and variance, can be made robust, and has easily tunable hyper-parameters.  And complementarily, an implementation of that algorithm that is numerically stable, requires minimal space and time, is highly scalable for high-dimensional problems. Importantly, the method should perform well both on simulated and real data experiments.  And ideally, the software is intuitive, free and open source, and easy to use.
 
 % To address these concerns,  we describe a novel solution, called Low-Rank Optimal Linear Discriminant Analysis (\Lol).
-% We developed LOL by considering the above described simple scenario, and realizing that the optimal dimension reduction for such a setting would have to combine both the means and the covariances, because together those two parameters determine the optimal decision boundary.
+% We developed \Lol~by considering the above described simple scenario, and realizing that the optimal dimension reduction for such a setting would have to combine both the means and the covariances, because together those two parameters determine the optimal decision boundary.
 
 % @jovo: discussion?
 % While other methods have previous had a similar insight (in particular the ``First Two Moment'' (F2M) methods \cite{Li1991a, Tishby1999a, Globerson2003a, Cook2005a,Fukumizu2004a}), F2M methods only operate in low-dimensional settings.
 %
-% Therefore, we decided to combine the means and covariances differently, essentially by first projecting the data onto the means, and then effectively computing PCA on the ``residuals''.  Running FLD after projecting the data onto the subspace spanned jointly by the means and the top principal components comprises the LOL method.  In addition to MATLAB and R, we also implemented LOL using FlashX, a recently developed big data analytics library \cite{??}.  We were therefore able to take advantage of matrix parallelizations optimized for machines with solid state drives.
+% Therefore, we decided to combine the means and covariances differently, essentially by first projecting the data onto the means, and then effectively computing PCA on the ``residuals''.  Running FLD after projecting the data onto the subspace spanned jointly by the means and the top principal components comprises the \Lol~method.  In addition to MATLAB and R, we also implemented \Lol~using FlashX, a recently developed big data analytics library \cite{??}.  We were therefore able to take advantage of matrix parallelizations optimized for machines with solid state drives.
 
-We demonstrate LOL outperforms---or at least performs no worse than---several reference benchmarks along every statistical consideration mentioned above.  This includes proving the improvement over several standards, along both statistical considerations (bias and variance) for the simple Gaussian setting mentioned above. Moreover, we provide a distributed implementation that improves on previous computational capabilities in terms of: stability, time, space, and scalability under more general settings.  Moreover, numerical experiments quantitatively demonstrate the improvement of LOL over reference methods on a wide range of simulated experiments that satisfy our theoretical assumptions. By virtue of LOL being built upon geometric intuition, it is easy to extend it along various dimensions.  Additional numerical experiments demonstrate that practice matches our intuition, in particular, generalizations of LOL can easily be constructed to match different geometric assumptions of the data.  Indeed, even when data are sampled from distributions outside our theory and intuition, we see that LOL achieves smaller error than its competitors. In fact, we can extend our intuition outside of classification problems to other problems, including wide regression and hypothesis testing.  A trivial modification of LOL leads to regression and testing procedures that also outperform the natural competitors.  Computationally, LOL is always numerically stable, and requires no more computational space, and smaller computational time, than both Fisherfaces and sparse methods.  Moreover, we provide a highly scalable implementation that efficiently runs on terabyte datasets with hundreds of thousands or millions of features. Finally, we test LOL against a set of standard methods on four different benchmark real datasets.  For any of the four different settings, there was not a single method that outperformed LOL on both accuracy and time.
+We demonstrate \Lol~outperforms---or at least performs no worse than---several reference benchmarks along every  consideration mentioned above.
+This includes proving that \Lol~statistically dominates \Pca~and related linear methods under Gaussian assumption.
+% the improvement over several standards, along both statistical considerations (bias and variance) for the simple Gaussian setting mentioned above.
+Moreover, we provide an  implementation that improves on previous computational capabilities in terms of stability and scalability.
+Numerical experiments quantitatively demonstrate the improvement of \Lol~over reference methods on a wide range of simulated experiments that satisfy our theoretical assumptions. By virtue of \Lol~being built upon geometric intuition, it is easy to extend it along various dimensions.  Additional numerical experiments demonstrate that practice matches  intuition, in particular, generalizations of \Lol~can easily be constructed to match different geometric assumptions of the data.  Indeed, even when data are sampled from distributions outside our theory and intuition,  \Lol~achieves smaller error than its competitors. In fact, one can extend this intuition outside of classification problems to other problems, including  regression and hypothesis testing: a trivial modification of \Lol~leads to regression and testing procedures that also outperform the natural competitors.  Computationally, \Lol~is always numerically stable, and requires no more computational space, and smaller computational time, than other linear methods.  Moreover, we provide a highly scalable implementation that efficiently runs on terabyte datasets with hundreds of millions of features.
+Finally, we test \Lol~against a set of standard methods on four different benchmark real datasets.  For any of the four different settings, there was not a single method that outperformed \Lol~in any dimension.
 
-In addition to the above quantitative properties, LOL is intuitive, only has a single hyper-parameter which is exceedingly easy to tune, and we provide free and open source implementations, in MATLAB, R, and FlashX, as well as pre-configured environments that will enable anybody to run LOL on commodity machines, including laptops, workstations, and cloud instances.  LOL is not likely to necessarily be the best algorithm on any given new high-dimensional challenge problem.  Rather, the arguments and methodology developed herein provide a framework for developing big supervised manifold learning algorithms to tackle the data science problems of the next century.
+In addition to the above quantitative properties, \Lol~is intuitive, only has a single hyper-parameter which is exceedingly easy to tune, and we provide free and open source implementations, in MATLAB and R, as well as pre-configured environments that will enable anybody to run \Lol~on commodity machines, including laptops, workstations, and cloud instances.  \Lol~is not likely to necessarily be the best algorithm on any given new high-dimensional challenge problem.  Rather, we suspect \Lol~might be useful as one of the first algorithms to try on big and wide data.  Moreover, the arguments and methodology developed herein provide a framework for developing big supervised manifold learning algorithms to tackle other data science challenges.
 
 
 
@@ -145,12 +169,12 @@ Clearly, \Lol~exhibits the best separation after embedding, which results in the
 
 A general strategy for high-dimensional classification proceeds as  schematized in Figure \ref{f:mnist}:
 (A) obtain/select $n$ training samples of the data,
-(B) learn a low dimensional projection,
+(B) learn a ``linear projection map'' from high-dimensions to low dimension,
 (C) project $m$ testing samples onto the lower dimensional space,
-(D) classify the embedded testing samples using a classifier.
-We consider  four different linear dimensionality reduction methods---\sct{Lasso}, \Lda, \Pca, and \Lol---each of which we compose with a classifier to form high-dimensional classifiers.\footnote{Although \sct{Lasso}~is not a 2-step method (where embedding is learned first, and then a classifier is applied), adaptive lasso \cite{Zou2006a} and its variants improve on lasso's theoretical and empirical properties, so we consider such an approach here.}
+(D) classify the embedded testing samples using a linear classifier.
+We consider  four different linear dimensionality reduction methods---\sct{Lasso}, \Rrlda, \Pca, and \Lol---each of which we compose with a linear classifier to form high-dimensional classifiers. \footnote{Although the original \sct{Lasso}~does not first find a low dimensional representation and then classify, more recent generalizations do (for exampel, \citet{Zou2006a}), and then improve on \sct{Lasso}'s theoretical and empirical properties, so will always mean Adaptive \sct{Lasso} here.}
 
-To demonstrate the utility of \Lol, we  first consider one of the most popular benchmark datasets ever, the MNIST dataset \cite{mnist}.  This dataset consists of $n=60$,$000$ examples of images of the digits 0 through 9.  Each such image is represented by a 28$\times$28 matrix, which means that the observed (or ambient) dimensionality of the data is $p=28^2=784$.  Because we are motivated by the $n \ll p$ scenario, we subsample the data to select $n=300$ examples of the numbers $3$, $7$, and $8$ ($100$ of each). We then apply all four approaches to this subsample of the MNIST dataset, learning a projection, and embedding $m=500$ testing samples, and classifying the resulting embedded data.
+To demonstrate the utility of \Lol, we  first consider one of the most popular benchmark datasets ever, the MNIST dataset \cite{mnist}.  This dataset consists of $n=60$,$000$ examples of images of the digits 0 through 9.  Each such image is represented by a 28$\times$28 matrix, which means that the observed (or ambient) dimensionality of the data is $p=28^2=784$.  Because we are motivated by the $n \ll p$ scenario, we subsample the data to select $n=300$ examples of the numbers $3$, $7$, and $8$ ($100$ of each). We then apply all four approaches to this subsample of the MNIST dataset, learning a projection, and embedding $500$ testing samples, and classifying the resulting embedded data.
 
 % Figure \ref{f:mnist}A shows several examples of digit, the border of each digit is colored for visualization purposes only.
 % Figure \ref{f:mnist}B shows the estimated projection matrices for each approach (see Methods for details).
@@ -160,16 +184,17 @@ To demonstrate the utility of \Lol, we  first consider one of the most popular b
 
 % Figure \ref{f:mnist}C shows n'=500 randomly selected training samples from the digits 3, 7, and 8, embedded into the first two dimensions using each of the three approaches. The colors of the embedded points correspond to those in the leftcolumn, that is, 3 is blue, 7 is red, and 8 is green.
 % FIgure \ref{f:mnist}D shows a smoothed histogram of the posterior probabilities of each test samples after classifying.
-\sct{Lasso}, by virtue of being a sparse method, finds the pixels that most discriminate the 3 classes.  The resulting embeddings mostly live along the boundaries, because these images are close to binary, and therefore, images either have or do not have a particular pixel. Indeed, although the images themselves are nearly sparse (over 80\% of the pixels in the dataset have intensity $\leq 0.05$),  a low-dimensional discriminant boundary does not seem to be sparse.
-\Lda~does poorly, essentially failing to discriminate these digits at all. This is because the low dimensional embedding implicit in \Lda~ignores the difference of the means, only determining the dimensions that maximize variance. In this setting, it seems the directions that maximally separate the classes are not well aligned with the directions of maximal variance.
-%
-\Pca~does reasonably well, as it implictly includes the discriminant directions by not subtracting them out.
+\sct{Lasso}, by virtue of being a sparse method, finds the pixels that most discriminate the 3 classes (column B).  The resulting embeddings mostly live along the boundaries (column C), because these images are close to binary, and therefore, images either have or do not have a particular pixel. Indeed, although the images themselves are nearly sparse (over 80\% of the pixels in the dataset have intensity $\leq 0.05$),  a low-dimensional discriminant boundary does not seem to be sparse, as evidenced by substantial overlap between the posteriors for 3 and 8 (panel D).
+
+
+\Rrlda~does poorly, essentially failing to discriminate these digits at all. This is because the low dimensional embedding implicit in \Rrlda~subtracts out the difference of the means, only utilizing the dimensions that maximize variance (see Appendix \ref{sec:pca} for details). In this setting, it seems the directions that maximally separate the classes are not well aligned with the directions of maximal variance.
+On the other hand, \Pca~does reasonably well, as it implictly includes the discriminant directions merely by not subtracting them out, but does not utilize them particularly well.
 % suggesting that the dimensions that maximize variance in this setting are ``close'' to the directions that maximize differences between classes.
 % \Lda, on the other hand, finds the linear combinations of training samples that maximize the variance.  This unsupervised linear manifold learning method results in projection matrices that indeed look like linear combinations of the three different digits.  The goal here, however, is separating classes, not maximizing variability.  The resulting embeddings are not particularly well separated, suggesting the the directions of discriminability are not the same as the directions of maximum variance.
-\Lol~is our newly proposed supervised linear manifold learning method.  The projection matrices it learns look qualitatively much like those of \Lda~and\Pca. This is not surprising, as they are all linear combinations of the training examples.
+\Lol~is our newly proposed supervised linear manifold learning method.  The projection matrices it learns look qualitatively much like those of \Rrlda~and\Pca. This is not surprising, as they are all linear combinations of the training examples.
 The resulting embeddings however, look quite different.
- The three different classes are very clearly separated by even the first two dimensions.  The result of these embeddings yields classifiers whose performance is obvious from looking at the embeddings: \Lol~achieves significantly smaller error than the other  approaches.
-This numerical experiment justifies the use of supervised linear manifold learning, we next build a geometric intuition for these methods in simple simulated examples, to better illustrate when we can expect \Lol~to outperform other methods, and perhaps more importantly, when we expect  \Lol~to fail.
+ The three different classes are very clearly separated by even the first two dimensions.  The result of these embeddings yields classifiers whose performance is obvious from looking at the embeddings: \Lol~achieves significantly smaller error than the other  approaches (quantified by the black area under the overlapping curves).
+This numerical experiment justifies the use of \Lol, we next build a geometric intuition for \Lol~in simple simulated examples, to better illustrate when we can expect \Lol~to outperform other methods, and perhaps more importantly, when we expect  \Lol~to fail.
 
 % \clearpage
 \subsection*{Linear Gaussian Intuition}
@@ -325,7 +350,7 @@ The above simulations were all under the \Lda~model, for which we have theoretic
 
 \subsection*{Computational Efficiency}
 
-In many applications, the main quantifiable consideration in whether to use a particular method, other than accuracy, is computational efficiency.  Because implementing \Lol~requires only highly optimized linear algebraic routines---including computing moments and singular value decomposition---rather than the costly iterative programming techniques currently required for sparse or dictionary learning type problems.  Moreover, because \Lol~only requires computing means and covariances, we can leverage recent advances in parallel matrix operations \cite{FlashMatrix} on fast solid-state drives (SSDs). We implement LOL with the R interface of FlashX \cite{FlashGraph, FlashMatrix, FlashEigen}.
+In many applications, the main quantifiable consideration in whether to use a particular method, other than accuracy, is computational efficiency.  Because implementing \Lol~requires only highly optimized linear algebraic routines---including computing moments and singular value decomposition---rather than the costly iterative programming techniques currently required for sparse or dictionary learning type problems.  Moreover, because \Lol~only requires computing means and covariances, we can leverage recent advances in parallel matrix operations \cite{FlashMatrix} on fast solid-state drives (SSDs). We implement \Lol~with the R interface of FlashX \cite{FlashGraph, FlashMatrix, FlashEigen}.
 %More specifically, we modified FlashX to be able to perform all the computational primitives required for \Lol~on matrices that are short and fat, rather than tall and skinny.
 Given the FlashX programming framework, we can run \Lol~on essentially arbitrarily large data.  For these examples, we simulated data satisfying the \Lda~model; specifically, we used a spherically symmetric covariance matrix, with means just $\pm$ the one vector (see Methods for simulation details).
 
@@ -334,7 +359,7 @@ Figure \ref{f:speed}A demonstrates both the in memory and semi-external memory \
 Another option for making \Lol~scale up better is to utilize randomized algorithms.  In particular, random projections---for which the data are multiplied by a lower-dimensional random matrix---have been shown to provide excellent approximation eigenvectors \cite{Candes2006b}.  Moreover, very sparse random projections, in which the elements of the matrix are mostly zero, with $\pm 1$ randomly distributed, have been shown to be effective, and have significant computational benefits \cite{Hastie2006}. We therefore further modified FlashX to incorporate random projections and very sparse random projections, and let \Lal~denote Linear Approximate Low-rank.  Figure \ref{f:speed}A shows an order of magnitude improvement in both the in-memory and semi-external memory implementations of \Lal.
 
 
-Figure \ref{f:speed}B shows the error for \Lol~and \PoF~in this scenario, simply to demonstrate that even in this extremely high dimensional setting, \Lol~still outperforms \PoF. As expected, \Lal~performs as well as \Lol for the low dimensional settings.
+Figure \ref{f:speed}B shows the error for \Lol~and \PoF~in this scenario, simply to demonstrate that even in this extremely high dimensional setting, \Lol~still outperforms \PoF. As expected, \Lal~performs as well as \\Lol~for the low dimensional settings.
 
 % we also implement a randomized variant of \Lol, that uses a novel FlashX implementation of random projection (in memory).  In this simulation setting, \Lfl~(short for Linear Fast Low-rank) performs just as well as \Lol, though at a substantially reduced computational burden.
 
@@ -759,6 +784,7 @@ Or, more formally, for any $F \in \mc{F}_{\Lda}$, $L_{\bdel\T \bSig^{-1}} = L_*$
 \end{proof}
 
 \subsection[PCA]{Principle Components Analysis (\Pca) Projection}
+\label{sec:pca}
 
 Principle Components Analysis (\Pca) finds the directions of maximal variance in a dataset.  \Pca~is closely related to eigendecompositions and singular value decompositions (\Svd).  In particular, the top principle component of a matrix $\bX \in \Real^{p \times n}$, whose columns are centered, is the eigenvector with the largest corresponding eigenvalue of the centered covariance matrix $\bX \bX\T$.  \Svd~enables one to estimate this eigenvector without ever forming the outer product matrix, because \Svd~factorizes a matrix $\bX$ into $\bU \bS \bV\T$, where  $\bU$ and $\bV$ are orthonormal  ${p \times n}$ matrices, and $\bS$ is a diagonal matrix, whose diagonal values are decreasing,  $s_1 \geq s_2 \geq \cdots > s_n$.  Defining $\bU =[\bu_1, \bu_2, \ldots, \bu_n]$, where each $\bu_i \in \Real^p$, then $\bu_i$ is the $i^{th}$ eigenvector, and $s_i$ is the square root of the $i^{th}$ eigenvalue of $\bX \bX\T$.  Let $\bA^{\Pca}_d =[\bu_1, \ldots , \bu_d]$ be the truncated \Pca~orthonormal matrix.
 
@@ -774,7 +800,7 @@ Let $g_{\Pca}^d:=g_{A_{\Pca}^d}$, and let $L_{\Pca}^d:=L_{A_{\Pca}^d}$.
 And let $g_{\Lda}^d := \II \{ x \bSig_d^{-1} \bdel > 0\}$ be the regularized \Lda~classifier, that is, the \Lda~classifier, but sets the bottom $p-d$ eigenvalues to zero.
 
 \begin{lem}
-$L_{\Pca}^d = L_{\Lda}^d$.
+$L_{\Pca}^d = L_{\Rrlda}^d$.
 \end{lem}
 
 \begin{proof}
@@ -789,7 +815,7 @@ Plugging $\bU_d$ into Eq.~\eqref{eq:g_A} for $\bA$, and considering only the lef
 \end{align*}
 \end{proof}
 
-The implication of this lemma is that if one desires to implement Fisherfaces, rather than first learning the eigenvectors and then learning \Lda, one can instead directly implement regularized \Lda~by setting the bottom $p-d$ eigenvalues to zero.
+The implication of this lemma is that if one desires to implement \Rrlda, rather than first learning the eigenvectors and then learning \Lda, one can instead directly implement regularized \Lda~by setting the bottom $p-d$ eigenvalues to zero.
 
 
 
@@ -878,7 +904,7 @@ In other words, \Pca~is the only rotationally invariant projection.
 \end{lem}
 
 \subsection{Chernoff information}
-We now introduce the notion of the Chernoff information, which serves as our surrogate measure for the Bayes error of any classification procedure given the {\em projected} data -- in the context of this paper the projection is via LOL or PCA. Our discussion of the Chernoff information is under the context of decision rules for hypothesis testing, nevertheless, as evidenced by the fact that the Maximum A Posterior decision rule -- equivalently the Bayes classifier -- achieves the Chernoff information rate, this distinction between hypothesis testing and classification is mainly for ease of exposition.
+We now introduce the notion of the Chernoff information, which serves as our surrogate measure for the Bayes error of any classification procedure given the {\em projected} data -- in the context of this paper the projection is via \Lol~or PCA. Our discussion of the Chernoff information is under the context of decision rules for hypothesis testing, nevertheless, as evidenced by the fact that the Maximum A Posterior decision rule -- equivalently the Bayes classifier -- achieves the Chernoff information rate, this distinction between hypothesis testing and classification is mainly for ease of exposition.
 
 Let $F_0$ and $F_1$ be two absolutely continuous multivariate distribution in $\Omega \subset \mathbb{R}^{d}$ with density function $f_0$ and $f_1$, respectively. Suppose that $Y_1, Y_2, \dots, Y_m$ are independent and identically distributed random variables, with $Y_i$ distributed either $F_0$ or $F_1$. We are interested in testing the simple null hypothesis $\mathbb{H}_0 \colon F = F_0$ against the simple alternative hypothesis $\mathbb{H}_1 \colon F = F_1$. A test $T$ is a sequence of mapping $T_m \colon \Omega^{m} \mapsto \{0,1\}$ such that given $Y_1 = y_1, Y_2 = y_2, \dots, Y_m = y_m$, the test rejects $\mathbb{H}_0$ in favor of $\mathbb{H}_1$ if $T_m(y_1, y_2, \dots, y_m) = 1$; similarly, the test rejects $\mathbb{H}_1$ in favor of $\mathbb{H}_0$ if $T_m(y_1, y_2, \dots, y_m) = 0$.
 The Neyman-Pearson lemma states that, given $Y_1 = y_1, Y_2 = y_2, \dots, Y_m = y_m$ and a threshold $\eta_m \in \mathbb{R}$, the likelihood ratio test which rejects $\mathbb{H}_0$ in favor of $\mathbb{H}_1$ whenever
@@ -936,7 +962,7 @@ $$ (\mu_1 - \mu_0)^{\top} A^{\top} (A \Sigma A^{\top})^{-1} A (\mu_1 - \mu_0) > 
 
 As an example, suppose $\Sigma$ is diagonal with distinct eigenvalues where the diagonal entries of $\Sigma$ are in non-increasing order.
 Denote by $\delta = \mu_1 - \mu_0$ and let
-$A = \delta^{\top}$ and $B = e_1^{\top} = (1,0,0,\dots,0)$ be the linear transformations for LOL and PCA of $X$ into $\mathbb{R}$. We then have
+$A = \delta^{\top}$ and $B = e_1^{\top} = (1,0,0,\dots,0)$ be the linear transformations for \Lol~and PCA of $X$ into $\mathbb{R}$. We then have
 \begin{gather*}
 C(F_0^{(A)}, F_1^{(A)}) = \frac{(\delta^{\top} \delta)^2}{\delta^{\top} \Sigma \delta} = \frac{(\sum_{i} \delta_i^{2})^{2}}{\sum_{i} \delta_i^{2} \lambda_i}; \quad
 C(F_0^{(B)}, F_1^{(B)}) = \frac{\delta_1^2}{\lambda_1}
@@ -945,7 +971,7 @@ where $\lambda_1$ is the largest eigenvalue of $\Sigma$. Suppose furthermore tha
 $$ C(F_0^{(A)}, F_1^{(A)}) = \frac{(\sum_{i} \delta_i^{2})^{2}}{\sum_{i} \delta_i^{2} \lambda_i} \geq \frac{(p \delta_1^2)^2}{p \delta_p^{2} \lambda_1} $$
 and hence $C(F_0^{(A)}, F_1^{(A)}) > C(F_0^{(B)}, F_1^{(B)})$ provided $p \delta_1^{2}  \geq \delta_p^2$.
 
-When $A = \bigl[ \delta \mid e_1 \mid e_2 \dots \mid e_{d-1} \bigr]^{\top} \in \mathbb{R}^{d \times p}$ and $B = \bigl[e_1 \mid e_2 \mid \dots \mid e_d \bigr]^{\top} \in \mathbb{R}^{d \times p}$ are the linear transformation for LOL and PCA of $X$ into $\mathbb{R}^{d}$, we have
+When $A = \bigl[ \delta \mid e_1 \mid e_2 \dots \mid e_{d-1} \bigr]^{\top} \in \mathbb{R}^{d \times p}$ and $B = \bigl[e_1 \mid e_2 \mid \dots \mid e_d \bigr]^{\top} \in \mathbb{R}^{d \times p}$ are the linear transformation for \Lol~and PCA of $X$ into $\mathbb{R}^{d}$, we have
 \begin{gather*}
 C(F_0^{(A)}, F_1^{(A)}) = \frac{(\sum_{i=d}^{p} \delta_i^2)^2}{\sum_{i=d}^{p} \delta_i^2 \lambda_i} + \sum_{i=1}^{d-1} \frac{\delta_i^{2}}{\lambda_i};  \quad
 C(F_0^{(B)}, F_1^{(B)}) = \sum_{i=1}^{d} \frac{\delta_i^2}{\lambda_i}.
@@ -1017,7 +1043,7 @@ and hence
 $$ \frac{\bigl(\sum_{i=d}^{p} \delta_i^{2}\bigr)^{2}}{\sum_{i=d}^{p} \delta_i^{2} \lambda_i} \geq \frac{\bigl(\sum_{i=d}^{p} \delta_{i}^{2}\bigr)^{2}}{\lambda_d \sum_{i=d}^{p} \delta_i^{2}} = \frac{1}{\lambda_d} \sum_{i=d}^{p} \delta_i^{2} \geq \frac{\delta_{d}^2}{\lambda_d} $$
 and hence $C(F_0^{(A)}, F_1^{(A)}) \geq C(F_0^{(B)}, F_1^{(B)})$ always, and the inequality is strict provided that $\sum_{d+1}^{p} \delta_d^2 > 0$.
 
-Finally we consider the case where $\Sigma$ is an arbitrary covariance matrix. Let $\lambda_1 \geq \lambda_2 \geq \dots \geq \lambda_{p}$ be the eigenvalues of $\Sigma$ and let $u_1, u_2, \dots, u_p$ be the corresponding eigenvectors. For $d \leq p$,  let $U_{d-1} = \bigl[ u_1 \mid u_2 \mid \dots \mid u_{d-1}] \in \mathbb{R}^{p \times (d-1)}$ be the matrix whose columns are the eigenvectors $u_1, u_2, \dots, u_{d-1}$ of $\Sigma$. Then the LOL projection matrix into $\mathbb{R}^{d}$ is given by $A = \bigl[ \delta | U_{d-1} \bigr]^{\top}$. We first have
+Finally we consider the case where $\Sigma$ is an arbitrary covariance matrix. Let $\lambda_1 \geq \lambda_2 \geq \dots \geq \lambda_{p}$ be the eigenvalues of $\Sigma$ and let $u_1, u_2, \dots, u_p$ be the corresponding eigenvectors. For $d \leq p$,  let $U_{d-1} = \bigl[ u_1 \mid u_2 \mid \dots \mid u_{d-1}] \in \mathbb{R}^{p \times (d-1)}$ be the matrix whose columns are the eigenvectors $u_1, u_2, \dots, u_{d-1}$ of $\Sigma$. Then the \Lol~projection matrix into $\mathbb{R}^{d}$ is given by $A = \bigl[ \delta | U_{d-1} \bigr]^{\top}$. We first have
 \begin{equation*}
 A \Sigma A^{\top} = \bigl[ \delta | U_{d-1} \bigr]^{\top}\, \Sigma \, \bigl[ \delta | U_{d-1} \bigr] = \begin{bmatrix} \delta^{\top} \Sigma & \delta^{\top} \Sigma U_{d-1} \\ U_{d-1}^{\top} \Sigma \delta & U_{d-1}^{\top} \Sigma U_{d-1} \end{bmatrix} = \begin{bmatrix} \delta^{\top} \Sigma & \delta^{\top} \Sigma U_{d-1} \\ U_{d-1}^{\top} \Sigma \delta & \Lambda_{d-1} \end{bmatrix}
 \end{equation*}
@@ -1103,10 +1129,10 @@ C(F_0^{(B)}, F_1^{(B)}) = \delta^{\top} B^{\top} (B \Sigma B^{\top})^{-1} B \del
 \end{equation}
 where $\tilde{\Sigma}_d = \tilde{U}_d \tilde{S}_d \tilde{U}_d^{\top}$ is the best rank $d$ approximation to $\tilde{\Sigma} = \Sigma + \tfrac{1}{4} \delta \delta^{\top}$.
 
-We recall that the LOL projection $A = [\delta \mid U_{d-1}]^{\top}$ yields
+We recall that the \Lol~projection $A = [\delta \mid U_{d-1}]^{\top}$ yields
 $$ C(F_0^{(A)}, F_1^{(A)}) = \frac{(\delta^{\top} (I - U_{d-1} U_{d-1}^{\top}) \delta)^{2}}{\delta^{\top} (\Sigma - \Sigma_{d-1}) \delta} + \delta^{\top} \Sigma_{d-1}^{\dagger} \delta. $$
 
-To illustrate the difference between the LOL projection and that based on the eigenvectors of the {\em pooled} covariance matrix, consider the following simple example. Let $\Sigma = \mathrm{diag}(\lambda_1, \lambda_2, \dots, \lambda_p)$ be a diagonal matrix with $\lambda_1 \geq \lambda_2 \geq \dots \geq \lambda_p$. Also let $\delta = (0,0,\dots,0,s)$. Suppose furthermore that $\lambda_p + s^{2}/4 < \lambda_d$. Then we have $\tilde{\Sigma}_d = \mathrm{diag}(\lambda_1, \lambda_2, \dots, \lambda_d, 0, 0, \dots, 0)$. Thus $\tilde{\Sigma}_d^{\dagger} = \mathrm{diag}(1/\lambda_1, 1/\lambda_2, \dots, 1/\lambda_d, 0,0, \dots, 0)$ and $\delta^{\dagger} \tilde{\Sigma}_d^{\dagger} \delta = 0$. Therefore, $C(F_0^{(B)}, F_1^{(B)}) = 0$.
+To illustrate the difference between the \Lol~projection and that based on the eigenvectors of the {\em pooled} covariance matrix, consider the following simple example. Let $\Sigma = \mathrm{diag}(\lambda_1, \lambda_2, \dots, \lambda_p)$ be a diagonal matrix with $\lambda_1 \geq \lambda_2 \geq \dots \geq \lambda_p$. Also let $\delta = (0,0,\dots,0,s)$. Suppose furthermore that $\lambda_p + s^{2}/4 < \lambda_d$. Then we have $\tilde{\Sigma}_d = \mathrm{diag}(\lambda_1, \lambda_2, \dots, \lambda_d, 0, 0, \dots, 0)$. Thus $\tilde{\Sigma}_d^{\dagger} = \mathrm{diag}(1/\lambda_1, 1/\lambda_2, \dots, 1/\lambda_d, 0,0, \dots, 0)$ and $\delta^{\dagger} \tilde{\Sigma}_d^{\dagger} \delta = 0$. Therefore, $C(F_0^{(B)}, F_1^{(B)}) = 0$.
 
 On the other hand, we have
 $$ C(F_0^{(A)}, F_1^{(A)}) = \frac{(\delta^{\top} (I - U_{d-1} U_{d-1}^{\top}) \delta)^{2}}{\delta^{\top} (\Sigma - \Sigma_{d-1}) \delta} + \delta^{\top} \Sigma_{d-1}^{\dagger} \delta = \frac{s^4}{s^2 \lambda_p} + 0 = s^{2}/\lambda_p.$$
@@ -1133,7 +1159,7 @@ $$\frac{1}{4} \sum_{i=1}^{K} \sigma^2 \chi_{1}^{2}(\tau) \geq \lambda_{d} - \lam
 where $K$ is Poisson distributed with mean parameter $\theta$ and $\chi_{i}^{2}(\tau)$ is the non-central chi-square distribution with one degree of freedom and non-centrality parameter $\tau$. Thus if $\lambda_{d} - \lambda_{d+1} \geq C \theta \tau^2 \log{p}$ for sufficiently large $p$ and for some constant $C$, then this probability can also be made arbitrarily close to $1$.
 
 \subsection{Finite Sample Performance}
-We now consider the finite sample performance of LOL and PCA-based classifiers in the high-dimensional setting with small or moderate sample sizes, e.g., when $p$ is comparable to $n$ or when $p \gg n$. Once again we assume that $X | Y = i \sim \mathcal{N}(\mu_i, \Sigma)$ for $i = 0, 1$. Furthermore, we also assume that $\Sigma$ belongs to the class $\Theta(p,r,k,\tau,\lambda)$ as defined below.
+We now consider the finite sample performance of \Lol~and PCA-based classifiers in the high-dimensional setting with small or moderate sample sizes, e.g., when $p$ is comparable to $n$ or when $p \gg n$. Once again we assume that $X | Y = i \sim \mathcal{N}(\mu_i, \Sigma)$ for $i = 0, 1$. Furthermore, we also assume that $\Sigma$ belongs to the class $\Theta(p,r,k,\tau,\lambda)$ as defined below.
 
 {\bf Definition} Let $\lambda > 0$, $\tau \geq 1$ and $k \leq p$ be given. Denote by $\Theta(p,r,k,\tau,\lambda,\sigma^2)$ the collection of matrices $\Sigma$ such that
 
@@ -1149,7 +1175,7 @@ $$ \frac{\tau k}{n} \log \frac{e p}{k} \leq c_0, $$ there exists an estimate $\h
 $$ \sup_{\Sigma \in \Theta(p,r,k,\tau,\lambda,\sigma^2)} \mathbb{E} \|\hat{V} \hat{V}^{\top} - V V^{\top} \|^{2} \leq \frac{C k (\sigma \lambda + \sigma^2)}{n \lambda^{2}} \log \frac{e p}{k}$$
 where $C$ is a universal constant not depending on $p,r,k,\tau,\lambda$ and $\sigma^2$.
 
-We can therefore show that provided that $M_0$ and $M_1$ is large enough, and $n$ and $p$ satisfies the condition in the preceding theorem, then provided that the Chernoff information of the population version of LOL is larger than the Chernoff information of the population version of PCA, the expected Chernoff information for the sample version of LOL is also larger than the expected Chernoff information of the sample version of PCA. We emphasize that it is necessary that the LOL and the PCA version both projected into the top $d \leq r$ dimension of the sample covariance matrices.
+We can therefore show that provided that $M_0$ and $M_1$ is large enough, and $n$ and $p$ satisfies the condition in the preceding theorem, then provided that the Chernoff information of the population version of \Lol~is larger than the Chernoff information of the population version of PCA, the expected Chernoff information for the sample version of \Lol~is also larger than the expected Chernoff information of the sample version of PCA. We emphasize that it is necessary that the \Lol~and the PCA version both projected into the top $d \leq r$ dimension of the sample covariance matrices.
 
 
 
@@ -1158,7 +1184,7 @@ We can therefore show that provided that $M_0$ and $M_1$ is large enough, and $n
 \clearpage
 \section{The R implementation of LOL}
 
-Figure \ref{Rimpl} shows the R implementation of LOL for binary classification
+Figure \ref{Rimpl} shows the R implementation of \Lol~for binary classification
 using FlashMatrix \cite{FlashMatrix}. The implementation takes a $D \times I$
 matrix, where each column is a training instance and each instance has D
 features, and outputs a $D \times k$ projection matrix.
@@ -1166,7 +1192,7 @@ features, and outputs a $D \times k$ projection matrix.
 \clearpage
 \begin{figure}[t]
 \begin{lstlisting}
-LOL <- function(m, labels, k) {
+\Lol~<- function(m, labels, k) {
 	counts <- fm.table(labels)
 	num.labels <- length(counts$val)
 	num.features <- dim(m)[1]
