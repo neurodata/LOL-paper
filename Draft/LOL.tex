@@ -5,7 +5,7 @@
 % @jlp: use my fonts for title and main text
 
 \title{\vspace{-50pt}\db{
-\Lol~$>$ PCA
+LOL $>$ PCA
 % Supervised Manifold Learning via Linear Optimal Low-rank Embedding
 % Never Use PCA for Subsequent Classification, Low-Rank Optimal Linear is Better
 % Wide Supervised Manifold Learning by Low-Rank Optimal Linear Discriminant Analysis (LOL)
@@ -26,9 +26,13 @@
 %%% 1st sentence should carry the meaning of the whole paragraph
 
 \begin{abstract}
-It is increasingly easy and common to acquire scientific data with hundreds, millions, or billions of predictors. The goal of is often to find a ``discriminant boundary'' that separates predictors into two classes (for example, healthy and diseased). Unfortunately, when the dimensionality of the predictors is larger than the sample size, there are an infinite number of equally good decision boundaries. To address this challenge researchers rely on dimensionality reduction techniques that search for a low-dimensional representations that preserve the discrimination information. Unfortunately, directly solving for the optimal low-dimensional representation for classification is computationally infeasible. Existing approaches either (i) modify the goal to find a low-dimensional representation that maximizes something else (such as Principal Components Analysis (PCA) or manifold learning to maximize variance), or (ii) make restrictive assumptions that require costly algorithms (such as Lasso to maximize sparsity).
-We therefore develop a method called ``Linear Optimal Low-rank'' embedding (\Lol), by jointly utilizing both the directions of maximal variance (ignoring the classification task) and the direction of maximal discrimination (ignoring the variance). We show via a combination of theoretical results and simulations that \Lol~statistically dominates PCA and other linear methods under relatively general settings, meaning that no matter what the dimensionality of the original data, or the dimensionality of embedded data, or sample size, \Lol~finds a better representation of the data for subsequent classification, while adding negligible additional computational cost. Additional numerical experiments demonstrate that the same intuition may fruitfully be applied to hypothesis testing and regression.
-We demonstrate the performance of \Lol~as compared with existing standard methods on a genetics application, an image recognition application, and a connectomics application with over 500 million features comprising $>$400 gigabytes.
+It is increasingly easy and common to acquire scientific data with hundreds, millions, or billions of predictors. The goal of is often to find a ``discriminant boundary'' that separates predictors into two classes (for example, healthy and diseased). Unfortunately, when the dimensionality of the predictors is larger than the sample size, there are an infinite number of equally good decision boundaries. To address this challenge researchers rely on dimensionality reduction techniques that search for a low-dimensional representations that preserve the discrimination information. Unfortunately, directly solving for the optimal low-dimensional representation for classification is computationally infeasible.
+Instead, the nearly ubiqutous approach is to utilize Principal Components Analysis (PCA), which solves a surrogate problem: finding the directions that maximize variance, rather than maximize classification accuracy.
+Recently a second approach also became prominent:
+% Existing approaches either (i) modify the goal to find a low-dimensional representation that maximizes something else (such as Principal Components Analysis (PCA) or manifold learning to maximize variance), or (ii)
+try to directly maximize classification accuracy under  restrictive assumptions about the geometry of the data that require costly algorithms (such as Lasso to maximize sparsity).
+Instead, we developed a method called ``Linear Optimal Low-rank'' embedding (\Lol), by jointly utilizing both the directions of maximal variance (ignoring the classification task) and the direction of maximal discrimination (ignoring the variance). We show via a combination of theoretical results and simulations that \Lol~finds a better low-dimensional representation of the data for subsequent classification under  relatively general settings, meaning that no matter what the dimensionality of the original data, or the dimensionality of embedded data, or sample size, \Lol~finds a better representation of the data for subsequent classification, while adding negligible additional computational cost. Additional numerical experiments demonstrate that the same intuition may fruitfully be applied to hypothesis testing and regression.
+We demonstrate the performance of \Lol~on three different applications: (i) sparse genetics, (ii) dense images, and (iii) connectomics application with over 500 million features comprising $>$400 gigabytes.
 In each case, \Lol~outperforms the other methods, while only requiring a few minutes on a single machine to run even on the huge dataset. Our open source implementation of \Lol~is easy to use, and computationally efficient, making it poised to tackle supervised dimensionality reduction challenges across disciplines.
 
 
@@ -185,29 +189,37 @@ To demonstrate the utility of \Lol, we  first consider one of the most popular b
 % Figure \ref{f:mnist}C shows n'=500 randomly selected training samples from the digits 3, 7, and 8, embedded into the first two dimensions using each of the three approaches. The colors of the embedded points correspond to those in the leftcolumn, that is, 3 is blue, 7 is red, and 8 is green.
 % FIgure \ref{f:mnist}D shows a smoothed histogram of the posterior probabilities of each test samples after classifying.
 \sct{Lasso}, by virtue of being a sparse method, finds the pixels that most discriminate the 3 classes (column B).  The resulting embeddings mostly live along the boundaries (column C), because these images are close to binary, and therefore, images either have or do not have a particular pixel. Indeed, although the images themselves are nearly sparse (over 80\% of the pixels in the dataset have intensity $\leq 0.05$),  a low-dimensional discriminant boundary does not seem to be sparse, as evidenced by substantial overlap between the posteriors for 3 and 8 (panel D).
-
-
+%
 \Rrlda~does poorly, essentially failing to discriminate these digits at all. This is because the low dimensional embedding implicit in \Rrlda~subtracts out the difference of the means, only utilizing the dimensions that maximize variance (see Appendix \ref{sec:pca} for details). In this setting, it seems the directions that maximally separate the classes are not well aligned with the directions of maximal variance.
 On the other hand, \Pca~does reasonably well, as it implictly includes the discriminant directions merely by not subtracting them out, but does not utilize them particularly well.
 % suggesting that the dimensions that maximize variance in this setting are ``close'' to the directions that maximize differences between classes.
 % \Lda, on the other hand, finds the linear combinations of training samples that maximize the variance.  This unsupervised linear manifold learning method results in projection matrices that indeed look like linear combinations of the three different digits.  The goal here, however, is separating classes, not maximizing variability.  The resulting embeddings are not particularly well separated, suggesting the the directions of discriminability are not the same as the directions of maximum variance.
-\Lol~is our newly proposed supervised linear manifold learning method.  The projection matrices it learns look qualitatively much like those of \Rrlda~and\Pca. This is not surprising, as they are all linear combinations of the training examples.
+
+\Lol~is our newly proposed supervised linear manifold learning method.  The projection matrices it learns look qualitatively much like those of \Rrlda~and \Pca. This is not surprising, as they are all linear combinations of the training examples.
 The resulting embeddings however, look quite different.
- The three different classes are very clearly separated by even the first two dimensions.  The result of these embeddings yields classifiers whose performance is obvious from looking at the embeddings: \Lol~achieves significantly smaller error than the other  approaches (quantified by the black area under the overlapping curves).
+ The three different classes are very clearly separated by even the first two dimensions.  The result of these embeddings yields classifiers whose performance is obvious from looking at the embeddings: \Lol~achieves significantly smaller error than the other  approaches.
 This numerical experiment justifies the use of \Lol, we next build a geometric intuition for \Lol~in simple simulated examples, to better illustrate when we can expect \Lol~to outperform other methods, and perhaps more importantly, when we expect  \Lol~to fail.
 
 % \clearpage
 \subsection*{Linear Gaussian Intuition}
 
-The above real data example suggests the geometric intuition for when \Lol~outperforms its sparse and unsupervised counterparts.  To further investigate, both theoretically and numerically, we consider the simplest setting that illustrates the relevant geometry.  In particular, we consider a two-class classification problem, where both classes are distributed according to a multivariate normal distribution, where the two classes have the same covariance matrix. so that the only difference between the classes is their means (we call this the Linear Discriminant Analysis (\Lda) model; see Methods for details).
+% The above real data example suggests the geometric intuition for when \Lol~outperforms its sparse and unsupervised counterparts.
+To build intuition about when \Lol~performs well, and when it does not,
+% further investigate, both theoretically and numerically,
+we consider the simplest high-dimensional classification setting.
+In particular, we consider a two-class classification problem, where both classes are distributed according to a multivariate normal distribution, and the two classes have the same covariance matrix $\bSig$. so that the only difference between the classes is their means.
+ % (we call this the Linear Discriminant Analysis (\Lda) model; see Methods for details).
 
 
 
 
 % To motivate \Lol, and the following simulations, lets c
-Consider what the optimal projection would be in this scenario. The optimal low-dimensional projection is analytically available as the dot product of the difference of means and the inverse covariance matrix, $\mb{A}_*=\bdel\T \bSig^{-1}$ \cite{Bickel2004a} (see Methods for derivation).
-\Pca, the dominant unsupervised manifold learning method, utilizes only the covariance structure of the data, and ignores the difference between the means (because \Pca~for classification operates on the class-conditionally centered data, see Methods for details).
-In particular, \Pca~would project the data on the top d eigenvectors of the  covariance matrix.
+% Consider what the optimal projection would be in this scenario.
+The optimal low-dimensional projection is analytically available in this scenario: it is the dot product of the difference of means and the inverse covariance matrix, $\bdel\T \bSig^{-1}$ \cite{Bickel2004a} (see Methods for derivation).
+\Pca, the dominant unsupervised manifold learning method, utilizes only the covariance  of the data $\bSig$, and ignores the difference between the means $\bdel$.
+ % (because \Pca~for classification operates on the class-conditionally centered data, see Methods for details).
+In particular, \Pca~would project the data on the top $d$ eigenvectors of the  sample covariance matrix.
+
 \textbf{The key insight of our work is the following: we can combine the difference of the means and the covariance matrix in a simple fashion, rather than just the covariance matrix, to find a low dimensional projection.}
 Na\"ively, this should typically improve performance, because in this stylized scenario, both are important. The \sct{F2M} literature has a similar insight, but a different construction that requires the dimensionality to be smaller than the sample size \cite{Li1991a, Tishby1999a, Globerson2003a, Cook2005a,Fukumizu2004a}. We implement our idea by simply concatenating the difference of the means with the top d eigenvectors of the  covariance matrix.
 This is equivalent to first projecting onto the difference of the means vector, and then projecting the residuals onto the first d principle components.
