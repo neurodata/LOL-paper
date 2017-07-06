@@ -146,7 +146,8 @@ In addition to the above quantitative properties, \Lol~is intuitive, only has a 
 \section*{Results}
 % get 192 lines, have 240, need to remove 50.
 
-\subsection*{An Illustrative Real Data Example of Supervised Linear Manifold Learning}
+\subsection*{Linear Optimal Low-rank}
+% An Illustrative Real Data Example of Supervised Linear Manifold Learning}
 
 
 
@@ -154,18 +155,20 @@ In addition to the above quantitative properties, \Lol~is intuitive, only has a 
 \begin{figure}
 \centering % l b r t
 %  trim={<left> <lower> <right> <upper>}
-\includegraphics[width=0.7\linewidth,trim=1cm 0cm 0cm 1.0cm,clip=true]{../Figs/mnist}
-\caption{
-Illustrating four different classifiers---\sct{Lasso}~(top), \Lda~(second),  \Pca~(third), and \Lol~(bottom)---for embedding images of the digits 3, 7, and 8 (from MNIST), each of which is 28 $\times$ 28 = 784 dimensional.
-\textbf{(A)} A subset of training samples  (boundary colors are only for visualization purposes).
-\textbf{(B)} The first four projection matrices learned by the  different approaches on 100 training samples from each class.
-Note that \sct{Lasso}~is sparse and supervised, \Pca which is dense and unsupervised, and both \Lda~and \Lol~are dense and supervised.
-\textbf{(C)} Embedding 500 test samples into the top two dimensions using each approach.  Digits color coded as in (A).
+\includegraphics{../Figs/mnist2.pdf} %[height=2in],trim=1cm 0cm 0cm 1.0cm,clip=true
+\caption{Schematic of Linear Optimal Low-rank Embedding using 300 samples of the numbers 3, 7, and 8 from the MNIST dataset; each sample is a 28 $\times$ 28 = 784 dimensional image.
+% Illustrating four different classifiers---\sct{Lasso}~(top), \Lda~(second),  \Pca~(third), and \Lol~(bottom)---for embedding images of the digits 3, 7, and 8 (from MNIST), each of which is 28 $\times$ 28 = 784 dimensional.
+\textbf{(A)} A subset of training samples  (boundary colors are  for visualization purposes).
+\textbf{(B)} The first four projection matrices learned by \Lol~on 100 training samples from each class.
+% Note that \sct{Lasso}~is sparse and supervised, \Pca which is dense and unsupervised, and both \Lda~and \Lol~are dense and supervised.
+\textbf{(C)} Projecting 500 test samples into the top two learned dimensions.
+ % using each approach.
+ Digits color coded as in (A).
 \textbf{(D)}  The estimated posterior distributions for 3 and 8 of test samples after
-projecting data into two dimensions via each method and using Lasso or LDA to classify.
+projecting data into two dimensions and using LDA to classify.
 % The vertical line shows the classification threshold.
 The filled area is the estimated error rate; the goal of any classification algorithm is to minimize that area.
-Clearly, \Lol~exhibits the best separation after embedding, which results in the best classification performance.
+% Clearly, \Lol~exhibits the best separation after embedding, which results in the best classification performance.
 }
 \label{f:mnist}
 % \end{wrapfigure}
@@ -173,32 +176,36 @@ Clearly, \Lol~exhibits the best separation after embedding, which results in the
 
 A general strategy for high-dimensional classification proceeds as  schematized in Figure \ref{f:mnist}:
 (A) obtain/select $n$ training samples of the data,
-(B) learn a ``linear projection map'' from high-dimensions to low dimension,
-(C) project $m$ testing samples onto the lower dimensional space,
-(D) classify the embedded testing samples using a linear classifier.
-We consider  four different linear dimensionality reduction methods---\sct{Lasso}, \Rrlda, \Pca, and \Lol---each of which we compose with a linear classifier to form high-dimensional classifiers. \footnote{Although the original \sct{Lasso}~does not first find a low dimensional representation and then classify, more recent generalizations do (for exampel, \citet{Zou2006a}), and then improve on \sct{Lasso}'s theoretical and empirical properties, so will always mean Adaptive \sct{Lasso} here.}
+(B) learn a ``projection'' that converts the high-dimensional data to a low dimension representation,
+(C) use that projection to project the data into the lower dimensional space,
+(D) classify the projected  samples using a standard classifier.
+% We consider  four different linear dimensionality reduction methods---\sct{Lasso}, \Rrlda, \Pca, and \Lol---each of which we compose with a linear classifier to form high-dimensional classifiers. \footnote{Although the original \sct{Lasso}~does not first find a low dimensional representation and then classify, more recent generalizations do (for exampel, \citet{Zou2006a}), and then improve on \sct{Lasso}'s theoretical and empirical properties, so will always mean Adaptive \sct{Lasso} here.}
 
-To demonstrate the utility of \Lol, we  first consider one of the most popular benchmark datasets ever, the MNIST dataset \cite{mnist}.  This dataset consists of $n=60$,$000$ examples of images of the digits 0 through 9.  Each such image is represented by a 28$\times$28 matrix, which means that the observed (or ambient) dimensionality of the data is $p=28^2=784$.  Because we are motivated by the $n \ll p$ scenario, we subsample the data to select $n=300$ examples of the numbers $3$, $7$, and $8$ ($100$ of each). We then apply all four approaches to this subsample of the MNIST dataset, learning a projection, and embedding $500$ testing samples, and classifying the resulting embedded data.
-
-% Figure \ref{f:mnist}A shows several examples of digit, the border of each digit is colored for visualization purposes only.
-% Figure \ref{f:mnist}B shows the estimated projection matrices for each approach (see Methods for details).
-% These are the matrices that transform the data into a low-dimensional representation.
-
-
-
-% Figure \ref{f:mnist}C shows n'=500 randomly selected training samples from the digits 3, 7, and 8, embedded into the first two dimensions using each of the three approaches. The colors of the embedded points correspond to those in the leftcolumn, that is, 3 is blue, 7 is red, and 8 is green.
-% FIgure \ref{f:mnist}D shows a smoothed histogram of the posterior probabilities of each test samples after classifying.
-\sct{Lasso}, by virtue of being a sparse method, finds the pixels that most discriminate the 3 classes (column B).  The resulting embeddings mostly live along the boundaries (column C), because these images are close to binary, and therefore, images either have or do not have a particular pixel. Indeed, although the images themselves are nearly sparse (over 80\% of the pixels in the dataset have intensity $\leq 0.05$),  a low-dimensional discriminant boundary does not seem to be sparse, as evidenced by substantial overlap between the posteriors for 3 and 8 (panel D).
+To illustrate how \Lol~works,  first consider one of the most popular benchmark datasets, the MNIST dataset \cite{mnist}.  This dataset consists of $n=60$,$000$ examples of images of the digits 0 through 9.  Each such image is represented by a 28$\times$28 matrix, which means that the observed (or ambient) dimensionality of the data is $p=28^2=784$.  Because we are motivated by the $n \ll p$ scenario, we subsample the data to select $n=300$ examples of the numbers $3$, $7$, and $8$ ($100$ of each).
+We then apply
+% all four approaches
+\Lol~to this subsample of the MNIST dataset, learning a projection,  projecting the data, and learning a classifier using the projected data.
 %
-\Rrlda~does poorly, essentially failing to discriminate these digits at all. This is because the low dimensional embedding implicit in \Rrlda~subtracts out the difference of the means, only utilizing the dimensions that maximize variance (see Appendix \ref{sec:pca} for details). In this setting, it seems the directions that maximally separate the classes are not well aligned with the directions of maximal variance.
-On the other hand, \Pca~does reasonably well, as it implictly includes the discriminant directions merely by not subtracting them out, but does not utilize them particularly well.
-% suggesting that the dimensions that maximize variance in this setting are ``close'' to the directions that maximize differences between classes.
-% \Lda, on the other hand, finds the linear combinations of training samples that maximize the variance.  This unsupervised linear manifold learning method results in projection matrices that indeed look like linear combinations of the three different digits.  The goal here, however, is separating classes, not maximizing variability.  The resulting embeddings are not particularly well separated, suggesting the the directions of discriminability are not the same as the directions of maximum variance.
+% \sct{Lasso}, by virtue of being a sparse method, finds the pixels that most discriminate the 3 classes (column B).  The resulting embeddings mostly live along the boundaries (column C), because these images are close to binary, and therefore, images either have or do not have a particular pixel. Indeed, although the images themselves are nearly sparse (over 80\% of the pixels in the dataset have intensity $\leq 0.05$),  a low-dimensional discriminant boundary does not seem to be sparse, as evidenced by substantial overlap between the posteriors for 3 and 8 (panel D).
+% %
+% \Rrlda~does poorly, essentially failing to discriminate these digits at all. This is because the low dimensional embedding implicit in \Rrlda~subtracts out the difference of the means, only utilizing the dimensions that maximize variance (see Appendix \ref{sec:pca} for details). In this setting, it seems the directions that maximally separate the classes are not well aligned with the directions of maximal variance.
+% On the other hand, \Pca~does reasonably well, as it implictly includes the discriminant directions merely by not subtracting them out, but does not utilize them particularly well.
 
-\Lol~is our newly proposed supervised linear manifold learning method.  The projection matrices it learns look qualitatively much like those of \Rrlda~and \Pca. This is not surprising, as they are all linear combinations of the training examples.
-The resulting embeddings however, look quite different.
- The three different classes are very clearly separated by even the first two dimensions.  The result of these embeddings yields classifiers whose performance is obvious from looking at the embeddings: \Lol~achieves significantly smaller error than the other  approaches.
-This numerical experiment justifies the use of \Lol, we next build a geometric intuition for \Lol~in simple simulated examples, to better illustrate when we can expect \Lol~to outperform other methods, and perhaps more importantly, when we expect  \Lol~to fail.
+
+% @jovo:something in here about how LOL learns the embedding
+\Lol~is our proposed supervised linear manifold learning method.  The projection matrices it learns are linear combinations of the original digits.
+% This is not surprising, as they are all linear combinations of the training examples.
+% The resulting embeddings however, look quite different.
+Upon projecting new samples into the low dimensional space, they are clearly separable into thee different classes, even if only using the first two dimensions.
+When training a linear classifier on the data, it is very easy to learn a linear  discriminant boundary that performs well.
+
+ % The three different classes are very clearly separated by even the first two dimensions.  The result of these embeddings yields classifiers whose performance is obvious from looking at the embeddings: \Lol~achieves significantly smaller error than the other  approaches.
+% This numerical experiment justifies the use of \Lol, we next build a geometric intuition for \Lol~in simple simulated examples, to better illustrate when we can expect \Lol~to outperform other methods, and perhaps more importantly, when we expect  \Lol~to fail.
+
+% \Lol~is our proposed supervised linear manifold learning method.  The projection matrices it learns look qualitatively much like those of \Rrlda~and \Pca. This is not surprising, as they are all linear combinations of the training examples.
+% The resulting embeddings however, look quite different.
+%  The three different classes are very clearly separated by even the first two dimensions.  The result of these embeddings yields classifiers whose performance is obvious from looking at the embeddings: \Lol~achieves significantly smaller error than the other  approaches.
+% This numerical experiment justifies the use of \Lol, we next build a geometric intuition for \Lol~in simple simulated examples, to better illustrate when we can expect \Lol~to outperform other methods, and perhaps more importantly, when we expect  \Lol~to fail.
 
 % \clearpage
 \subsection*{Linear Gaussian Intuition}
@@ -221,8 +228,11 @@ The optimal low-dimensional projection is analytically available in this scenari
 In particular, \Pca~would project the data on the top $d$ eigenvectors of the  sample covariance matrix.
 
 \textbf{The key insight of our work is the following: we can combine the difference of the means and the covariance matrix in a simple fashion, rather than just the covariance matrix, to find a low dimensional projection.}
-Na\"ively, this should typically improve performance, because in this stylized scenario, both are important. The \sct{F2M} literature has a similar insight, but a different construction that requires the dimensionality to be smaller than the sample size \cite{Li1991a, Tishby1999a, Globerson2003a, Cook2005a,Fukumizu2004a}. We implement our idea by simply concatenating the difference of the means with the top d eigenvectors of the  covariance matrix.
-This is equivalent to first projecting onto the difference of the means vector, and then projecting the residuals onto the first d principle components.
+Na\"ively, this should typically improve performance, because in this stylized scenario, both are important.
+% @jovo: for discussion
+The \sct{F2M} literature has a similar insight, but a different construction that requires the dimensionality to be smaller than the sample size \cite{Li1991a, Tishby1999a, Globerson2003a, Cook2005a,Fukumizu2004a}.
+We implement our idea by simply concatenating the difference of the means with the top $d$ eigenvectors of the  covariance matrix.
+This is equivalent to first projecting onto the difference of the means vector, and then projecting the residuals onto the first $d$ principle components.
 Thus, it requires almost no additional computational time or complexity over that of \Pca, rather, merely estimates the difference of the means.
 In this sense, \Lol~can be thought of as a very simple  ``supervised \Pca''.
 
