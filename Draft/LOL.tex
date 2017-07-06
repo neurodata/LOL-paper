@@ -1,13 +1,14 @@
-\documentclass[10pt]{article}
+\documentclass[10pt]{article}
 \input{preamble.tex}
 
 % @jlp: put in overleaf
 % @jlp: use my fonts for title and main text
 
 \title{\vspace{-50pt}\db{
-LOL $>$ PCA
+%On Why Principal Component Analysis Does the Wrong Thing
+%LOL $>$ PCA
 % Supervised Manifold Learning via Linear Optimal Low-rank Embedding
-% Never Use PCA for Subsequent Classification, Low-Rank Optimal Linear is Better
+ Do Not Use Principal Components Analysis (PCA) for Prediction Problems, LOL is Typically Better
 % Wide Supervised Manifold Learning by Low-Rank Optimal Linear Discriminant Analysis (LOL)
 }}
 \author{Joshua T.~Vogelstein,  Minh Tang, Da Zheng, Randal Burns, Mauro Maggioni}
@@ -26,20 +27,18 @@ LOL $>$ PCA
 %%% 1st sentence should carry the meaning of the whole paragraph
 
 \begin{abstract}
-It is increasingly easy and common to acquire scientific data with hundreds, millions, or billions of predictors. The goal of is often to find a ``discriminant boundary'' that separates predictors into two classes (for example, healthy and diseased). Unfortunately, when the dimensionality of the predictors is larger than the sample size, there are an infinite number of equally good decision boundaries. To address this challenge researchers rely on dimensionality reduction techniques that search for a low-dimensional representations that preserve the discrimination information. Unfortunately, directly solving for the optimal low-dimensional representation for classification is computationally infeasible.
-Instead, the nearly ubiqutous approach is to utilize Principal Components Analysis (PCA), which solves a surrogate problem: finding the directions that maximize variance, rather than maximize classification accuracy.
-Recently a second approach also became prominent:
-% Existing approaches either (i) modify the goal to find a low-dimensional representation that maximizes something else (such as Principal Components Analysis (PCA) or manifold learning to maximize variance), or (ii)
-try to directly maximize classification accuracy under  restrictive assumptions about the geometry of the data that require costly algorithms (such as Lasso to maximize sparsity).
-Instead, we developed a method called ``Linear Optimal Low-rank'' embedding (\Lol), by jointly utilizing both the directions of maximal variance (ignoring the classification task) and the direction of maximal discrimination (ignoring the variance). We show via a combination of theoretical results and simulations that \Lol~finds a better low-dimensional representation of the data for subsequent classification under  relatively general settings, meaning that no matter what the dimensionality of the original data, or the dimensionality of embedded data, or sample size, \Lol~finds a better representation of the data for subsequent classification, while adding negligible additional computational cost. Additional numerical experiments demonstrate that the same intuition may fruitfully be applied to hypothesis testing and regression.
+It is increasingly common to acquire scientific data with hundreds, millions, or billions of features. 
+The goal  of these massive datasets is often to discover dimensions that separate the data into two classes (for example, healthy and diseased). 
+Unfortunately, when the dimensionality of the features is larger than the sample size, there are an infinite number of equally good dimensions. 
+Directly finding a small set of dimensions that maximize classification accuracy is computationally intractable.  
+Instead, the nearly ubiquitous approach is to utilize Principal Components Analysis (PCA) to find a low-dimensional representation of the features that maximize  variance.
+However, in general there is no reason to suspect that the dimensions that maximize classification accuracy will be close to those that maximize variance.
+Indeed, we show that, under reasonable assumptions, those two sets of directions will be approximately independent.
+To mitigate this issue, we developed a method called ``Linear Optimal Low-rank'' embedding (\Lol), which extends PCA by 
+by jointly utilizing both the dimensions that maximize classification accuracy (ignoring the variance) and the dimensions that maximize variance (ignoring the classification task). 
+We show via a combination of theoretical results and simulations that \Lol~finds a better low-dimensional representation of the data for subsequent classification under  relatively general settings, meaning that no matter what the dimensionality of the original data, or the dimensionality of embedded data, or sample size, \Lol~finds a better representation of the data for subsequent classification, while adding negligible additional computational cost. Additional numerical experiments demonstrate that the same intuition may fruitfully be applied to hypothesis testing and regression.
 We demonstrate the performance of \Lol~on three different applications: (i) sparse genetics, (ii) dense images, and (iii) connectomics application with over 500 million features comprising $>$400 gigabytes.
 In each case, \Lol~outperforms the other methods, while only requiring a few minutes on a single machine to run even on the huge dataset. Our open source implementation of \Lol~is easy to use, and computationally efficient, making it poised to tackle supervised dimensionality reduction challenges across disciplines.
-
-
-% In the 21st century high-dimensional observations abound.  In classical statistics, it is well known that as the dimensionality of a dataset increase, the number of samples required to estimate properties thereof increases even faster.  A number of techniques have been developed to stave off this ``curse of dimensionality'', including dimensionality reduction and regularization.  Mitigating this curse is especially demanding in supervised learning problems, such as classification. The challenge in finding a low-dimensional discriminant boundary in the face of high-dimensional observations is that direct searches are computationally infeasible.  Therefore, previous art have taken one of two approaches.
-% First, one can ignore the discriminant problem, and try to reduce the dimensionality of the data---for example, using principal components analysis or manifold learning techniques---in hopes that one has not discarded the discriminant information.  Second, one directly solve the problem after making a number of overly restrictive assumptions of the data, such as independence and sparsity.
-% Here, we demonstrate via a simple geometric argument that one can algebraically compute a low-dimensional embedding that is approximately optimal with high probability in many settings.  The intuition is that we can  project the data both in the directions of maximal variance (ignoring the classification task) and the linear direction of maximal discrimination (ignoring the variance).  The result is an extremely computationally efficient supervised manifold learning method that we call ``Linear Optimal Low-Rank'' (LOL). \Lol~outperforms state-of-the-art algorithms in a wide variety of settings, including both those for which theoretical arguments predict it should, and in much more general settings for which we are unable as yet to obtain solid theoretical footing.  This includes both simulated settings, where our intuition enables us to characterize a number of simple variants designed for more complex settings, as well as several benchmark problems.
-% In particular, \Lol~outperforms several reference algorithms in terms of both efficiency and accuracy on said benchmarks. We therefore believe that \Lol~could be useful in myriad applications, and many extensions are readily available.
 \end{abstract}
 
 \vspace{15pt}
@@ -50,103 +49,102 @@ In each case, \Lol~outperforms the other methods, while only requiring a few min
 % intro: we get 64, we have 157.  need to reduce by 2x
 
 
-% par 1 problem statement
-%   classify high-dimensional data quickly/easily
-% par 2 prior art and associated limitations
-%   PCA: discards signal (PCA)
-%   sparse: makes sparse assumptions, does not scale to millions of dimensions
-%   dictionary learning: no theoretical guarantees, algs can be very slow
-%   RR-LDA: does not take full advantage of assumptions, leads to more variance, does not perform well
-%
-% par 3 primary challenges
-%   low dimensional projection that captures large amount of class conditional signal (small bias), and small variance
-%
-% par 4 illustration of challenge
-%   MNIST
-%     sparse: does not perform well or provide intuition
-%     RR-LDA: high variance, no separation
-%     PCA: works pretty good
-%     LOL: works even better
+% properties we want classifier to have:
+%1. simple geometric intuition (uses means and variances)
+%2. can be applied to multiclass problems, and generalized to other problems
+%3. theory (for small p)
+%4. efficient alg (for small p)
 
-% par 5 proposed solution
-%   combine mean diff with eigs
+% but LDA doesn't have:
+%4. strong theoretical justification for performance for any dimensionality
+%4. efficient implementations for big data
 
-% par 6 action
-%   easy to run, provably better, empirically better, just as fast.
+% par 2
+% manifold learning solves the wrong problem, and doesn't have OOS, or scale (except PCA)
+
+% par 3
+% sparse methods solve an overly constrained problem, don't scale, often only work for 2-class problems (don't generalize).
+
+% no method for high-d data that addresses also desiderata satisfactorily
+
+% par 4: LOL 
+% uses mean & variance
+% can be extend
+% theory for large p
+% implementation for large p
+
+% par 5 resolution
+% empirical demonstrations
+%  easy to run, provably better, empirically better, just as fast.
+
+
 % @jlp: add citations, make comments if you don't know which one they should be.
 
 Supervised learning---the art and science of estimating statistical relationships using labeled training data---is a crucial tool in scientific discovery.  Supervised learning has been enabled a wide variety of basic and applied findings, ranging from discovering biomarkers in omics data \cite{Vogelstein2014a} to object recognition from images \cite{Krizhevsky2012}.
 % , and includes celebrated methods such as support vector machines, random forests, and deep networks \cite{Hastie2004}.
-A special case is classification; a classifier predicts the ``class'' of a novel observation via partitioning the space of observations (for example, predicting male  or female from MRI scans). One of the most foundational and important approaches to classification is called ``Fisher's Linear Discrimnant Analysis'' (\Lda) \cite{Fisher1925a}, which is based on very simple geometric reasoning.  In particular, it is guaranteed to find the optimal linear classifier under the assumption that the data are Gaussian. Moreover, it can be applied no matter how many classes are present. Finally, its solution is analytic, therefore obviating costly numerical optimizations and enabling scalability. This solid theoretical foundation, easy interpretation, computational efficiency, and widespread utility perhaps contribute to \Lda's longevity, as it remains one of {the} few reference classifiers nearly a century later.
+A special case is classification; a classifier predicts the ``class'' of a novel observation via partitioning the space of observations (for example, predicting male  or female from MRI scans). One of the most foundational and important approaches to classification is called ``Fisher's Linear Discriminant Analysis'' (\Lda) \cite{Fisher1925a}. 
+\Lda~has a number of highly desirable properties for a reference classifier.  
+First, it is built based on very simple geometric reasoning: when the data are Gaussian, all the information is in the means and variances, so the optimal classifier uses both the means and the variances.  
+Second, due to its simplicity, \Lda~can be applied to multiclass problems, and can easily be extended to other problems.
+Third, theorems guarantee that when sample size is large, and dimensionality is small, \Lda~converges to the optimal classifier under the Gaussian assumption.
+And finally, again, because it is so simple, algorithms for implementing it are highly efficient.
+
+
+%which is based on very simple geometric reasoning.  In particular, it is guaranteed to find the optimal linear classifier under the assumption that the data are Gaussian. Moreover, it can be applied no matter how many classes are present. Finally, its solution is analytic, therefore obviating costly numerical optimizations and enabling scalability. This solid theoretical foundation, easy interpretation, computational efficiency, and widespread utility perhaps contribute to \Lda's longevity, as it remains one of {the} few reference classifiers nearly a century later.
 
 Modern scientific datasets, however, present challenges for classification that were not addressed in Fisher's era.
 Specifically, the dimensionality of datasets is quickly ballooning.
-Currently, across many scientific disciplines, the raw data might consist of hundreds of millions  of features or dimensions; for example, an entire genome or connectome.  While the dimensionality of these data have increased precipitously, the sample sizes have not witnessed a concommitant increase.
-This ``large p, small n'' problem is disatrous for many classical statistical approaches because they were designed with ``small p, large n'' in mind. For example, \Lda~estimates a hyperplane in $p-1$ dimensions when the data are $p$ dimensional.  But there are an infinite number of $p-1$ dimensional hyperplanes that fit the data exactly when $p<n$.  To see this, imagine fitting a line to a single point, or a plane to two points.  In each case, one can choose any rotation, and still fit the data perfectly.  Doing so, however, requires the algorithm to make a choice that is independent of the existing data, and therefore unlikely to be correct.  This problem is typically called ``over-fitting''.
+Currently, across many scientific disciplines, the raw data might consist of hundreds of millions  of features or dimensions; for example, an entire genome or connectome.  While the dimensionality of these data have increased precipitously, the sample sizes have not witnessed a concomitant increase.
+This ``large p, small n'' problem is disastrous for many classical statistical approaches because they were designed with ``small p, large n'' in mind. \Lda~in particular estimates a hyperplane in $p-1$ dimensions when the data are $p$ dimensional.  But there are an infinite number of $p-1$ dimensional hyperplanes that fit the data exactly when $p>n$.  To visualize this, imagine fitting a line to a single point, or a plane to two points.  In each case, one can choose any rotation, and still fit the data perfectly.  
+Therefore, without further constraints, algorithms will ``over-fit'', effectively randomly choose one of the many equally good fits, typically yielding a line or plane that is far from the optimal one.
+%Doing so, however, requires the algorithm to make a choice that is independent of the existing data, and therefore unlikely to be correct.  
+%This problem is called ``over-fitting''.
+%To address this challenge, ``supervised manifold learning''
+Supervised manifold learning is field devoted to combating this 
+%Many statistical and machine learning approaches have been developed
+%% over the last 100 years
+%to combat 
+this over-fitting issue  by searching for a small number of dimensions that maximize predictive accuracy.
+Two complementary strategies have been pursued.
+
+Perhaps the most prominent strategy is to use principal components analysis (\Pca) \cite{PCA} to ``pre-process'' the data, that is, to reduce the dimensionality of the data prior to a subsequent classification using the much lower dimensional data.  While hugely successful, \Pca~is a wholly \emph{unsupervised} dimensionality reduction technique, meaning that \Pca~does not utilize the class labels while learning the low dimensional representation.  This results in dimensions that have no statistical guarantee of being close to the best ones, and in fact, as we show below, with high probability will be completely wrong.  Other unsupervised nonlinear dimensionality reduction techniques,  called manifold learning, are ill-equipped to address this problem because they typically only learn a low-dimensional representation for a set of points; thus, they are unable to be applied to  new test data.   Moreover, they often require costly numerical methods that do not scale, and lack theoretical justification in this setting. 
 
 
 
-Many statistical and machine learning approaches have been developed
-% over the last 100 years
-to combat this over-fitting issue when the dimensionality exceeds the sample size.
-Perhaps the most prominent strategy is to use principal components analysis (\Pca) \cite{PCA} to ``pre-process'' the data, that is, to reduce the dimensionality of the data prior to a subsequent classification using the much lower dimensional data.  While hugely successful, \Pca~is a wholly \emph{unsupervised} dimensionality reduction technique, meaning that \Pca~does not utilize the class labels while learning the low dimensional representation. A closely related approach for supervised learning is called ``reduced-rank \Lda'' (\Rrlda).  As we will show below, while \Pca~does not optimally utilize the class labels in its low-dimensional representation, \Rrlda~actually \emph{discards} this information.
+%A closely related approach for supervised learning is called ``reduced-rank \Lda'' (\Rrlda).  As we will show below, while \Pca~does not optimally utilize the class labels in its low-dimensional representation, \Rrlda~actually \emph{discards} this information.
 
 
-A different strategy that focuses on utilizing the lable information is called  ``sparsity''. Sparse methods  find a small subset of the original features to use for subsequent inference \cite{sparsity}. There are many such approaches (often called ``feature selection'' or ``feature screening''); the advantage of these approaches is that the result is sometimes more easily interpretable.  The disadvantage, however, is that exactly solving the problem is computationally intractable, requiring time that is exponential in the number of features.  That said, varous approximations enable efficient algorithms that have provable guarantees under certain assumptions.  \Lasso~is a particularly popular algorithm that has these properties. Unfortunately, \Lasso~still cannot run on millions of dimensions, and it has a hyper-parameter that requires careful tuning, and even then often produces spurious answers even when the unrealistically strict assumptions are met \cite{lasso-fail}.
-A more recent approach is called ``regularized optimal affine discriminant'' (\Road). \Road~finds the optimal sparse dimensionaly reduction under certain gaussian assumptions.  \Road, however, can only be applied in two-class settings, and requires solving a computationally costly numerical optimization problem, and thus does not scale to large dimensionality.
+A different strategy that focuses on utilizing the class label information is called  ``sparsity''. Sparse methods  find a small subset of the original features to use for subsequent inference \cite{sparsity}. There are many such approaches (often called ``feature selection'' or ``feature screening''); the advantage of these approaches is that the result is sometimes more easily interpretable.  The disadvantage, however, is that exactly solving the problem is computationally intractable, requiring time that increases exponentially in the number of features.  Various approximations enable efficient algorithms that have provable guarantees under certain limiting assumptions.  \Lasso~is a particularly popular algorithm that has these properties. Unfortunately, \Lasso~cannot run on millions of dimensions,  it has a hyper-parameter that requires careful tuning, and  often produces spurious answers even when the unrealistically strict assumptions are met \cite{lasso-fail}.
+A more recent approach is called ``regularized optimal affine discriminant'' (\Road). \Road~finds the optimal sparse dimensionality reduction under certain Gaussian assumptions.  \Road, however, can only be applied in two-class settings, and requires solving a computationally costly numerical optimization problem, and thus does not scale to large dimensionality.
 
 
-Thus, analysts desire a method that has a simple geometric intuition even in high-dimensions and can be applied when there are any number of classes, but also has theoretical gurantees, without making addition assumptions about the data and requiring carefully tuning hyperparameters, and can scale to arbitrarily high-dimensional data in a computationally efficient fashion.
+There is therefore a gap: the field lacks the high-dimensional analog of Fisher's \Lda, that is, a method based on simple geometric intuition, that can be applied to multiclass and more general problems, with theorems that guarantee good performance for arbitrarily large dimensionality, and an efficient implementation that scales to hundreds of millions of features. 
 %
-To address these concerns,  we developed ``Linear Optimal Low-rank'' embedding (\Lol). The key intuition behind \Lol~is that we can jointly utilize both  directions that are informative with regard to the classification task (the means) and the directions that maximize the variance (the covariance).
-
-
-
-% To understand \Lol, consider the following simplified scenario.  Assume there exists two classes of data, both of which are sampled according to a high-dimensional Gaussian distribution, and both have the same covariance matrix.  Assuming that there are the same number of observations from each class  implies that the only difference between the two classes are their means.  Figure \ref{f:cigars} shows three different examples of this setting, each with 100 total samples in 1,000 dimensions (only the first two dimensions are shown).
-% In panel \textbf{(A)}, each dimension is independent of the others, but the second dimension is different: the means in the second dimension are further away from one another than they are in all the others, and the variance in that dimension is smaller.  This setting, which we called ``stacked cigars'', is relatively easy for all the above described methods, because the direction of maximal variance is also the direction that is maximally informative about the classification task.
-% @jovo: possibly continue this line of thought?
-
-
-
-
-
-% @jovo: possibly discussion
-% The first century of statistical pattern recognition focused on elegant SL approaches for low-dimensional problems (e.g., Fisher's Linear Discriminant (FLD) \cite{Fisher}), and dimensionality reduction techniques for high-dimensional problems (e.g., Principal Components Analysis (PCA) \cite{PCA}), but did not seriously investigate high-dimensional SL approaches.  More recent work has focused on high-dimensional SL approaches, including sparse methods (e.g., Lasso \cite{Lasso}) and supervised dictionary learning techniques \cite{Mairal2009}.  However, theoretical guarantees for sparse methods require very strict assumptions that are often far from accurate \cite{??}, meaning that sparse methods tend to exhibit significant bias.  Moreover, their suseptibility to correlations of the predictor variables can lead to substantial variance, insofar that which variables are selector can be highly noise dependent \cite{Meinshausen2010c}.
-% Dictionary learning, on the other hand, has scant theoretical guarantees in any setting \cite{??}.  Moreover, because dictionary learning tends to consider a large complex discriminant model, its resulting estimates are highly dependent on initialization choice.  Finally, computationally, both are problematic for big data, in that they require large amounts of time, and implementations on scalable platforms are currently unavailable.
-
-% @jovo: possibly discussion
-% In complementary work, generalizations of principal components to include various kinds of nonlinear dimensionality reduction techniques, collectively referred to as  ``manifold learning'', have been developing recently \cite{??}. These tools are predominantly ``unsupervised'', and therefore, do not explicitly search for a discriminant boundary, and therefore may add significant bias to the problem at hand.  Adding supervision to these techniques so far has been difficult; methods proposed thus far embed the data in an unsupervised fashion first, again, potentially adding bias \cite{Belkin2004a}, and require substantial computations.   Thus, a supervised manifold learning algorithm designed for one of the simplest possible high-dimensional classification problems remains amiss.
-
-% @jovo: probably for discussion
-% The computer science community has been developing tools for big data for several decades now. Specifically, algorithm complexity has lowered significantly, and ability to scale-up and scale-out has increased significantly.  This is true both for simple statistical primitives, such as computing a mean, and more complicated primitives like PCA \cite{??}.  More recently, a large number of distributed machine learning libraries have become available, including Apache Spark's mllib,  H20, Dato, and Vowpal Wabbit \cite{??}.  These focus almost entirely on large sample size and low dimensionality regime, whereas the motivating problems of interest for this work are small sample size and high-dimensionality. Moreover, they utilize a distributed platform that is susceptible to low bandwidth communication between nodes, meaning that as one adds resources, the computations cannot scale out optimally.
-
-
-% Thus, a gap remains in the literature for a statistical tool that, under relatively general assumptions, achieves both small bias and variance, can be made robust, and has easily tunable hyper-parameters.  And complementarily, an implementation of that algorithm that is numerically stable, requires minimal space and time, is highly scalable for high-dimensional problems. Importantly, the method should perform well both on simulated and real data experiments.  And ideally, the software is intuitive, free and open source, and easy to use.
-
-% To address these concerns,  we describe a novel solution, called Low-Rank Optimal Linear Discriminant Analysis (\Lol).
-% We developed \Lol~by considering the above described simple scenario, and realizing that the optimal dimension reduction for such a setting would have to combine both the means and the covariances, because together those two parameters determine the optimal decision boundary.
-
-% @jovo: discussion?
-% While other methods have previous had a similar insight (in particular the ``First Two Moment'' (F2M) methods \cite{Li1991a, Tishby1999a, Globerson2003a, Cook2005a,Fukumizu2004a}), F2M methods only operate in low-dimensional settings.
+%analysts desire a method that has a simple geometric intuition even in high-dimensions and can be applied when there are any number of classes, but also has theoretical guarantees, without making addition assumptions about the data and requiring carefully tuning hyperparameters, and can scale to arbitrarily high-dimensional data in a computationally efficient fashion.
 %
-% Therefore, we decided to combine the means and covariances differently, essentially by first projecting the data onto the means, and then effectively computing PCA on the ``residuals''.  Running FLD after projecting the data onto the subspace spanned jointly by the means and the top principal components comprises the \Lol~method.  In addition to MATLAB and R, we also implemented \Lol~using FlashX, a recently developed big data analytics library \cite{??}.  We were therefore able to take advantage of matrix parallelizations optimized for machines with solid state drives.
-
-We demonstrate \Lol~outperforms---or at least performs no worse than---several reference benchmarks along every  consideration mentioned above.
-This includes proving that \Lol~statistically dominates \Pca~and related linear methods under Gaussian assumption.
+To address these concerns,  we developed ``Linear Optimal Low-rank'' embedding (\Lol). The key intuition behind \Lol~is that we can jointly utilize both  directions that are informative with regard to the classification task (the means) and the directions that maximize the variance (the covariance), much like \Lda.  But by virtue of utilizing random matrix theory, we are able to prove that \Lol~finds a better low dimensional representation than PCA and other linear methods under the Gaussian assumption. This is true regardless of the dimensionality of the features, the number of samples, and the number of dimensions in which we project.  
+%
+%We demonstrate \Lol~outperforms---or at least performs no worse than---several reference benchmarks along every  consideration mentioned above.
+%This includes proving that \Lol~statistically dominates \Pca~and related linear methods under Gaussian assumption.
 % the improvement over several standards, along both statistical considerations (bias and variance) for the simple Gaussian setting mentioned above.
-Moreover, we provide an  implementation that improves on previous computational capabilities in terms of stability and scalability.
-Numerical experiments quantitatively demonstrate the improvement of \Lol~over reference methods on a wide range of simulated experiments that satisfy our theoretical assumptions. By virtue of \Lol~being built upon geometric intuition, it is easy to extend it along various dimensions.  Additional numerical experiments demonstrate that practice matches  intuition, in particular, generalizations of \Lol~can easily be constructed to match different geometric assumptions of the data.  Indeed, even when data are sampled from distributions outside our theory and intuition,  \Lol~achieves smaller error than its competitors. In fact, one can extend this intuition outside of classification problems to other problems, including  regression and hypothesis testing: a trivial modification of \Lol~leads to regression and testing procedures that also outperform the natural competitors.  Computationally, \Lol~is always numerically stable, and requires no more computational space, and smaller computational time, than other linear methods.  Moreover, we provide a highly scalable implementation that efficiently runs on terabyte datasets with hundreds of millions of features.
-Finally, we test \Lol~against a set of standard methods on four different benchmark real datasets.  For any of the four different settings, there was not a single method that outperformed \Lol~in any dimension.
+%Moreover, we provide an  implementation that improves on previous computational capabilities in terms of stability and scalability.
+Numerical experiments quantitatively demonstrate the improvement of \Lol~over reference methods on a wide range of simulated experiments that both satisfy our theoretical assumptions, and go beyond them. 
+%
+%By virtue of \Lol~being built upon geometric intuition, it is easy to extend it along various dimensions.  Additional numerical experiments demonstrate that practice matches  intuition, in particular, generalizations of \Lol~can easily be constructed to match different geometric assumptions of the data.  Indeed, even when data are sampled from distributions outside our theory and intuition,  \Lol~achieves smaller error than its competitors. 
+In fact, one can extend \Lol~outside of classification problems to  regression and hypothesis testing and obtain qualitatively similar results.  Computationally, \Lol~is always numerically stable, and requires no more computational space, and smaller computational time, than other linear methods.  Moreover, we provide a highly scalable implementation that efficiently runs on datasets with hundreds of millions of features comprising hundreds of gigaabytes.
+We then tested \Lol~against a set of standard methods on  several benchmark datasets:  there was not a single method that outperformed \Lol~in any dimension.
+We provide open source implementations of \Lol~in both MATLAB and R to support further applications and extensions.  
+%In addition to the above quantitative properties, \Lol~is intuitive, only has a single hyper-parameter which is exceedingly easy to tune, and we provide free and open source implementations, in MATLAB and R, as well as pre-configured environments that will enable anybody to run \Lol~on commodity machines, including laptops, workstations, and cloud instances.  \Lol~is not likely to necessarily be the best algorithm on any given new high-dimensional challenge problem.  Rather, we suspect \Lol~might be useful as one of the first algorithms to try on big and wide data.  Moreover, 
+The arguments and methodology developed herein provide a framework for developing big supervised manifold learning algorithms to tackle other data science challenges.
 
-In addition to the above quantitative properties, \Lol~is intuitive, only has a single hyper-parameter which is exceedingly easy to tune, and we provide free and open source implementations, in MATLAB and R, as well as pre-configured environments that will enable anybody to run \Lol~on commodity machines, including laptops, workstations, and cloud instances.  \Lol~is not likely to necessarily be the best algorithm on any given new high-dimensional challenge problem.  Rather, we suspect \Lol~might be useful as one of the first algorithms to try on big and wide data.  Moreover, the arguments and methodology developed herein provide a framework for developing big supervised manifold learning algorithms to tackle other data science challenges.
 
 
 
-
-\section*{Results}
+%\section*{Results}
 % get 192 lines, have 240, need to remove 50.
 
-\subsection*{Linear Optimal Low-rank}
+\subsection*{Supervised Manifold Learning}
+%Linear Optimal Low-rank}
 % An Illustrative Real Data Example of Supervised Linear Manifold Learning}
 
 
@@ -156,35 +154,40 @@ In addition to the above quantitative properties, \Lol~is intuitive, only has a 
 \centering % l b r t
 %  trim={<left> <lower> <right> <upper>}
 \includegraphics{../Figs/mnist2.pdf} %[height=2in],trim=1cm 0cm 0cm 1.0cm,clip=true
-\caption{Schematic of Linear Optimal Low-rank Embedding using 300 samples of the numbers 3, 7, and 8 from the MNIST dataset; each sample is a 28 $\times$ 28 = 784 dimensional image.
+\caption{Schematic illustrating Linear Optimal Low-rank Embedding as a supervised manifold learning technique. 
 % Illustrating four different classifiers---\sct{Lasso}~(top), \Lda~(second),  \Pca~(third), and \Lol~(bottom)---for embedding images of the digits 3, 7, and 8 (from MNIST), each of which is 28 $\times$ 28 = 784 dimensional.
-\textbf{(A)} A subset of training samples  (boundary colors are  for visualization purposes).
-\textbf{(B)} The first four projection matrices learned by \Lol~on 100 training samples from each class.
+\textbf{(A)} 300 training samples of the numbers 3, 7, and 8 from the MNIST dataset (100 samples per digit);  each sample is a 28 $\times$ 28 = 784 dimensional image (boundary colors are  for visualization purposes).
+\textbf{(B)} The first four projection matrices learned by \Lol.  Each is a linear combination of the sample images.
 % Note that \sct{Lasso}~is sparse and supervised, \Pca which is dense and unsupervised, and both \Lda~and \Lol~are dense and supervised.
-\textbf{(C)} Projecting 500 test samples into the top two learned dimensions.
+\textbf{(C)} Projecting 500 new (test) samples into the top two learned dimensions;
  % using each approach.
- Digits color coded as in (A).
-\textbf{(D)}  The estimated posterior distributions for 3 and 8 of test samples after
-projecting data into two dimensions and using LDA to classify.
+ digits color coded as in (A). \Lol~embedded data form three distinct clusters.
+\textbf{(D)}  Use the low-dimensional data to learn a classifier.  The estimated  distributions for 3 and 8 of test samples after
+projecting data into two dimensions and using LDA to classify demonstrate that 3 and 8 are easily separable by linear methods after \Lol~projections (color of line indicates the digit).
 % The vertical line shows the classification threshold.
-The filled area is the estimated error rate; the goal of any classification algorithm is to minimize that area.
+The filled area is the estimated error rate; the goal of any classification algorithm is to minimize that area. \Lol~is performing well on this high-dimensional real data example.
 % Clearly, \Lol~exhibits the best separation after embedding, which results in the best classification performance.
 }
 \label{f:mnist}
 % \end{wrapfigure}
 \end{figure}
 
-A general strategy for high-dimensional classification proceeds as  schematized in Figure \ref{f:mnist}:
-(A) obtain/select $n$ training samples of the data,
-(B) learn a ``projection'' that converts the high-dimensional data to a low dimension representation,
-(C) use that projection to project the data into the lower dimensional space,
-(D) classify the projected  samples using a standard classifier.
+A general strategy for supervised manifold learning is schematiized in Figure \ref{f:mnist}.
+Step \textbf{(A)},  obtain or select $n$ training samples of high-dimensional data.  For concreteness, we utilize one of the most popular benchmark datasets, the MNIST dataset \cite{mnist}.  This dataset consists of $n=60$,$000$ examples of images of the digits 0 through 9.  Each such image is represented by a 28$\times$28 matrix, which means that the observed (or ambient) dimensionality of the data is $p=28^2=784$.  Because we are motivated by the $n \ll p$ scenario, we subsample the data to select $n=300$ examples of the numbers $3$, $7$, and $8$ ($100$ of each).
+%
+Step textbf{(B)},  learn a ``projection'' that converts the high-dimensional data to a low dimension representation.  One can either ignore the class label data, that is, which images correspond to which digits (as PCA and manifold learning techniques do), or try to use them (as sparse methods do).  \Lol~uses the class labels to learn projections that are linear combinations of the original data samples (panel B shows the first four projections that \Lol~learns, each of which looks like a combination of the original images).  
+%
+Step textbf{(C)}, use the learned projections to convert data into the lower dimensional space. This step requires having learned a projection that can be applied to new (test) data samples for which we do not know the true class labels.  Manifold learning methods typically are unable to be applied in this way.  \Lol, however, can project new samples in such a way as to separate the data into classes (in panel C, two-dimensional points represent the original images, color coded by their digit label, are well separated).
+Finally, step textbf{(D)}, using the low-dimensional representation of the data, learn a classifier.  A good classifier correctly identifies as many points as possible with the correct label.  Panel D shows that when using \Lda~on the low-dimensional data from \Lol, the data points are mostly linearly separable. 
+
+%(C) use that projection to project the data into the lower dimensional space,
+%(D) classify the projected  samples using a standard classifier.
 % We consider  four different linear dimensionality reduction methods---\sct{Lasso}, \Rrlda, \Pca, and \Lol---each of which we compose with a linear classifier to form high-dimensional classifiers. \footnote{Although the original \sct{Lasso}~does not first find a low dimensional representation and then classify, more recent generalizations do (for exampel, \citet{Zou2006a}), and then improve on \sct{Lasso}'s theoretical and empirical properties, so will always mean Adaptive \sct{Lasso} here.}
 
-To illustrate how \Lol~works,  first consider one of the most popular benchmark datasets, the MNIST dataset \cite{mnist}.  This dataset consists of $n=60$,$000$ examples of images of the digits 0 through 9.  Each such image is represented by a 28$\times$28 matrix, which means that the observed (or ambient) dimensionality of the data is $p=28^2=784$.  Because we are motivated by the $n \ll p$ scenario, we subsample the data to select $n=300$ examples of the numbers $3$, $7$, and $8$ ($100$ of each).
-We then apply
+%To illustrate how \Lol~works,  first consider one of the most popular benchmark datasets, the MNIST dataset \cite{mnist}.  This dataset consists of $n=60$,$000$ examples of images of the digits 0 through 9.  Each such image is represented by a 28$\times$28 matrix, which means that the observed (or ambient) dimensionality of the data is $p=28^2=784$.  Because we are motivated by the $n \ll p$ scenario, we subsample the data to select $n=300$ examples of the numbers $3$, $7$, and $8$ ($100$ of each).
+%We then apply
 % all four approaches
-\Lol~to this subsample of the MNIST dataset, learning a projection,  projecting the data, and learning a classifier using the projected data.
+%\Lol~to this subsample of the MNIST dataset, learning a projection,  projecting the data, and learning a classifier using the projected data.
 %
 % \sct{Lasso}, by virtue of being a sparse method, finds the pixels that most discriminate the 3 classes (column B).  The resulting embeddings mostly live along the boundaries (column C), because these images are close to binary, and therefore, images either have or do not have a particular pixel. Indeed, although the images themselves are nearly sparse (over 80\% of the pixels in the dataset have intensity $\leq 0.05$),  a low-dimensional discriminant boundary does not seem to be sparse, as evidenced by substantial overlap between the posteriors for 3 and 8 (panel D).
 % %
@@ -193,11 +196,11 @@ We then apply
 
 
 % @jovo:something in here about how LOL learns the embedding
-\Lol~is our proposed supervised linear manifold learning method.  The projection matrices it learns are linear combinations of the original digits.
+%\Lol~is our proposed supervised linear manifold learning method.  The projection matrices it learns are linear combinations of the original digits.
 % This is not surprising, as they are all linear combinations of the training examples.
 % The resulting embeddings however, look quite different.
-Upon projecting new samples into the low dimensional space, they are clearly separable into thee different classes, even if only using the first two dimensions.
-When training a linear classifier on the data, it is very easy to learn a linear  discriminant boundary that performs well.
+%Upon projecting new samples into the low dimensional space, they are clearly separable into thee different classes, even if only using the first two dimensions.
+%When training a linear classifier on the data, it is very easy to learn a linear  discriminant boundary that performs well.
 
  % The three different classes are very clearly separated by even the first two dimensions.  The result of these embeddings yields classifiers whose performance is obvious from looking at the embeddings: \Lol~achieves significantly smaller error than the other  approaches.
 % This numerical experiment justifies the use of \Lol, we next build a geometric intuition for \Lol~in simple simulated examples, to better illustrate when we can expect \Lol~to outperform other methods, and perhaps more importantly, when we expect  \Lol~to fail.
@@ -213,28 +216,38 @@ When training a linear classifier on the data, it is very easy to learn a linear
 % The above real data example suggests the geometric intuition for when \Lol~outperforms its sparse and unsupervised counterparts.
 To build intuition about when \Lol~performs well, and when it does not,
 % further investigate, both theoretically and numerically,
-we consider the simplest high-dimensional classification setting.
-In particular, we consider a two-class classification problem, where both classes are distributed according to a multivariate normal distribution, and the two classes have the same covariance matrix $\bSig$. so that the only difference between the classes is their means.
+we consider the simplest high-dimensional classification setting: a two-class classification problem, where both classes are distributed according to a multivariate normal distribution, and the two classes have the same covariance matrix $\bSig$ and prior probabilities, so that the only difference between the classes is their means.
  % (we call this the Linear Discriminant Analysis (\Lda) model; see Methods for details).
-
-
-
-
+%
 % To motivate \Lol, and the following simulations, lets c
 % Consider what the optimal projection would be in this scenario.
 The optimal low-dimensional projection is analytically available in this scenario: it is the dot product of the difference of means and the inverse covariance matrix, $\bdel\T \bSig^{-1}$ \cite{Bickel2004a} (see Methods for derivation).
-\Pca, the dominant unsupervised manifold learning method, utilizes only the covariance  of the data $\bSig$, and ignores the difference between the means $\bdel$.
+When the distribution of the data are unavailable, as in all real data problems, machine learning methods estimate the parameters instead.  For example, \Pca~utilizes the pooled sample mean, $\mh{\bmu}= \frac{1}{n} \sum_i \bx_i$ and the pooled sample covariance matrix,  $\mh{\bSig}=\frac{1}{n} \sum_i (\bx_i - \bmu) (\bx_i - \bmu)\T$.  
+%utilizes only the covariance  of the data $\bSig$, and ignores the difference between the means $\bdel$.
  % (because \Pca~for classification operates on the class-conditionally centered data, see Methods for details).
-In particular, \Pca~would project the data on the top $d$ eigenvectors of the  sample covariance matrix.
+The \Pca~projection would be the top $d$ eigenvectors of the pooled sample covariance matrix, thus completely ignoring the class labels.
 
-\textbf{The key insight of our work is the following: we can combine the difference of the means and the covariance matrix in a simple fashion, rather than just the covariance matrix, to find a low dimensional projection.}
-Na\"ively, this should typically improve performance, because in this stylized scenario, both are important.
+%, thus ignoring the sample class conditional means, that is, the means for each class, $\mh{\bmu}_j = \frac{1}{n_j} \sum_{i : y_i = j} \bx_i$.
+%would then project the data on the top $d$ eigenvectors of the  sample covariance matrix.
+
+\textbf{The key insight of our work is that we can combine the class means and the covariance matrix in a simple fashion, rather than just the covariance matrix, to find a low dimensional projection.}
+This is motivated  by Fisher's \Lda, which utilizes both means and variance, and should therefore improve performance over \Pca~which only utilizes the means. 
+%Na\"ively, this should typically improve performance, because in this stylized scenario, both are important.
 % @jovo: for discussion
-The \sct{F2M} literature has a similar insight, but a different construction that requires the dimensionality to be smaller than the sample size \cite{Li1991a, Tishby1999a, Globerson2003a, Cook2005a,Fukumizu2004a}.
-We implement our idea by simply concatenating the difference of the means with the top $d$ eigenvectors of the  covariance matrix.
-This is equivalent to first projecting onto the difference of the means vector, and then projecting the residuals onto the first $d$ principle components.
-Thus, it requires almost no additional computational time or complexity over that of \Pca, rather, merely estimates the difference of the means.
-In this sense, \Lol~can be thought of as a very simple  ``supervised \Pca''.
+%The \sct{F2M} literature has a similar insight, but a different construction that requires the dimensionality to be smaller than the sample size \cite{Li1991a, Tishby1999a, Globerson2003a, Cook2005a,Fukumizu2004a}.
+More specifically, for a two-class problem, \Lol~first computes the sample mean of each class,  $\mh{\bmu}_j = \frac{1}{n_j} \sum_{i : y_i = j} \bx_i$, where $n_j$ is the number of samples in class $j$.  Second, \Lol~estimates the difference between class means,  $\mh{\bdel}=\bmu_1 - \bmu_2$.  
+Third, \Lol~computes the class-conditionally centered covariance matrix, 
+$\mt{\bSig}= \sum_{j=1}^J \frac{1}{n} \sum_{i : y_i = j} (\bx_i - \bmu_j) (\bx_i - \bmu_j)\T$. 
+
+simply concatenates the difference of the means with the top $d$ eigenvectors of the class-conditionally centered covariance matrix.
+Whereas \Pca~subtracts the overall mean prior to computing an eigendecomposition of the covariance matrix, 
+\Lol~subtracts the mean \emph{from each class}, therefore obtaining a more accurate estimate of the shared covariance matrix.
+By also including the difference of the means, \Lol~captures both the dimensions of maximal variance and the dimensions that characterize the difference between the classes, that is, the supervised information.
+%   
+%computes the eigendecomposition of the centered covariance (ignoring the classes), \Lol~utilizes the eig
+%This is equivalent to first projecting onto the difference of the means vector, and then projecting the residuals onto the first $d$ principle components.
+%Thus, it requires almost no additional computational time or complexity over that of \Pca, rather, merely estimates the difference of the means.
+%In this sense, \Lol~can be thought of as a very simple  ``supervised \Pca''.
 
 
 
@@ -480,6 +493,31 @@ These three simulation settings therefore demonstrate the generality of this tec
 
 \section*{Discussion}
 % get 64 lines, only using 20.
+
+%
+% To understand \Lol, consider the following simplified scenario.  Assume there exists two classes of data, both of which are sampled according to a high-dimensional Gaussian distribution, and both have the same covariance matrix.  Assuming that there are the same number of observations from each class  implies that the only difference between the two classes are their means.  Figure \ref{f:cigars} shows three different examples of this setting, each with 100 total samples in 1,000 dimensions (only the first two dimensions are shown).
+% In panel \textbf{(A)}, each dimension is independent of the others, but the second dimension is different: the means in the second dimension are further away from one another than they are in all the others, and the variance in that dimension is smaller.  This setting, which we called ``stacked cigars'', is relatively easy for all the above described methods, because the direction of maximal variance is also the direction that is maximally informative about the classification task.
+% @jovo: possibly continue this line of thought?
+%
+% @jovo: possibly discussion
+% The first century of statistical pattern recognition focused on elegant SL approaches for low-dimensional problems (e.g., Fisher's Linear Discriminant (FLD) \cite{Fisher}), and dimensionality reduction techniques for high-dimensional problems (e.g., Principal Components Analysis (PCA) \cite{PCA}), but did not seriously investigate high-dimensional SL approaches.  More recent work has focused on high-dimensional SL approaches, including sparse methods (e.g., Lasso \cite{Lasso}) and supervised dictionary learning techniques \cite{Mairal2009}.  However, theoretical guarantees for sparse methods require very strict assumptions that are often far from accurate \cite{??}, meaning that sparse methods tend to exhibit significant bias.  Moreover, their susceptibility to correlations of the predictor variables can lead to substantial variance, insofar that which variables are selector can be highly noise dependent \cite{Meinshausen2010c}.
+% Dictionary learning, on the other hand, has scant theoretical guarantees in any setting \cite{??}.  Moreover, because dictionary learning tends to consider a large complex discriminant model, its resulting estimates are highly dependent on initialization choice.  Finally, computationally, both are problematic for big data, in that they require large amounts of time, and implementations on scalable platforms are currently unavailable.
+%
+% @jovo: possibly discussion
+% In complementary work, generalizations of principal components to include various kinds of nonlinear dimensionality reduction techniques, collectively referred to as  ``manifold learning'', have been developing recently \cite{??}. These tools are predominantly ``unsupervised'', and therefore, do not explicitly search for a discriminant boundary, and therefore may add significant bias to the problem at hand.  Adding supervision to these techniques so far has been difficult; methods proposed thus far embed the data in an unsupervised fashion first, again, potentially adding bias \cite{Belkin2004a}, and require substantial computations.   Thus, a supervised manifold learning algorithm designed for one of the simplest possible high-dimensional classification problems remains amiss.
+%
+% @jovo: probably for discussion
+% The computer science community has been developing tools for big data for several decades now. Specifically, algorithm complexity has lowered significantly, and ability to scale-up and scale-out has increased significantly.  This is true both for simple statistical primitives, such as computing a mean, and more complicated primitives like PCA \cite{??}.  More recently, a large number of distributed machine learning libraries have become available, including Apache Spark's mllib,  H20, Dato, and Vowpal Wabbit \cite{??}.  These focus almost entirely on large sample size and low dimensionality regime, whereas the motivating problems of interest for this work are small sample size and high-dimensionality. Moreover, they utilize a distributed platform that is susceptible to low bandwidth communication between nodes, meaning that as one adds resources, the computations cannot scale out optimally.
+%
+% Thus, a gap remains in the literature for a statistical tool that, under relatively general assumptions, achieves both small bias and variance, can be made robust, and has easily tunable hyper-parameters.  And complementarily, an implementation of that algorithm that is numerically stable, requires minimal space and time, is highly scalable for high-dimensional problems. Importantly, the method should perform well both on simulated and real data experiments.  And ideally, the software is intuitive, free and open source, and easy to use.
+%
+% To address these concerns,  we describe a novel solution, called Low-Rank Optimal Linear Discriminant Analysis (\Lol).
+% We developed \Lol~by considering the above described simple scenario, and realizing that the optimal dimension reduction for such a setting would have to combine both the means and the covariances, because together those two parameters determine the optimal decision boundary.
+%
+% @jovo: discussion?
+% While other methods have previous had a similar insight (in particular the ``First Two Moment'' (F2M) methods \cite{Li1991a, Tishby1999a, Globerson2003a, Cook2005a,Fukumizu2004a}), F2M methods only operate in low-dimensional settings.
+%
+% Therefore, we decided to combine the means and covariances differently, essentially by first projecting the data onto the means, and then effectively computing PCA on the ``residuals''.  Running FLD after projecting the data onto the subspace spanned jointly by the means and the top principal components comprises the \Lol~method.  In addition to MATLAB and R, we also implemented \Lol~using FlashX, a recently developed big data analytics library \cite{??}.  We were therefore able to take advantage of matrix parallelizations optimized for machines with solid state drives.
 
 We have introduced a very simple, yet new, methodology to improve performance on supervised learning problems with big and wide data.  In particular, we have proposed a supervised manifold learning procedure that utilizes both the difference of the means, and the covariance matrices, and proved that it performs better than first applying \Pca~to the data under reasonable assumptions.  This is in stark contrast to most previous approaches, which only utilize the covariance matrices (or kernel variants thereof), or try to solve a difficult optimization theoretic problem.  In addition to demonstrating the statistical accuracy and computational efficiency of \Lol~on simulated and real classification problems, we also demonstrate how the same idea can also be used for other kinds of supervised learning problems, including regression and hypothesis testing. Theoretical guarantees suggest that this line of research is promising and can be extended to other more general settings and tasks.
 
