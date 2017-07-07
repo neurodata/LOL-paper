@@ -19,7 +19,7 @@ addpath(p);
 task_list_name='cigars';
 truth=0; % whether to estimate PCA & LOL or use the truth
 k=3;
-task.savestuff=0;
+task.savestuff=1;
 task.D=100;
 task.ntrain=100;
 task_list = set_task_list(task_list_name);
@@ -51,6 +51,8 @@ marker='.';
 ms=4; % markersize
 teps=10^-4;
 charString = char(1:length(task_list)-1+'A');
+cols=get(groot,'defaultAxesColorOrder');
+
 
 %%
 for j=1:Nsims
@@ -177,7 +179,7 @@ for j=1:Nsims
         if i==3
             ylab='ROAD';
             col1='c'; col2=col1;
-            si=5;
+            si=3;
             yy1=y2;
             yy2=y1;
         elseif i==2
@@ -185,16 +187,16 @@ for j=1:Nsims
             col1='g'; col2=col1;
             si=2;
         elseif i==1
-            ylab=[{'LRo'};{'FLD'}];
+            ylab=[{'PCA'''}];
             %             ylab='FLD o PCA';
             col1='m'; col2=col1;
             si=4;
         elseif i==4
-            ylab=[{'eigen-'};{'faces'}];
-            col1='y'; col2=col1;
-            si=3;
+            ylab=[{'PCA'}];
+            col1=cols(4,:); col2=col1;
+            si=5;
         elseif i==5
-            ylab=[{'Bayes'};{'Optimal'}];
+            ylab=[{'Optimal'}];
             col1='k';
             col2='k';
             si=1;

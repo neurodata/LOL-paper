@@ -173,12 +173,15 @@ The filled area is the estimated error rate; the goal of any classification algo
 \end{figure}
 
 A general strategy for supervised manifold learning is schematiized in Figure \ref{f:mnist}.
-Step \textbf{(A)},  obtain or select $n$ training samples of high-dimensional data.  For concreteness, we utilize one of the most popular benchmark datasets, the MNIST dataset \cite{mnist}.  This dataset consists of $n=60$,$000$ examples of images of the digits 0 through 9.  Each such image is represented by a 28$\times$28 matrix, which means that the observed (or ambient) dimensionality of the data is $p=28^2=784$.  Because we are motivated by the $n \ll p$ scenario, we subsample the data to select $n=300$ examples of the numbers $3$, $7$, and $8$ ($100$ of each).
+Step \textbf{(A)},  obtain or select $n$ training samples of high-dimensional data.  For concreteness, we utilize one of the most popular benchmark datasets, the MNIST dataset \cite{mnist}.  This dataset consists of $n=60$,$000$ examples of images of the digits 0 through 9.  Each such image is represented by a $28\times28$ matrix, which means that the observed (or ambient) dimensionality of the data is $p=28^2=784$.  Because we are motivated by the $n \ll p$ scenario, we subsample the data to select $n=300$ examples of the numbers $3$, $7$, and $8$ ($100$ of each).
 %
-Step textbf{(B)},  learn a ``projection'' that converts the high-dimensional data to a low dimension representation.  One can either ignore the class label data, that is, which images correspond to which digits (as PCA and manifold learning techniques do), or try to use them (as sparse methods do).  \Lol~uses the class labels to learn projections that are linear combinations of the original data samples (panel B shows the first four projections that \Lol~learns, each of which looks like a combination of the original images).  
+Step \textbf{(B)},  learn a ``projection'' that converts the high-dimensional data to a low dimension representation.  One can either ignore the class label data, that is, which images correspond to which digits (as PCA and manifold learning techniques do), or try to use them (as sparse methods do).  \Lol~uses the class labels to learn projections that are linear combinations of the original data samples (panel B shows the first four projections that \Lol~learns, each of which looks like a combination of the original images).  
 %
-Step textbf{(C)}, use the learned projections to convert data into the lower dimensional space. This step requires having learned a projection that can be applied to new (test) data samples for which we do not know the true class labels.  Manifold learning methods typically are unable to be applied in this way.  \Lol, however, can project new samples in such a way as to separate the data into classes (in panel C, two-dimensional points represent the original images, color coded by their digit label, are well separated).
-Finally, step textbf{(D)}, using the low-dimensional representation of the data, learn a classifier.  A good classifier correctly identifies as many points as possible with the correct label.  Panel D shows that when using \Lda~on the low-dimensional data from \Lol, the data points are mostly linearly separable. 
+Step \textbf{(C)}, use the learned projections to map the high-dimensional data into the lower dimensional space. This step requires having learned a projection that can be applied to new (test) data samples for which we do not know the true class labels.  Nonlinear manifold learning methods typically are unable to be applied in this way (see for example, \citet{oos}).  \Lol, however, can project new samples in such a way as to separate the data into classes (in panel C, two-dimensional points represent the original images, color coded by their digit label, are well separated).
+Finally, step \textbf{(D)}, using the low-dimensional representation of the data, learn a classifier.  A good classifier correctly identifies as many points as possible with the correct label.  Panel D shows that when using \Lda~on the low-dimensional data from \Lol, the data points are mostly linearly separable.  
+Specifically, the two curves correspond to the distribution of three's (in blue) and eights (in green) after applying \Lda~to the data projected using \Lol, and the area of overlap (in black) corresponds to the fraction of errors, so smaller is better. 
+
+
 
 %(C) use that projection to project the data into the lower dimensional space,
 %(D) classify the projected  samples using a standard classifier.
@@ -216,33 +219,39 @@ Finally, step textbf{(D)}, using the low-dimensional representation of the data,
 % The above real data example suggests the geometric intuition for when \Lol~outperforms its sparse and unsupervised counterparts.
 To build intuition about when \Lol~performs well, and when it does not,
 % further investigate, both theoretically and numerically,
-we consider the simplest high-dimensional classification setting: a two-class classification problem, where both classes are distributed according to a multivariate normal distribution, and the two classes have the same covariance matrix $\bSig$ and prior probabilities, so that the only difference between the classes is their means.
+we consider the simplest high-dimensional classification setting. 
+We observe $n$ samples $(\bx_i,y_i)$, where $\bx_i$ are $p$ dimensional feature vectors, and $y_i$ is the binary class label, that is $y_i$ is either $0$ or $1$.
+We assume that both classes are distributed according to a multivariate Gaussian distribution, and the two classes have the same covariance matrix $\bSig$ and data from either class is equally likely, so that the only difference between the classes is their means, $\bmu_1$ and $\bmu_2$.
  % (we call this the Linear Discriminant Analysis (\Lda) model; see Methods for details).
 %
 % To motivate \Lol, and the following simulations, lets c
 % Consider what the optimal projection would be in this scenario.
-The optimal low-dimensional projection is analytically available in this scenario: it is the dot product of the difference of means and the inverse covariance matrix, $\bdel\T \bSig^{-1}$ \cite{Bickel2004a} (see Methods for derivation).
-When the distribution of the data are unavailable, as in all real data problems, machine learning methods estimate the parameters instead.  For example, \Pca~utilizes the pooled sample mean, $\mh{\bmu}= \frac{1}{n} \sum_i \bx_i$ and the pooled sample covariance matrix,  $\mh{\bSig}=\frac{1}{n} \sum_i (\bx_i - \bmu) (\bx_i - \bmu)\T$.  
+The optimal low-dimensional projection is analytically available in this scenario: it is the dot product of the difference of means and the inverse covariance matrix, $(\bmu_1-\bmu_2)\T \bSig^{-1}$ \cite{Bickel2004a} (see Methods for derivation).
+When the distribution of the data are unavailable, as in all real data problems, machine learning methods estimate the parameters instead.  For example, \Pca~utilizes the pooled sample mean, $\mh{\bmu}= \frac{1}{n} \sum_{i=1}^n \bx_i$ and the pooled sample covariance matrix,  $\mh{\bSig}$ with entries $\mh{\bSig}_{kl}=\frac{1}{n} \sum_{i=1}^n (x_{ik} - \mu_k) (x_{il} - \mu_l)$.  
 %utilizes only the covariance  of the data $\bSig$, and ignores the difference between the means $\bdel$.
  % (because \Pca~for classification operates on the class-conditionally centered data, see Methods for details).
-The \Pca~projection would be the top $d$ eigenvectors of the pooled sample covariance matrix, thus completely ignoring the class labels.
+The \Pca~projection is the top $d$ eigenvectors of the pooled sample covariance matrix, thus completely ignoring the class labels.
 
 %, thus ignoring the sample class conditional means, that is, the means for each class, $\mh{\bmu}_j = \frac{1}{n_j} \sum_{i : y_i = j} \bx_i$.
 %would then project the data on the top $d$ eigenvectors of the  sample covariance matrix.
 
 \textbf{The key insight of our work is that we can combine the class means and the covariance matrix in a simple fashion, rather than just the covariance matrix, to find a low dimensional projection.}
-This is motivated  by Fisher's \Lda, which utilizes both means and variance, and should therefore improve performance over \Pca~which only utilizes the means. 
+This is motivated  by Fisher's \Lda, which utilizes both means and variance, and should therefore improve performance over \Pca~which only utilizes the variances. 
 %Na\"ively, this should typically improve performance, because in this stylized scenario, both are important.
 % @jovo: for discussion
 %The \sct{F2M} literature has a similar insight, but a different construction that requires the dimensionality to be smaller than the sample size \cite{Li1991a, Tishby1999a, Globerson2003a, Cook2005a,Fukumizu2004a}.
-More specifically, for a two-class problem, \Lol~first computes the sample mean of each class,  $\mh{\bmu}_j = \frac{1}{n_j} \sum_{i : y_i = j} \bx_i$, where $n_j$ is the number of samples in class $j$.  Second, \Lol~estimates the difference between class means,  $\mh{\bdel}=\bmu_1 - \bmu_2$.  
-Third, \Lol~computes the class-conditionally centered covariance matrix, 
-$\mt{\bSig}= \sum_{j=1}^J \frac{1}{n} \sum_{i : y_i = j} (\bx_i - \bmu_j) (\bx_i - \bmu_j)\T$. 
+More specifically, for a two-class problem, \Lol~first computes the sample mean of each class,  $\mh{\bmu}_j = \frac{1}{n_j} \sum_{i : y_i = j} \bx_i$, where $n_j$ is the number of samples in class $j$.  Second, \Lol~estimates the difference between  means,  $\mh{\bdel}=\mh{\bmu}_1 - \mh{\bmu}_2$.  
+Third, \Lol~computes the class-conditional covariance matrix, 
+$\mt{\bSig}$ with entries $\mt{\bSig}_{kl}= \sum_{j=1}^J \frac{1}{n} \sum_{i : y_i = j} (x_{ik} - \mu_{jk}) bx_{il} - \mu_{jl})$.  In other words, \Lol~centers each data point with respect to its own classes mean, rather than the overall pooled mean, and then computes the covariances.    
+Fourth, \Lol~computes the eigenvectors of this class-conditionally centered covariance. 
+And finally, \Lol~simply concatenates the difference of the means with the top $d-1$ eigenvectors of $\mt{\bSig}$. 
+Note that the sample class-conditional covariance matrix estimates the population covariance, $\bSig$, whereas the sample covariance matrix is distorted by the difference of the class means.  
+All together, \Lol~estimates both the difference of the means and the covariance matrix, just like Fisher's \Lda.  
 
-simply concatenates the difference of the means with the top $d$ eigenvectors of the class-conditionally centered covariance matrix.
-Whereas \Pca~subtracts the overall mean prior to computing an eigendecomposition of the covariance matrix, 
-\Lol~subtracts the mean \emph{from each class}, therefore obtaining a more accurate estimate of the shared covariance matrix.
-By also including the difference of the means, \Lol~captures both the dimensions of maximal variance and the dimensions that characterize the difference between the classes, that is, the supervised information.
+%simply concatenates the difference of the means with the top $d$ eigenvectors of the class-conditionally centered covariance matrix.
+%Whereas \Pca~subtracts the overall mean prior to computing an eigendecomposition of the covariance matrix, 
+%\Lol~subtracts the mean \emph{from each class}, therefore obtaining a more accurate estimate of the shared covariance matrix.
+%By also including the difference of the means, \Lol~captures both the dimensions of maximal variance and the dimensions that characterize the difference between the classes, that is, the supervised information.
 %   
 %computes the eigendecomposition of the centered covariance (ignoring the classes), \Lol~utilizes the eig
 %This is equivalent to first projecting onto the difference of the means vector, and then projecting the residuals onto the first $d$ principle components.
@@ -256,17 +265,21 @@ By also including the difference of the means, \Lol~captures both the dimensions
 \centering
 \includegraphics[width=0.8\linewidth,trim=0in 0in 1.5in 0in,clip=true]{../Figs/cigars_est.pdf}%l b r t
 \caption{
-\Lol~achieves near optimal performance for a wide variety of distributions.
+\Lol~achieves near optimal performance for a wide variety of Gaussian distributions.
 Each point is sampled from a multivariate Gaussian;
 the three columns correspond to different simulation parameters (see Methods for details).
-In each of 3 simulations, we sample $n=100$ points in $p=1000$ dimensions.  And for each approach, we embed into the top 20 dimensions. Note that we use the sample estimates, rather than the true population values of the parameters.  The five columns show (in decreasing order):
+In each of 3 simulations, we sample $n=100$ points in $p=1000$ dimensions, so $n \ll p$. 
+And for each approach, we embed into the top 20 dimensions. Note that we use the sample estimates, rather than the true population values of the parameters.  The five columns show (in decreasing order):
 \textbf{Row 1}: A scatter plot of the first two dimensions of the sampled points, with class 0 and 1 as black and gray dots, respectively.
-\textbf{Row 2} \sct{Fld $\circ$ Pca}.
-\textbf{Row 3} \Road, a sparse method designed specifically for this model \cite{Fan2012a}.
-\textbf{Row 4} \Lol, our newly proposed method.
-\textbf{Row 5} the Bayes optimal classifier, which is what all classifiers strive to achieve.
-\textbf{(A)} The mean difference vector is aligned with the direction of maximal variance, maxing it ideal for both \Pca~to discover the discriminant direction and a sparse solution. In this setting, the results are  similar for all methods, and essentially optimal.
-\textbf{(B)} The mean difference vector is orthogonal to the direction of maximal variance, making \Pca~fail, but sparse methods and \Lol~can still recover the correct dimensions, achieving nearly optimal performance.
+\textbf{Row 2} - \textbf{Row 5}: the posteriors after projecting using different manifold learning techniques, including 
+\textbf{Row 2} \Pca.
+\textbf{Row 3} \Pca', a method that projects onto the top $d$ eigenvectors of  sample class-conditional covariance \cite{RRLDA},
+\textbf{Row 4} \Road, a sparse method designed specifically for this model \cite{Fan2012a}.
+\textbf{Row 5} \Lol, our  proposed method.
+\textbf{Row6} the Bayes optimal classifier.
+%
+\textbf{(A)} The mean difference vector is aligned with the direction of maximal variance, maxing it ideal for both \Pca~or \Rrlda~to discover the discriminant dimension and a sparse solution. In this setting, the results are  similar for all methods, and essentially optimal.
+\textbf{(B)} The mean difference vector is orthogonal to the direction of maximal variance, making \Pca~perform worse, \Rrlda~is at chance, but sparse methods and \Lol~can still recover the correct dimensions, achieving nearly optimal performance.
 \textbf{(C)} Same as B, but the data are rotated, in this case, only \Lol~performs well.
 Note that \Lol~is closest to Bayes optimal in all three settings.
 }
@@ -275,39 +288,51 @@ Note that \Lol~is closest to Bayes optimal in all three settings.
 % \vspace{-30pt}
 
 
-Figure \ref{f:cigars} shows three different examples of data sampled from the \Lda~model to geometrically illustrate this intuition.
-In each, we sample $n=100$ training samples in $p=1000$ dimensional space, so $n \ll p$.
-Figure \ref{f:cigars}A shows an example we call  ``stacked cigars''.
-In this example the covariance matrix is diagonal, so all ambient dimensions are independent of one another.
-Moreover, the difference between the means and direction of maximum variance are both large along the same dimensions (they are highly correlated with one another).
-This is an idealized setting for \Pca, because \Pca~finds the direction of maximal variance, which happens to correspond to the direction of maximal separation.
-However, in the face of high-dimensional data, \Pca~does not weight the discriminant directions sufficiently, and therefore performs only moderately well.\footnote{When having to estimate the eigenvector from the data, \Pca~performs even worse.  This is because when $n \ll p$, \Pca~is an inconsistent estimator with large variance \cite{Baik2006a,Paul2007a}.}
-Because all dimensions are independent, this is a good scenario for sparse methods.
-Indeed,  \Road, a sparse classifier designed for precisely this scenario,  does an excellent job finding the most useful ambient dimensions.
-\Lol~does the best of all three approaches, by using both the difference of the means and the covariance. This is obvious upon comparing each approach to the Bayes optimal solution for this setting, which is analytically available due to its simplicity.
+Figure \ref{f:cigars} shows three different examples of data sampled from the Gaussian model to geometrically illustrate this intuition (see Methods for details).
+In each, the top row shows the first two dimensions  of   $n=100$ training samples in $p=1000$ dimensional space, so $n \ll p$.  
+The next four rows each show the distribution of test data after using \Lda~on the low-dimensional representation (solid line for class $0$ and dashed line for class $1$, and the vertical line is the estimated boundary between the two classes). 
+
+Figure \ref{f:cigars}{\color{magenta}A} shows an example we call  ``stacked cigars''.
+In this example  all  dimensions are uncorrelated with one another.
+Moreover, the difference between the means and direction of maximum variance are both large along the same dimension.
+This is an idealized setting for \Pca, because \Pca~finds the direction of maximal variance, which happens to correspond to the direction of maximal separation of the classes.
+We also compare this to a method we refer to as \Pca'. which uses the top $d$ eigenvectors of the class-conditional covariance matrix, $\mt{\bSig}$. 
+As it turns out, composing this projection with \Lda~is equivalent to a method called ``Reduced Rank \Lda'' \cite{RRLDA} (see Appendix \ref{sec:RRLDA} for proof). 
+\Pca' performs well here too, for the same reason that \Pca~does.
+Because all dimensions are uncorrelated, and one dimension contains most of the information discriminating between the two classes, this is a good scenario for sparse methods.
+Indeed,  \Road, a sparse classifier designed for precisely this scenario,  does an excellent job finding the most useful dimensions \cite{ROAD}.
+% Again, in this case, because the directions of maximal variance and discrimination are the same, \Rrlda~performs well here too. 
+\Lol, using both the difference of means and the directions of maximal variance also does well.  
+To calibrate all of these methods, we also show the performance of the optimal classifier.
 
 
-Figure \ref{f:cigars}B shows an example which is a worst case scenario for using \Pca~to find the optimal projection for classification.
+Figure \ref{f:cigars}{\color{magenta}B} shows an example which is worse for  \Pca.
 In particular, the variance is getting larger for subsequent dimensions, $\sigma_1 < \sigma_2 < \cdots < \sigma_p$, while the magnitudes of the difference between the means are decreasing with dimension, $\delta_1 > \delta_2 < \cdots > \delta_p$.
-Thus, for any truncation level,  \Pca~finds exactly the \emph{wrong} directions.
+Because \Pca~operates on the pooled sample covariance matrix, the dimensions with the maximum difference are included, and therefore, \Pca~finds some of them, while also finding some of the dimensions of maximum variance.
+\Pca', however, by virtue of subtracting out the difference of the means, is completely at chance.
 \Road~is not hampered by this problem, it is also able to find the directions of maximal discrimination, rather than those of maximal variance.
 Again, \Lol, by using both the means and the covariance, does extremely well.
 
 
-Figure \ref{f:cigars}C is exactly the same as B, except the data have been randomly rotated in all 1000 dimensions.  This means that none of the original coordinates have much information, rather, linear combinations of them do.
+Figure \ref{f:cigars}{\color{magenta}C}  is exactly the same as B, except the data have been randomly rotated in all 1000 dimensions.  This means that none of the original coordinates have much information, rather, linear combinations of them do.
 This is evidenced by observing the scatter plot, which shows that the first two dimensions  fail to disambiguate the two classes.
-\Pca, being rotationally invariant, fails in this scenario as it did in B.
-Now, there is no small number of ambient dimensions that separate the data well, so \Road~also fails.
- \Lol~is unperturbed by this rotation; in particular, it is able to ``unrotate'' the data, to find dimensions that optimally separate the two classes.
+\Pca, being rotationally invariant, performs approximately as well in this scenario as in B.
+\Pca' is not helped by this random rotation, so still performs at chance levels.
+Because there is no small number of features that separate the data well,  \Road~fails.
+ \Lol~performs as well here as it does in the other examples.
+ 
+ Collectively, these three examples demonstrate when, based purely on geometric intuition, that \Lol~performs as expected in a variety of Gaussian settings.
 
 
 \subsection*{Statistical Theory}
 
 The above numerical experiments provide the intuition to guide our theoretical developments.
 \begin{thm} \label{t:LDA}
-\Lol~better than (or as good as) \Pca, under the \Lda~model when the parameters are provided.
+\Lol~is always better than or equal to  \Pca' under the Gaussian model, and better than or equal to \Pca~with relatively weak conditions.
 % This is true for all possible observed dimensionality of the data, and number of dimensions into which we embed.
 \end{thm}
+A formal statement of the theorem and proof are provided in Appendix \ref{sec:theory}.  The condition for \Lol~to be better than \Pca~is essentially that the $d^{th}$ eigenvector of the pooled sample covariance matrix has less information about classification than the difference of the means vector.  
+
 In words, it is better to incorporate the mean difference vector into the projection matrix.  The \emph{degree} of improvement is a function of the embedding dimension d, the ambient dimensionality p, and the parameters (see Methods for details and proof), but the \emph{existence} of an improvement, or at least no worse performance, is independent of those factors.  Note that better here includes both bias and variance.  In the population version of these two methods, there is no variance, so only the bias is important.  Moreover, we know the conditions under which \Lol~is strictly better than \Pca, they are formally stated in Assumption \ref{a:2} (in Methods).  Informally, \Lol~is better than \Pca~whenever the angle between the mean vector and the top $d$ principal components is large enough. Under reasonable assumptions, in the appendix, we show that this happens $84\%$ of the time.
 % Note that Theorem \ref{t:LDA} is true regardless of the truncation dimension and ambient (observed) dimension.
 
@@ -493,6 +518,9 @@ These three simulation settings therefore demonstrate the generality of this tec
 
 \section*{Discussion}
 % get 64 lines, only using 20.
+
+
+%However, in the face of high-dimensional data, \Pca~does not weight the discriminant directions sufficiently, and therefore performs only moderately well.\footnote{When having to estimate the eigenvector from the data, \Pca~performs even worse.  This is because when $n \ll p$, \Pca~is an inconsistent estimator with large variance \cite{Baik2006a,Paul2007a}.}
 
 %
 % To understand \Lol, consider the following simplified scenario.  Assume there exists two classes of data, both of which are sampled according to a high-dimensional Gaussian distribution, and both have the same covariance matrix.  Assuming that there are the same number of observations from each class  implies that the only difference between the two classes are their means.  Figure \ref{f:cigars} shows three different examples of this setting, each with 100 total samples in 1,000 dimensions (only the first two dimensions are shown).
