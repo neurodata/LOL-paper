@@ -135,7 +135,14 @@ In fact, one can extend \Lol~outside of classification problems to  regression a
 We then tested \Lol~against a set of standard methods on  several benchmark datasets:  there was not a single method that outperformed \Lol~in any dimension.
 We provide open source implementations of \Lol~in both MATLAB and R to support further applications and extensions.  
 %In addition to the above quantitative properties, \Lol~is intuitive, only has a single hyper-parameter which is exceedingly easy to tune, and we provide free and open source implementations, in MATLAB and R, as well as pre-configured environments that will enable anybody to run \Lol~on commodity machines, including laptops, workstations, and cloud instances.  \Lol~is not likely to necessarily be the best algorithm on any given new high-dimensional challenge problem.  Rather, we suspect \Lol~might be useful as one of the first algorithms to try on big and wide data.  Moreover, 
-The arguments and methodology developed herein provide a framework for developing big supervised manifold learning algorithms to tackle other data science challenges.
+
+
+This work therefore makes four complementary challenges to the machine learning literature.  
+First, we provide geometric intuition for how supervised manifold learning methods can work, suggestive of potential algorithms.  
+Second, we provide one example algorithm that satisfies the desiderata, specifically that is simple enough to admit theoretical investigations and efficient implementations.  
+Third, we provide a theoretical framework for evaluating supervised manifold learning for classification that does not depend on the subsequent classifier.
+And fourth, we provide a scalable implementation that can run on half-terabyte datasets on single machines in a few minutes. 
+The arguments and methodology developed herein provide a comprehensive framework for developing big supervised manifold learning algorithms to tackle other data science challenges.
 
 
 
