@@ -34,7 +34,9 @@ Moreover, directly finding a small set of dimensions that maximize classificatio
 Instead, the nearly ubiquitous approach is to utilize Principal Components Analysis (PCA) to find a low-dimensional representation of the features that maximize  variance.
 However, in general there is no reason to suspect that the dimensions that maximize classification accuracy will be close to those that maximize variance.
 Indeed, we show that, under reasonable assumptions, those two sets of directions will be approximately independent.
-To mitigate this issue, we developed a method called ``Linear Optimal Low-rank'' embedding (\Lol), which extends PCA by 
+To mitigate this issue, we developed a closed-form 
+% @jovo: is closed form right here?
+method called ``Linear Optimal Low-rank'' embedding (\Lol), which extends PCA by 
 by jointly utilizing both the dimensions that maximize classification accuracy (ignoring the variance) and the dimensions that maximize variance (ignoring the classification task). 
 We show via a combination of theoretical results and simulations that \Lol~finds a better low-dimensional representation of the data for subsequent classification under  relatively general settings, meaning that no matter what the dimensionality of the original data, or the dimensionality of embedded data, or sample size, \Lol~finds a better representation of the data for subsequent classification, while adding negligible additional computational cost. Additional numerical experiments demonstrate that the same intuition may fruitfully be applied to hypothesis testing and regression.
 We demonstrate the performance of \Lol~on three different applications: (i) sparse genetics, (ii) dense images, and (iii) connectomics application with over 500 million features comprising $>$400 gigabytes.
