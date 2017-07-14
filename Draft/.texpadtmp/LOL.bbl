@@ -109,12 +109,6 @@ C.~M. Bishop, \emph{{Pattern Recognition and Machine Learning}}, ser.
   \url{http://www.library.wisc.edu/selectedtocs/bg0137.pdf}
 \BIBentrySTDinterwordspacing
 
-\bibitem{FlashMatrix}
-D.~Zheng, D.~Mhembere, J.~T. Vogelstein, C.~E. Priebe, and R.~Burns,
-  ``Flashmatrix: Parallel, scalable data analysis with generalized matrix
-  operations using commodity ssds,'' \emph{arXiv preprint arXiv:1604.06414},
-  2016.
-
 \bibitem{FlashGraph}
 D.~Zheng, D.~Mhembere, R.~Burns, J.~Vogelstein, C.~E. Priebe, and A.~S. Szalay,
   ``{FlashGraph}: Processing billion-node graphs on an array of commodity
@@ -125,6 +119,30 @@ D.~Zheng, D.~Mhembere, R.~Burns, J.~Vogelstein, C.~E. Priebe, and A.~S. Szalay,
 D.~Zheng, R.~Burns, J.~Vogelstein, C.~E. Priebe, and A.~S. Szalay, ``An
   ssd-based eigensolver for spectral analysis on billion-node graphs,''
   \emph{CoRR}, vol. abs/1602.01421, 2016.
+
+\bibitem{FlashMatrix}
+D.~Zheng, D.~Mhembere, J.~T. Vogelstein, C.~E. Priebe, and R.~Burns,
+  ``Flashmatrix: Parallel, scalable data analysis with generalized matrix
+  operations using commodity ssds,'' \emph{arXiv preprint arXiv:1604.06414},
+  2016.
+
+\bibitem{Candes2006b}
+\BIBentryALTinterwordspacing
+E.~J. Cand{\`{e}}s and T.~Tao, ``{Near-Optimal Signal Recovery From Random
+  Projections: Universal Encoding Strategies?}'' \emph{IEEE Transactions on
+  Information Theory}, vol.~52, no.~12, pp. 5406--5425, dec 2006. [Online].
+  Available:
+  \url{http://ieeexplore.ieee.org/lpdocs/epic03/wrapper.htm?arnumber=4016283}
+\BIBentrySTDinterwordspacing
+
+\bibitem{Hastie2006}
+\BIBentryALTinterwordspacing
+T.~Hastie, K.~W. Church, P.~Li, and K.~C. Kdd, ``{Very sparse random
+  projections},'' \emph{Proceedings of the 12th ACM SIGKDD international
+  conference on Knowledge discovery and data mining - KDD '06}, p. 287, 2006.
+  [Online]. Available:
+  \url{http://portal.acm.org/citation.cfm?doid=1150402.1150436}
+\BIBentrySTDinterwordspacing
 
 \bibitem{SEM_SpMM}
 D.~Zheng, D.~Mhembere, V.~Lyzinski, J.~Vogelstein, C.~E. Priebe, and R.~Burns,
@@ -145,24 +163,6 @@ G.~M. Amdahl, ``{Validity of the Single Processor Approach to Achieving Large
 J.~Abello, A.~L. Buchsbaum, and J.~R. Westbrook, ``A functional approach to
   external graph algorithms,'' in \emph{Algorithms—ESA’98}.\hskip 1em plus
   0.5em minus 0.4em\relax Springer, 1998, pp. 332--343.
-
-\bibitem{Candes2006b}
-\BIBentryALTinterwordspacing
-E.~J. Cand{\`{e}}s and T.~Tao, ``{Near-Optimal Signal Recovery From Random
-  Projections: Universal Encoding Strategies?}'' \emph{IEEE Transactions on
-  Information Theory}, vol.~52, no.~12, pp. 5406--5425, dec 2006. [Online].
-  Available:
-  \url{http://ieeexplore.ieee.org/lpdocs/epic03/wrapper.htm?arnumber=4016283}
-\BIBentrySTDinterwordspacing
-
-\bibitem{Hastie2006}
-\BIBentryALTinterwordspacing
-T.~Hastie, K.~W. Church, P.~Li, and K.~C. Kdd, ``{Very sparse random
-  projections},'' \emph{Proceedings of the 12th ACM SIGKDD international
-  conference on Knowledge discovery and data mining - KDD '06}, p. 287, 2006.
-  [Online]. Available:
-  \url{http://portal.acm.org/citation.cfm?doid=1150402.1150436}
-\BIBentrySTDinterwordspacing
 
 \bibitem{Lopes2011a}
 \BIBentryALTinterwordspacing
