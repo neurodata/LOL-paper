@@ -54,6 +54,10 @@ J.~Fan, Y.~Feng, and X.~Tong, ``{A road to classification in high dimensional
   \url{http://doi.wiley.com/10.1111/j.1467-9868.2012.01029.x}
 \BIBentrySTDinterwordspacing
 
+\bibitem{Zou2006a}
+H.~Zou, ``{The Adaptive Lasso and Its Oracle Properties},'' pp. 1418--1429,
+  2006.
+
 \bibitem{Hastie2004}
 T.~Hastie, R.~Tibshirani, and J.~H. Friedman, ``{The Elements of Statistical
   Learning: Data Mining, Inference, and Prediction},'' \emph{BeiJing:

@@ -1,4 +1,5 @@
-\documentclass[10pt]{article}
+
+\documentclass[10pt]{article}
 \input{preamble.tex}
 
 % @jlp: put in overleaf
@@ -337,10 +338,10 @@ Because there is no small number of features that separate the data well,  \Road
 
 \subsection*{Statistical Theory}
 
-The above numerical experiments provide the intuition to guide our theoretical developments.
+The above numerical experiments provide the intuition to guide our theoretical developments. 
+% We specifically compare \Lol~to other projection methods, in particular, evaluating when appending the difference of the means yields improved performance to any 
 \begin{thm} \label{t:LDA}
-\Lol~is always better than or equal to  \Pca' under the Gaussian model, and better than or equal to \Pca~with relatively weak conditions, as well as other linear projections.  
- This is true for all possible observed dimensionality of the data, and number of dimensions into which we embed, for sufficiently large sample sizes. Moreover, under relatively weak assumptions, these conditions hold almost surely as the number of dimensions increases.
+\Lol~is always better than or equal to \Pca' (and nearly any other linear projection) under the Gaussian model, and better than or equal to \Pca~with relatively weak conditions.  This is true for all possible observed dimensionality of the data, and number of dimensions into which we embed, for sufficiently large sample sizes. Moreover, under relatively weak assumptions, these conditions hold almost surely as the number of dimensions increases.
 \end{thm}
 A formal statement of the theorem and proof are provided in Appendix \ref{sec:theory}.  The condition for \Lol~to be better than \Pca~is essentially that the $d^{th}$ eigenvector of the pooled sample covariance matrix has less information about classification than the difference of the means vector.  
 %
@@ -370,25 +371,14 @@ Here we numerically investigate the performance of \Lol~versus \Pca~and other me
 For each of four different scenarios, we sample 
 %what happens when the parameters must be estimated from training data, and in particular, from 
 $n=100$ training samples each with  $p=100$ features; therefore, FIsher's \Lda~cannot solve the problem because there are infinitely many ways to overfit.  
-For each setting we evaluate the misclassification rate on held out data for all number of dimensions to embed into.  The comparison algorithms are \Pca, \Pca',  \Lasso, and \Road.  
+For each setting we evaluate the misclassification rate on held out data for all number of dimensions to embed into.  The comparison algorithms are \Pca, \Pca', and two sparse methods \Lasso~\cite{Zou2006a}, and \Road~\cite{Fan2012a}. \Road~is a sparse approach specifically designed for  Gaussian data, but only works for two-class problems, whereas \Lasso~was designed for finding sparse dimensions and can be applied to any number of classes.  
 
 %These results strengthen our theoretical results by providing exact magnitudes of performance, rather than merely better than guarantees, in addition to operating in a finite sample setting, more akin to real data scenarios.
 
-\para{Theoretical model} We begin by investigating two scenarios that satisfy the \Lda~model assumptions required by our proofs. FirstConsider  the rotated trunk example from Figure \ref{f:cigars}C as well as a ``Toeplitz'' example, as depicted in Figures \ref{f:properties}A and B, respectively.  In both cases, we compare \Lol~to \FoP~and \Road.  In both scenarios, for all dimensions, \Lol~achieves a lower error rate than either of its competitors.
+\para{Theoretical model} We begin by investigating two scenarios that satisfy the \Lda~model assumptions required by our proofs. First, consider  the rotated trunk example from Figure \ref{f:cigars}{\color{magenta}C} as well as a ``Toeplitz'' example, as depicted in Figures \ref{f:properties}{\color{magenta}A} and {\color{magenta}B}, respectively.  In both scenarios, for all dimensions, \Lol~achieves a lower error rate than either of its competitors, often dramatically so.
 
 
-\para{Multiple Classes} \Lol~can trivially be extended to $>2$ class situations.  Nai\"vely it may seem like we would need to keep all pairwise differences between means.  However, given $k$ classes, the set of all $k^2$ differences is only rank $k-1$.  In other words, we can equivalently compute the distance of each mean to a single mean (in practice, for minimizing variance reasons, we use the class which has the maximum number of samples (breaking ties randomly).  Figure \ref{f:properties}C shows a 3-class generalization of the rotated Trunk example from Figure \ref{f:properties}A.  While \Lol~uses the additional class naturally,  many previously proposed high-dimensional classifiers, such as \Road, natively only work for 2-classes. Thus, we only compare \Lol~to \PoF~here. As before, \Lol~significantly outperforms \PoF~for all embedding dimensions.
-
-
-
-% the data are sampled from the \Lda~ model, and in both cases, the optimal dimensionality under finite samples depends on the particular approach, but is never the true dimensionality.  Moreover, \Lol~dominates the other approaches, regardless of the number of dimensions used.
-%
-
-% Indeed, we can generalize Theorem \ref{t:n} to include ``sub-Gaussian'' data, rather than just Gaussian:
-% \begin{thm} \label{t:FAT}
-% Under a sub-Gaussian generalization of the \Lda~ model, \Lol~is still better than \Pca.
-% \end{thm}
-
+\para{Multiple Classes} \Lol~can trivially be extended to $>2$ class situations, unlike \Road.  In brief, \Lol~computes the mean of each class, and then selecets one mean to be the reference, and computes the difference between all the other means and the reference one.  Under the linearity assumptiosn, this approach does not lose any information relative to computing the distance between all pairs of means  (see Methods for details).  We generated data again from the same Trunk example, but added a third class whose mean is the zero vector.  We used \Lasso~as the sparse method approach, which utterly fails in this near sparse setting.  As before, \Lol~outperforms the other methods for all dimensions. 
 
 
 
@@ -413,15 +403,11 @@ In all 7 cases, \Lol, or the appropriate generalization thereof, outperforms uns
 
 
 
-\subsection*{Generalizations of \Lol}
 
-% The simple geometric intuition which led to the development of \Lol~suggests that we can easily generalize \Lol~to be more appropriate for more complicated settings. We consider three additional scenarios:
-
-The above simulations were all under the \Lda~model, for which we have theoretical guarantees that \Lol~should outperform \PoF.  In this section, we explore simulation settings that extend beyond the geometric constraints we required for our proofs, to develop an even deeper understanding of \Lol.
-
-\para{Fat Tails} Figure \ref{f:properties}D shows a sparse example with ``fat tails'' to mirror real data settings better. More specifically, each class is the sum of multiple Gaussians, with the same mean, but different covariances (see Methods for details). The qualitative results are consistent with those of A and B, even though the setting is no longer exactly the setting under which we have theoretical confirmation. More specifically, \Lol~outperforms \PoF~and \Road~for all dimensions.
+\para{Fat Tails} Figure \ref{f:properties}{\color{magenta}D} shows a sparse example with ``fat tails'' to mirror real data settings better. More specifically, each class is the sum of multiple Gaussians, with the same mean, but different covariances (see Methods for details). The qualitative results are consistent with those of the previous numerical experiments, even though  we have no theoretical guarantees here. More specifically, \Lol~outperforms all other methods for all dimensions.
 
 
+% @jovo: what happened to these ones?
 \para{QDA} Sometimes, it makes more sense to model each class as having a unique covariance matrix, rather than a shared covariance matrix.  Assuming everything is Gaussian, the optimal classifier in this scenario is called  Quadratic Discriminant Analysis (QDA) \cite{Hastie2004}.  Intuitively then, we can modify \Lol~to compute the eigenvectors separately for each class, and concatenate them (sorting them according to their singular values).  Moreover, rather than classifying the projected data with \Lda, we can then classify the projected data with QDA.  Indeed, simulating data according to such a model (Figure \ref{f:properties}E), \Lol~performs slightly better than chance, regardless of the number of dimensions we use to project, whereas QOQ (for Quadratic Optimal QDA) performs significantly better regardless of how many dimensions it keeps. This demonstrates a  straightforward generalization of \Lol, available to us because of the simplicity and intuitiveness of \Lol.
 
 \para{Outliers}  Outliers persist in many real data sets.  Finding outliers, especially in high-dimensional data, is both tedious and difficult.  Therefore, it is often advantageous to have estimators that are robust to certain kinds of outliers \cite{Huber1981a,Rousseeuw1999a,Ferrari2010a}.  \Pca~and eigenvector computation are particularly sensitive to outliers \cite{Candes2009b}.  Because \Lol~is so simple and modular, we can replace typical eigenvector computation with a robust variant thereof, such as the geometric median subspace embedding \cite{Zhang2014a}.  Figure \ref{f:properties}F shows an example where we generated  $n/2$ training samples according to the simple \Lda~model, but then added another $n/2$ training samples from a noise model.  \Lrl~(Linear Robust Low-Rank), performs better than \Lol~regardless of the number of dimensions we keep. This simulation setting further demonstrates the flexibility of the \Lol~framework to be extensible to other, more complicated scenarios.
@@ -431,16 +417,16 @@ The above simulations were all under the \Lda~model, for which we have theoretic
 
 \subsection*{Computational Efficiency}
 
-In many applications, the main quantifiable consideration in whether to use a particular method, other than accuracy, is computational efficiency.  Because implementing \Lol~requires only highly optimized linear algebraic routines---including computing moments and singular value decomposition---rather than the costly iterative programming techniques currently required for sparse or dictionary learning type problems.  Moreover, because \Lol~only requires computing means and covariances, we can leverage recent advances in parallel matrix operations \cite{FlashMatrix} on fast solid-state drives (SSDs). We implement \Lol~with the R interface of FlashX \cite{FlashGraph, FlashMatrix, FlashEigen}.
+In many applications, the main quantifiable consideration in whether to use a particular method, other than accuracy, is computational efficiency.  Implementing \Lol~requires only highly optimized linear algebraic routines---including computing moments and singular value decomposition---rather than the costly iterative programming techniques currently required for sparse or dictionary learning type problems.  Moreover, because \Lol~only requires computing means and covariances, we can leverage recent advances in parallel matrix operations \cite{FlashMatrix} on fast solid-state drives (SSDs). We implement \Lol~with the R interface of FlashX \cite{FlashGraph, FlashMatrix, FlashEigen}.
 %More specifically, we modified FlashX to be able to perform all the computational primitives required for \Lol~on matrices that are short and fat, rather than tall and skinny.
-Given the FlashX programming framework, we can run \Lol~on essentially arbitrarily large data.  For these examples, we simulated data satisfying the \Lda~model; specifically, we used a spherically symmetric covariance matrix, with means just $\pm$ the one vector (see Methods for simulation details).
+Given the FlashX programming framework, we can run \Lol~on essentially arbitrarily large data.  
+%For these examples, we simulated data satisfying the \Lda~model; specifically, we used a spherically symmetric covariance matrix, with means just $\pm$ the one vector (see Methods for simulation details).
 
-Figure \ref{f:speed}A demonstrates both the in memory and semi-external memory \cite{SEM_SpMM} computing models of our implementation.  For the in memory implementation (light green line), we see that the run time increases linearly with the number of dimensions, requiring about 11 minutes to run \Lol~on a $p=32$,$000$,$000$ dimensional problem with $n=2000$ samples.   This linear increase is the optimal scale up according to Ahmdel's Law \cite{Amdahl1967}.  This example already requires 477 gigabyte (GB) to store the data, but $<$1 GB to perform the computations.  For larger data, we developed a semi-external memory implementation, which stores the data matrix on solid state drives, and the low-rank estimates in RAM \cite{abello1998functional}.  This strategy allows us to run \Lol~as long as the data can fit on disk, and the low-rank approximation can fit in RAM.  The semi-external memory implementation (dark green line) achieves the same performance as the in memory implementation whenever the data are small enough for in memory, and continues scaling optimally (linearly) as the dimensionality further increases to $p=128,000,000$ dimensions, a multi-terabyte scenario.
+Figure \ref{f:speed}{\color{magenta}A} demonstrates both the in memory and semi-external memory \cite{SEM_SpMM} computing models of our implementation.  For the in memory implementation (light green line), we see that the run time increases linearly with the number of dimensions, requiring about 11 minutes to run \Lol~on a $p=32$,$000$,$000$ dimensional problem with $n=2000$ samples.   This linear increase is the optimal scale up according to Ahmdel's Law \cite{Amdahl1967}.  This example already requires 477 gigabyte (GB) to store the data, but $<$1 GB to perform the computations.  For larger data, we developed a semi-external memory implementation, which stores the data matrix on solid state drives, and the low-rank estimates in RAM \cite{abello1998functional}.  This strategy allows us to run \Lol~as long as the data can fit on disk, and the low-rank approximation can fit in RAM.  The semi-external memory implementation (dark green line) achieves the same performance as the in memory implementation whenever the data are small enough for in memory, and continues scaling optimally (linearly) as the dimensionality further increases to $p=128,000,000$ dimensions, a multi-terabyte scenario.
 
-Another option for making \Lol~scale up better is to utilize randomized algorithms.  In particular, random projections---for which the data are multiplied by a lower-dimensional random matrix---have been shown to provide excellent approximation eigenvectors \cite{Candes2006b}.  Moreover, very sparse random projections, in which the elements of the matrix are mostly zero, with $\pm 1$ randomly distributed, have been shown to be effective, and have significant computational benefits \cite{Hastie2006}. We therefore further modified FlashX to incorporate random projections and very sparse random projections, and let \Lal~denote Linear Approximate Low-rank.  Figure \ref{f:speed}A shows an order of magnitude improvement in both the in-memory and semi-external memory implementations of \Lal.
-
-
-Figure \ref{f:speed}B shows the error for \Lol~and \PoF~in this scenario, simply to demonstrate that even in this extremely high dimensional setting, \Lol~still outperforms \PoF. As expected, \Lal~performs as well as \\Lol~for the low dimensional settings.
+Another option for making \Lol~scale up better is to utilize randomized algorithms.  In particular, random projections---for which the data are multiplied by a lower-dimensional random matrix---have been shown to provide excellent approximation eigenvectors \cite{Candes2006b}.  Moreover, very sparse random projections, in which the elements of the matrix are mostly zero, with $\pm 1$ randomly distributed, have been shown to be effective, and have significant computational benefits \cite{Hastie2006}. We therefore further modified FlashX to incorporate random projections and very sparse random projections, which we denote Linear Approximate Low-rank (\Lal).   Figure \ref{f:speed}{\color{magenta}A} shows an order of magnitude improvement in both the in-memory and semi-external memory implementations using very sparse random projections.
+%
+Figure \ref{f:speed}{\color{magenta}B} shows the error for \Lol~and \Pca~in this scenario,  to demonstrate that even in this extremely high dimensional setting, \Lol~still outperforms \Pca. As expected, \Lal~performs as well as \Lol~for this high-dimensional settings.
 
 % we also implement a randomized variant of \Lol, that uses a novel FlashX implementation of random projection (in memory).  In this simulation setting, \Lfl~(short for Linear Fast Low-rank) performs just as well as \Lol, though at a substantially reduced computational burden.
 
@@ -452,7 +438,7 @@ Figure \ref{f:speed}B shows the error for \Lol~and \PoF~in this scenario, simply
 % \includegraphics[width=1\linewidth]{../Figs/speed_test}
 \includegraphics[width=1\linewidth]{../Figs/scalability}
 \caption{
-Computational efficiency of various low-dimensional projection methods. In all cases, $n=2000$, and we used spherically symmetric  simulation parameters (see Methods for details).   We compare \Pca~with the projection step of \Lol~(light green for in memory, dark green for semi-external memory ) and \Lfl~(light orange for in-memory, dark orange for semi-external memory) for different observed dimensions ($p$). \textbf{(A)} \Lol~exhibits optimal (linear) scale up and scale out, requiring only 46 minutes to find the embedding on a 2TB dataset, and only 3 minutes using \Lal (the sparse constant of sparse random projection $c=\dfrac{1}{\sqrt{p}}$). \textbf{(B)} Error for \Lal~is the same as \Lol~in this setting, and both are significantly better than \PoF~for all choices of embedding dimension.
+Computational efficiency of various low-dimensional projection methods. In all cases, $n=2000$, and we used spherically symmetric  simulation parameters (see Methods for details).   We compare \Pca~with the projection step of \Lol~(light green for in memory, dark green for semi-external memory ) and \Lal~(light orange for in-memory, dark orange for semi-external memory) for different observed dimensions ($p$). \textbf{(A)} \Lol~exhibits optimal (linear) scale up and scale out, requiring only 46 minutes to find the embedding on a 2TB dataset, and only 3 minutes using \Lal (the sparse constant of sparse random projection $c=\dfrac{1}{\sqrt{p}}$). \textbf{(B)} Error for \Lal~is the same as \Lol~in this setting, and both are significantly better than \PoF~for all choices of embedding dimension.
 % from \Lol, \Qoq, \Lrl, \Lfl, and \Lal, for different values of $(p,d)$.  The addition of the mean difference vector is essentially negligible.  Moreover, for small $d$, the \Lfl~is advantageous.  \Lal~is always fastest, and its performance is often comparable to other methods (not shown).
 }
 \label{f:speed}
