@@ -418,31 +418,34 @@ In all 7 cases, \Lol, or the appropriate generalization thereof, outperforms uns
 \subsection*{Computational Efficiency}
 
 When the dimensionality $p$ or sample size $n$ is large, the main bottleneck or concern is sometimes merely the ability to run anything on the data, rather than its predictive accuracy. Fortunately, \Lol~not only exhibits improved performance over standard methods, it also has several algorithmic and implementation level designs that make it computationally efficient.
-First, \Lol~admits a closed form solution, enabling it to leverage highly optimized linear algebraic routines rather than the costly iterative programming techniques currently required for sparse or dictionary learning type problems.   This means that when the dataset is small enough, it will run very quickly.  When the data size is larger than the memory of computer, however, other techniques are required.  
-Second, \Lol~is designed to be parallizable, meaning that it can be implemented run on modern hardware architectures.  Typical parallelization strategies distribute work across compute nodes in a large cluster.  However, doing so comes with a severe communication cost between the nodes.  Instead, we therefore leverage recent advances in computer architecture, including multicore processors and solid-state drives.  
-Building on FlashX \cite{FlashGraph, FlashEigen, FlashMatrix}, we developed  extremely efficient \Lol~implementations with an R interface for ease of use. This includes both an in memory implementation, when the data are small enough to be kept in RAM, and 
+First, \Lol~admits a closed form solution, enabling it to leverage highly optimized linear algebraic routines rather than the costly iterative programming techniques currently required for sparse or dictionary learning type problems.   This means that when the dataset is small enough, it will run very quickly.  
+Specifically, the implementation is linear in both sample size and dimensionality (Figure \ref{f:speed}{\color{magenta}A}; light green line).
+When the data size is larger than the memory of computer, however, other techniques are required.  
+Second, \Lol~is designed to be parallelizable. %, meaning that it can be implemented to utilize modern hardware architectures.  
+Typical parallelization strategies distribute work across compute nodes in a large cluster.  However, doing so comes with a severe communication cost between the nodes.  Instead, we therefore leverage recent advances in computer architecture, including multicore processors and solid-state drives.  
+Building on FlashX \cite{FlashGraph, FlashEigen, FlashMatrix}, we developed  extremely efficient \Lol~implementations with an R interface for ease of use, including both  an in memory implementation when the data are small enough to be kept in RAM, and a semi-external memory implementation for larger data.
 % @Jovo: fix this later
-This enables us to run \Lol~on essentially arbitrarily large data. 
+Our implementations enables us to run \Lol~on essentially arbitrarily large data,  achieving  in-memory speeds for small data, and enabling the same speeds for multi-terabyte data (Figure \ref{f:speed}{\color{magenta}A}, dark green line).
 Third, because \Lol~is so simple, we can use randomized approximate algorithms to further accelerate its performance.  
 In particular, random projections---for which the data are multiplied by a lower-dimensional random matrix---have been shown to provide excellent approximation eigenvectors \cite{Candes2006b}.  Moreover, very sparse random projections, in which the elements of the matrix are mostly zero, with $\pm 1$ randomly distributed, have been shown to be effective, and have significant computational benefits \cite{Hastie2006}.
+ We therefore further modified FlashX to incorporate very sparse random projections, which we denote by Linear Approximate Low-rank (\Lal) .   \Lal~shows an order of magnitude improvement in both the in-memory and semi-external memory implementations (Figure \ref{f:speed}{\color{magenta}A}; orange lines).
+ 
+ These empirical observations mirror the theoretical bounds of performance.  In particular, given $T$ threads with sparsity $c$, our implementation achieves a computational complexity of $\mc{O}(npd/Tc)$, with an optimal speed up and scale up (not shown).
+ Moreover, the error for \Lol~and \Lal~are substantially smaller than \Pca~for this setting for all dimensions (Figure \ref{f:speed}{\color{magenta}B}). 
+ 
 
-%We implement \Lol~with the R interface of FlashX \cite{FlashGraph, FlashMatrix, FlashEigen}.
-%More specifically, we modified FlashX to be able to perform all the computational primitives required for \Lol~on matrices that are short and fat, rather than tall and skinny.
-%Given the FlashX programming framework, we can run \Lol~on essentially arbitrarily large data.  
-%For these examples, we simulated data satisfying the \Lda~model; specifically, we used a spherically symmetric covariance matrix, with means just $\pm$ the one vector (see Methods for simulation details).
-
-Figure \ref{f:speed}{\color{magenta}A} demonstrates both the in memory and semi-external memory \cite{SEM_SpMM} computing models of our implementation.  For the in memory implementation (light green line), we see that the run time increases linearly (optimally) with the number of dimensions, requiring about 11 minutes to run \Lol~on a $p=32$,$000$,$000$ dimensional problem with $n=2000$ samples;  nearly  half a terabyte of data.   This linear increase is the optimal scale up according to Ahmdel's Law \cite{Amdahl1967}.  
-%This example already requires 477 gigabyte (GB) to store the data, but $<$1 GB to perform the computations.  
-To run \Lol~on larger data we developed a semi-external memory implementation, which stores the data matrix on solid state drives, and the low-rank estimates in RAM \cite{abello1998functional}.  
-%This strategy allows us to run \Lol~as long as the data can fit on disk, and the low-rank approximation can fit in RAM.  
-The semi-external memory implementation (dark green line) achieves the same performance as the in memory implementation whenever the data are small enough for in memory, and continues scaling optimally (linearly) as the dimensionality further increases to $p=128,000,000$ dimensions, a multi-terabyte scenario.
-
-%Another option for making \Lol~scale up better is to utilize randomized algorithms.  
- We therefore further modified FlashX to incorporate random projections and very sparse random projections, which we denote Linear Approximate Low-rank (\Lal).   Figure \ref{f:speed}{\color{magenta}A} shows an order of magnitude improvement in both the in-memory and semi-external memory implementations using very sparse random projections.
 %
-Figure \ref{f:speed}{\color{magenta}B} shows the error for \Lol~and \Pca~in this scenario,  to demonstrate that even in this extremely high dimensional setting, \Lol~still outperforms \Pca. As expected, \Lal~performs as well as \Lol~for this high-dimensional settings.
+%Figure \ref{f:speed}{\color{magenta}A} demonstrates both the in memory and semi-external memory \cite{SEM_SpMM} computing models of our implementation.  For the in memory implementation (light green line), we see that the run time increases linearly (optimally) with the number of dimensions, requiring about 11 minutes to run \Lol~on a $p=32$,$000$,$000$ dimensional problem with $n=2000$ samples;  nearly  half a terabyte of data.   This linear increase is the optimal scale up according to Ahmdel's Law \cite{Amdahl1967}.  
+%%This example already requires 477 gigabyte (GB) to store the data, but $<$1 GB to perform the computations.  
+%To run \Lol~on larger data we developed a semi-external memory implementation, which stores the data matrix on solid state drives, and the low-rank estimates in RAM \cite{abello1998functional}.  
+%%This strategy allows us to run \Lol~as long as the data can fit on disk, and the low-rank approximation can fit in RAM.  
+%The semi-external memory implementation (dark green line) achieves the same performance as the in memory implementation whenever the data are small enough for in memory, and continues scaling optimally (linearly) as the dimensionality further increases to $p=128,000,000$ dimensions, a multi-terabyte scenario.
+%
+%%Another option for making \Lol~scale up better is to utilize randomized algorithms.  
+% We therefore further modified FlashX to incorporate random projections and very sparse random projections, which we denote Linear Approximate Low-rank (\Lal).   Figure \ref{f:speed}{\color{magenta}A} shows an order of magnitude improvement in both the in-memory and semi-external memory implementations using very sparse random projections.
+%%
+%Figure \ref{f:speed}{\color{magenta}B} shows the error for \Lol~and \Pca~in this scenario,  to demonstrate that even in this extremely high dimensional setting, \Lol~still outperforms \Pca. As expected, \Lal~performs as well as \Lol~for this high-dimensional settings.
 
-% we also implement a randomized variant of \Lol, that uses a novel FlashX implementation of random projection (in memory).  In this simulation setting, \Lfl~(short for Linear Fast Low-rank) performs just as well as \Lol, though at a substantially reduced computational burden.
 
 
 % To quantify the computational efficiency of \Lol~and its variants, Figure \ref{f:speed} shows the wall time it takes to run each method on the stacked cigars problem, varying the ambient dimensionality, embedded dimensionality, and sample size.  Note that for completeness, we include two additional variants of \Lol: \Lal~and \Lfl.  \Lfl~(short for Linear Fast Low-rank) replaces the standard \Svd~algorithm with a randomized variant, which can be much faster in certain situations \cite{Halko2011a}.  \Lal~(short for Linear Approximate Low-rank) goes even one step further, replacing \Svd~with random projections \cite{Candes2006a}.  This variant of \Lol~is the fastest, its runtime is  least sensitive to $(p,d,n)$, and its accuracy is often commensurate (or better) than other variants of \Lol.  The runtime of all the variants of \Lol~are quite similar to \sct{Fld $\circ$ Pca}.  Given, given \Lol's improved accuracy, and nearly identical simplicity, it seems there is very little reason to not use \Lol~instead of \sct{Fld $\circ$ Pca}.
@@ -460,13 +463,13 @@ Computational efficiency of various low-dimensional projection methods. In all c
 
 %\para{Computational Theory}
 
-We reify the above computational experiments with theoretical statements.  Computing the mean for each class requires $\mc{O}(n_j p)$ floating point operations (flops), where $n_j$ is the number of samples per class. Subtracting the means requires $\mc{O}((J-1) p)$ flops, where $J$ is the total number of classes.  Computing the first $d$ singular triples (left and right singular vectors, and singular value) requires $\mc{O}(n p d)$ flops.
-The sparse random projection however only requires $\mc{O}(n p d / c)$, where $c1$ is the sparsity of the sparse random projection matrix.
-%The randomized version of \Svd~however only requires $\mc{O}(d^2 (n + p))+ (q+1) 2 d M$, where $M$ is the flop count required for matrix vector multiply.
-Since, $d \ll n,p$, this can substantially reduce computational complexity.  Regardless, \Lol~computation is clearly bottlenecked by the \Pca~computation or random projection for single threaded operations.
-
-These empirical estimates of computational complexity match the theoretically optimal rates.  
-In particular, with $n$ samples in $p$ dimensions embedded into $d$ dimensions give $T$ threads, the computational complexity is $\mc{O}(n p d / T)$ flops for \Lol, or and $\mc{O}(n p d / c T)$ flops for \Lal, where $c$ is the sparsity of the random projection matrix.
+%We reify the above computational experiments with theoretical statements.  Computing the mean for each class requires $\mc{O}(n_j p)$ floating point operations (flops), where $n_j$ is the number of samples per class. Subtracting the means requires $\mc{O}((J-1) p)$ flops, where $J$ is the total number of classes.  Computing the first $d$ singular triples (left and right singular vectors, and singular value) requires $\mc{O}(n p d)$ flops.
+%The sparse random projection however only requires $\mc{O}(n p d / c)$, where $c1$ is the sparsity of the sparse random projection matrix.
+%%The randomized version of \Svd~however only requires $\mc{O}(d^2 (n + p))+ (q+1) 2 d M$, where $M$ is the flop count required for matrix vector multiply.
+%Since, $d \ll n,p$, this can substantially reduce computational complexity.  Regardless, \Lol~computation is clearly bottlenecked by the \Pca~computation or random projection for single threaded operations.
+%
+%These empirical estimates of computational complexity match the theoretically optimal rates.  
+%In particular, with $n$ samples in $p$ dimensions embedded into $d$ dimensions give $T$ threads, the computational complexity is $\mc{O}(n p d / T)$ flops for \Lol, or and $\mc{O}(n p d / c T)$ flops for \Lal, where $c$ is the sparsity of the random projection matrix.
 
 
 %Our parallel in memory implementation scales-up optimally (linearly) with the number of threads, requiring $\mc{O}(n p d / T)$ flops for \Lol,

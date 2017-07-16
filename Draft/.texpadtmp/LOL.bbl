@@ -144,26 +144,6 @@ T.~Hastie, K.~W. Church, P.~Li, and K.~C. Kdd, ``{Very sparse random
   \url{http://portal.acm.org/citation.cfm?doid=1150402.1150436}
 \BIBentrySTDinterwordspacing
 
-\bibitem{SEM_SpMM}
-D.~Zheng, D.~Mhembere, V.~Lyzinski, J.~Vogelstein, C.~E. Priebe, and R.~Burns,
-  ``Semi-external memory sparse matrix multiplication on billion-node graphs in
-  a multicore architecture,'' \emph{CoRR}, vol. abs/1602.02864, 2016.
-
-\bibitem{Amdahl1967}
-\BIBentryALTinterwordspacing
-G.~M. Amdahl, ``{Validity of the Single Processor Approach to Achieving Large
-  Scale Computing Capabilities},'' in \emph{AFIPS Spring Joint Computer
-  Conference, 1967. AFIPS '67 (Spring). Proceedings of the}, vol.~30, 1967, pp.
-  483--485. [Online]. Available:
-  \url{http://delivery.acm.org/10.1145/1470000/1465560/p483-amdahl.pdf?ip=202.189.127.238{\&}id=1465560{\&}acc=ACTIVE
-  SERVICE{\&}key=CDD1E79C27AC4E65.DE0A32330AE3471B.4D4702B0C3E38B35.4D4702B0C3E38B35{\&}CFID=646862329{\&}CFTOKEN=33418015{\&}{\_}{\_}acm{\_}{\_}=1426882996{\_}a666a43ab4250317fe0}
-\BIBentrySTDinterwordspacing
-
-\bibitem{abello1998functional}
-J.~Abello, A.~L. Buchsbaum, and J.~R. Westbrook, ``A functional approach to
-  external graph algorithms,'' in \emph{Algorithms—ESA’98}.\hskip 1em plus
-  0.5em minus 0.4em\relax Springer, 1998, pp. 332--343.
-
 \bibitem{Lopes2011a}
 \BIBentryALTinterwordspacing
 M.~Lopes, L.~Jacob, and M.~J. Wainwright, ``{A More Powerful Two-Sample Test in

@@ -27,7 +27,7 @@ plot(x+1,nanmean(PCA),'linewidth',2)
 % legend('lol','pca','rrlda')
 
 axis('tight')
-t=title([{'(D) MRN'}; {['D > 500,000,000, n = 112']}]);
+t=title([{'(C) MRN; K=2'}; {['D > 500,000,000, n = 112']}]);
 set(t, 'horizontalAlignment', 'left')
 set(t, 'units', 'normalized')
 set(t, 'position', [0.1 0.8 0])

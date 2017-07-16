@@ -16,9 +16,10 @@ switch sit
         
     case 'real'
         settings={...
-            'prostate';...
+%             'prostate';...
             'colon';...
             'MNIST';...
+%             'CIFAR-10';...
             'MRN';...
             };
         
@@ -89,27 +90,27 @@ for s=1:S
             G.ylab='Fat Tails (D=1000)';
             G.xmax=30;
         case 'prostate'
-            G.ylab='(A) Prostate';
+            G.ylab='(A) Prostate; K=2';
             G.xmax=20;
             G.ymax=0.5;
             G.tit='Misclassification Rate';
         case 'colon'
-            G.ylab='(B) Colon';
+            G.ylab='(A) Colon; K=2';
             G.xticks=[10:10:500];
             G.xmax=20;
             G.ymax=0.5;
         case 'MNIST'
-            G.ylab='(C) MNIST';
+            G.ylab='(B) MNIST; K=10';
             G.xticks=[10:10:500];
             G.xmax=30;
             G.ymax=1.0;
         case 'CIFAR-10'
-            G.ylab='CIFAR-10';
+            G.ylab='CIFAR-10; K=2';
             G.xmax=30;
             G.xticks=[10:10:500];
             G.xlab='# of Embedded Dimensions';
         case 'MRN'
-            G.ylab='(D) MRN';
+            G.ylab='(C) MRN; K=2';
             G.xmax=100;
             G.xticks=[25:25:500];
             G.xlab='# of Embedded Dimensions';
@@ -133,7 +134,7 @@ end
 if strcmp(sit,'sims')
     H.wh=[6.5 9];
 else
-    H.wh=[11.5,2];
+    H.wh=[10,2];
     legend({'LOL','RR-LDA','Eigenfaces','ROAD','Lasso'},'Position', [0.46 0.3 1 0.2]) ; % [left bottom width height] 'location','bestoutside')
     legend('boxoff')
 end
