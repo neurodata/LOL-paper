@@ -490,17 +490,26 @@ Computational efficiency of various low-dimensional projection methods. In all c
 \centering
 \includegraphics[width=1\linewidth]{../Figs/plot_real}
 \caption{
-For four standard datasets, we benchmark \Lol~(green circles) versus standard classification methods, including support vector machines (blue up triangles), \Road~(cyan down triangles), \sct{Lasso}~(magenta pluses), and random forest (orange diamonds).
-Top panels show error rate as a function of log$_2$ number of embedded dimensions (for \Lol, \Road, and \sct{Lasso}) or cost (for SVM).
-% \Lol~consistently achieves lower error for fewer dimensions.
-Bottom panels show the minimum error rate achieved by each of the five algorithms versus time.
-The lower left dark gray (upper right light gray) rectangle is the area in which any algorithm is \emph{better}  (worse) than \Lol~in terms of both accuracy and efficiency.
-\textbf{(A)} Prostate: a standard sparse dataset.  1-dimensional \Lol~does very well, although keeping $2^5$ ambient coordinates slightly improves performance, at a significant cost of compute time (two orders of magnitude), with minimal additional interpretability.
-\textbf{(B)} Colon: another standard sparse dataset.  Here, 2-4 dimensions of \Lol~outperforms all other approaches considered regardless of how many dimensions they keep.
-\textbf{(C)} MNIST: 10 image categories, so \Road~is not possible.  \Lol~does very well regardless of the number of dimensions kept.  SVN marginally improves on \Lol~accuracy, at a significant cost in computation (two orders of magnitude).
-\textbf{(D)} CIFAR-10: a higher dimensional and newer 10 category image classification problem.  Results are qualitatively similar to C.
-%
-Note that, for all four of the problems, there is no algorithmperforming better and faster than \Lol; rather, most algorithms typically perform worse and slower (though some are more accurate and much more computationally expensive).
+For three datasets, we benchmark \Lol~(green) versus standard classification methods, 
+%including support vector machines (blue up triangles), 
+\Pca'~(cyan),
+\Pca~(magenta),
+\Road~(orange), and 
+\sct{Lasso}~(dark blue).  For \Lol, \Pca, and \Pca', we compose the embedding with Fisher's \Lda.  
+%and random forest (orange diamonds).
+
+The three panels show the misclassification rate (vertical axis) and the number of projection dimensions (horizontal axis).  \textbf{(A)} A standard sparse colon cancer genetics dataset. \textbf{(B)} A dense image dataset from Figure \ref{f:mnist}, but this time using all 10 digits. \textbf{(C)} A magnetic resonance imaging dataset with over five hundred million features.  In all cases, for all number of projection dimensions, \Lol~does as well or better than all other methods.  
+
+%Top panels show error rate as a function of log$_2$ number of embedded dimensions (for \Lol, \Road, and \sct{Lasso}) or cost (for SVM).
+%% \Lol~consistently achieves lower error for fewer dimensions.
+%Bottom panels show the minimum error rate achieved by each of the five algorithms versus time.
+%The lower left dark gray (upper right light gray) rectangle is the area in which any algorithm is \emph{better}  (worse) than \Lol~in terms of both accuracy and efficiency.
+%\textbf{(A)} Prostate: a standard sparse dataset.  1-dimensional \Lol~does very well, although keeping $2^5$ ambient coordinates slightly improves performance, at a significant cost of compute time (two orders of magnitude), with minimal additional interpretability.
+%\textbf{(B)} Colon: another standard sparse dataset.  Here, 2-4 dimensions of \Lol~outperforms all other approaches considered regardless of how many dimensions they keep.
+%\textbf{(C)} MNIST: 10 image categories, so \Road~is not possible.  \Lol~does very well regardless of the number of dimensions kept.  SVN marginally improves on \Lol~accuracy, at a significant cost in computation (two orders of magnitude).
+%\textbf{(D)} CIFAR-10: a higher dimensional and newer 10 category image classification problem.  Results are qualitatively similar to C.
+%%
+%Note that, for all four of the problems, there is no algorithmperforming better and faster than \Lol; rather, most algorithms typically perform worse and slower (though some are more accurate and much more computationally expensive).
 % This suggests that regardless of how one subjectively weights computational efficiency versus accuracy, \Lol~is the best default algorithm in a variety of real data settings.
 }
 \label{f:realdata}
