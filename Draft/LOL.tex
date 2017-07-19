@@ -373,16 +373,8 @@ For each of four different scenarios, we sample
 $n=100$ training samples each with  $p=100$ features; therefore, FIsher's \Lda~cannot solve the problem because there are infinitely many ways to overfit.  
 For each setting we evaluate the misclassification rate on held out data for all number of dimensions to embed into.  The comparison algorithms are \Pca, \Pca', and two sparse methods \Lasso~\cite{Zou2006a}, and \Road~\cite{Fan2012a}. \Road~is a sparse approach specifically designed for  Gaussian data, but only works for two-class problems, whereas \Lasso~was designed for finding sparse dimensions and can be applied to any number of classes.  
 
-%These results strengthen our theoretical results by providing exact magnitudes of performance, rather than merely better than guarantees, in addition to operating in a finite sample setting, more akin to real data scenarios.
 
-\para{Theoretical model} We begin by investigating two scenarios that satisfy the \Lda~model assumptions required by our proofs. First, consider  the rotated trunk example from Figure \ref{f:cigars}{\color{magenta}C} as well as a ``Toeplitz'' example, as depicted in Figures \ref{f:properties}{\color{magenta}A} and {\color{magenta}B}, respectively.  In both scenarios, for all dimensions, \Lol~achieves a lower error rate than either of its competitors, often dramatically so.
-
-
-\para{Multiple Classes} \Lol~can trivially be extended to $>2$ class situations, unlike \Road.  In brief, \Lol~computes the mean of each class, and then selecets one mean to be the reference, and computes the difference between all the other means and the reference one.  Under the linearity assumptiosn, this approach does not lose any information relative to computing the distance between all pairs of means  (see Methods for details).  We generated data again from the same Trunk example, but added a third class whose mean is the zero vector.  We used \Lasso~as the sparse method approach, which utterly fails in this near sparse setting.  As before, \Lol~outperforms the other methods for all dimensions. 
-
-
-
-\begin{figure}[h!]
+\begin{figure}
 \centering
 \includegraphics[width=0.8\linewidth]{../Figs/plot_sims}
 \caption{
@@ -400,6 +392,16 @@ In all 7 cases, \Lol, or the appropriate generalization thereof, outperforms uns
 }
 \label{f:properties}
 \end{figure}
+
+
+
+
+%These results strengthen our theoretical results by providing exact magnitudes of performance, rather than merely better than guarantees, in addition to operating in a finite sample setting, more akin to real data scenarios.
+
+\para{Theoretical model} We begin by investigating two scenarios that satisfy the \Lda~model assumptions required by our proofs. First, consider  the rotated trunk example from Figure \ref{f:cigars}{\color{magenta}C} as well as a ``Toeplitz'' example, as depicted in Figures \ref{f:properties}{\color{magenta}A} and {\color{magenta}B}, respectively.  In both scenarios, for all dimensions, \Lol~achieves a lower error rate than either of its competitors, often dramatically so.
+
+
+\para{Multiple Classes} \Lol~can trivially be extended to $>2$ class situations, unlike \Road.  In brief, \Lol~computes the mean of each class, and then selecets one mean to be the reference, and computes the difference between all the other means and the reference one.  Under the linearity assumptiosn, this approach does not lose any information relative to computing the distance between all pairs of means  (see Methods for details).  We generated data again from the same Trunk example, but added a third class whose mean is the zero vector.  We used \Lasso~as the sparse method approach, which utterly fails in this near sparse setting.  As before, \Lol~outperforms the other methods for all dimensions. 
 
 
 
@@ -497,9 +499,9 @@ For three datasets, we benchmark \Lol~(green) versus standard classification met
 \Road~(orange), and 
 \sct{Lasso}~(dark blue).  For \Lol, \Pca, and \Pca', we compose the embedding with Fisher's \Lda.  
 %and random forest (orange diamonds).
-
+%
 The three panels show the misclassification rate (vertical axis) and the number of projection dimensions (horizontal axis).  \textbf{(A)} A standard sparse colon cancer genetics dataset. \textbf{(B)} A dense image dataset from Figure \ref{f:mnist}, but this time using all 10 digits. \textbf{(C)} A magnetic resonance imaging dataset with over five hundred million features.  In all cases, for all number of projection dimensions, \Lol~does as well or better than all other methods.  
-
+%
 %Top panels show error rate as a function of log$_2$ number of embedded dimensions (for \Lol, \Road, and \sct{Lasso}) or cost (for SVM).
 %% \Lol~consistently achieves lower error for fewer dimensions.
 %Bottom panels show the minimum error rate achieved by each of the five algorithms versus time.
@@ -518,13 +520,24 @@ The three panels show the misclassification rate (vertical axis) and the number 
 Although \Lol~both statistically and computationally outperforms its natural competitors both in theory and in a variety of simulation settings, real data often tell a different story.
 %
 % To more comprehensively understand the relative advantages and disadvantages of \Lol~with respect to other high-dimensional classification approaches, in addition to evaluating its performance in theory, and in a variety of numerical simulations, it is important to evaluate it also on benchmark datasets.
-We have  therefore selected four commonly used high-dimensional datasets to compare \Lol~to several state-of-the-art algorithms (see Methods for details).  For each dataset, we compare \Lol~to (i) support vector machines (SVM), (ii) \Road, (iii) lasso, (iv) and random forest (RF).  Because in practice all these approaches have ``hyperparameters'' to tune, we consider several possible values for  SVM, lasso, and \Lol~(but not RF, as its runtime was too high).  Figure \ref{f:realdata} shows the results for all four datasets. For each, we use MATLAB implementations, partially because \Road~provides MATLAB code, and also because of MATLAB's ubiquity in certain communities.  Because we also have R and FlashX implementations of \Lol, comparisons using other languages would be straightforward.
+We have  therefore selected three  high-dimensional datasets to compare \Lol~to several state-of-the-art algorithms (see Methods for details).  For each dataset, we compare \Lol~to 
+(i) \Pca,
+(ii) \Pca',
+(iii) \Lasso, and
+(iv) \Road~for the two-class problems.
+% @jovo: remove QOQ
+%(i) support vector machines (SVM), (ii) \Road, (iii) lasso, (iv) and random forest (RF).  
+%Because in practice all these approaches have ``hyperparameters'' to tune, we consider several possible values for  SVM, lasso, and \Lol~(but not RF, as its runtime was too high).  
+For \Lol, \Pca, and \Pca', we used Fisher's \Lda~to classify the points after projecting into a lower dimensional space.
+Figure \ref{f:realdata} shows the results for all three datasets. 
+%For each, we use MATLAB implementations, partially because \Road~provides MATLAB code, and also because of MATLAB's ubiquity in certain communities.  Because we also have R and FlashX implementations of \Lol, comparisons using other languages would be straightforward.
+Panel A shows performance on a commonly used dataset for sparse methods.  Even still, \Lol~achieves a better (lower) misclassification rate than both sparse approaches, as well as \Pca~and \Pca'.
+Panel B shows performance on the MNIST dataset, one of the most widely used datasets in machine learning.  To challenge the methods we only provided 100 samples total from the 10 classes, where each point is a $784$ dimensional vector obtained from a $28 \times 28$ dimensional image.   \Pca'~does nearly as well as \Lol~on this dataset, whereas the other methods perform substantially worse.
+Finally, panel C shows the performance of \Lol~on a dataset derived from diffussion magnetic resonance imaging.  Specifically, we registered the raw data to a standard template (MNI152), and did no further pre-processing.  This is in stark contrast to the standard approaches to dealing with this data, which includes a deep processing chain including many steps of parametric modeling and downsampling.  At the native resolution each brain volume is over $500$ million dimensions, and we have only $112$  samples.  We learned classifiers on the basis of sex, and evaluated using a leave-one-out procedure.  As in the other two applications, \Lol~achieve a lower misclassification rate for all number of projection dimensions than both \Pca~and \Pca'.  Neither \Road~nor \Lasso~can run on these big data, whereas running this experiment only took a few minutes using our implementation of \Lol.  Moreover, the minimum misclassification rate was about $15\%$, which is the same performance we obtain using the severely processed and downsampled data that is typically required.  Note that processing these data remains hugely controversial in the future, so we side-step those issues by not processing and simply apply state of the art machine learning on them.
 
+%The results on real data mirror those on simulated data: for all cases and all number of projection dimensions, \Lol~achieves a lower misclassification rate than any of the other linear methods. This includes a 500 million dimensional 
 
-
-
-
-Qualitatively, the results are similar across datasets: \Lol~achieves high accuracy and computational efficiency as compared to the other methodologies.  Considering Figure \ref{f:realdata}A and B, two popular sparse settings, we find that \Lol~can find very low dimensional projections with very good accuracy. For the prostate data, with a sufficiently non-sparse solution for \Road, it slightly outperforms \Lol, but at substantial computational cost; in particular, \Road~takes about 100 times longer to run on this dataset.   Figure \ref{f:realdata}C and D are 10-class problems, so \Road~is no longer possible.  Here, SVM can again slightly outperform \Lol, but again, requiring 100 fold additional computational time.  In all cases, the beloved random forest classifier performs subpar. In all four scenarios, there is never an algorithm that achieves smaller error in less time, as indicated by the dark gray box being empty in the lower panels of Figure \ref{f:realdata}A-D.
+%Qualitatively, the results are similar across datasets: \Lol~achieves high accuracy and computational efficiency as compared to the other methodologies.  Considering Figure \ref{f:realdata}A and B, two popular sparse settings, we find that \Lol~can find very low dimensional projections with very good accuracy. For the prostate data, with a sufficiently non-sparse solution for \Road, it slightly outperforms \Lol, but at substantial computational cost; in particular, \Road~takes about 100 times longer to run on this dataset.   Figure \ref{f:realdata}C and D are 10-class problems, so \Road~is no longer possible.  Here, SVM can again slightly outperform \Lol, but again, requiring 100 fold additional computational time.  In all cases, the beloved random forest classifier performs subpar. In all four scenarios, there is never an algorithm that achieves smaller error in less time, as indicated by the dark gray box being empty in the lower panels of Figure \ref{f:realdata}A-D.
 
 
 \subsection*{Extensions to Other Supervised Learning Problems}

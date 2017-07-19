@@ -135,7 +135,7 @@ if strcmp(sit,'sims')
     H.wh=[6.5 9];
 else
     H.wh=[10,2];
-    legend({'LOL','RR-LDA','Eigenfaces','ROAD','Lasso'},'Position', [0.46 0.3 1 0.2]) ; % [left bottom width height] 'location','bestoutside')
+    legend({'LOL','PCA','PCA''','ROAD','Lasso'},'Position', [0.46 0.3 1 0.2]) ; % [left bottom width height] 'location','bestoutside')
     legend('boxoff')
 end
 H.fname=['plot_', sit];
