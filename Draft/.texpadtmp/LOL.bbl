@@ -158,6 +158,105 @@ P.~N. Belhumeur, J.~P. Hespanha, and D.~J. Kriegman, ``{Eigenfaces vs.
   \emph{IEEE Transactions on Pattern Analysis and Machine Intelligence},
   vol.~19, no.~7, pp. 711--720, 1997.
 
+\bibitem{Eckart1936a}
+\BIBentryALTinterwordspacing
+C.~Eckart and G.~Young, ``{The approximation of one matrix by another of lower
+  rank},'' \emph{Psychometrika}, vol.~1, no.~3, pp. 211--218, Sep. 1936.
+  [Online]. Available:
+  \url{http://www.springerlink.com/content/9v4274h33h75lq24/}
+\BIBentrySTDinterwordspacing
+
+\bibitem{deSilva2003}
+V.~de~Silva and J.~B. Tenenbaum, ``{Global Versus Local Methods in Nonlinear
+  Dimensionality Reduction},'' in \emph{Neural Information Processing Systems},
+  2003, pp. 721--728.
+
+\bibitem{Allard2012}
+\BIBentryALTinterwordspacing
+W.~K. Allard, G.~Chen, and M.~Maggioni, ``{Multi-scale geometric methods for
+  data sets II: Geometric Multi-Resolution Analysis},'' \emph{Applied and
+  Computational Harmonic Analysis}, vol.~32, no.~3, pp. 435--462, May 2012.
+  [Online]. Available:
+  \url{http://linkinghub.elsevier.com/retrieve/pii/S1063520311000868}
+\BIBentrySTDinterwordspacing
+
+\bibitem{Li1991a}
+\BIBentryALTinterwordspacing
+K.-C. Li, ``{Sliced Inverse Regression for Dimension Reduction},''
+  \emph{Journal of the American Statistical Association}, vol.~86, no. 414, pp.
+  316--327, Jun. 1991. [Online]. Available:
+  \url{http://www.tandfonline.com/doi/abs/10.1080/01621459.1991.10475035}
+\BIBentrySTDinterwordspacing
+
+\bibitem{Tishby1999a}
+N.~Tishby, F.~C. Pereira, and W.~Bialek, ``{The information bottleneck method
+  arXiv : physics / 0004057v1 [ physics . data-an ] 24 Apr 2000},''
+  \emph{Neural Computation}, pp. 1--16, 1999.
+
+\bibitem{Globerson2003a}
+\BIBentryALTinterwordspacing
+A.~Globerson and N.~Tishby, ``{Sufficient Dimensionality Reduction},''
+  \emph{Journal of Machine Learning Research}, vol.~3, no. 7-8, pp. 1307--1331,
+  Oct. 2003. [Online]. Available: \url{http://www.crossref.org/jmlr\_DOI.html}
+\BIBentrySTDinterwordspacing
+
+\bibitem{Cook2005a}
+\BIBentryALTinterwordspacing
+R.~D. Cook and L.~Ni, ``\BIBforeignlanguage{en}{{Sufficient Dimension Reduction
+  via Inverse Regression}},'' \emph{\BIBforeignlanguage{en}{Journal of the
+  American Statistical Association}}, vol. 100, no. 470, pp. 410--428, Jun.
+  2005. [Online]. Available:
+  \url{http://amstat.tandfonline.com/doi/abs/10.1198/016214504000001501\#.U6tH3Y1dUts}
+\BIBentrySTDinterwordspacing
+
+\bibitem{Fukumizu2004a}
+K.~Fukumizu, F.~R. Bach, and M.~I. Jordan, ``{Dimensionality Reduction for
+  Supervised Learning with Reproducing Kernel Hilbert Spaces},'' \emph{Journal
+  of Machine Learning Research}, vol.~5, pp. 73--99, 2004.
+
+\bibitem{Cook2013}
+\BIBentryALTinterwordspacing
+R.~D. Cook, L.~Forzani, and A.~J. Rothman, ``{Prediction in abundant
+  high-dimensional linear regression},'' \emph{Electronic Journal of
+  Statistics}, vol.~7, pp. 3059--3088, 2013. [Online]. Available:
+  \url{https://projecteuclid.org/euclid.ejs/1387207935}
+\BIBentrySTDinterwordspacing
+
+\bibitem{Huber1985a}
+\BIBentryALTinterwordspacing
+P.~J. Huber, ``\BIBforeignlanguage{EN}{{Projection Pursuit}},''
+  \emph{\BIBforeignlanguage{EN}{The Annals of Statistics}}, vol.~13, no.~2, pp.
+  435--475, Jun. 1985. [Online]. Available:
+  \url{http://projecteuclid.org/euclid.aos/1176349519}
+\BIBentrySTDinterwordspacing
+
+\bibitem{Belkin2006a}
+\BIBentryALTinterwordspacing
+M.~Belkin, P.~Niyogi, and V.~Sindhwani, ``{Manifold Regularization: A Geometric
+  Framework for Learning from Labeled and Unlabeled Examples},'' \emph{The
+  Journal of Machine Learning Research}, vol.~7, pp. 2399--2434, Dec. 2006.
+  [Online]. Available: \url{http://dl.acm.org/citation.cfm?id=1248547.1248632
+  http://dl.acm.org/citation.cfm?id=1248632}
+\BIBentrySTDinterwordspacing
+
+\bibitem{Mairal2009}
+\BIBentryALTinterwordspacing
+J.~Mairal, J.~Ponce, G.~Sapiro, A.~Zisserman, and F.~R. Bach, ``{Supervised
+  Dictionary Learning},'' in \emph{Advances in Neural Information Processing
+  Systems}, 2009, pp. 1033--1040. [Online]. Available:
+  \url{http://papers.nips.cc/paper/3448-supervised}
+\BIBentrySTDinterwordspacing
+
+\bibitem{Donoho2008a}
+\BIBentryALTinterwordspacing
+D.~L. Donoho and J.~Jin, ``{Higher criticism thresholding: Optimal feature
+  selection when useful features are rare and weak.}'' \emph{Proceedings of the
+  National Academy of Sciences of the United States of America}, vol. 105,
+  no.~39, pp. 14\,790--5, Sep. 2008. [Online]. Available:
+  \url{http://www.pnas.org/content/105/39/14790
+  http://www.pnas.org/content/105/39/14790.short}
+\BIBentrySTDinterwordspacing
+
 \bibitem{Mika1999a}
 \BIBentryALTinterwordspacing
 S.~Mika, G.~Ratsch, J.~Weston, B.~Scholkopf, and K.~Mullers, ``{Fisher
@@ -171,15 +270,6 @@ S.~Mika, G.~Ratsch, J.~Weston, B.~Scholkopf, and K.~Mullers, ``{Fisher
 \bibitem{Breiman2001a}
 L.~Breiman, ``{Random forests},'' \emph{Machine learning}, vol.~45, no.~1, pp.
   5--32, 2001.
-
-\bibitem{Allard2012}
-\BIBentryALTinterwordspacing
-W.~K. Allard, G.~Chen, and M.~Maggioni, ``{Multi-scale geometric methods for
-  data sets II: Geometric Multi-Resolution Analysis},'' \emph{Applied and
-  Computational Harmonic Analysis}, vol.~32, no.~3, pp. 435--462, May 2012.
-  [Online]. Available:
-  \url{http://linkinghub.elsevier.com/retrieve/pii/S1063520311000868}
-\BIBentrySTDinterwordspacing
 
 \bibitem{Anderson1999a}
 \BIBentryALTinterwordspacing
