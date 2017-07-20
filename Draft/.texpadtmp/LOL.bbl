@@ -58,57 +58,6 @@ J.~Fan, Y.~Feng, and X.~Tong, ``{A road to classification in high dimensional
 H.~Zou, ``{The Adaptive Lasso and Its Oracle Properties},'' pp. 1418--1429,
   2006.
 
-\bibitem{Hastie2004}
-T.~Hastie, R.~Tibshirani, and J.~H. Friedman, ``{The Elements of Statistical
-  Learning: Data Mining, Inference, and Prediction},'' \emph{BeiJing:
-  Publishing House of Electronics Industry}, 2004.
-
-\bibitem{Huber1981a}
-\BIBentryALTinterwordspacing
-P.~J. Huber, \emph{{Robust Statistics}}, ser. Wiley Series in Probability and
-  Statistics.\hskip 1em plus 0.5em minus 0.4em\relax Wiley, 1981, vol.~82,
-  no.~3. [Online]. Available: \url{http://doi.wiley.com/10.1002/9780470434697}
-\BIBentrySTDinterwordspacing
-
-\bibitem{Rousseeuw1999a}
-\BIBentryALTinterwordspacing
-P.~J. Rousseeuw and K.~V. Driessen, ``\BIBforeignlanguage{en}{{A Fast Algorithm
-  for the Minimum Covariance Determinant Estimator}},''
-  \emph{\BIBforeignlanguage{en}{Technometrics}}, vol.~41, no.~3, pp. 212--223,
-  Mar. 1999. [Online]. Available:
-  \url{http://amstat.tandfonline.com/doi/abs/10.1080/00401706.1999.10485670\#.VTejtq1Viko}
-\BIBentrySTDinterwordspacing
-
-\bibitem{Ferrari2010a}
-\BIBentryALTinterwordspacing
-D.~Ferrari and Y.~Yang, ``{Maximum L q -likelihood estimation},'' \emph{The
-  Annals of Statistics}, vol.~38, no.~2, pp. 753--783, apr 2010. [Online].
-  Available: \url{http://projecteuclid.org/euclid.aos/1266586613}
-\BIBentrySTDinterwordspacing
-
-\bibitem{Candes2009b}
-\BIBentryALTinterwordspacing
-E.~J. Cand\`{e}s, X.~Li, Y.~Ma, and J.~Wright, ``{Robust Principal Component
-  Analysis?}'' \emph{Journal of the ACM}, vol.~58, no.~3, pp. 1--37, Dec. 2009.
-  [Online]. Available: \url{http://dl.acm.org/citation.cfm?id=1970392.1970395
-  http://arxiv.org/abs/0912.3599}
-\BIBentrySTDinterwordspacing
-
-\bibitem{Zhang2014a}
-\BIBentryALTinterwordspacing
-T.~Zhang and G.~Lerman, ``{A Novel M-Estimator for Robust PCA},'' \emph{Journal
-  of Machine Learning Research}, vol.~15, pp. 749--808, 2014. [Online].
-  Available: \url{http://jmlr.org/papers/v15/zhang14a.html}
-\BIBentrySTDinterwordspacing
-
-\bibitem{Bishop2006a}
-\BIBentryALTinterwordspacing
-C.~M. Bishop, \emph{{Pattern Recognition and Machine Learning}}, ser.
-  Information science and statistics.\hskip 1em plus 0.5em minus 0.4em\relax
-  Springer, 2006. [Online]. Available:
-  \url{http://www.library.wisc.edu/selectedtocs/bg0137.pdf}
-\BIBentrySTDinterwordspacing
-
 \bibitem{FlashGraph}
 D.~Zheng, D.~Mhembere, R.~Burns, J.~Vogelstein, C.~E. Priebe, and A.~S. Szalay,
   ``{FlashGraph}: Processing billion-node graphs on an array of commodity
