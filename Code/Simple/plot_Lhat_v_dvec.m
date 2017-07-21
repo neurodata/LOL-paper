@@ -18,7 +18,7 @@ if ~isfield(F,'savestuff'), F.savestuff=0; end
 if ~isfield(F,'tit'), F.tit=[{'Misclassification Rate'};{'D=100, n=100'}]; end
 if ~isfield(F,'color')
     col=get(groot,'defaultAxesColorOrder');
-    algs={'LOL';'RRLDA';'eigenfaces';'ROAD';'lasso';'LRL';'QOQ'};
+    algs={'LOL';'PCA''';'PCA';'ROAD';'lasso';'LRL';'QOQ'};
     ms = {'o';'+';'d';'v';'^';'x';'s';'<';'>';'p';'h';'*'};
     for a=1:length(algs)
         F.color.(algs{a})=col(a,:);
@@ -75,6 +75,7 @@ algs=F.algs;
 
 % F.ylab=[{F.ylab};{['n=', num2str(ntrain(1)), ', D=', num2str(D(1))]}];
 if F.row==F.nrows, F.xlab=xlab; end
+if F.row==1, title([{'Misclassification'}, {'Rate'}]), end
 
 if strcmp(F.sit,'real')
     t=title([{[ F.ylab]}; {['D = ',num2str(median(D)), ', n = ', num2str(median(ntrain))]}]); 

@@ -58,6 +58,11 @@ J.~Fan, Y.~Feng, and X.~Tong, ``{A road to classification in high dimensional
 H.~Zou, ``{The Adaptive Lasso and Its Oracle Properties},'' pp. 1418--1429,
   2006.
 
+\bibitem{Hastie2004}
+T.~Hastie, R.~Tibshirani, and J.~H. Friedman, ``{The Elements of Statistical
+  Learning: Data Mining, Inference, and Prediction},'' \emph{BeiJing:
+  Publishing House of Electronics Industry}, 2004.
+
 \bibitem{FlashGraph}
 D.~Zheng, D.~Mhembere, R.~Burns, J.~Vogelstein, C.~E. Priebe, and A.~S. Szalay,
   ``{FlashGraph}: Processing billion-node graphs on an array of commodity

@@ -1,9 +1,13 @@
 % %% plot
 clear, clc
 
-% sit='sims';
-sit='real';
-% sit='dead';
+i=1;
+
+if i==1, sit='sims';
+elseif i==2, sit='real';
+elseif i==3, sit='dead';
+end
+
 
 switch sit
     case 'sims'
@@ -12,6 +16,7 @@ switch sit
             '3trunk';...
             'toeplitz';...
             'fat_tails';...
+            'r2toeplitz';...
             };
         
     case 'real'
@@ -44,12 +49,13 @@ for a=1:length(algs)
 end
 F.color.('Bayes')=[0 0 0];
 F.col=col;
+F.nrows=S;
 if strcmp(sit,'sims')
-    F.nrows=S;
     F.ncols=3;
 elseif strcmp(sit,'real')
-    F.ncols=S;
     F.nrows=1;
+elseif strcmp(sit,'dead')
+    F.ncols=1;
 end
 F.xlab=[];
 F.xmax=1;
@@ -63,6 +69,7 @@ for s=1:S
     setting=settings{s};
     F.row=s;
     G=F;
+    G.xticks=[10:10:500];
     switch setting
         case 'rtrunk'
             G.ylab='Trunk-2';
@@ -72,6 +79,7 @@ for s=1:S
         case 'toeplitz'
             G.ylab='Toeplitz';
             G.xmax=90;
+            G.xticks=[10:20:500];
             G.algs=algs(1:4);
         case '3trunk'
             G.ylab='Trunk-3';
@@ -122,7 +130,7 @@ for s=1:S
         plot_mrn2
     end
     %     if s==S, legend('show'); end
-    if ~strcmp(setting,{'prostate','colon','MNIST','CIFAR-10','MRN'})
+    if strcmp(sit,'sims'), %~strcmp(setting,{'prostate','colon','MNIST','CIFAR-10','MRN'})
         plot_means(setting,G);
     else
         %         plot_timing(minL,wallTime,s,G);

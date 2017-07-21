@@ -39,6 +39,10 @@ plot(mu2,'linewidth',2)
 axis('tight')
 set(gca,'YTickLabel',[],'XTickLabel',[])
 if F.row==1, title([{'Means'}, {'(first 10 dimensions)'}]), end
+if F.row==F.nrows
+    set(gca,'XTick',[1,5,10])
+    xlabel('Observed Dimensions')
+end
 
 % covariances
 subplot(F.nrows,F.ncols,(F.row-1)*F.ncols+3)
@@ -77,11 +81,15 @@ else
 %     plot(rand(1,10),'linewidth',2,'Color',col)
     xlim([-100, -90])
     ylim([-100, -90])
+
+
     set(gca,'visible','off');
-    h=legend('LOL','RRLDA','Eigenfaces','ROAD','Lasso','QOQ',' ',...
+    h=legend('LOL','PCA''','PCA','ROAD','Lasso','QOQ',' ',...
         '$\mu_1$','$\mu_2$','$\mu_3$'); % [left bottom width height]
     set(h,'Interpreter','latex','Box','off','Position',[0.3 0.05 1 0.2])
+
 end
+
 
 % if F.legend
 %     legend('show')
