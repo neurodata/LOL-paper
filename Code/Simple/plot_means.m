@@ -40,7 +40,7 @@ axis('tight')
 set(gca,'YTickLabel',[],'XTickLabel',[])
 if F.row==1, title([{'Means'}, {'(first 10 dimensions)'}]), end
 if F.row==F.nrows
-    set(gca,'XTick',[1,5,10])
+    set(gca,'XTick',[1,5,10],'XTickLabel',[1,5,10])
     xlabel('Observed Dimensions')
 end
 
