@@ -110,14 +110,14 @@ Supervised manifold learning is field devoted to combating this
 this over-fitting issue  by searching for a small number of dimensions that maximize predictive accuracy.
 Two complementary strategies have been pursued.
 
-Perhaps the most prominent strategy is to use principal components analysis (\Pca) \cite{PCA} to ``pre-process'' the data, that is, to reduce the dimensionality of the data prior to a subsequent classification using the much lower dimensional data.  While hugely successful, \Pca~is a wholly \emph{unsupervised} dimensionality reduction technique, meaning that \Pca~does not utilize the class labels while learning the low dimensional representation.  This results in dimensions that have no statistical guarantee of being close to the best ones, and in fact, as we show below, with high probability will be completely wrong.  Other unsupervised nonlinear dimensionality reduction techniques,  called manifold learning, are ill-equipped to address this problem because they typically only learn a low-dimensional representation for a set of points; thus, they are unable to be applied to  new test data.   Moreover, they often require costly numerical methods that do not scale, and lack theoretical justification in this setting. 
+Perhaps the most prominent strategy is to use principal components analysis (\Pca) \cite{Jolliffe1986} to ``pre-process'' the data, that is, to reduce the dimensionality of the data prior to a subsequent classification using the much lower dimensional data.  While hugely successful, \Pca~is a wholly \emph{unsupervised} dimensionality reduction technique, meaning that \Pca~does not utilize the class labels while learning the low dimensional representation.  This results in dimensions that have no statistical guarantee of being close to the best ones, and in fact, as we show below, with high probability will be completely wrong.  Other unsupervised nonlinear dimensionality reduction techniques,  called manifold learning, are ill-equipped to address this problem because they typically only learn a low-dimensional representation for a set of points; thus, they are unable to be applied to  new test data.   Moreover, they often require costly numerical methods that do not scale, and lack theoretical justification in this setting. 
 
 
 
 %A closely related approach for supervised learning is called ``reduced-rank \Lda'' (\Rrlda).  As we will show below, while \Pca~does not optimally utilize the class labels in its low-dimensional representation, \Rrlda~actually \emph{discards} this information.
 
 
-A different strategy that focuses on utilizing the class label information is called  ``sparsity''. Sparse methods  find a small subset of the original features to use for subsequent inference \cite{sparsity}. There are many such approaches (often called ``feature selection'' or ``feature screening''); the advantage of these approaches is that the result is sometimes more easily interpretable.  The disadvantage, however, is that exactly solving the problem is computationally intractable, requiring time that increases exponentially in the number of features.  Various approximations enable efficient algorithms that have provable guarantees under certain limiting assumptions.  \Lasso~is a particularly popular algorithm that has these properties. Unfortunately, \Lasso~cannot run on millions of dimensions,  it has a hyper-parameter that requires careful tuning, and  often produces spurious answers even when the unrealistically strict assumptions are met \cite{lasso-fail}.
+A different strategy that focuses on utilizing the class label information is called  ``sparsity''. Sparse methods  find a small subset of the original features to use for subsequent inference \cite{Hastie2015}. There are many such approaches (often called ``feature selection'' or ``feature screening''); the advantage of these approaches is that the result is sometimes more easily interpretable.  The disadvantage, however, is that exactly solving the problem is computationally intractable, requiring time that increases exponentially in the number of features.  Various approximations enable efficient algorithms that have provable guarantees under certain limiting assumptions.  \Lasso~is a particularly popular algorithm that has these properties. Unfortunately, \Lasso~cannot run on millions of dimensions,  it has a hyper-parameter that requires careful tuning, and  often produces spurious answers even when the unrealistically strict assumptions are met \cite{Su2015}.
 A more recent approach is called ``regularized optimal affine discriminant'' (\Road). \Road~finds the optimal sparse dimensionality reduction under certain Gaussian assumptions.  \Road, however, can only be applied in two-class settings, and requires solving a computationally costly numerical optimization problem, and thus does not scale to large dimensionality.
 
 
@@ -187,7 +187,7 @@ Step \textbf{(A)},  obtain or select $n$ training samples of high-dimensional da
 %
 Step \textbf{(B)},  learn a ``projection'' that maps the high-dimensional data to a low dimension representation.  One can either ignore the class label data, that is, ignore which images correspond to which digits (as PCA and most manifold learning techniques do), or try to use them (as sparse methods do).  \Lol~uses the class labels to learn projections that are linear combinations of the original data samples (panel B shows the first four projections that \Lol~learns, each of which looks like a combination of the original images).  
 %
-Step \textbf{(C)}, use the learned projections to map the high-dimensional data into the lower dimensional space. This step requires having learned a projection that can be applied to new (test) data samples for which we do not know the true class labels.  Nonlinear manifold learning methods typically are unable to be applied in this way (see for example, \citet{oos}).  \Lol, however, can project new samples in such a way as to separate the data into classes (in panel C, two-dimensional points represent the original images, color coded by their digit label, are well separated).
+Step \textbf{(C)}, use the learned projections to map the high-dimensional data into the lower dimensional space. This step requires having learned a projection that can be applied to new (test) data samples for which we do not know the true class labels.  Nonlinear manifold learning methods typically are unable to be applied in this way (though see \cite{Bengio2004}).  \Lol, however, can project new samples in such a way as to separate the data into classes (in panel C, two-dimensional points represent the original images, color coded by their digit label, are well separated).
 Finally, step \textbf{(D)}, using the low-dimensional representation of the data, learn a classifier.  A good classifier correctly identifies as many points as possible with the correct label.  Panel D shows that when using \Lda~on the low-dimensional data from \Lol, the data points are mostly linearly separable.  
 Specifically, the two curves correspond to the distribution of $3$'s (in blue) and $8$'s (in green) after applying \Lda~to the data projected using \Lol, and the area of overlap (in black) corresponds to the fraction of errors, so smaller is better. 
 
@@ -285,8 +285,8 @@ And for each approach, we embed into the top 20 dimensions. Note that we use the
 \textbf{Row 1}: A scatter plot of the first two dimensions of the sampled points, with class 0 and 1 as black and gray dots, respectively.
 \textbf{Row 2} - \textbf{Row 5}: the posteriors after projecting using different manifold learning techniques, including 
 \textbf{Row 2} \Pca.
-\textbf{Row 3} \Pca', a method that projects onto the top $d$ eigenvectors of  sample class-conditional covariance \cite{RRLDA},
-\textbf{Row 4} \Road, a sparse method designed specifically for this model \cite{Fan2012a}.
+\textbf{Row 3} \Pca', a method that projects onto the top $d$ eigenvectors of  sample class-conditional covariance,
+\textbf{Row 4} \Road, a sparse method designed specifically for this model.
 \textbf{Row 5} \Lol, our  proposed method.
 \textbf{Row6} the Bayes optimal classifier.
 %
@@ -309,10 +309,10 @@ In this example  all  dimensions are uncorrelated with one another.
 Moreover, the difference between the means and direction of maximum variance are both large along the same dimension.
 This is an idealized setting for \Pca, because \Pca~finds the direction of maximal variance, which happens to correspond to the direction of maximal separation of the classes.
 We also compare this to a method we refer to as \Pca'. which uses the top $d$ eigenvectors of the sample class-conditional covariance matrix, $\mt{\bSig}$. 
-As it turns out, composing this projection with \Lda~is equivalent to a method called ``Reduced Rank \Lda'' \cite{RRLDA} (see Appendix \ref{sec:RRLDA} for proof). 
+Composing this projection with \Lda~is equivalent to a method called ``Reduced Rank \Lda'' \cite{Hastie1996} (see Appendix \ref{sec:pca} for proof). 
 \Pca' performs well here too, for the same reason that \Pca~does.
 Because all dimensions are uncorrelated, and one dimension contains most of the information discriminating between the two classes, this is a good scenario for sparse methods.
-Indeed,  \Road, a sparse classifier designed for precisely this scenario,  does an excellent job finding the most useful dimensions \cite{ROAD}.
+Indeed,  \Road, a sparse classifier designed for precisely this scenario,  does an excellent job finding the most useful dimensions \cite{Fan2012a}.
 % Again, in this case, because the directions of maximal variance and discrimination are the same, \Rrlda~performs well here too. 
 \Lol, using both the difference of means and the directions of maximal variance also does well.  
 To calibrate all of these methods, we also show the performance of the optimal classifier.
@@ -617,12 +617,12 @@ Moreover, nonlinear manifold learning techniques tend to learn a mapping from th
 % Supervised dimensionality reduction techniques, therefore, combine the best of both worlds, explicitly searching for low-dimensional discriminant boundaries.
 %
 Another recent  set of methods comes from the statistics community:   ``sufficient dimensionality reduction'' (SIR) or ``first two moments'' (F2M) methods  \cite{Li1991a, Tishby1999a, Globerson2003a, Cook2005a,Fukumizu2004a}.  These methods are theoretically elegant, but typically require the sample size to be larger than the number of observed dimensions (although see \cite{Cook2013} for some promising work).  Other approaches formulate an optimization problem, such as projection pursuit \cite{Huber1985a}, empirical risk minimization \cite{Belkin2006a}, or supervised dictionary learning \cite{Mairal2009}.  These methods are limited because they are prone to fall into local minima, they require costly iterative algorithms, and lack any theoretical guarantees \cite{Belkin2006a}.   
-Other approaches, such as higher criticism thresholding \cite{Donoho2008a,} effectively filter the dimensions, possibly prior to performing \Pca~on the remaining features \cite{Bair06}. These approaches could be combined with \Lol~in ultrahigh-dimensional problems.  
-Similarly, another  recently proposed supervised \Pca~builds on the elegant Hilbert-Schmidt independence criterion \cite{Gretton05} to learn an embedding \cite{Barshan11a}.  Our theory demonstrates that under the Gaussian model, composing this linear projection with the difference of the means will improve subsequent performance under general settings, implying that this will be a fertile avenue to pursue.
+Other approaches, such as higher criticism thresholding \cite{Donoho2008a} effectively filter the dimensions, possibly prior to performing \Pca~on the remaining features \cite{Bair2006}. These approaches could be combined with \Lol~in ultrahigh-dimensional problems.  
+Similarly, another  recently proposed supervised \Pca~builds on the elegant Hilbert-Schmidt independence criterion \cite{Gretton05} to learn an embedding \cite{Barshan2011}.  Our theory demonstrates that under the Gaussian model, composing this linear projection with the difference of the means will improve subsequent performance under general settings, implying that this will be a fertile avenue to pursue.
 %Thus, there remains a gap in the literature: a supervised learning method with theoretical convergence guarantees appropriate when the dimensionality is orders of magnitude larger than the sample size.
 %
 %The computer science community has been developing tools for big data for several decades now. Specifically, algorithm complexity has lowered significantly, and ability to scale-up and scale-out has increased significantly.  This is true both for simple statistical primitives, such as computing a mean, and more complicated primitives like PCA \cite{??}.  More recently, a 
-Finally, several distributed machine learning libraries have become available, including Apache Spark's mllib,  H20, Dato, and Vowpal Wabbit \cite{??}.  These focus almost entirely on large sample size and low dimensionality regime, whereas the motivating problems of interest for this work are small sample size and high-dimensionality. Moreover, they utilize a distributed platform that is susceptible to low bandwidth communication between nodes, meaning that as one adds resources, the computations cannot scale out optimally, as our \Lol~implementation does.
+Finally, several distributed machine learning libraries have become available, including Apache Spark's mllib,  H20, Dato, and Vowpal Wabbit \cite{Agarwal2014}.  These focus almost entirely on large sample size and low dimensionality regime, whereas the motivating problems of interest for this work are small sample size and high-dimensionality. Moreover, they utilize a distributed platform that is susceptible to low bandwidth communication between nodes, meaning that as one adds resources, the computations cannot scale out optimally, as our \Lol~implementation does.
 
 
 
@@ -905,7 +905,8 @@ Let $\mc{A}^d=\{\bA : \bA \in \Real^{d \times p}, \bA \bA\T = \bI_{d \times d}\}
 
 
 In our opinion, Eq.~\eqref{eq:A} is the simplest supervised manifold learning problem there is: a two-class classification problem, where the data are multivariate Gaussians with shared covariances, the manifold is linear, and the classification is done via \Lda.
-Nonetheless, solving Eq.~\eqref{eq:A} is difficult, because we do not know how to evaluate the integral analytically, and we do not know any algorithms that are guaranteed to find the global optimum in finite time.  This has led to previous work using a surrogate function \cite{not sure who}.
+Nonetheless, solving Eq.~\eqref{eq:A} is difficult, because we do not know how to evaluate the integral analytically, and we do not know any algorithms that are guaranteed to find the global optimum in finite time.  
+%This has led to previous work using a surrogate function \cite{not sure who}.
 We proceed by studying a few natural choices for $\bA$.
 
 
@@ -985,7 +986,7 @@ The eigenvectors are all normalized and orthogonal to one another; to impose ort
 
 
 \section[LDA]{Theoretical Properties of LDA based Classifiers}
-
+\label{sec:theory}
 
 \subsection{\Lda~is rotationally invariant}
 

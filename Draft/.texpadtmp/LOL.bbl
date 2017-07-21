@@ -21,6 +21,20 @@
 \providecommand{\BIBdecl}{\relax}
 \BIBdecl
 
+\bibitem{Vogelstein2014a}
+J.~T. Vogelstein, Y.~Park, T.~Ohyama, R.~Kerr, J.~Truman, C.~E. Priebe, and
+  M.~Zlatic, ``Discovery of brainwide neural-behavioral maps via multiscale
+  unsupervised structure learning,'' \emph{Science}, vol. 344, no. 6182, pp.
+  386--392, 2014.
+
+\bibitem{Krizhevsky2012}
+\BIBentryALTinterwordspacing
+A.~Krizhevsky, I.~Sutskever, and G.~E. Hinton, ``{ImageNet Classification with
+  Deep Convolutional Neural Networks},'' in \emph{Advances in Neural
+  Information Processing Systems}, 2012, pp. 1097--1105. [Online]. Available:
+  \url{http://papers.nips.cc/paper/4824-imagenet-classification-w}
+\BIBentrySTDinterwordspacing
+
 \bibitem{Fisher1925a}
 \BIBentryALTinterwordspacing
 R.~A. Fisher, ``\BIBforeignlanguage{English}{{Theory of Statistical
@@ -30,11 +44,35 @@ R.~A. Fisher, ``\BIBforeignlanguage{English}{{Theory of Statistical
   \url{http://journals.cambridge.org/abstract\_S0305004100009580}
 \BIBentrySTDinterwordspacing
 
+\bibitem{Jolliffe1986}
+I.~T. Jolliffe, ``\BIBforeignlanguage{en}{Principal component analysis and
+  factor analysis},'' in \emph{\BIBforeignlanguage{en}{Principal Component
+  Analysis}}, ser. Springer Series in Statistics.\hskip 1em plus 0.5em minus
+  0.4em\relax Springer, New York, NY, 1986, pp. 115--128.
+
+\bibitem{Hastie2015}
+T.~Hastie, R.~Tibshirani, and M.~Wainwright,
+  \emph{\BIBforeignlanguage{en}{Statistical Learning with Sparsity: The Lasso
+  and Generalizations (Chapman \& {Hall/CRC} Monographs on Statistics \&
+  Applied Probability)}}, 1st~ed.\hskip 1em plus 0.5em minus 0.4em\relax
+  Chapman and Hall/CRC, 7~May 2015.
+
+\bibitem{Su2015}
+W.~Su, M.~Bogdan, and E.~Candes, ``False discoveries occur early on the lasso
+  path,'' 5~Nov. 2015.
+
 \bibitem{mnist}
 \BIBentryALTinterwordspacing
 Y.~LeCun, C.~Cortes, and C.~Burges, ``{MNIST handwritten digit database}.''
   [Online]. Available: \url{http://yann.lecun.com/exdb/mnist/}
 \BIBentrySTDinterwordspacing
+
+\bibitem{Bengio2004}
+Y.~Bengio, J.-F. Paiement, P.~Vincent, O.~Delalleau, N.~L. Roux, and M.~Ouimet,
+  ``{Out-of-Sample} extensions for {LLE}, isomap, {MDS}, eigenmaps, and
+  spectral clustering,'' in \emph{Advances in Neural Information Processing
+  Systems 16}, S.~Thrun, L.~K. Saul, and P.~B. Sch{\"o}lkopf, Eds.\hskip 1em
+  plus 0.5em minus 0.4em\relax MIT Press, 2004, pp. 177--184.
 
 \bibitem{Bickel2004a}
 \BIBentryALTinterwordspacing
@@ -44,6 +82,11 @@ P.~J. Bickel and E.~Levina, ``{Some theory for Fisher's linear discriminant
   989--1010, Dec. 2004. [Online]. Available:
   \url{http://projecteuclid.org/euclid.bj/1106314847}
 \BIBentrySTDinterwordspacing
+
+\bibitem{Hastie1996}
+T.~Hastie and R.~Tibshirani, ``Discriminant analysis by gaussian mixtures,''
+  \emph{J. R. Stat. Soc. Series B Stat. Methodol.}, vol.~58, no.~1, pp.
+  155--176, 1996.
 
 \bibitem{Fan2012a}
 \BIBentryALTinterwordspacing
@@ -211,6 +254,27 @@ D.~L. Donoho and J.~Jin, ``{Higher criticism thresholding: Optimal feature
   http://www.pnas.org/content/105/39/14790.short}
 \BIBentrySTDinterwordspacing
 
+\bibitem{Bair2006}
+E.~Bair, T.~Hastie, D.~Paul, and R.~Tibshirani, ``Prediction by supervised
+  principal components,'' \emph{J. Am. Stat. Assoc.}, vol. 101, no. 473, pp.
+  119--137, 1~Mar. 2006.
+
+\bibitem{Gretton05}
+A.~Gretton, R.~Herbrich, A.~Smola, O.~Bousquet, and B.~Scholkopf, ``Kernel
+  methods for measuring independence,'' \emph{Journal of Machine Learning
+  Research}, vol.~6, pp. 2075--2129, 2005.
+
+\bibitem{Barshan2011}
+E.~Barshan, A.~Ghodsi, Z.~Azimifar, and M.~Zolghadri~Jahromi, ``Supervised
+  principal component analysis: Visualization, classification and regression on
+  subspaces and submanifolds,'' \emph{Pattern Recognit.}, vol.~44, no.~7, pp.
+  1357--1371, 1~Jul. 2011.
+
+\bibitem{Agarwal2014}
+A.~Agarwal, O.~Chapelle, M.~Dud{\'\i}k, and J.~Langford, ``A reliable effective
+  terascale linear learning system,'' \emph{J. Mach. Learn. Res.}, vol.~15, pp.
+  1111--1133, 2014.
+
 \bibitem{Mika1999a}
 \BIBentryALTinterwordspacing
 S.~Mika, G.~Ratsch, J.~Weston, B.~Scholkopf, and K.~Mullers, ``{Fisher
@@ -233,6 +297,10 @@ E.~Anderson, Z.~Bai, C.~Bischof, S.~Blackford, J.~Demmel, J.~Dongarra, J.~D.
   0.4em\relax SIAM, 1999. [Online]. Available:
   \url{https://books.google.com/books?hl=en\&lr=\&id=AZlvEnr9gCgC\&pgis=1}
 \BIBentrySTDinterwordspacing
+
+\bibitem{Breiman2001b}
+L.~Breiman, ``Statistical modeling: The two cultures,'' \emph{Statistical
+  Science}, vol.~16, no.~3, pp. 199--231, 2001.
 
 \bibitem{chernoff_1952}
 H.~Chernoff, ``A measure of asymptotic efficiency for tests of a hypothesis
