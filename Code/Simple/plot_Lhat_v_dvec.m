@@ -35,6 +35,7 @@ if F.nrows>F.ncols
 else
     h=subplot(F.nrows,F.ncols,F.row);
 end
+
 cla, hold all
 Lmax=0;
 Lmin=1;
@@ -69,6 +70,7 @@ for a=1:A
         end
     end
 end
+
 algs=F.algs;
 
 %%
@@ -84,7 +86,7 @@ if strcmp(F.sit,'real')
     set(t, 'position', [0.1 0.8 0])
     if F.row==1, ylabel('Misclassification Rate'); end
 else
-    ylabel(F.ylab)
+    ylabel(F.ylab) %, 'horizontalAlignment', 'right')
 %     if F.row==1, title(F.ylab), end
 end
 xlabel(F.xlab)
@@ -97,8 +99,14 @@ if isfield(Lhat,'Bayes')
     %         plot([1:F.xmax],meanL*ones(F.xmax,1),'k','linewidth',2)
     %     end
 end
+
+
 ylim([Lmin,Lmax])
 set(gca,'XTick',F.xticks)
+if strcmp(setting,'toeplitz')
+    Lmin=floor(Lmin*10)/10; 
+    set(gca,'YTick',0:0.1:1)
+end
 if F.legend
     legend('show')
 end

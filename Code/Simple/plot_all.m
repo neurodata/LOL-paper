@@ -72,31 +72,32 @@ for s=1:S
     G.xticks=[10:10:500];
     switch setting
         case 'rtrunk'
-            G.ylab='Trunk-2';
+            G.ylab='(A) Trunk-2';
             G.xmax=30;
             G.legend=false;
             G.algs=algs(1:4);
         case 'toeplitz'
-            G.ylab='Toeplitz';
+            G.ylab='(C) Toeplitz';
             G.xmax=90;
             G.xticks=[10:20:500];
             G.algs=algs(1:4);
         case '3trunk'
-            G.ylab='Trunk-3';
+            G.ylab='(B) Trunk-3';
             G.xmax=30;
         case 'xor2'
             G.ylab='XOR';
             G.xmax=30;
         case 'r2toeplitz'
-            G.ylab='QDA';
+            G.ylab='(E) QDA';
             G.xmax=30;
         case 'outliers'
             G.ylab='Outliers';
             G.xmax=70;
             G.ymax=0.3;
         case 'fat_tails'
-            G.ylab='Fat Tails (D=1000)';
+            G.ylab='(D) Fat Tails (D=1000)';
             G.xmax=30;
+            G.yticks=[0.3:0.1:1];
         case 'prostate'
             G.ylab='(A) Prostate; K=2';
             G.xmax=20;
