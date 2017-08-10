@@ -1,4 +1,4 @@
-% %% plot
+set_path
 clear, clc
 
 i=1;
@@ -148,4 +148,5 @@ else
     legend('boxoff')
 end
 H.fname=['plot_', sit];
+H.png=1;
 print_fig(h,H)

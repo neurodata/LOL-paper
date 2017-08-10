@@ -13,11 +13,12 @@ if ~isfield(F,'fname'), F.fname='temp_fig'; end
 if ~isfield(F,'tiff'), F.tiff=false; end
 if ~isfield(F,'png'), F.png=false; end
 if ~isfield(F,'fig'), F.fig=false; end
+if ~isfield(F,'pdf'), F.pdf=true; end
 set(h,'PaperSize',F.PaperSize,'PaperPosition',F.PaperPosition,'color','w');
 set(h, 'InvertHardCopy', 'off');
 set(h,'renderer',F.renderer)
-print(h,F.fname,'-dpdf')
 
+if F.pdf, print(h,F.fname,'-dpdf'), end
 if F.png, print(h,F.fname,'-dpng','-r300'), end
 if F.tiff, print(h,F.fname,'-dtiff','-r300'), end
 if F.fig, saveas(h,F.fname,'fig'), end

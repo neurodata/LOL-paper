@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>LOL</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <link rel="stylesheet" type="text/css" href="remarkstyle.css">
+  <script type="text/javascript" src="https://github.com/downloads/gnab/remark/remark-0.4.2.min.js"></script>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+  <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML&delayStartupUntil=configured">
+    remark.on('ready', function () {
+      MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        }
+      });
+      MathJax.Hub.Queue(function() {
+        $(MathJax.Hub.getAllJax()).map(function(index, elem) {
+          return(elem.SourceElement());
+        }).parent().addClass('has-jax');
+      });
+      MathJax.Hub.Configured();
+    });
+  </script>
+  <style type="text/css" media="screen">
+    code.has-jax {font: inherit; font-size: 100%; background: inherit; border: inherit;}
+  </style>
+  <link rel="stylesheet" href="http://jovo.me/fonts/gentona/gentona.css">
+  <link rel="stylesheet" href="http://jovo.me/fonts/quadon/quadon.css">
+
+
+</head>
+
+
+  <body onload="var slideshow = remark.create();">
+    <textarea id="source">
+
+
+
+
+class: center, middle
+
+name:opening
+
+### Supervised Manifold Learning Outperforms Principal Components Analysis for Subsequent Inference
+
+ Joshua T. Vogelstein*, Minh Tang, Da Zheng, Randal Burns, Mauro Maggioni
+
+
+<br>
+
+.center[
+<br>
+<!-- JHU Kavli Neuroscience Discovery Institute -->
+{[bme](http://www.bme.jhu.edu/),[icm](http://icm.jhu.edu/),[cis](http://cis.jhu.edu/),[idies](http://idies.jhu.edu/),[kavli](http://kavlijhu.org/),[cs](http://engineering.jhu.edu/computer-science/), [ams](http://engineering.jhu.edu/ams/), [neuro](http://neuroscience.jhu.edu/)} | [jhu](https://www.jhu.edu/)
+<br>
+questions: [jovo@jhu.edu](mailto:jovo at jhu dot edu)
+<br>
+slides: <neurodata-papers.github.io/LOL/>
+<br>
+
+Co-Founder: [NeuroData](http://neurodata.io) & [gigantum](http://gigantum.io)
+
+
+]
+
+---
+
+### Manifold Learning for  Subsequent Inference
+
+<img src="Figs/mnist2.png" STYLE="margin:auto; width:100%"/>
+
+---
+
+
+---
+
+## Linear Projections
+
+- PCA: $(x_i - \hat{\mu})$
+- PCA': $(x_i - \hat{\mu}_j)$
+- LOL: $[ \hat{\delta} | (x_i - \hat{\mu}_j)]$
+
+- PCA: $$x_i - \mu$$
+\begin{align}
+a=x
+\end{align}
+
+1. This is an inline integral: `\(\int_a^bf(x)dx\)`
+2. More `\(x={a \over b}\)` formulae.
+
+Display formula:
+    $$e^{i\pi} + 1 = 0$$
+
+
+---
+
+## LOL Gaussian Intuition
+
+<img src="Figs/cigars_est.png" STYLE="position:absolute; left:150px; width:600px"/>
+
+---
+
+## LOL > PCA Theory
+
+<img src="Figs/LOL_theory.png" STYLE="margin:auto; width:100%"/>
+
+
+---
+
+## LOL > PCA Simulations
+
+
+<img src="Figs/plot_sims.png" STYLE="position:absolute; left:250px; width:400px"/>
+
+
+---
+
+## LOL is fast
+
+<img src="Figs/scalability.png" STYLE="margin:auto; width:100%"/>
+
+
+---
+
+## LOL > PCA Data
+
+<img src="Figs/plot_real.png" STYLE="position:absolute; LEFT:150px; WIDTH:600px;"/>
+
+---
+
+## LOL Hypothesis Testing & Regression
+
+<img src="Figs/regression_power.png" STYLE="position:absolute; LEFT:150px; WIDTH:600px;"/>
+
+
+
+
+---
+class:    center
+
+<br>
+
+# Questions?
+
+
+
+## Hiring Postdocs & Software Engineers Now!
+
+
+e: [jovo@jhu.edu](mailto:jovo@jhu.edu) |
+w: [neurodata.io](http://neurodata.io), [gigantum.io](http://gigantum.io)
+
+
+
+<img src="http://brainx.io/images/funding/nsf_fpo.png" STYLE="position:absolute; TOP:550px; LEFT:10px; HEIGHT:100px;"/>
+
+<img src="http://brainx.io/images/funding/nih_fpo.png" STYLE="position:absolute; TOP:550px; LEFT:120px; HEIGHT:100px;"/>
+
+<img src="http://brainx.io/images/funding/darpa_fpo.png" STYLE="position:absolute; TOP:550px; LEFT:230px; HEIGHT:100px;"/>
+
+<img src="http://brainx.io/images/funding/iarpa_fpo.jpg" STYLE="position:absolute; TOP:550px; LEFT:430px; HEIGHT:100px;"/>
+
+<img src="http://brainx.io/images/funding/kavli_fpo.png" STYLE="position:absolute; TOP:550px; LEFT:550px; HEIGHT:100px;"/>
+
+<img src="http://brainx.io/images/funding/kndi_fpo.png" STYLE="position:absolute; TOP:550px; LEFT:650px; HEIGHT:100px;"/>
+
+
+
+    </textarea>
+    <div id="slideshow" />
+
+  </body>
+</html>
