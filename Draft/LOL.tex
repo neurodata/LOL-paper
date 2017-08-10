@@ -163,7 +163,7 @@ The arguments and methodology developed herein provide a comprehensive framework
 \begin{figure}
 \centering % l b r t
 %  trim={<left> <lower> <right> <upper>}
-\includegraphics[height=2in]{../Figs/mnist2.pdf} %[height=2in],trim=1cm 0cm 0cm 1.0cm,clip=true
+\includegraphics[height=2in]{mnist2.pdf} %[height=2in],trim=1cm 0cm 0cm 1.0cm,clip=true
 \caption{Schematic illustrating Linear Optimal Low-rank (\Lol)  as a supervised manifold learning technique.
 % Illustrating four different classifiers---\sct{Lasso}~(top), \Lda~(second),  \Pca~(third), and \Lol~(bottom)---for embedding images of the digits 3, 7, and 8 (from MNIST), each of which is 28 $\times$ 28 = 784 dimensional.
 \textbf{(A)} 300 training samples of the numbers 3, 7, and 8 from the MNIST dataset (100 samples per digit);  each sample is a 28 $\times$ 28 = 784 dimensional image (boundary colors are  for visualization purposes).
@@ -278,7 +278,7 @@ All together, \Lol~estimates both the difference of the means and the covariance
 \begin{figure}[h!]%{R}{0.7\textwidth}%[h!]
 % \begin{SCfigure}
 \centering
-\includegraphics[width=0.8\linewidth,trim=0in 0in 1.5in 0in,clip=true]{../Figs/cigars_est.pdf}%l b r t
+\includegraphics[width=0.8\linewidth,trim=0in 0in 1.5in 0in,clip=true]{cigars_est.pdf}%l b r t
 \caption{
 \Lol~achieves near optimal performance for a wide variety of Gaussian distributions.
 Each point is sampled from a multivariate Gaussian;
@@ -335,8 +335,8 @@ Again, \Lol, by using both the means and the covariance, does extremely well.
 
 Figure \ref{f:cigars}{\color{magenta}C}  is exactly the same as B, except the data have been randomly rotated in all 1000 dimensions.  This means that none of the original features have much information, rather, linear combinations of them do.
 This is evidenced by observing the scatter plot, which shows that the first two dimensions  fail to disambiguate the two classes.
-\Pca, being rotationally invariant, performs approximately as well in this scenario as in B.
-\Pca' is not helped by this random rotation, so still performs at chance levels.
+\Pca~performs even worse in this scenario than in the previous one.
+\Pca' is rotationally invariant (see Methods for details),  so still performs at chance levels.
 Because there is no small number of features that separate the data well,  \Road~fails.
  \Lol~performs nearly as well here as it does in the other examples.
 
@@ -386,7 +386,7 @@ For each setting we evaluate the misclassification rate on held out data for all
 
 \begin{figure}
 \centering
-\includegraphics[width=0.8\linewidth]{../Figs/plot_sims}
+\includegraphics[width=0.8\linewidth]{plot_sims}
 \caption{
 Five simulations demonstrating \Lol~achieves superior finite sample performance over competitors both in settings for which we have  theoretical guarantees, and those for which we do not.
 For all cases, the left column depicts misclassification rate as a function of the number of embedded dimensions, for several different approaches.
@@ -437,8 +437,8 @@ In all  cases, \Lol, or the appropriate generalization thereof, outperforms unsu
 
 \begin{figure}[h!]
 \centering
-% \includegraphics[width=1\linewidth]{../Figs/speed_test}
-\includegraphics[width=1\linewidth]{../Figs/scalability}
+% \includegraphics[width=1\linewidth]{speed_test}
+\includegraphics[width=1\linewidth]{scalability}
 \caption{
 Computational efficiency of various low-dimensional projection methods. In all cases, $n=2000$, and we used spherically symmetric  Gaussians  (see Methods for details).   We compare \Pca~with \Lol~(light green for in memory, dark green for semi-external memory ) and \Lal~(light orange for in-memory, dark orange for semi-external memory) for different observed dimensions ($p$). \textbf{(A)} \Lol~exhibits optimal (linear) scale up, requiring only 46 minutes to find the embedding on a 2 terabyte dataset, and only 3 minutes using \Lal. \textbf{(B)} Error for \Lal~is the same as \Lol~in this setting, and both are significantly better than \Lda~for all choices of embedding dimension.
 % from \Lol, \Qoq, \Lrl, \Lfl, and \Lal, for different values of $(p,d)$.  The addition of the mean difference vector is essentially negligible.  Moreover, for small $d$, the \Lfl~is advantageous.  \Lal~is always fastest, and its performance is often comparable to other methods (not shown).
@@ -473,7 +473,7 @@ In particular, random projections---for which the data are multiplied by a lower
 
 \begin{figure}[h!]
 \centering
-\includegraphics[width=1\linewidth]{../Figs/plot_real}
+\includegraphics[width=1\linewidth]{plot_real}
 \caption{
 For three datasets, we benchmark \Lol~(green) versus standard classification methods,
 %including support vector machines (blue up triangles),
@@ -529,7 +529,7 @@ High-dimensional  regression is another supervised learning method that can util
 \begin{figure}
 % \begin{wrapfigure}{R}{0.7\textwidth} %[h!]
 \centering
-\includegraphics[width=1\linewidth]{../Figs/regression_power}
+\includegraphics[width=1\linewidth]{regression_power}
 \caption{
 The intuition of including the mean difference vector is equally useful for other supervised manifold learning problems, including testing and regression.
 \textbf{(A)} and \textbf{(B)} show two different high-dimensional testing settings, as described in Methods.  Power is plotted against the decay rate of the spectrum, which approximates the effective number of dimensions.  \Lol~composed with Hotelling's test outperforms the random projections variants described in \cite{Lopes2011a}, as well as several other variants.
@@ -687,6 +687,12 @@ and then we randomly rotated as in the rotated Trunk example.
 \end{compactitem}
 
 
+\paragraph*{Computational Efficiency Experiments}
+
+\paragraph*{Hypothesis Testing Experiments}
+
+\paragraph*{Regression Experiments}
+
 
 %
 % \paragraph*{Outliers} In this dataset, we generate $n/2$ samples from an inlier model, and the remaining $n/2$ samples from an outlier model.  For the inlier model, we first generate a random $d \times p$ dimensional orthonormal matrix, $V$, where $d=p/10$.  Then, the first half of the inlier points are generated by $f_{x|0}$, the next half by $f_{x|1}$, and the remaining points generated by $f_{x | \emptyset}$. For the outliers, we sampled their class randomly from a fair Bernoulli distribution:
@@ -721,7 +727,7 @@ and then we randomly rotated as in the rotated Trunk example.
 
 \begin{figure}
 \centering
-\includegraphics[width=1\linewidth,trim=0.5in 4.5in 0.5in 0.5in,clip=true]{../Figs/table} %l b r t
+\includegraphics[width=1\linewidth,trim=0.5in 4.5in 0.5in 0.5in,clip=true]{table} %l b r t
 \caption{Table of algorithms and their properties for high-dimensional data. Gray elements indicate that results are demonstrated in the Figure labeled in the bottom row. 'X' denotes relatively good performance for a given setting, or has the particular property.
 }
 \label{f:table}
@@ -867,7 +873,9 @@ Or, more formally, for any $F \in \mc{F}_{\Lda}$, $L_{\bdel\T \bSig^{-1}} = L_*$
 \subsection[PCA]{Principle Components Analysis (\Pca) Projection}
 \label{sec:pca}
 
-Principle Components Analysis (\Pca) finds the directions of maximal variance in a dataset.  \Pca~is closely related to eigendecompositions and singular value decompositions (\Svd).  In particular, the top principle component of a matrix $\bX \in \Real^{p \times n}$, whose columns are centered, is the eigenvector with the largest corresponding eigenvalue of the centered covariance matrix $\bX \bX\T$.  \Svd~enables one to estimate this eigenvector without ever forming the outer product matrix, because \Svd~factorizes a matrix $\bX$ into $\bU \bS \bV\T$, where  $\bU$ and $\bV$ are orthonormal  ${p \times n}$ matrices, and $\bS$ is a diagonal matrix, whose diagonal values are decreasing,  $s_1 \geq s_2 \geq \cdots > s_n$.  Defining $\bU =[\bu_1, \bu_2, \ldots, \bu_n]$, where each $\bu_i \in \Real^p$, then $\bu_i$ is the $i^{th}$ eigenvector, and $s_i$ is the square root of the $i^{th}$ eigenvalue of $\bX \bX\T$.  Let $\bA^{\Pca}_d =[\bu_1, \ldots , \bu_d]$ be the truncated \Pca~orthonormal matrix.
+Principle Components Analysis (\Pca) finds the directions of maximal variance in a dataset.  \Pca~is closely related to eigendecompositions and singular value decompositions (\Svd).  In particular, the top left singular vector of a matrix $\bX \in \Real^{p \times n}$, whose columns are centered, is the eigenvector with the largest eigenvalue of the centered covariance matrix $\bX \bX\T$.  \Svd~enables one to estimate this eigenvector without ever forming the outer product matrix, because \Svd~factorizes a matrix $\bX$ into $\bU \bS \bV\T$, where  $\bU$ and $\bV$ are orthonormal  ${p \times n}$ matrices, and $\bS$ is a diagonal matrix, whose diagonal values are decreasing,
+$s_1 \geq s_2 \geq \cdots > s_n$.  Defining $\bU =[\bu_1, \bu_2, \ldots, \bu_n]$, where each $\bu_i \in \Real^p$, then $\bu_i$ is the $i^{th}$ eigenvector, and $s_i$ is the square root of the $i^{th}$ eigenvalue of $\bX \bX\T$.
+Let $\bA^{\Pca}_d =[\bu_1, \ldots , \bu_d]$ be the truncated \Pca~orthonormal matrix.
 
 The \Pca~matrix is perhaps the most obvious choice of a orthonormal matrix for several reasons.  First, truncated \Pca~minimizes the squared error loss between the original data matrix and all possible rank d representations:
 \begin{align*}
@@ -875,10 +883,11 @@ The \Pca~matrix is perhaps the most obvious choice of a orthonormal matrix for s
 \end{align*}
 Second, the ubiquity of \Pca~has led to a large number of highly optimized numerical libraries for computing \Pca~(for example, LAPACK \cite{Anderson1999a}).
 
-Moreover, let $\bU_d=[\bu_1,\ldots,\bu_d] \in \Real^{p \times d}$, and note that $\bU_d\T \bU_d = \bI_{d \times p}$ and $\bU_d\T \bU_d  = \bI_{p \times d}$.  Similarly, let $\bU \bS \bU\T = \bSig$, and $\bU \bS^{-1} \bU\T = \bSig^{-1}$.  Let $\bS_d$ be the matrix whose diagonal entries are the eigenvalues, up to the $d^{th}$ one, that is $\bS_d(i,j)=s_i$ for $i=j \leq d$ and zero otherwise.  Similarly, $\bSig_d=\bU \bS_d \bU\T=\bU_d \bS_d \bU_d\T$.
+Moreover, let $\bU_d=[\bu_1,\ldots,\bu_d] \in \Real^{p \times d}$, and note that $\bU_d\T \bU_d = \bI_{d \times p}$ and $\bU_d\T \bU_d  = \bI_{p \times d}$.  Similarly, let $\bU \bS \bU\T = \bSig$,
+and $\bU \bS^{-1} \bU\T = \bSig^{-1}$.  Let $\bS_d$ be the matrix whose diagonal entries are the eigenvalues, up to the $d^{th}$ one, that is $\bS_d(i,j)=s_i$ for $i=j \leq d$ and zero otherwise.  Similarly, $\bSig_d=\bU \bS_d \bU\T=\bU_d \bS_d \bU_d\T$.
 
 Let $g_{\Pca}^d:=g_{A_{\Pca}^d}$, and let $L_{\Pca}^d:=L_{A_{\Pca}^d}$.
-And let $g_{\Lda}^d := \II \{ x \bSig_d^{-1} \bdel > 0\}$ be the regularized \Lda~classifier, that is, the \Lda~classifier, but sets the bottom $p-d$ eigenvalues to zero.
+And let $g_{\Lda}^d := \II \{ x \bSig_d^{-1} \bdel > 0\}$ be the regularized \Lda~classifier, that is, the \Lda~classifier, but sets the bottom $p-d$ eigenvalues of the covariance matrix to zero.
 
 \begin{lem}
 $L_{\Pca}^d = L_{\Rrlda}^d$.
@@ -904,14 +913,11 @@ The implication of this lemma is that if one desires to implement \Rrlda, rather
 \subsection[LOL]{Linear Optimal Low-Rank (\Lol) Projection}
 
 
-The basic idea of \Lol~is to use both $\bdel$ and the top $d$ eigenvectors.  Most na\"ively, we could simply concatenate the two, $\bA_{\Lol}^d=[\bdel,\bA_{\Pca}^{d-1}]$.
+The basic idea of \Lol~is to use both $\bdel$ and the top $d$ eigenvectors of the class-conditionally centered covariance.  Most na\"ively, we could simply concatenate the two, $\bA_{\Lol}^d=[\bdel,\bA_{\Pca}^{d-1}]$.
 Recall that eigenvectors are orthonormal.  To maintain orthonormality, we could easily apply Gram-Schmidt,  $\bA_{\Lol}^d=$ \sct{Orth}$([\bdel, \bA_{\Pca}^{d-1}])$.
-Both in practice and in theory (as will be shown below), this orthogonalization step does not matter much.
-
-to ensure that they are balanced appropriately, we normalize $\bdel$
-
-each vector in $\bdel$ to have norm unity.  Formally, let $\mt{\bdel}_j = \bdel_j / \norm{\bdel_j}$, where $\bdel_j$ is the $j^{th}$ difference of the mean vector (remember, the number of vectors is equal to $C-1$, where $C$ is the total number of classes), and let  $\bA_{\Lol}^d=[\mt{\bdel}, \bA_{\Pca}^{d-(C-1)}]$.
-The eigenvectors are all normalized and orthogonal to one another; to impose orthogonality between $\mt{\bdel}$ and the eigenvectors, we could use any number of numerically optimized algorithms.  However, in practice, orthogonalizing does not matter very much, so we do not bother. We formally demonstrate this below.
+In practice, this orthogonalization step does not matter much, so we ignore it here after.
+To ensure that $\bdel$ and $\bSig$ are balanced appropriately, we normalize each vector in $\bdel$ to have norm unity.  Formally, let $\mt{\bdel}_j = \bdel_j / \norm{\bdel_j}$, where $\bdel_j$ is the $j^{th}$ difference of the mean vector (remember, the number of vectors is equal to $C-1$, where $C$ is the total number of classes), and let  $\bA_{\Lol}^d=[\mt{\bdel}, \bA_{\Pca}^{d-(C-1)}]$.
+% The eigenvectors are all normalized and orthogonal to one another; to impose orthogonality between $\mt{\bdel}$ and the eigenvectors, we could use any number of numerically optimized algorithms.  However, in practice, orthogonalizing does not matter very much, so we do not bother. We formally demonstrate this below.
 
 
 
@@ -921,14 +927,14 @@ The eigenvectors are all normalized and orthogonal to one another; to impose ort
 
 \subsection{\Lda~is rotationally invariant}
 
-For certain classification tasks, the ambient coordinates have intrinsic value, for example, when simple interpretability is desired.  However, in many other contexts, interpretability is less important \cite{Breiman2001b}.  When the exploitation task at hand is invariant to rotations, then we have no reason to restrict our search space to be sparse in the ambient coordinates, rather, for example, we can consider sparsity in the eigenvector basis.  Fisherfaces is one example of a rotationally invariant classifier, under certain model assumptions.
+For certain classification tasks, the observed dimensions (or features) have intrinsic value, for example, when simple interpretability is desired.  However, in many other contexts, interpretability is less important \cite{Breiman2001b}.  When the exploitation task at hand is invariant to rotations, then we have no reason to restrict our search space to be sparse in the observed dimensions, rather, for example, we can consider sparsity in the eigenvector basis.  Fisherfaces is one example of a rotationally invariant classifier, under certain model assumptions.
 Let  $\bW$ be a rotation matrix, that is $\bW \in \mc{W}=\{\bW : \bW\T = \bW^{-1}$ and det$(\bW)=1\}$.
 Moreover, let $\bW \circ F$ denote the distribution $F$ after transformation by an operator $\bW$.  For example, if $F=\mc{N}(\bmu,\bSig)$ then $\bW \circ F=\mc{N}(\bW  \bmu, \bW \bSig \bW\T)$.
 
 \begin{defi}
 A rotationally invariant classifier has the following property:
-$$L_g^F = L_g^{W \circ F}, \qquad F \in \mc{F}.$$
-In words, the Bayes risk of using classifier $g$ on distribution $F$ is unchanged if $F$ is first rotated, for any $F \in \mc{F}$.
+$$L_g^F = L_g^{W \circ F}, \qquad F \in \mc{F} \text{ and } W \in \mc{W}.$$
+In words, the Bayes risk of using classifier $g$ on distribution $F$ is unchanged if $F$ is first rotated. %, for any $F \in \mc{F}$.
 \end{defi}
 
 
@@ -958,7 +964,8 @@ $L_{\Lda}^F = L_{\Lda}^{W \circ F}$, for any $F \in \mc{F}$.
 \end{align*}
 \end{proof}
 
-One implication of this lemma is that we can reparameterize without loss of generality.  Specifically, defining $\bW := \bU\T$ yields a change of variables: $\bSig \mapsto \bS$ and $\bdel \mapsto \bU\T \bdel := \bdel''$, where $\bS$ is a diagonal covariance matrix.  Moreover, let $\bd=(\sigma_1,\ldots, \sigma_D)\T$ be the vector of eignevalues, then $\bS^{-1} {\bdel'}=\bd^{-1} \odot \mt{\bdel}$, where $\odot$ is the Hadamard (entrywise) product.  The \Lda~classifier may therefore be encoded by a unit vector, $\mt{\bd}:= \frac{1}{m} \bd^{-1} \odot \mt{\bdel'}$, and its magnitude, $m:=\norm{\bd^{-1} \odot \mt{\bdel}}$.
+One implication of this lemma is that we can reparameterize without loss of generality.  Specifically, defining $\bW := \bU\T$ yields a change of variables: $\bSig \mapsto \bS$ and $\bdel \mapsto \bU\T \bdel := \bdel''$, where $\bS$ is a diagonal covariance matrix.  Moreover, let $\bd=(\sigma_1,\ldots, \sigma_D)\T$ be the vector of eignevalues, then
+$\bS^{-1} {\bdel'}=\bd^{-1} \odot \mt{\bdel}$, where $\odot$ is the Hadamard (entrywise) product.  The \Lda~classifier may therefore be encoded by a unit vector, $\mt{\bd}:= \frac{1}{m} \bd^{-1} \odot \mt{\bdel'}$, and its magnitude, $m:=\norm{\bd^{-1} \odot \mt{\bdel}}$.
 This will be useful later.
 
 
@@ -981,7 +988,7 @@ where $\bY = \bA \bW \in \Real^{d \times p}$ so that $\bZ=\bY\T \bY$ is a symmet
 The implications of the above is:
 \begin{lem}
 $g_A$ is rotationally invariant if and only if span($\bA$)=span($\bSig_d$).
-In other words, \Pca~is the only rotationally invariant projection.
+In other words, \Pca'~is the only rotationally invariant projection.
 \end{lem}
 
 \subsection{Chernoff information}

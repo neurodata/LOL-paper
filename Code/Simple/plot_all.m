@@ -13,8 +13,8 @@ switch sit
     case 'sims'
         settings={...
             'rtrunk';...
-            '3trunk';...
             'toeplitz';...
+            '3trunk';...
             'fat_tails';...
             'r2toeplitz';...
             };
@@ -77,12 +77,12 @@ for s=1:S
             G.legend=false;
             G.algs=algs(1:4);
         case 'toeplitz'
-            G.ylab='(C) Toeplitz';
+            G.ylab='(B) Toeplitz';
             G.xmax=90;
             G.xticks=[10:20:500];
             G.algs=algs(1:4);
         case '3trunk'
-            G.ylab='(B) Trunk-3';
+            G.ylab='(C) Trunk-3';
             G.xmax=30;
         case 'xor2'
             G.ylab='XOR';
@@ -144,7 +144,7 @@ if strcmp(sit,'sims')
     H.wh=[6.5 9];
 else
     H.wh=[10,2];
-    legend({'LOL','PCA','PCA''','ROAD','Lasso'},'Position', [0.46 0.3 1 0.2]) ; % [left bottom width height] 'location','bestoutside')
+    legend({'LOL','PCA''','PCA','ROAD','Lasso'},'Position', [0.46 0.3 1 0.2]) ; % [left bottom width height] 'location','bestoutside')
     legend('boxoff')
 end
 H.fname=['plot_', sit];
