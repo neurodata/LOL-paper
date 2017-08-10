@@ -1,162 +1,366 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Title</title>
-    <meta charset="utf-8">
-    <style>
-      @import url(https://fonts.googleapis.com/css?family=Droid+Serif);
-      @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
-      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+<head>
 
-      body {
-        font-family: 'Droid Serif';
-      }
-      h1, h2, h3 {
-        font-family: 'Yanone Kaffeesatz';
-        font-weight: 400;
-        margin-bottom: 0;
-      }
-      .remark-slide-content h1 { font-size: 3em; }
-      .remark-slide-content h2 { font-size: 2em; }
-      .remark-slide-content h3 { font-size: 1.6em; }
-      .footnote {
-        position: absolute;
-        bottom: 3em;
-      }
-      .remark-slide-content {
-        font-size: 1.5em;
-      }
-      li p { line-height: 1.25em; }
-      .red { color: #fa0000; }
-      .yellow { color: #FF00FF; }
-      .green { color: #00CC00; }
-      .large { font-size: 2em; }
-      a, a > code {
-        color: rgb(249, 38, 114);
-        text-decoration: none;
-      }
-      code {
-        background: #e7e8e2;
-        border-radius: 5px;
-      }
-      .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
-      .remark-code-line-highlighted     { background-color: #373832; }
-      .pull-left {
-        float: left;
-        width: 47%;
-      }
-      .center {
-        margin: auto;
+  <link rel="stylesheet" href="http://jovo.me/fonts/gentona/gentona.css">
+  <link rel="stylesheet" href="http://jovo.me/fonts/titling-gothic/titling-gothic.css">
+  <link rel="stylesheet" href="http://jovo.me/fonts/quadon/quadon.css">
+  <link rel="stylesheet" href="http://jovo.me/fonts/arnhem/arnhem.css">
+  <!-- endbower -->
+
+  <title>LOL</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <style type="text/css">
+
+    body {
+      font-family: 'gentona'; /* Varela Round */
+      font-size: 1.0em;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'quadon';
+      font-weight: 400;
+      margin-bottom: 0;
+      color: #a6bcd7;
+      text-align: center;
+      /*text-shadow: 2px 2px gray; /*#ff0000;*/*/
+    }
+    .remark-slide-content {
+      font-size: 1.5em;
+      background: #28282e;
+      background: -webkit-radial-gradient(circle, #28282e, #15120e, black); /* Safari */
+      background: -o-radial-gradient(circle, #28282e, #15120e, black); /* Opera 11.6 to 12.0 */
+      background: -moz-radial-gradient(circle, #272822, #15120e, black); /* Firefox 3.6 to 15 */
+      background: radial-gradient(circle, #28282e, #15120e, black); /* Standard syntax */
+      color: #dfd6c2;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+
+
+  hi {
+    position: absolute;
+    left: 100px;
+    top: 50px;
+  }
+    .remark-slide-content h1 { font-size: 3em; }
+    .remark-slide-content h2 { font-size: 2em; }
+    .remark-slide-content h3 { font-size: 1.6em; }
+    .remark-slide-content h4 { font-size: 1.4em; }
+    .footnote {
+      position: absolute;
+      bottom: 3em;
+    }
+    .navbar {
+      position: absolute;
+      float: center;
+      top: 0em;
+      font-family: 'titling-gothic';  /* Yanone Kaffeesatz */
+      font-weight: 200;
+      color: #A7A7A7;
+    }
+    .navbar a {
+      color: #A7A7A7;
+    }
+    .bbar {
+      position: absolute;
+      bottom: 13px;
+      left: 13px;
+      font-family: 'titling-gothic';  /* Yanone Kaffeesatz */
+      font-weight: 200;
+      color: #A7A7A7;
+    }
+    .bbar a {
+      color: #A7A7A7;
+    }
+    .cbar {
+      position: absolute;
+      bottom: 13px;
+      left: 13px;
+      font-family: 'titling-gothic';  /* Yanone Kaffeesatz */
+      font-weight: 200;
+      /*color: #A7A7A7;*/
+      color: #bdbcbc;
+    }
+    .cbar a{
+     color: #bdbcbc;
+    }
+
+    .btn {
+      background: #424242;
+      height: 2em;
+    }
+    li p { line-height: 1.25em; }
+    .r { color: #fa0000; }
+    .w {color: white;}
+    .ye { color: #FFFF00; }
+    .y { color: #fcfaf6; }
+    .pink { color: #FF87F3;}
+    .orange { color: #FFA500;}
+    .g { color: #00CC00; }
+    .blue { color: #75E9FF;}
+    .s {color :#318dde;}
+    .purple { color: #A149A9;}
+    .large { font-size: 2em; }
+    .black { color: black; background-color: white;}
+    a, a > code {
+      color:#318dde;
+      text-decoration: none; /*underline*/
+    }
+
+    a:hover {
+      color: white;
+    }
+
+    code {
+      background: #424242;
+      border-radius: 5px;
+    }
+    .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+    .remark-code-line-highlighted     { background-color: #373832; }
+/*      .pull-left {
+      float: left;
+      width: 47%;
+    }*/
+
+    .pull-left {
+      float: left;
+      width: 47%;
+    }
+    .pull-right {
+      float: right;
+      width: 47%;
+    }
+    .center {
+      margin: auto;
+      width: 100%;
+      padding: 10px;
+    }
+    .small {
+      font-size: 0.8em;
+    }
+/*      .pull-right {
+      float: right;
+      width: 47%;
+    }*/
+    .pull-bottom {
+      position: absolute;
+      bottom: 0;
+    }
+    .bottom {
+      position: absolute;
+      bottom: 35px;
+      left: 13px;
+      font-family: 'Yanone Kaffeesatz';
+    }
+    .pull-right ~ p {
+      clear: both;
+    }
+    #slideshow .slide .content code {
+      font-size: 0.8em;
+    }
+    #slideshow .slide .content pre code {
+      font-size: 0.9em;
+      padding: 15px;
+    }
+    .inverse {
+      background: white;
+      color: white;
+      text-shadow: 0 0 20px #333;
+    }
+    .inverse p {
+      color: white;
+    }
+    .inverse h1, .inverse h2 {
+      color: #f3f3f3;
+      line-height: 0.8em;
+    }
+    #frame { zoom: 0.75; -moz-transform: scale(0.75); -moz-transform-origin: 0 0; }
+
+    #outer {
+      width: 100%;
+      text-align: center;
+    }
+    #inner {
+      display: inline-block;
+    }
+
+    /* Slide-specific styling */
+    #slide-inverse .footnote {
+      bottom: 12px;
+      left: 20px;
+    }
+    #slide-how .slides {
+      font-size: 0.9em;
+      position: absolute;
+      top:  151px;
+      right: 140px;
+    }
+    #slide-how .slides h3 {
+      margin-top: 0.2em;
+    }
+    #slide-how .slides .first, #slide-how .slides .second {
+      padding: 1px 20px;
+      height: 90px;
+      width: 120px;
+      -moz-box-shadow: 0 0 10px #777;
+      -webkit-box-shadow: 0 0 10px #777;
+      box-shadow: 0 0 10px #777;
+    }
+    #slide-how .slides .first {
+      background: #fff;
+      position: absolute;
+      top: 20%;
+      left: 20%;
+      z-index: 1;
+    }
+    #slide-how .slides .second {
+      position: relative;
+      background: #fff;
+      z-index: 0;
+    }
+
+    /* Two-column layout */
+    .left-column {
+      color: #777;
+      width: 20%;
+      height: 92%;
+      float: left;
+    }
+    .left-column h2:last-of-type, .left-column h3:last-child {
+      color: #000;
+    }
+    .right-column {
+      width: 75%;
+      float: right;
+      padding-top: 1em;
+    }
+    br {
+      line-height: 50%;
+    }
+    .task {
+      float: right;
+      font-size: 0.9em;
+      padding-top: 0.6em;
+    }
+    table {
+        border-collapse: collapse;
         width: 100%;
-        padding: 10px;
-      }
-      .pull-right {
-        float: right;
-        width: 47%;
-      }
-      .pull-bottom {
-        position: absolute;
-        bottom: 0;
-      }
-      .pull-right ~ p {
-        clear: both;
-      }
-      #slideshow .slide .content code {
-        font-size: 0.8em;
-      }
-      #slideshow .slide .content pre code {
-        font-size: 0.9em;
-        padding: 15px;
-      }
-      .inverse {
-        background: #272822;
-        color: #777872;
-        text-shadow: 0 0 20px #333;
-      }
-      .inverse h1, .inverse h2 {
-        color: #f3f3f3;
-        line-height: 0.8em;
-      }
-
-      /* Slide-specific styling */
-      #slide-inverse .footnote {
-        bottom: 12px;
-        left: 20px;
-      }
-      #slide-how .slides {
-        font-size: 0.9em;
-        position: absolute;
-        top:  151px;
-        right: 140px;
-      }
-      #slide-how .slides h3 {
-        margin-top: 0.2em;
-      }
-      #slide-how .slides .first, #slide-how .slides .second {
-        padding: 1px 20px;
-        height: 90px;
-        width: 120px;
-        -moz-box-shadow: 0 0 10px #777;
-        -webkit-box-shadow: 0 0 10px #777;
-        box-shadow: 0 0 10px #777;
-      }
-      #slide-how .slides .first {
-        background: #fff;
-        position: absolute;
-        top: 20%;
-        left: 20%;
-        z-index: 1;
-      }
-      #slide-how .slides .second {
-        position: relative;
-        background: #fff;
-        z-index: 0;
-      }
-
-      /* Two-column layout */
-      .left-column {
-        color: #777;
-        width: 20%;
-        height: 92%;
-        float: left;
-      }
-        .left-column h2:last-of-type, .left-column h3:last-child {
-          color: #000;
-        }
-      .right-column {
-        width: 75%;
-        float: right;
-        padding-top: 1em;
-      }
-      br {
-        line-height: 50%;
-      }
-    </style>
+    }
+    th, td {
+        text-align: left;
+        padding: 8px;
+    }
+    tr:nth-child(even){background-color: #4a484c}
+    th {
+        background-color: #6cace4;
+        color: white;
+    }
+}
+  </style>
+</head>
+  <body onload="var slideshow = remark.create();">
+    <textarea id="source">
 
 
-  <!-- load remark -->
-  <script src="http://gnab.github.com/remark/downloads/remark-0.5.1.min.js" type="text/javascript"></script>
 
-  <!-- load MathJax -->
-  <script type="text/javascript"
-    src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML&delayStartupUntil=configured"></script>
 
-  <!-- Initialize (has to go in <script> tag **without** SRC attribute) -->
-  <script type="text/javascript">
-      // Create slideshow
-      var slideshow = remark.create({
-          // This BREAKS MathJax: 
-          // highlightLanguage: 'Python'
-      
-          // You have to tag every code block with python, like so:
-          //
-          // ```python
-          // def add(a, b):
-          //     return a + b
-          // ```
-          
-      });
-      
+class: center, middle
+
+name:opening
+
+### Supervised Manifold Learning Outperforms Principal Components Analysis for Subsequent Inference
+
+ Joshua T. Vogelstein*, Minh Tang, Da Zheng, Randal Burns, Mauro Maggioni
+
+
+<br>
+
+.center[
+<br>
+<!-- JHU Kavli Neuroscience Discovery Institute -->
+{[bme](http://www.bme.jhu.edu/),[icm](http://icm.jhu.edu/),[cis](http://cis.jhu.edu/),[idies](http://idies.jhu.edu/),[kavli](http://kavlijhu.org/),[cs](http://engineering.jhu.edu/computer-science/), [ams](http://engineering.jhu.edu/ams/), [neuro](http://neuroscience.jhu.edu/)} | [jhu](https://www.jhu.edu/)
+<br>
+questions: [jovo@jhu.edu](mailto:jovo at jhu dot edu)
+<br>
+slides: <neurodata-papers.github.io/LOL/>
+<br>
+
+Co-Founder: [NeuroData](http://neurodata.io) & [gigantum](http://gigantum.io)
+
+
+]
+
+---
+
+
+<img src="https://github.com/neurodata-papers/LOL/raw/master/Figs/cigars_est.png" STYLE="position:absolute; LEFT:150px; WIDTH:600px;"/>
+
+
+
+---
+
+## Acknowledgments
+
+| Role | Person |
+| :--- | :--- |
+| Data | Bock, Lee, Reid, Kasthuri, Lichtman, Collman, Weiler, Micheva, Smith, Crow, Deisseroth, Bloss, Spruston, Hildebrand, Engert, Harris,  Zlatic, Cardona, Wanner |
+| Theory | Priebe, Lyzinski, Sussman, Tang, Ketcha, Wang, Fishkind, Durante, Dunson, Chen, Shen, Lindquist, Caffo  |
+| Computer Vision | Kazhdan, Dyer, Gray Roncal, Kutten, Miller, Hager, Chevillet, Simhal, Patsolic, Saalfeld, Sapiro |
+| Computer Science | Zheng, Lillaney, Baden, Manavalan, Mhembere,  Perlman, Koutra, Faloutsos,  Szalay, Burns |
+| Analysis | Kiar, Kleissas, Litt, Wandell, Poldrack, Wiener, Vogelstein |
+
+
+<img src="http://brainx.io/images/funding/nsf_fpo.png" STYLE="position:absolute; TOP:550px; LEFT:10px; HEIGHT:100px;"/>
+
+<img src="http://brainx.io/images/funding/nih_fpo.png" STYLE="position:absolute; TOP:550px; LEFT:120px; HEIGHT:100px;"/>
+
+<img src="http://brainx.io/images/funding/darpa_fpo.png" STYLE="position:absolute; TOP:550px; LEFT:230px; HEIGHT:100px;"/>
+
+<img src="http://brainx.io/images/funding/iarpa_fpo.jpg" STYLE="position:absolute; TOP:550px; LEFT:430px; HEIGHT:100px;"/>
+
+<img src="http://brainx.io/images/funding/kavli_fpo.png" STYLE="position:absolute; TOP:550px; LEFT:550px; HEIGHT:100px;"/>
+
+<img src="http://brainx.io/images/funding/kndi_fpo.png" STYLE="position:absolute; TOP:550px; LEFT:650px; HEIGHT:100px;"/>
+
+
+---
+class:   middle, center
+
+
+# Questions?
+
+<!-- ### Funding &nbsp;&nbsp;&nbsp;&nbsp;   -->
+
+<!-- <br /> -->
+
+<!-- <br>
+<br> -->
+
+
+## Hiring Postdocs & Software Engineers Now!
+
+
+e: [jovo@jhu.edu](mailto:jovo@jhu.edu)
+
+w: [neurodata.io](http://neurodata.io), [gigantum.io](http://gigantum.io)
+
+<!-- ____ -->
+
+
+
+<!-- [more slides](http://docs.neurodata.io/ndintro/more.html) -->
+
+
+
+
+
+    </textarea>
+    <script src="remark-latest.min.js" type="text/javascript">
+    </script>
+    <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML&delayStartupUntil=configured" type="text/javascript"></script>
+    <script type="text/javascript">
+      var slideshow = remark.create();
+
       // Setup MathJax
       MathJax.Hub.Config({
           tex2jax: {
@@ -168,166 +372,48 @@
               return(elem.SourceElement());
           }).parent().addClass('has-jax');
       });
-      
+
       MathJax.Hub.Configured();
-  </script>
 
-  </head>
-  <body>
-    <textarea id="source">
+var slideshow = remark.create({
+  // Set the slideshow display ratio
+  // Default: '4:3'
+  // Alternatives: '16:9', ...
+  ratio: '4:3',
+
+  // Navigation options
+  navigation: {
+    // Enable or disable navigating using scroll
+    // Default: true
+    // Alternatives: false
+    scroll: true,
+
+    // Enable or disable navigation using touch
+    // Default: true
+    // Alternatives: false
+    touch: true,
+
+    // Enable or disable navigation using click
+    // Default: false
+    // Alternatives: true
+    click: false
+  },
+
+  // Customize slide number label, either using a format string..
+  // slideNumberFormat: 'Slide %current% of %total%',
+  // .. or by using a format function
+  slideNumberFormat: function (current, total) {
+    return  current + ' of ' + total;
+  },
+
+  // Enable or disable counting of incremental slides in the slide counting
+  countIncrementalSlides: false
+});
 
-
-
-class: center, middle, inverse
-
-# [LOL](http://github.com/jovo/LOL): 
-## Linear Optimal Low-rank Supervised Learning for Wide Data
-
-### Joshua T. Vogelstein, Minh Tang, Brett Mensh, Mauro Maggioni
-
-<!-- ### Joshua T. Vogelstein -->
-<!-- ### {[BME](http://bme.jhu.edu),[ICM](http://icm.jhu.edu),[CIS](http://cis.jhu.edu),[Kavli](http://kndi.jhu.edu)}@[jhu](http://jhu.edu) -->
-
-<!-- #### e: [jovo@jhu.edu](mailto:jovo@jhu.edu) | w:  -->
-<!-- ### [NeuroData.io](http://neurodata.io) -->
-
-
-
-#### this talk: <http://jovo.me/LOL>
-
----
-
-### Installation
-
-There is no installation, simply download the code from [here](http://github.com/jovo/LOL).
-
-The repo is fairly large (50 MB), because it contains all the results and figures as well.
-
-These slides show the results from the paper.
-
-The results are fully reproducible, each figure is generated by running a single script.
-
-
-
----
-
-### Figure 1: LOL for Parallel Cigars
-
-
-.center[
-<img src="https://raw.githubusercontent.com/jovo/LOL/master/Figs/cigars_est.png" alt="Drawing" style="width: 600px;"/>
-]
-
-- LOL yields classification accuracies very close to Bayes optimal on all three examples
-- FLD o PCA (also known as [Fisherfaces](http://www.scholarpedia.org/article/Fisherfaces)) and [ROAD](http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3467977/) (a sparse classifier) do not work.
-- To obtain this figure, run [Plot_cigars.m](https://github.com/jovo/LOL/blob/master/Code/Plots/Plot_cigars.m); to sample data again, set `newsim=1`. 
-
-
----
-
-### Figure 2: LOL for MNIST
-
-
-.center[
-<img src="https://raw.githubusercontent.com/jovo/LOL/master/Figs/mnist.png" alt="Drawing" style="width: 400px;"/>
-]
-
-- digits 3, 7, and 8 from MNIST, 300 samples total.
-- LOL separates MNIST data very well. 
-- Fisherfaces and ROAD do not.
-- To obtain this figure, run [Plot_MNIST.m](https://github.com/jovo/LOL/blob/master/Code/Plots/Plot_MNIST.m); to sample data again, set `newsim=1`. 
-
-
-
----
-
-
-### Figure 3: LOL for Different Simulations 
-
-
-.center[
-<img src="https://raw.githubusercontent.com/jovo/LOL/master/Figs/properties.png" alt="Drawing" style="width: 400px;"/>
-]
-
-- 7 different simulation settings
-- For all different dimensions to embed into, LOL works the best of all comparisons
-- To obtain this figure, run [Plot_classification_accuracy.m](https://github.com/jovo/LOL/blob/master/Code/Plots/Plot_classification_accuracy.m); to sample data again, set `newsim=1`. 
-
-
-
----
-
-
-### Figure 4: LOL Efficiency 
-
-
-.center[
-<img src="https://raw.githubusercontent.com/jovo/LOL/master/Figs/speed_test.png" alt="Drawing" style="width: 600px;"/>
-]
-
-- Stacked cigars simulation
-- Different variants of LOL exhibit different accuracy/efficiency trade-offs
-- To obtain this figure, run [Plot_speed_sims.m](https://github.com/jovo/LOL/blob/master/Code/Plots/Plot_speed_sims.m); to sample data again, set `newsim=1`. 
-
-
----
-
-### Figure 5: LOL on Real Data 
-
-
-.center[
-<img src="https://raw.githubusercontent.com/jovo/LOL/master/Figs/realdata.png" alt="Drawing" style="width: 600px;"/>
-]
-
-- 4 different real data scenarios
-- No algorithm ever yields better accuracy and efficiency on any dataset
-- To obtain this figure, run [Plot_realdata.m](https://github.com/jovo/LOL/blob/master/Code/Plots/Plot_realdata.m); to sample data again, set `newsim=1`. 
-
-
----
-
-
-### Figure 6: LOL for Regression and Testing
-
-
-.center[
-<img src="https://raw.githubusercontent.com/jovo/LOL/master/Figs/regression_power.png" alt="Drawing" style="width: 700px;"/>
-]
-
-- 3 different regression settings
-- Compared accuracy with linear regression composed with random projections and PCA, and Lasso
-- LOL is essentially always better
-- To obtain this figure, run [Plot_regression_power.m](https://github.com/jovo/LOL/blob/master/Code/Plots/Plot_regression_power.m); to sample data again, set `newsim=1` for both regression and power code blocks.
-
-
-
----
-
-# Closing Remarks 
-
-- R code coming soon
-- Please [git issue](https://github.com/jovo/LOL/issues) me if you find bugs or have feature requests
-- Funding includes NIH/NSF:  {BIGDATA, CRCNS} and DARPA: {XDATA,GRAPHS,SIMPLEX}. 
-
-
-____
-
-c: [code](https://github.com/jovo/LOL)
-
-e: jovo at jhu dot edu
-
-w: [neurodata.io](http://neurodata.io)
-
-m: [manuscript](https://github.com/jovo/LOL/raw/master/Draft/LOL.pdf)
-
-
-____
-
-    </textarea>
-    <script src="https://gnab.github.io/remark/downloads/remark-latest.min.js">
     </script>
-    <script>
-      var slideshow = remark.create();
-    </script>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
   </body>
 </html>
