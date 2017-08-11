@@ -1,30 +1,39 @@
 <!DOCTYPE html>
 <html>
 <head>
+
+
   <title>LOL</title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-  <script type="text/javascript" src="https://github.com/downloads/gnab/remark/remark-0.4.2.min.js"></script>
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-  <!-- <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML&delayStartupUntil=configured">
-    remark.on('ready', function () {
-      MathJax.Hub.Config({
-        tex2jax: {
-          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
-        }
-      });
-      MathJax.Hub.Queue(function() {
-        $(MathJax.Hub.getAllJax()).map(function(index, elem) {
-          return(elem.SourceElement());
-        }).parent().addClass('has-jax');
-      });
-      MathJax.Hub.Configured();
-    });
-  </script> -->
-  <!-- <script src="remark-latest.min.js" type="text/javascript"></script> -->
+
+  <script src="remark-latest.min.js" type="text/javascript"></script>
   <link rel="stylesheet" href="http://jovo.me/fonts/gentona/gentona.css">
   <link rel="stylesheet" href="http://jovo.me/fonts/quadon/quadon.css">
   <link rel="stylesheet" type="text/css" href="remarkstyle.css">
 
+  <!-- <script type="text/javascript" src="https://github.com/downloads/gnab/remark/remark-0.4.2.min.js"></script> -->
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+  <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML&delayStartupUntil=configured" type="text/javascript"></script>
+  <script type="text/javascript">
+    var slideshow = remark.create();
+
+    // Setup MathJax
+    MathJax.Hub.Config({
+        tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        $(MathJax.Hub.getAllJax()).map(function(index, elem) {
+            return(elem.SourceElement());
+        }).parent().addClass('has-jax');
+    });
+
+    MathJax.Hub.Configured();
+
+
+
+  </script>
 
 </head>
   <body onload="var slideshow = remark.create();">
@@ -51,7 +60,7 @@ name:opening
 <br>
 questions: [jovo@jhu.edu](mailto:jovo at jhu dot edu)
 <br>
-slides: <neurodata-papers.github.io/LOL/>
+slides: <httpneurodata-papers.github.io/LOL/>
 <br>
 
 Co-Founder: [NeuroData](http://neurodata.io) & [gigantum](http://gigantum.io)
@@ -61,9 +70,76 @@ Co-Founder: [NeuroData](http://neurodata.io) & [gigantum](http://gigantum.io)
 
 ---
 
+### What is supervised inference?
+
+Given (X<sub>i</sub>,Y<sub>i</sub>) pairs with neither  F<sub>Y</sub> nor F<sub>Y</sub> degenerate,
+*supervised inference* is the estimation of any given functional of F<sub>X|Y</sub>
+
+--
+
+#### Examples
+
+- Classification
+- Regression
+- 2-sample testing
+- K-sample testing
+
+---
+
+### Classification and Fisher's LDA
+
+- Given F<sub>X|Y</sub> = N(&mu;<sub>y</sub>,&Sigma;) and F<sub>Y</sub> = B(&#960),
+- where X &#1013 R<sup>p</sup>
+- Bayes optimal classifier is x' &Sigma;<sup>-1</sup> &delta; > t, where &delta;=&mu;<sub>0</sub>-&mu;<sub>1</sub>
+
+--
+
+#### Properties
+
+- simple
+- multiclass generalizations
+- plug-in estimate converges to Bayes optimal
+- algorithmic efficiency
+
+---
+
+### But...
+
+- When n < p, our estimate of &Sigma; is singular
+- Cannot use Fisher's LDA
+- What to do?
+
+<br>
+--
+
+- Manifold learning
+- Spare modeling (is secretly also manifold learning)
+
+<br>
+
+
+---
+
 ### Manifold Learning for  Subsequent Inference
 
 <img src="../Figs/mnist2.png" STYLE="margin:auto; width:100%"/>
+
+---
+
+### Limitations of existing approaches
+
+- Manifold learing
+  - is typically unsupervised
+  - who says directions of variance are near directions of discrimination?
+
+<br>
+--
+
+- Sparse modeling
+  - NP-hard (feature screening), or
+  - approximations are computationally inefficient (Lasso), or
+  - non-convex (Dictionary learning),
+  - with icky hyperparameters (Lasso & dictionary learning)
 
 
 
@@ -71,27 +147,28 @@ Co-Founder: [NeuroData](http://neurodata.io) & [gigantum](http://gigantum.io)
 
 ## Linear Projections
 
-- PCA: $(x_i - \hat{\mu})$
-- PCA': $(x_i - \hat{\mu}_j)$
-- LOL: $[ \hat{\delta} | (x_i - \hat{\mu}_j)]$
+- PCA: eig({x<sub>i</sub> - &mu;})
+- PCA': eig({x<sub>i</sub> - &mu;<sub>j</sub>})
+- LOL: [&delta;, eig({x<sub>i</sub> - &mu;<sub>j</sub>})]
 
-- PCA: $$x_i - \mu$$
-\begin{align}
-a=x
-\end{align}
+"Linear Optimal Low-Rank"
 
-1. This is an inline integral: `\(\int_a^bf(x)dx\)`
-2. More `\(x={a \over b}\)` formulae.
+<br>
+--
 
-Display formula:
-    $$e^{i\pi} + 1 = 0$$
+### Notes
+
+- Fisher's LDA uses &delta; and {x<sub>i</sub> - &mu;<sub>j</sub>}
+- PCA' removes &delta;
+- PCA kind of accidentally includes it
+- LOL uses both terms explicitly
 
 
 ---
 
 ## LOL Gaussian Intuition
 
-<img src="../Figs/cigars_est.png" STYLE="position:absolute; left:150px; width:600px"/>
+<img src="../Figs/cigars_est.png" STYLE="margin:auto; width:90%"/>
 
 ---
 
@@ -99,13 +176,94 @@ Display formula:
 
 <img src="../Figs/LOL_theory.png" STYLE="margin:auto; width:100%"/>
 
+---
+
+## Unpacking the theory: Chernoff Information
+
+- C(F,G) = sup<sub> t </sub> [ -log &int; f<sup>t</sup>(x) g<sup>1-t</sup>(x) dx], for 0 < t < 1
+- the *exponential rate* at which the Bayes error decreases
+- it is the tightest possible bound on performance
+- if F=N(&mu;<sub>0</sub>,&Sigma;<sub>0</sub>) and G=N(&mu;<sub>1</sub>,&Sigma;<sub>1</sub>)
+- C(F,G)=  0.5  sup<sub>t</sub>  t(1-t) &delta;' &Sigma;<sup>-1</sup> &delta; + log |&Sigma;<sub>t</sub>| / (|&Sigma;<sub>0</sub>|<sup>t</sup> |&Sigma;<sub>1</sub>|<sup>1-t</sup>)
+
+
+--
+
+### Chernoff on Projected Data
+
+<!-- - let F =N(&mu;<sub>0</sub>,&Sigma;) and G=N(&mu;<sub>1</sub>,&Sigma;) -->
+- let F & G be Gaussian with same covariance (LDA model)
+- let A be any linear transformation
+- C(F<sup>A</sup>, G<sup>A</sup>) = 1/8 * || P<sub>Z</sub> &Sigma;<sup>-1/2</sup> &delta; ||<sub>F</sub><sup>2</sup>
+- P<sub>Z</sub> = Z (Z' Z)<sup>-1</sup> Z', and Z = &Sigma;<sup>1/2</sup>A'
+- let C<sup>A</sup> := C(F<sup>A</sup>, G<sup>A</sup>)
+
+---
+
+## Thm 1.A: LOL > PCA'
+
+<!-- - let A = LOL projection -->
+<!-- - let B = PCA' projection -->
+- let F & G be Gaussian with same covariance
+- C<sup>LOL</sup> &ge; C<sup>PCA'</sup>
+- inequality is strict whenever &delta;' (I - U<sub>d</sub>U<sub>d</sub>' ) &delta; &ge; 0.
+
+---
+
+## Thm 1.B: LOL > PCA
+
+<!-- - let C = PCA projection -->
+<!-- - let F & G be Gaussian with same covariance -->
+- C<sup>PCA</sup> = 4K / (4 - K), where
+- K = &delta;' &Sigma;<sup>t</sup><sub>d</sub> &delta;
+- so when &delta; is in the space spanned by the smaller eigenvectors, PCA discards nearly all the info
+
+<br>
+--
+
+- for example, if &Sigma; is diagonal, and &delta;=(0,...,0,s), and &lambda;<sub>p</sub> + s<sup>2</sup>/4 < &lambda;<sub>d</sub>
+- C<sup>PCA</sup> = 0
+- C<sup>LOL</sup> = s<sup>2</sup> /  &lambda;<sub>p</sub>
+
+---
+
+## Thm 1.C: [&delta;, U<sub>d</sub>] > U<sub>d</sub>
+
+- let U<sub>d</sub> be any matrix in R<sup>p x d</sup> with U<sub>d</sub> U<sub>d</sub>' = I
+- arthimetic is messier
+- nearly the same result as PCA
+- basically, when &delta; and U<sub>d</sub> are nearly orthogonal, adding delta helps
+
+---
+
+## Thm 1.D: LOL > PCA as p increases
+
+- let &gamma; = &lambda;<sub>d</sub> - &lambda;<sub>d+1</sub>
+- let &delta; be sparse with probabilty &epsilon; an element is 0,
+- o.w. it is Gaussian with mean &tau; and standard deviation &sigma;
+- let p(1-&epsilon;) &rarr; &theta;
+- with probability at least &epsilon;<sup>d</sup>,  C(F<sup>C</sup>, G<sup>C</sup>) = 0 < C(F<sup>A</sup>, G<sup>A</sup>)
+- and this probability can be made arbitrarily close to 1
+
+
+---
+
+## Thm 1.E: LOL > PCA as n & p increases
+
+- when n/p &rarr; 0, all results trivially hold
+
+<br>
+
+- Suppose that M log p &le; log n &le; M' log &lambda;,
+- provided M & M' are large enough
+- E [ C<sup>A</sup> ] > E[ C<sup>PCA</sup>]
 
 ---
 
 ## LOL > PCA Simulations
 
 
-<img src="../Figs/plot_sims.png" STYLE="position:absolute; left:250px; width:400px"/>
+<img src="../Figs/plot_sims.png" STYLE="margin:auto; width:380px"/>
 
 
 ---
@@ -119,14 +277,13 @@ Display formula:
 
 ## LOL > PCA Data
 
-<img src="../Figs/plot_real.png" STYLE="position:absolute; LEFT:150px; WIDTH:600px;"/>
+<img src="../Figs/plot_real.png" STYLE="margin:auto; WIDTH:100%;"/>
 
 ---
 
-## LOL Hypothesis Testing & Regression
+### LOL Hypothesis Testing & Regression
 
-<img src="../Figs/regression_power.png" STYLE="position:absolute; LEFT:150px; WIDTH:600px;"/>
-
+<img src="../Figs/regression_power.png" STYLE="margin:auto; WIDTH:100%;"/>
 
 
 
@@ -145,8 +302,6 @@ class:    center
 e: [jovo@jhu.edu](mailto:jovo@jhu.edu) |
 w: [neurodata.io](http://neurodata.io), [gigantum.io](http://gigantum.io)
 
-
-
 <img src="http://brainx.io/images/funding/nsf_fpo.png" STYLE="position:absolute; TOP:550px; LEFT:10px; HEIGHT:100px;"/>
 
 <img src="http://brainx.io/images/funding/nih_fpo.png" STYLE="position:absolute; TOP:550px; LEFT:120px; HEIGHT:100px;"/>
@@ -161,7 +316,11 @@ w: [neurodata.io](http://neurodata.io), [gigantum.io](http://gigantum.io)
 
 
 
+
+
+
+
+
     </textarea>
-    <div id="slideshow" />
   </body>
 </html>
