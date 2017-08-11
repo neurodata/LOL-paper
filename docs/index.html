@@ -167,7 +167,7 @@ Given (X<sub>i</sub>,Y<sub>i</sub>) pairs with neither  F<sub>Y</sub> nor F<sub>
 
 - Fisher's LDA uses &delta; and {x<sub>i</sub> - &mu;<sub>j</sub>}
 - PCA' removes &delta;
-- PCA kind of accidentally includes it, &Sigma; + &delta; &delta;'/4, but weights it suboptimally
+- PCA kind of accidentally includes it, &Sigma; + &pi;<sup>2</sup> &delta; &delta;', but weights it suboptimally
 - LOL uses both terms explicitly, weighting &delta; more
 - For each we compose with LDA on low-d estimates
 
