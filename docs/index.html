@@ -56,11 +56,11 @@ name:opening
 .center[
 <br>
 <!-- JHU Kavli Neuroscience Discovery Institute -->
-{[bme](http://www.bme.jhu.edu/),[icm](http://icm.jhu.edu/),[cis](http://cis.jhu.edu/),[idies](http://idies.jhu.edu/),[kavli](http://kavlijhu.org/),[cs](http://engineering.jhu.edu/computer-science/), [ams](http://engineering.jhu.edu/ams/), [neuro](http://neuroscience.jhu.edu/)} | [jhu](https://www.jhu.edu/)
+{[bme](http://www.bme.jhu.edu/), [icm](http://icm.jhu.edu/), [cis](http://cis.jhu.edu/), [idies](http://idies.jhu.edu/), [kavli](http://kavlijhu.org/), [cs](http://engineering.jhu.edu/computer-science/), [ams](http://engineering.jhu.edu/ams/), [neuro](http://neuroscience.jhu.edu/)} | [jhu](https://www.jhu.edu/)
 <br>
 questions: [jovo@jhu.edu](mailto:jovo at jhu dot edu)
 <br>
-slides: <httpneurodata-papers.github.io/LOL/>
+slides: <http://neurodata.io/tools/LOL/>
 <br>
 
 Co-Founder: [NeuroData](http://neurodata.io) & [gigantum](http://gigantum.io)
@@ -136,16 +136,17 @@ Given (X<sub>i</sub>,Y<sub>i</sub>) pairs with neither  F<sub>Y</sub> nor F<sub>
 - Manifold learing
   - is typically unsupervised
   - out of sample embedding is icky
+  - do not scale to terabytes (often require n<sup>3</sup> operations)
   - who says directions of variance are near directions of discrimination?
 
 <br>
 --
 
-- Sparse modeling
+- Sparse modeling (is supervised, but...)
   - NP-hard (feature screening), or
-  - approximations are computationally inefficient (Lasso), or
+  - approximations do not scale to terabytes (Lasso), or
   - non-convex (Dictionary learning),
-  - with icky hyperparameters (Lasso & dictionary learning)
+  - with icky hyperparameters (elastic net & dictionary learning)
 
 
 
