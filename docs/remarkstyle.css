@@ -2,13 +2,13 @@ body {
   font-family: 'gentona'; /* Varela Round */
   font-size: 1.0em;
   /*color: #dfd6c2;*/
-  /*color: #a6bcd7;*/*/
+  color: #a6bcd7;*/
 }
 h1, h2, h3, h4, h5, h6 {
   font-family: 'quadon';
   font-weight: 400;
   margin-bottom: 0;
-  color: black; /*#a6bcd7;*/
+  color: #a6bcd7;*/
   text-align: center;
   /*text-shadow: 2px 2px gray; /*#ff0000;*/*/
 }
@@ -244,9 +244,9 @@ th {
     color: white;
 }
 
-code.has-jax {
+/*code.has-jax {
   font: inherit;
   font-size: 100%;
   background: inherit;
   border: inherit;
-}
+}*/
