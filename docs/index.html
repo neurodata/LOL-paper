@@ -167,9 +167,9 @@ Given (X<sub>i</sub>,Y<sub>i</sub>) pairs with neither  F<sub>Y</sub> nor F<sub>
 
 - Fisher's LDA uses &delta; and {x<sub>i</sub> - &mu;<sub>j</sub>}
 - PCA' removes &delta;
-- PCA kind of accidentally includes it
-- LOL uses both terms explicitly
-
+- PCA kind of accidentally includes it, &Sigma; + &delta; &delta;'/4, but weights it suboptimally
+- LOL uses both terms explicitly, weighting &delta; more
+- For each we compose with LDA on low-d estimates
 
 ---
 
@@ -181,7 +181,7 @@ Given (X<sub>i</sub>,Y<sub>i</sub>) pairs with neither  F<sub>Y</sub> nor F<sub>
 
 ## LOL > PCA Theory
 
-<img src="../Figs/LOL_theory.png" STYLE="margin:auto; width:100%"/>
+<img src="LOL_theory.png" STYLE="margin:auto; width:100%"/>
 
 ---
 
@@ -228,7 +228,11 @@ Given (X<sub>i</sub>,Y<sub>i</sub>) pairs with neither  F<sub>Y</sub> nor F<sub>
 <br>
 --
 
-- for example, if &Sigma; is diagonal, and &delta;=(0,...,0,s), and &lambda;<sub>p</sub> + s<sup>2</sup>/4 < &lambda;<sub>d</sub>
+### Simple Example
+
+- if &Sigma; is diagonal with decreasing &lambda;'s,
+- &delta;=(0,...,0,s),
+- &lambda;<sub>p</sub> + s<sup>2</sup>/4 < &lambda;<sub>d</sub>
 - C<sup>PCA</sup> = 0
 - C<sup>LOL</sup> = s<sup>2</sup> /  &lambda;<sub>p</sub>
 
@@ -247,9 +251,10 @@ Given (X<sub>i</sub>,Y<sub>i</sub>) pairs with neither  F<sub>Y</sub> nor F<sub>
 
 - let &gamma; = &lambda;<sub>d</sub> - &lambda;<sub>d+1</sub>
 - let &delta; be sparse with probabilty &epsilon; an element is 0,
-- o.w. it is Gaussian with mean &tau; and standard deviation &sigma;
+- o.w. it is Gaussian
+<!-- with mean &tau; and standard deviation &sigma; -->
 - let p(1-&epsilon;) &rarr; &theta;
-- with probability at least &epsilon;<sup>d</sup>,  C(F<sup>C</sup>, G<sup>C</sup>) = 0 < C(F<sup>A</sup>, G<sup>A</sup>)
+- then with probability at least &epsilon;<sup>d</sup>,  C<sup>PCA</sup> = 0 < C<sup>LOL</sup>
 - and this probability can be made arbitrarily close to 1
 
 
@@ -262,10 +267,10 @@ Given (X<sub>i</sub>,Y<sub>i</sub>) pairs with neither  F<sub>Y</sub> nor F<sub>
 <br>
 
 - Suppose &Sigma; is low rank + &sigma;<sup>2</sup>I
-- Suppose that M log p &le; log n &le; M' log &lambda;,
+- Suppose that: M log p &le; log n &le; M' log &lambda;,
 - provided M & M' are large enough
 - estimates of C converge, so
-- E [ C<sup>A</sup> ] > E[ C<sup>PCA</sup>]
+- E [ C<sup>LOL</sup> ] > E[ C<sup>PCA</sup>]
 
 ---
 
