@@ -130,6 +130,7 @@ Given (X<sub>i</sub>,Y<sub>i</sub>) pairs with neither  F<sub>Y</sub> nor F<sub>
 
 - Manifold learing
   - is typically unsupervised
+  - out of sample embedding is icky
   - who says directions of variance are near directions of discrimination?
 
 <br>
@@ -254,8 +255,10 @@ Given (X<sub>i</sub>,Y<sub>i</sub>) pairs with neither  F<sub>Y</sub> nor F<sub>
 
 <br>
 
+- Suppose &Sigma; is low rank + &sigma;<sup>2</sup>I
 - Suppose that M log p &le; log n &le; M' log &lambda;,
 - provided M & M' are large enough
+- estimates of C converge, so
 - E [ C<sup>A</sup> ] > E[ C<sup>PCA</sup>]
 
 ---
@@ -272,6 +275,8 @@ Given (X<sub>i</sub>,Y<sub>i</sub>) pairs with neither  F<sub>Y</sub> nor F<sub>
 
 <img src="../Figs/scalability.png" STYLE="margin:auto; width:100%"/>
 
+- utilize FlashX semi-external memory computing
+- ~3 minutes for a 2 terabyte dataset
 
 ---
 
@@ -284,6 +289,10 @@ Given (X<sub>i</sub>,Y<sub>i</sub>) pairs with neither  F<sub>Y</sub> nor F<sub>
 ### LOL Hypothesis Testing & Regression
 
 <img src="../Figs/regression_power.png" STYLE="margin:auto; WIDTH:100%;"/>
+
+---
+
+## Discussion
 
 
 
