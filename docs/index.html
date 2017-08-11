@@ -275,7 +275,11 @@ Given (X<sub>i</sub>,Y<sub>i</sub>) pairs with neither  F<sub>Y</sub> nor F<sub>
 
 <img src="../Figs/scalability.png" STYLE="margin:auto; width:100%"/>
 
-- utilize FlashX semi-external memory computing
+- utilize FlashX semi-external memory (SEM) computing
+- optimal (linear) scale up and out
+- SEM speed &approx; internal memory speed
+- swap random projections (RP) with SVD for 10x speed improvement
+- RP error rate &approx; SVD error rate
 - ~3 minutes for a 2 terabyte dataset
 
 ---
@@ -294,7 +298,16 @@ Given (X<sub>i</sub>,Y<sub>i</sub>) pairs with neither  F<sub>Y</sub> nor F<sub>
 
 ## Discussion
 
+- simple supervised inference for wide data
+- big data tools (eg, Spark, H20, VW) typically focus on large n
+- algorithmic and theoretical generalizations straightforward
+- open source implementations
 
+<br>
+
+<center>
+http://neurodataio/tools/LOL/
+</center>
 
 ---
 class:    center
