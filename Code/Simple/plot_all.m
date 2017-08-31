@@ -1,7 +1,7 @@
 set_path
 clear, clc
 
-i=1;
+i=2;
 
 if i==1, sit='sims';
 elseif i==2, sit='real';
@@ -54,6 +54,7 @@ if strcmp(sit,'sims')
     F.ncols=3;
 elseif strcmp(sit,'real')
     F.nrows=1;
+    F.ncols=S;
 elseif strcmp(sit,'dead')
     F.ncols=1;
 end
