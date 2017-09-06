@@ -45,28 +45,31 @@ nmc=length(Lhat);
 for a=1:A
     ls='-';
     alg=F.algs{a};
-    if strcmp(alg,'QOQ')
+    if strcmp(alg,'QOQ') % skip QOQ in real
         ls='--';
         F.color.(alg)=F.color.('LOL');
-    end
-    if isfield(Lhat,alg)
-        if ~strcmp(alg,'Bayes')
-            L=[];
-            for i=1:nmc
-                if strcmp(alg,'lasso')
-                    LL=lasso_interp(ks{i}.(alg),Lhat(i).(alg),ks{i}.('LOL'));
-                else
-                    LL=Lhat(i).(alg);
+    else
+        if isfield(Lhat,alg)
+            if ~strcmp(alg,'Bayes')
+                L=[];
+                for i=1:nmc
+                    if strcmp(alg,'lasso')
+                        LL=lasso_interp(ks{i}.(alg),Lhat(i).(alg),ks{i}.('LOL'));
+                    else
+                        LL=Lhat(i).(alg);
+                    end
+                    L(i,:)=LL;
+                    if exist('wt'), wallTime(a,i)=wt(i).(alg); else, wallTime=[]; end
                 end
-                L(i,:)=LL;
-                if exist('wt'), wallTime(a,i)=wt(i).(alg); else, wallTime=[]; end
+                meanL=nanmean(L);
+                steL=nanstd(L)/sqrt(nmc);
+                minL(a)=min(meanL);
+                maxL=max(meanL);
+%                 plot(ks{1}.('LOL'),meanL,'linewidth',2,'DisplayName',alg,'color',F.color.(alg),'LineStyle',ls)
+                errorbar(ks{1}.('LOL'),meanL,steL,'linewidth',2,'DisplayName',alg,'color',F.color.(alg),'LineStyle',ls)
+                Lmax=max(Lmax,maxL);
+                Lmin=min(Lmin,minL(a));
             end
-            meanL=nanmean(L);
-            minL(a)=min(meanL);
-            maxL=max(meanL);
-            plot(ks{1}.('LOL'),meanL,'linewidth',2,'DisplayName',alg,'color',F.color.(alg),'LineStyle',ls)
-            Lmax=max(Lmax,maxL);
-            Lmin=min(Lmin,minL(a));
         end
     end
 end
@@ -80,14 +83,14 @@ if F.row==F.nrows, F.xlab=xlab; end
 if F.row==1, title([{'Misclassification'}, {'Rate'}]), end
 
 if strcmp(F.sit,'real')
-    t=title([{[ F.ylab]}; {['D = ',num2str(median(D)), ', n = ', num2str(median(ntrain))]}]); 
+    t=title([{[ F.ylab]}; {['D = ',num2str(median(D)), ', n = ', num2str(median(ntrain))]}]);
     set(t, 'horizontalAlignment', 'left')
     set(t, 'units', 'normalized')
     set(t, 'position', [0.1 0.8 0])
     if F.row==1, ylabel('Misclassification Rate'); end
 else
     ylabel(F.ylab) %, 'horizontalAlignment', 'right')
-%     if F.row==1, title(F.ylab), end
+    %     if F.row==1, title(F.ylab), end
 end
 xlabel(F.xlab)
 % title(['D = ', num2str(D(1)), ', n = ', num2str(ntrain(1))])
@@ -104,7 +107,7 @@ end
 ylim([Lmin,Lmax])
 set(gca,'XTick',F.xticks)
 if strcmp(setting,'toeplitz')
-    Lmin=floor(Lmin*10)/10; 
+    Lmin=floor(Lmin*10)/10;
     set(gca,'YTick',0:0.1:1)
 end
 if F.legend

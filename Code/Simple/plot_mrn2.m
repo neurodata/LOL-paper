@@ -15,14 +15,13 @@ meanLOL=nanmean(LOL);
 meanPCA=nanmean(PCA);
 meanRRLDA=nanmean(RRLDA);
 
-% errorbar(x,meanLOL,nanstd(LOL)/sqrt(n),'linewidth',2)
-% errorbar(x+1,meanPCA,nanstd(PCA)/sqrt(n),'linewidth',2)
-% errorbar(x+2,meanRRLDA,nanstd(RRLDA)/sqrt(n),'linewidth',2)
+errorbar(x,meanLOL,nanstd(LOL)/sqrt(n),'linewidth',2)
+errorbar(x+1,meanPCA,nanstd(PCA)/sqrt(n),'linewidth',2)
+errorbar(x+2,meanRRLDA,nanstd(RRLDA)/sqrt(n),'linewidth',2)
 
-
-plot(x,nanmean(LOL),'linewidth',2)
-plot(x+2,nanmean(RRLDA),'linewidth',2)
-plot(x+1,nanmean(PCA),'linewidth',2)
+% plot(x,nanmean(LOL),'linewidth',2)
+% plot(x+2,nanmean(RRLDA),'linewidth',2)
+% plot(x+1,nanmean(PCA),'linewidth',2)
 
 % legend('lol','pca','rrlda')
 
