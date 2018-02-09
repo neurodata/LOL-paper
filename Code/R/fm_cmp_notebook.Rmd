@@ -1,0 +1,228 @@
+---
+title: "R Notebook"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r}
+require(ggplot2)
+require(latex2exp)
+require(MASS)
+require(FlashR)
+source("./simulations.R")
+```
+
+# LOL Files
+
+```{r}
+lol.utils.info <- function(X, Y, ...) {
+  ylabs <- as.vector(sort(unique(Y)))
+  dimx <- dim(X)
+  n <- dimx[1]; d <- dimx[2]
+  K <- length(ylabs)
+  # compute the fraction of each class for prior p
+  priors = sapply(ylabs, function(y) sum(Y == y)/n)
+  centroids <- as.matrix(sapply(ylabs, function(y) colMeans(X[Y==y,,drop=FALSE])))
+  return(list(n=n, d=d, ylabs=ylabs, priors=priors, centroids=centroids, K=K))
+}
+
+# A utility for using irlba when necessary which is faster
+lol.utils.svd <- function(X, r=NULL, trans=TRUE, ...) {
+  d <- dim(X)[2]  # dimensions of X
+  if (is.null(r)) {
+    r <- d
+  }
+  if (trans) {
+    X <- t(as.matrix(X))
+  } else {
+    X <- as.matrix(X)
+  }
+  if (r < .05*d) {
+    # take the svd and retain the top r left singular vectors as our components
+    # using more efficient irlba if we only need a fraction of singular vecs
+    svdX <- irlba::irlba(X, nv=0, nu=r)
+  } else {
+    svdX <- svd(X, nv=0, nu=r)
+  }
+  A <- svdX$u
+
+  return(A)
+}
+
+lol.project.full_lrcca <- function(X, Y, r, ...) {
+  info <- lol.utils.info(X, Y)
+  priors <- info$priors; centroids <- t(info$centroids)
+  K <- info$K; ylabs <- info$ylabs
+  n <- info$n; d <- info$d
+  # hot-encoding of Y categorical variables
+  Yh <- array(0, dim=c(n, K))
+  # Yind is a indicator of membership in each respective class
+  for (i in 1:length(ylabs)) {
+    Yh[Y == ylabs[i],i] <- 1
+  }
+  Xc <- X - outer(rep(1, n), colMeans(X))
+  Yc <- Yh - outer(rep(1, n), colMeans(Yh))
+  # covariance matrices
+  S_x <- 1/n*t(Xc) %*% Xc; S_y <- 1/n*t(Yc) %*% Yc
+  # inverse covariance matrices are ginverse in the low-rank case
+  S_xi <- ginv(S_x); S_yi <- MASS::ginv(S_y)
+  S_xy <- 1/n*t(Xc) %*% Yc
+  # decompose Sxi*Sxy*Syi*Syx
+  A <- eigen(S_xi %*% S_xy %*% S_yi %*% t(S_xy))$vectors[, 1:r]
+
+  return(list(A=A, centroids=centroids, priors=priors, ylabs=ylabs,
+              Xr=X %*% A, cr=centroids %*% A))
+}
+```
+
+# Flash Matrix Files
+
+```{r}
+tcrossprod_mean <- function(V, U) {
+  s <- colMeans(V)
+  vec <- as.vector(U %*% s)
+  vec
+}
+tcrossprod_pca <- function(V, U, r) {
+  V <- fm.as.matrix(V)
+  U <- fm.as.matrix(U)
+  mul <- function(vec, extra) {
+    vec <- as.vector(U %*% (t(V) %*% vec))
+    vec <- V %*% (t(U) %*% vec)
+  }
+  res <- fm.eigen(mul, k=r, n=nrow(V), which="LM", sym=TRUE)
+  res$vectors
+}
+
+fm.lrcca <- function(X, Y, r, ...) {
+  X <- fm.as.matrix(X)
+  Y <- as.vector(Y)
+  ylabs <- unique(Y)
+  K <- length(ylabs)
+  n <- nrow(X)
+  d <- ncol(X)
+  # hot-encoding of Y categorical variables
+  Yh <- array(0, dim=c(n, K))
+  # Yind is a indicator of membership in each respective class
+  for (i in 1:length(ylabs)) {
+    Yh[Y == ylabs[i],i] <- 1
+  }
+
+  S_y <- cov(Yh)
+  S_yi <- MASS::ginv(S_y)
+
+  # covariance matrices cov(X)
+  #Xc <- X - outer(rep(1, n), colMeans(X))
+  if (nrow(X) < ncol(X)) {
+    Xc <- sweep(X, 2, colMeans(X), "-")
+    #S_x <- 1/(n-1)*t(Xc) %*% Xc;
+    X_cov_mul <- function(vec, extra) 1/(n-1) * t(Xc) %*% (Xc %*% vec)
+    res <- fm.eigen(X_cov_mul, k=nrow(X), n=ncol(X), which="LM", sym=TRUE)
+  } else {
+    S_x <- cov(X)
+    res <- eigen(S_x)
+  }
+  sigma <- res$values[res$values > 1e-6]
+  U <- res$vectors[,1:length(sigma)]
+
+  # inverse covariance matrices are ginverse in the low-rank case
+  # S_xi <- U %*% diag(1/sigma) %*% t(U)
+  # S_xi <- MASS::ginv(S_x);
+  # S_xy <- 1/(n-1)*t(Xc) %*% Yc
+  S_xy <- cov(X, fm.as.matrix(Yh))
+
+  # decompose Sxi*Sxy*Syi*Syx
+  # A <- lol.utils.pca(S_xi %*% S_xy %*% S_yi %*% t(S_xy), r, trans=FALSE)
+  Z <- (t(U) %*% S_xy) %*% (S_yi %*% t(S_xy))
+  Z <- t(Z)
+  U <- U %*% diag(1/sigma)
+  A <- tcrossprod_pca(U, Z, r)
+
+  return(list(A=A, Xr=X %*% A, ylabs=ylabs))
+}
+```
+
+
+```{r}
+n=400
+d=30
+r=3
+testdat <- lol.sims.cigar(n, d)
+X <- testdat$X
+Y <- testdat$Y
+
+data <- data.frame(x1=X[,1], x2=X[,2], y=Y)
+data$y <- factor(data$y)
+ggplot(data, aes(x=x1, y=x2, color=y)) +
+  geom_point() +
+  xlab(TeX("$x_1$")) +
+  ylab(TeX("$x_2$")) +
+  ggtitle("Simulated Data")
+```
+
+```{r}
+result <- lol.project.lrcca(X, Y, r)
+
+data <- data.frame(x1=result$Xr[,1], x2=result$Xr[,2], y=Y)
+data$y <- factor(data$y)
+ggplot(data, aes(x=x1, y=x2, color=y)) +
+  geom_point() +
+  xlab(TeX("$x_1$")) +
+  ylab(TeX("$x_2")) +
+  ggtitle("Projected Data using LR-CCA")
+```
+
+```{r, error=TRUE}
+resultfm <- fm.lrcca(X, Y, r)
+
+datafm <- data.frame(x1=resultfm$Xr[,1], x2=resultfm$Xr[,2], y=Y)
+datafm$y <- factor(datafm$y)
+ggplot(datafm, aes(x=x1, y=x2, color=y)) +
+  geom_point() +
+  xlab(TeX("$x_1$")) +
+  ylab(TeX("$x_2")) +
+  ggtitle("Projected Data using LR-CCA")
+```
+
+
+```{r}
+n=100
+d=200
+r=3
+testdat <- lol.sims.cigar(n, d)
+X <- testdat$X
+Y <- testdat$Y
+
+data <- data.frame(x1=X[,1], x2=X[,2], y=Y)
+data$y <- factor(data$y)
+ggplot(data, aes(x=x1, y=x2, color=y)) +
+  geom_point() +
+  xlab(TeX("$x_1$")) +
+  ylab(TeX("$x_2$")) +
+  ggtitle("Simulated Data")
+```
+
+```{r}
+result <- lol.project.full_lrcca(X, Y, r)
+
+data <- data.frame(x1=result$Xr[,1], x2=result$Xr[,2], y=Y)
+data$y <- factor(data$y)
+ggplot(data, aes(x=x1, y=x2, color=y)) +
+  geom_point() +
+  xlab(TeX("$x_1$")) +
+  ylab(TeX("$x_2")) +
+  ggtitle("Projected Data using LR-CCA")
+```
+
+```{r, error=TRUE}
+resultfm <- fm.lrcca(X, Y, r)
+
+datafm <- data.frame(x1=resultfm$Xr[,1], x2=resultfm$Xr[,2], y=Y)
+datafm$y <- factor(datafm$y)
+ggplot(datafm, aes(x=x1, y=x2, color=y)) +
+  geom_point() +
+  xlab(TeX("$x_1$")) +
+  ylab(TeX("$x_2")) +
+  ggtitle("Projected Data using LR-CCA")
+```
