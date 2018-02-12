@@ -10,70 +10,7 @@ require(ggplot2)
 require(latex2exp)
 require(MASS)
 require(FlashR)
-source("./simulations.R")
-```
-
-# LOL Files
-
-```{r}
-lol.utils.info <- function(X, Y, ...) {
-  ylabs <- as.vector(sort(unique(Y)))
-  dimx <- dim(X)
-  n <- dimx[1]; d <- dimx[2]
-  K <- length(ylabs)
-  # compute the fraction of each class for prior p
-  priors = sapply(ylabs, function(y) sum(Y == y)/n)
-  centroids <- as.matrix(sapply(ylabs, function(y) colMeans(X[Y==y,,drop=FALSE])))
-  return(list(n=n, d=d, ylabs=ylabs, priors=priors, centroids=centroids, K=K))
-}
-
-# A utility for using irlba when necessary which is faster
-lol.utils.svd <- function(X, r=NULL, trans=TRUE, ...) {
-  d <- dim(X)[2]  # dimensions of X
-  if (is.null(r)) {
-    r <- d
-  }
-  if (trans) {
-    X <- t(as.matrix(X))
-  } else {
-    X <- as.matrix(X)
-  }
-  if (r < .05*d) {
-    # take the svd and retain the top r left singular vectors as our components
-    # using more efficient irlba if we only need a fraction of singular vecs
-    svdX <- irlba::irlba(X, nv=0, nu=r)
-  } else {
-    svdX <- svd(X, nv=0, nu=r)
-  }
-  A <- svdX$u
-
-  return(A)
-}
-
-lol.project.full_lrcca <- function(X, Y, r, ...) {
-  info <- lol.utils.info(X, Y)
-  priors <- info$priors; centroids <- t(info$centroids)
-  K <- info$K; ylabs <- info$ylabs
-  n <- info$n; d <- info$d
-  # hot-encoding of Y categorical variables
-  Yh <- array(0, dim=c(n, K))
-  # Yind is a indicator of membership in each respective class
-  for (i in 1:length(ylabs)) {
-    Yh[Y == ylabs[i],i] <- 1
-  }
-  Xc <- X - outer(rep(1, n), colMeans(X))
-  Yc <- Yh - outer(rep(1, n), colMeans(Yh))
-  # covariance matrices
-  S_x <- 1/n*t(Xc) %*% Xc; S_y <- 1/n*t(Yc) %*% Yc
-  # inverse covariance matrices are ginverse in the low-rank case
-  S_xi <- ginv(S_x); S_yi <- MASS::ginv(S_y)
-  S_xy <- 1/n*t(Xc) %*% Yc
-  # decompose Sxi*Sxy*Syi*Syx
-  A <- eigen(S_xi %*% S_xy %*% S_yi %*% t(S_xy))$vectors[, 1:r]
-
-  return(list(A=A, centroids=centroids, priors=priors, ylabs=ylabs,
-              Xr=X %*% A, cr=centroids %*% A))
-}
+require(lolR)
 ```
 
 # Flash Matrix Files
@@ -176,13 +113,14 @@ ggplot(data, aes(x=x1, y=x2, color=y)) +
 ```{r, error=TRUE}
 resultfm <- fm.lrcca(X, Y, r)
 
+resultfm$Xr <- as.matrix(resultfm$Xr)
 datafm <- data.frame(x1=resultfm$Xr[,1], x2=resultfm$Xr[,2], y=Y)
 datafm$y <- factor(datafm$y)
 ggplot(datafm, aes(x=x1, y=x2, color=y)) +
   geom_point() +
   xlab(TeX("$x_1$")) +
   ylab(TeX("$x_2")) +
-  ggtitle("Projected Data using LR-CCA")
+  ggtitle("Projected Data using FM LR-CCA")
 ```
 
 
@@ -204,7 +142,7 @@ ggplot(data, aes(x=x1, y=x2, color=y)) +
 ```
 
 ```{r}
-result <- lol.project.full_lrcca(X, Y, r)
+result <- lol.project.lrcca(X, Y, r)
 
 data <- data.frame(x1=result$Xr[,1], x2=result$Xr[,2], y=Y)
 data$y <- factor(data$y)
@@ -218,11 +156,12 @@ ggplot(data, aes(x=x1, y=x2, color=y)) +
 ```{r, error=TRUE}
 resultfm <- fm.lrcca(X, Y, r)
 
+resultfm$Xr <- as.matrix(resultfm$Xr)
 datafm <- data.frame(x1=resultfm$Xr[,1], x2=resultfm$Xr[,2], y=Y)
 datafm$y <- factor(datafm$y)
 ggplot(datafm, aes(x=x1, y=x2, color=y)) +
   geom_point() +
   xlab(TeX("$x_1$")) +
   ylab(TeX("$x_2")) +
-  ggtitle("Projected Data using LR-CCA")
+  ggtitle("Projected Data using FM LR-CCA")
 ```
