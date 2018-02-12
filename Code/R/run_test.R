@@ -1,5 +1,3 @@
-source('./lrcca.R')
-
 LOL <- function(m, labels, k, type=c("svd", "rand_dense", "rand_sparse")) {
     counts <- as.data.frame(table(fm.conv.FM2R(labels)))
     num.labels <- length(counts$Freq)
